@@ -1,4 +1,8 @@
-import time, random, search_algos, sort_algos, pathfinder_algos
+import random
+import search_algos
+import sort_algos
+import pathfinder_algos
+import time
 
 if __name__ == '__main__':
     test = [4, 89, 1, 9, 6489, 49, 149, 84, 15, 15, 949, 41, 9, 489, 19]
