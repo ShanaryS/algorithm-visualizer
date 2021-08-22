@@ -58,7 +58,7 @@ def dijkstra(graph, start):
                 adj_vertex.pred_vertex = current_vertex
 
 
-def a_star():
+def a_star(): #TODO
     pass
 
 
