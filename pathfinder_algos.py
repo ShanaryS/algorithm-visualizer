@@ -4,7 +4,7 @@ from graph import Graph, Vertex
 
 # Use Jeff's city data as SQL database, allow to pick from any city to another
 # Go from point A, to B, and then C
-# tes
+# test
 
 def bellman_ford(graph, start):
     for current_vertex in graph.adjacency_list:
