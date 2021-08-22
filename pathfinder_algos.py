@@ -4,7 +4,6 @@ from graph import Graph, Vertex
 
 # Use Jeff's city data as SQL database, allow to pick from any city to another
 # Go from point A, to B, and then C
-# test
 
 def bellman_ford(graph, start):
     for current_vertex in graph.adjacency_list:
@@ -34,8 +33,28 @@ def bellman_ford(graph, start):
     return True
 
 
-def dijkstra():
-    pass
+def dijkstra(graph, start):
+    unvisited_queue = []
+    for current_vertex in graph.adjacency_list:
+        unvisited_queue.append(current_vertex)
+
+    start.distance = 0
+
+    while len(unvisited_queue) > 0:
+
+        smallest_index = 0
+        for i in range(1, len(unvisited_queue)):
+            if unvisited_queue[i].distance < unvisited_queue[smallest_index].distance:
+                smallest_index = i
+        current_vertex = unvisited_queue.pop(smallest_index)
+
+        for adj_vertex in graph.adjacency_list[current_vertex]:
+            edge_weight = graph.edge_weights[(current_vertex, adj_vertex)]
+            alternative_path_distance = current_vertex.distance + edge_weight
+
+            if alternative_path_distance < adj_vertex.distance:
+                adj_vertex.distance = alternative_path_distance
+                adj_vertex.pred_vertex = current_vertex
 
 
 def a_star():
