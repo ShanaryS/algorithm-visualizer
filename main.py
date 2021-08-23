@@ -89,6 +89,3 @@ if __name__ == '__main__':
     j.sort()
     end - time.time_ns()
     print(f"Python sort: {(end - start) / 1000}")
-
-    # time the fastest algorithm and use that for search algos
-
