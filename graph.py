@@ -10,6 +10,9 @@ class Graph:
         self.adjacency_list = {}
         self.edge_weights = {}
 
+    def get_neighbors(self, v):
+        return self.adjacency_list[v]
+
     def add_vertex(self, new_vertex):
         self.adjacency_list[new_vertex] = []
 
@@ -20,3 +23,14 @@ class Graph:
     def add_undirected_edge(self, vertex_a, vertex_b, weight=1.0):
         self.add_directed_edge(vertex_a, vertex_b, weight)
         self.add_directed_edge(vertex_b, vertex_a, weight)
+
+
+def heuristic(n):
+    h = {
+        'A': 1,
+        'B': 1,
+        'C': 1,
+        'D': 1
+    }
+
+    return h[n]
