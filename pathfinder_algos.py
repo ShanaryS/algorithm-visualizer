@@ -59,7 +59,8 @@ def dijkstra(graph, start):
                 adj_vertex.pred_vertex = current_vertex
 
 
-def a_star(graph, start, stop):   # Change this to use graph.py. Needs quite a bit of work. May need to scrap.
+# Make own a_star from scratch using graph.py
+def a_star(graph, start, stop):
     open_lst = {[start]}
     closed_lst = set([])
 
