@@ -1,5 +1,6 @@
 import operator
 from graph import Graph, Vertex
+from collections import deque
 
 
 # Use Jeff's city data as SQL database, allow to pick from any city to another
@@ -58,8 +59,58 @@ def dijkstra(graph, start):
                 adj_vertex.pred_vertex = current_vertex
 
 
-def a_star(): #TODO
-    pass
+def a_star(graph, start, stop):   # Change this to use graph.py. Needs quite a bit of work. May need to scrap.
+    open_lst = {[start]}
+    closed_lst = set([])
+
+    poo = {start: 0}
+    par = {start: start}
+
+    while len(open_lst) > 0:
+        n = None
+
+        for v in open_lst:
+            if n is None or poo[v] + h(v) < poo[n] + h(n):
+                n = v
+
+        if n is None:
+            print('Path does not exist!')
+            return None
+
+        if n == stop:
+            reconst_path = []
+
+            while par[n] != n:
+                reconst_path.append(n)
+                n = par[n]
+
+            reconst_path.append(start)
+
+            reconst_path.reverse()
+
+            print('Path found: {}'.format(reconst_path))
+            return reconst_path
+
+        for (m, weight) in graph.get_neighbors(n):
+            if m not in open_lst and m not in closed_lst:
+                open_lst.add(m)
+                par[m] = n
+                poo[m] = poo[n] + weight
+
+            else:
+                if poo[m] > poo[n] + weight:
+                    poo[m] = poo[n] + weight
+                    par[m] = n
+
+                    if m in closed_lst:
+                        closed_lst.remove(m)
+                        open_lst.add(m)
+
+        open_lst.remove(n)
+        closed_lst.add(n)
+
+    print('Path does not exist!')
+    return None
 
 
 def get_shortest_path(graph, start, end_vertex):
@@ -158,3 +209,15 @@ if __name__ == "__main__":
             print(f"A to {v.label}: {get_shortest_path(dijkstra_test, vertex_a, v)}")
 
     print("----------------------------------------------------------------")
+
+    # A* test
+
+    a_star(d, 'A', 'D')
+
+    # adjac_lis = {
+    #     'A': [('B', 1), ('C', 3), ('D', 7)],
+    #     'B': [('D', 5)],
+    #     'C': [('D', 12)]
+    # }
+    # graph1 = Graph(adjac_lis)
+    # graph1.a_star_algorithm('A', 'D')
