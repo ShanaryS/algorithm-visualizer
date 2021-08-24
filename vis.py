@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 # Return non sorted value for algorithms that require sort
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Create subplots to visualize multiple at once
+# Currently this gets rid of duplicates nums. See test4
 
 class SearchVisualizer:
     def __init__(self, values, pause_linear=0.1, pause_leap=1.0):
@@ -239,9 +240,10 @@ if __name__ == '__main__':
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test2 = random.sample(range(1000), 1000)
     test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
-    key = 593
+    test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    key = 5
 
-    x = SearchVisualizer(test2, 0.1, 0.1)
+    x = SearchVisualizer(test4, 0.1, 0.1)
     x.values_sort()
 
     # x.comparison(key)
