@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
-# Clean up code. Use a single length variable instead of constantly using len(v). Make as readable as possible.
+# Clean up code. Use a single length variable instead of constantly using len(self.values). Make as readable as possible
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algos that require sort
 
@@ -24,13 +24,15 @@ class SearchVisualizer:
         plt.clf()   # Might be costly. Optimization could be to keep different set of sorted values rather than updating
         self.vis = plt.bar(self.names, self.values)
 
-    # TODO Handle all edge cases for each algorithm
-    def visualize(self, res):   # Going to use this for polymorphism. All searches should currently output from this.
+    def visualize(self, res):
         if isinstance(res, int):
             if res > -1:
                 self.vis[res].set_color('g')
             else:
                 self.vis[res].set_color('r')
+                # for i in range(-res, len(values)):
+                #     test[i].set_color('r')
+                # This may be necessary for exponential to work properly. Leaving just in case.
         else:
             if res[0] > -1:
                 self.vis[res[0]].set_color('g')
@@ -90,16 +92,6 @@ class SearchVisualizer:
             self.vis[i].set_color('r')
         return self.visualize(-mid)
 
-    # key = 48
-    # test = plt.bar(names, values)
-    # plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
-    # res = binary(values, key)
-    # if res > -1:
-    #     test[res].set_color('g')
-    # else:
-    #     test[res].set_color('r')
-    # plt.show()
-
     def jump(self, key):
         length = len(self.values)
         step = int(math.sqrt(length))
@@ -137,18 +129,6 @@ class SearchVisualizer:
 
         return self.visualize((-i, right))
 
-    # key = 48
-    # test = plt.bar(names, values)
-    # res = jump(values, key)
-    # if res[0] > -1:
-    #     test[res[0]].set_color('g')
-    #     for i in range(res[0]+1, res[1]+1):
-    #         test[i].set_color('r')
-    # else:
-    #     for i in range(-res[0], res[1]+1):
-    #         test[i].set_color('r')
-    # plt.show()
-
     # TODO Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, k):
         self.vis[0].set_color('y')
@@ -180,17 +160,6 @@ class SearchVisualizer:
             return self.binary(k, i)
         else:
             return self.binary(k)
-
-    # key = 49
-    # test = plt.bar(names, values)
-    # plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
-    # res = exponential(values, key)
-    # if res > -1:
-    #     test[res].set_color('g')
-    # else:
-    #     for i in range(-res, len(values)):
-    #         test[i].set_color('r')
-    # plt.show()
 
     def fibonacci(self, key):
         fib_minus_2 = 0
@@ -234,21 +203,11 @@ class SearchVisualizer:
 
         return self.visualize(-i)
 
-    # key = 49
-    # test = plt.bar(names, values)
-    # plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
-    # res = fibonacci(values, key)
-    # if res > -1:
-    #     test[res].set_color('g')
-    # else:
-    #     test[res].set_color('r')
-    # plt.show()
-
 
 if __name__ == '__main__':
-    numbers = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]
+    test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
 
-    x = SearchVisualizer(numbers)
+    x = SearchVisualizer(test)
     # x.linear(148)
     # x.values_sort()
     # x.binary(49)
