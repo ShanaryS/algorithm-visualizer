@@ -6,36 +6,55 @@ import matplotlib.pyplot as plt
 # Put everything in a class so you don't need to repeat driver code
 # Clean up code. Use a single length variable instead of constantly using len(v). Make as readable as possible.
 # Check on larger list. Make sure all edge cases are dealt with.
+# Return non sorted value for algos that require sort
 
 values = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]
-values.sort()
+# values.sort()
 names = [str(i) for i in values]
 
 
-def linear(v, k):
-    for i in range(len(v)):
-        if v[i] != k:
-            test[i].set_color('r')
-            plt.pause(0.1)
-            if i == len(v)-1:
-                return -i
+class SearchVisualizer:
+    def __init__(self, values):
+        self.values = values
+        self.names = [str(i) for i in values]
+        self.vis = plt.bar(self.names, self.values)
+        self.pause_linear = 0.1
+        # self._values_sorted = sorted(values)
+        # self._names_sorted = [str(i) for i in values]
+        # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
+
+    def values_sort(self):
+        self.values.sort()
+        self.names = [str(i) for i in values]
+        plt.clf()   # Might be costly. Optimization could be to keep different set of sorted values rather than updating
+        self.vis = plt.bar(self.names, self.values)
+
+    def visualize(self, res):   # Going to use this for polymorphism. All searches should currently output from this.
+        if res > -1:
+            self.vis[res].set_color('g')
         else:
-            return i
+            self.vis[res].set_color('r')
+        plt.show()
+
+    def linear(self, key):  # Only algorithm that does not require sorted values.
+        for i in range(len(values)):
+            if self.values[i] != key:
+                self.vis[i].set_color('r')
+                plt.pause(self.pause_linear)
+                if i == len(self.values)-1:
+                    return self.visualize(-i)
+            else:
+                return self.visualize(i)
 
 
-# key = 49
-# test = plt.bar(names, values)
-# res = linear(values, key)
-# if res > -1:
-#     test[res].set_color('g')
-# else:
-#     test[res].set_color('r')
-# plt.show()
+x = SearchVisualizer(values)
+x.values_sort()
+x.linear(148)
 
 
-def binary(v, k, high=None):
+def binary(values, key, high=None):
     if not high:
-        high = len(v)
+        high = len(values)
     low = 0
     mid = (high + low) // 2
     upper = high
@@ -45,15 +64,15 @@ def binary(v, k, high=None):
         test[mid].set_color('y')
         plt.pause(1)
 
-        if v[mid] > k:
-            if high < len(v)-2:
+        if values[mid] > key:
+            if high < len(values)-2:
                 upper = high+1
             else:
                 upper = high
             for i in range(mid, upper):
                 test[i].set_color('r')
             high = mid - 1
-        elif v[mid] < k:
+        elif values[mid] < key:
             if low > 1:
                 lower = low-1
             else:
@@ -68,7 +87,7 @@ def binary(v, k, high=None):
                 test[i].set_color('r')
             return mid
 
-    for i in range(len(v)-1):
+    for i in range(len(values) - 1):
         test[i].set_color('r')
     return -mid
 
@@ -84,19 +103,19 @@ def binary(v, k, high=None):
 # plt.show()
 
 
-def jump(v, k):
-    length = len(v)
+def jump(values, key):
+    length = len(values)
     step = int(math.sqrt(length))
     left, right = 0, 0
 
-    while left < length and v[left] <= k:
+    while left < length and values[left] <= key:
         right = min(length - 1, left + step)
 
         test[left].set_color('y')
         test[right].set_color('y')
         plt.pause(1)
 
-        if v[left] <= k <= v[right]:
+        if values[left] <= key <= values[right]:
             for i in range(right+1, length):
                 test[i].set_color('r')
             plt.pause(1)
@@ -106,14 +125,14 @@ def jump(v, k):
         for i in range(left):
             test[i].set_color('r')
 
-    if left >= length or v[left] > k:
+    if left >= length or values[left] > key:
         return -left, right
 
     right = min(length - 1, right)
     i = left
 
-    while i <= right and v[i] <= k:
-        if v[i] == k:
+    while i <= right and values[i] <= key:
+        if values[i] == key:
             return i, right
         test[i].set_color('r')
         plt.pause(.4)
@@ -168,7 +187,7 @@ def exponential(v, k):  # TODO Does weird stuff when searching for 48 with test.
         return binary(v, k)
 
 
-# key = 48
+# key = 49
 # test = plt.bar(names, values)
 # plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
 # res = exponential(values, key)
@@ -223,12 +242,12 @@ def fibonacci(v, k):
     return -i
 
 
-key = 63
-test = plt.bar(names, values)
-plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
-res = fibonacci(values, key)
-if res > -1:
-    test[res].set_color('g')
-else:
-    test[res].set_color('r')
-plt.show()
+# key = 49
+# test = plt.bar(names, values)
+# plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
+# res = fibonacci(values, key)
+# if res > -1:
+#     test[res].set_color('g')
+# else:
+#     test[res].set_color('r')
+# plt.show()
