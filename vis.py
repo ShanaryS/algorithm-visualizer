@@ -5,15 +5,17 @@ import matplotlib.pyplot as plt
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algorithms that require sort
+# Seems as though you can only call each search function once. Need to fix for actual deployment
+# Create subplots to visualize multiple at once
 
 class SearchVisualizer:
-    def __init__(self, values):
+    def __init__(self, values, pause_linear=0.1, pause_leap=1.0):
         self.values = values
         self.names = [str(i) for i in values]
+        self.pause_linear = pause_linear
+        self.pause_leap = pause_leap
         self.vis = plt.bar(self.names, self.values)
         plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
-        self.pause_linear = 0.1
-        self.pause_leap = 1
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
@@ -42,6 +44,9 @@ class SearchVisualizer:
                 for i in range(-res[0], res[1]+1):
                     self.vis[i].set_color('r')
         plt.show()
+
+    def comparison(self, *args):
+        pass    # TODO take func name as arg and create subplots comparing multiple
 
     def linear(self, key):  # Only algorithm that does not require sorted values.
         length = len(self.values)
@@ -209,10 +214,13 @@ class SearchVisualizer:
 
 
 if __name__ == '__main__':
-    test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
+    import random
 
-    x = SearchVisualizer(test)
-    # x.linear(148)
+    test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
+    test2 = random.sample(range(100), 100)
+
+    x = SearchVisualizer(test2, 0.01, 0.1)
+    x.linear(148)
     # x.values_sort()
     # x.binary(49)
     # x.jump(50)
