@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
 # Clean up code. Use a single length variable instead of constantly using len(self.values). Make as readable as possible
 # Check on larger list. Make sure all edge cases are dealt with.
-# Return non sorted value for algos that require sort
+# Return non sorted value for algorithms that require sort
 
 class SearchVisualizer:
     def __init__(self, values):
@@ -44,18 +44,20 @@ class SearchVisualizer:
         plt.show()
 
     def linear(self, key):  # Only algorithm that does not require sorted values.
-        for i in range(len(self.values)):
+        length = len(self.values)
+        for i in range(length):
             if self.values[i] != key:
                 self.vis[i].set_color('r')
                 plt.pause(self.pause_linear)
-                if i == len(self.values)-1:
+                if i == length-1:
                     return self.visualize(-i)
             else:
                 return self.visualize(i)
 
     def binary(self, key, high=None):
+        length = len(self.values)
         if not high:
-            high = len(self.values)
+            high = length
         low = 0
         mid = (high + low) // 2
         upper = high
@@ -66,7 +68,7 @@ class SearchVisualizer:
             plt.pause(1)
 
             if self.values[mid] > key:
-                if high < len(self.values)-2:
+                if high < length-2:
                     upper = high+1
                 else:
                     upper = high
@@ -88,7 +90,7 @@ class SearchVisualizer:
                     self.vis[i].set_color('r')
                 return self.visualize(mid)
 
-        for i in range(len(self.values) - 1):
+        for i in range(length-1):
             self.vis[i].set_color('r')
         return self.visualize(-mid)
 
@@ -131,11 +133,12 @@ class SearchVisualizer:
 
     # TODO Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, k):
+        length = len(self.values)
         self.vis[0].set_color('y')
         plt.pause(1)
 
         if self.values[0] == k:
-            for i in range(1, len(self.values)):
+            for i in range(1, length):
                 self.vis[i].set_color('r')
             return 0
 
@@ -143,31 +146,32 @@ class SearchVisualizer:
         self.vis[0].set_color('r')
         self.vis[i].set_color('y')
 
-        while i < len(self.values) and self.values[i] <= k:
+        while i < length and self.values[i] <= k:
             i *= 2
-            if i <= len(self.values):
+            if i <= length:
                 for j in range(temp_low, temp+2):
                     self.vis[j].set_color('r')
             plt.pause(1)
             temp = i
             temp_low = int(temp / 2)
 
-        if i <= len(self.values):
-            for j in range(i+1, len(self.values)):
+        if i <= length:
+            for j in range(i+1, length):
                 self.vis[j].set_color('r')
 
-        if i < len(self.values):
+        if i < length:
             return self.binary(k, i)
         else:
             return self.binary(k)
 
     def fibonacci(self, key):
+        length = len(self.values)
         fib_minus_2 = 0
         fib_minus_1 = 1
         fib = fib_minus_1 + fib_minus_2
         i = 1
 
-        while fib < len(self.values):
+        while fib < length:
             fib_minus_2 = fib_minus_1
             fib_minus_1 = fib
             fib = fib_minus_1 + fib_minus_2
@@ -175,7 +179,7 @@ class SearchVisualizer:
         index = -1
 
         while fib > 1:
-            i = min(index + fib_minus_2, (len(self.values) - 1))
+            i = min(index + fib_minus_2, (length - 1))
 
             self.vis[i].set_color('y')
             plt.pause(1)
@@ -189,7 +193,7 @@ class SearchVisualizer:
                 fib_minus_2 = fib - fib_minus_1
                 index = i
             elif self.values[i] > key:
-                for j in range(i, len(self.values)):
+                for j in range(i, length):
                     self.vis[j].set_color('r')
 
                 fib = fib_minus_2
@@ -198,7 +202,7 @@ class SearchVisualizer:
             else:
                 return self.visualize(i)
 
-        if fib_minus_1 and index < (len(self.values) - 1) and self.values[index + 1] == key:
+        if fib_minus_1 and index < (length - 1) and self.values[index + 1] == key:
             return self.visualize(index + 1)
 
         return self.visualize(-i)
