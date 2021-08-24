@@ -44,22 +44,42 @@ class SearchVisualizer:
                 for i in range(-res[0], res[1]+1):
                     self.vis[i].set_color('r')
         plt.show()
+        plt.clf()   # Might break something. Idk yet. Maybe it will help to call multiple times per single run
 
-    def comparison(self, *args):
-        pass    # TODO take func name as arg and create subplots comparing multiple
+    # TODO Use *args to compare all at once. Or just open each in different windows
+    # Turn visualize into function where you pass every color change. This allows you to not show plots individually
+    # And can wait and combine them for this function.
+    # Maybe paralleling threads? Idk if that would apply in this situation.
+    def comparison(self, key, func1=None, func2=None):  # Use strings to know which functions needs to be compared
+        plt.close()
+        self.vis = plt.figure()
+        a = self.vis.add_subplot(211)
+        b = self.vis.add_subplot(212)
 
-    def linear(self, key):  # Only algorithm that does not require sorted values.
+        a.bar(self.names, self.values)
+        b.bar(self.names, self.values)
+
+        self.linear(key, a)
+        self.linear(key, b)
+
+    def linear(self, key, fig=None):  # Only algorithm that does not require sorted values.
+        if not fig:
+            fig = self.vis
+
         length = len(self.values)
         for i in range(length):
             if self.values[i] != key:
-                self.vis[i].set_color('r')
+                fig[i].set_color('r')
                 plt.pause(self.pause_linear)
                 if i == length-1:
                     return self.visualize(-i)
             else:
                 return self.visualize(i)
 
-    def binary(self, key, high=None):
+    def binary(self, key, high=None, fig=None):
+        if not fig:
+            fig = self.vis
+
         length = len(self.values)
         if not high:
             high = length
@@ -69,7 +89,7 @@ class SearchVisualizer:
 
         while high >= low:
             mid = (high + low) // 2
-            self.vis[mid].set_color('y')
+            fig[mid].set_color('y')
             plt.pause(self.pause_leap)
 
             if self.values[mid] > key:
@@ -78,7 +98,7 @@ class SearchVisualizer:
                 else:
                     upper = high
                 for i in range(mid, upper):
-                    self.vis[i].set_color('r')
+                    fig[i].set_color('r')
                 high = mid - 1
             elif self.values[mid] < key:
                 if low > 1:
@@ -86,17 +106,17 @@ class SearchVisualizer:
                 else:
                     lower = low
                 for i in range(lower, mid):
-                    self.vis[i].set_color('r')
+                    fig[i].set_color('r')
                 low = mid + 1
             else:
                 for i in range(low-1, mid):
-                    self.vis[i].set_color('r')
+                    fig[i].set_color('r')
                 for i in range(mid+1, upper):
-                    self.vis[i].set_color('r')
+                    fig[i].set_color('r')
                 return self.visualize(mid)
 
         for i in range(length-1):
-            self.vis[i].set_color('r')
+            fig[i].set_color('r')
         return self.visualize(-mid)
 
     def jump(self, key):
@@ -217,12 +237,16 @@ if __name__ == '__main__':
     import random
 
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
-    test2 = random.sample(range(100), 100)
+    test2 = random.sample(range(1000), 1000)
+    test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
+    key = 593
 
-    x = SearchVisualizer(test2, 0.01, 0.1)
-    x.linear(148)
-    # x.values_sort()
-    # x.binary(49)
-    # x.jump(50)
-    # x.exponential(48)
-    # x.fibonacci(49)
+    x = SearchVisualizer(test2, 0.1, 0.1)
+    x.values_sort()
+
+    # x.comparison(key)
+    # x.linear(key)
+    # x.binary(key)
+    # x.jump(key)
+    # x.exponential(key)
+    # x.fibonacci(key)
