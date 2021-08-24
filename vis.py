@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
-# Clean up code. Use a single length variable instead of constantly using len(self.values). Make as readable as possible
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algorithms that require sort
 
@@ -14,6 +13,7 @@ class SearchVisualizer:
         self.vis = plt.bar(self.names, self.values)
         plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
         self.pause_linear = 0.1
+        self.pause_leap = 1
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
@@ -65,7 +65,7 @@ class SearchVisualizer:
         while high >= low:
             mid = (high + low) // 2
             self.vis[mid].set_color('y')
-            plt.pause(1)
+            plt.pause(self.pause_leap)
 
             if self.values[mid] > key:
                 if high < length-2:
@@ -104,12 +104,12 @@ class SearchVisualizer:
 
             self.vis[left].set_color('y')
             self.vis[right].set_color('y')
-            plt.pause(1)
+            plt.pause(self.pause_leap)
 
             if self.values[left] <= key <= self.values[right]:
                 for i in range(right+1, length):
                     self.vis[i].set_color('r')
-                plt.pause(1)
+                plt.pause(self.pause_leap)
                 break
             left += step
 
@@ -126,7 +126,7 @@ class SearchVisualizer:
             if self.values[i] == key:
                 return self.visualize((i, right))
             self.vis[i].set_color('r')
-            plt.pause(.4)
+            plt.pause(self.pause_linear)
             i += 1
 
         return self.visualize((-i, right))
@@ -135,7 +135,7 @@ class SearchVisualizer:
     def exponential(self, k):
         length = len(self.values)
         self.vis[0].set_color('y')
-        plt.pause(1)
+        plt.pause(self.pause_leap)
 
         if self.values[0] == k:
             for i in range(1, length):
@@ -151,7 +151,7 @@ class SearchVisualizer:
             if i <= length:
                 for j in range(temp_low, temp+2):
                     self.vis[j].set_color('r')
-            plt.pause(1)
+            plt.pause(self.pause_leap)
             temp = i
             temp_low = int(temp / 2)
 
@@ -182,7 +182,7 @@ class SearchVisualizer:
             i = min(index + fib_minus_2, (length - 1))
 
             self.vis[i].set_color('y')
-            plt.pause(1)
+            plt.pause(self.pause_leap)
 
             if self.values[i] < key:
                 for j in range(i+1):
