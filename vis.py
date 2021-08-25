@@ -1,8 +1,12 @@
 import math
 from heapq import heappush, heappop
 import matplotlib.pyplot as plt
+# https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
+# plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values. set_height for values.
+# plt.gca().axes.xaxis.set_visible(False) to hide xaxis
 
 # Use an online Jupyter Notebook for visualizations, move to tableau if possible
+# Link to Jupyter in git readme to for visualizations and walkthrough
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
@@ -11,6 +15,8 @@ import matplotlib.pyplot as plt
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Create subplots to visualize multiple at once
 # Currently this gets rid of duplicates nums. See test4
+# Optimize so you don't need to clear graph each update
+# Use an upside down bar graph
 
 class SearchVisualizer:
     def __init__(self, values, pause_short=0.1, pause_long=1.0):   # Look into set_facecolor, set_edgecolor. Maybe solves edge bug
@@ -239,12 +245,14 @@ class SearchVisualizer:
         return self.visualize(-i)
 
 
-# TODO Animated graphs rather than recreating to update values
+# TODO Animated graphs rather than recreating to update values. Show each bar updating rather than just the result
 class SortVisualizer:
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
         self.values = values
         self.LENGTH = len(self.values)
-        self.names = [str(i) for i in self.values]
+        # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
+        self.names = [i for i in range(self.LENGTH)]
+        plt.gca().axes.xaxis.set_visible(False)
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
@@ -259,8 +267,9 @@ class SortVisualizer:
     def visualize(self):
         pass
 
+    # TODO Modify chart inplace rather than creating a new one. Probably complete redo. Also show when swapping
     def selection(self):
-        colors = {}
+        colors = {}     # Not used but may be useful
 
         for i in range(self.LENGTH-1):
             self.vis[i].set_color(self.vis_pivot)
@@ -274,7 +283,8 @@ class SortVisualizer:
                 plt.pause(self.pause_short)
 
                 if self.values[j] < self.values[index]:
-                    self.vis[index].set_color(self.vis_unsorted)
+                    if index != i:
+                        self.vis[index].set_color(self.vis_unsorted)
 
                     index = j
 
@@ -282,25 +292,53 @@ class SortVisualizer:
                     colors[index] = self.vis_min
 
             temp = self.values[i]
+
             self.values[i] = self.values[index]
-            self.names[i] = str(self.values[index])
+            # self.names[i] = str(self.values[index])
+
             self.values[index] = temp
-            self.names[index] = str(temp)
+
+            # self.names[index] = str(temp)
 
             plt.clf()
             self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
+            self.vis[i].set_color(self.vis_pivot)
             for b in range(i+1):
                 self.vis[b].set_color(self.vis_sorted)
             plt.pause(self.pause_long)
 
         self.vis[self.LENGTH-1].set_color(self.vis_sorted)
         plt.show()
-        # Pivot color is changing. Maybe use the dict
 
+    def insertion(self):
+        for i in range(1, len(self.values)):
+            a = i
 
+            self.vis[a].set_color(self.vis_pivot)
 
+            while a > 0 and self.values[a] < self.values[a - 1]:
+                self.vis[a].set_color(self.vis_pivot)
+                self.vis[a-1].set_color(self.vis_checking)
+                plt.pause(self.pause_long)
+                self.vis[a].set_color(self.vis_unsorted)
+                self.vis[a-1].set_color(self.vis_unsorted)
 
+                temp = self.values[a]
 
+                self.vis[a].set_height(self.values[a-1])
+                self.vis[a-1].set_height(temp)
+
+                self.values[a] = self.values[a - 1]
+                self.values[a - 1] = temp
+                a -= 1
+            else:
+                self.vis[a+1].set_color(self.vis_checking)
+                self.vis[a].set_color(self.vis_pivot)
+                plt.pause(self.pause_long)
+                self.vis[a+1].set_color(self.vis_unsorted)
+                self.vis[a].set_color(self.vis_unsorted)
+
+        plt.show()
 
 # Change values, add self, change len() to self.length
 
@@ -317,13 +355,14 @@ if __name__ == '__main__':
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     key = 49
 
-    y = SortVisualizer(test)
-    y.selection()
+    y = SortVisualizer(test, 0.1, 0.25)
+    # y.selection()
+    y.insertion()
 
 
 
 
-    # x = SearchVisualizer(test)
+    # x = SearchVisualizer(test3)
     # x.values_sort()
 
     # x.comparison(key)
