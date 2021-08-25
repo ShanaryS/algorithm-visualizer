@@ -12,11 +12,14 @@ import matplotlib.pyplot as plt
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algorithms that require sort
+# Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
+
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Create subplots to visualize multiple at once
 # Currently this gets rid of duplicates nums. See test4
 # Optimize so you don't need to clear graph each update
 # Use an upside down bar graph
+# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 
 class SearchVisualizer:
     def __init__(self, values, pause_short=0.1, pause_long=1.0):   # Look into set_facecolor, set_edgecolor. Maybe solves edge bug
@@ -258,7 +261,7 @@ class SortVisualizer:
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
         self.pause_short = pause_short
         self.pause_long = pause_long
-        self.vis_pivot = 'yellowgreen'
+        self.vis_pivot = 'red'
         self.vis_min = 'magenta'
         self.vis_checking = 'gold'
         self.vis_sorted = 'green'
@@ -267,47 +270,41 @@ class SortVisualizer:
     def visualize(self):
         pass
 
-    # TODO Modify chart inplace rather than creating a new one. Probably complete redo. Also show when swapping
     def selection(self):
-        colors = {}     # Not used but may be useful
-
-        for i in range(self.LENGTH-1):
+        for i in range(self.LENGTH - 1):
             self.vis[i].set_color(self.vis_pivot)
-            colors[i] = self.vis_pivot
             plt.pause(self.pause_long)
 
             index = i
-            for j in range(i+1, self.LENGTH):
+            for j in range(i + 1, self.LENGTH):
                 self.vis[j].set_color(self.vis_checking)
-                colors[j] = self.vis_checking
                 plt.pause(self.pause_short)
 
                 if self.values[j] < self.values[index]:
+                    self.vis[j].set_color(self.vis_min)
                     if index != i:
-                        self.vis[index].set_color(self.vis_unsorted)
+                        self.vis[index].set_color(self.vis_checking)
 
                     index = j
 
-                    self.vis[index].set_color(self.vis_min)
-                    colors[index] = self.vis_min
-
             temp = self.values[i]
 
-            self.values[i] = self.values[index]
-            # self.names[i] = str(self.values[index])
+            self.vis[i].set_height(self.values[index])
+            self.vis[index].set_height(temp)
+            self.vis[i].set_color(self.vis_min)
+            self.vis[index].set_color(self.vis_pivot)
+            plt.pause(self.pause_long)
+            self.vis[i].set_color(self.vis_sorted)
+            for b in range(i+1, self.LENGTH):
+                self.vis[b].set_color(self.vis_unsorted)
 
+            self.values[i] = self.values[index]
             self.values[index] = temp
 
-            # self.names[index] = str(temp)
+            if i == self.LENGTH-2:
+                for b in range(i, self.LENGTH):
+                    self.vis[b].set_color(self.vis_sorted)
 
-            plt.clf()
-            self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
-            self.vis[i].set_color(self.vis_pivot)
-            for b in range(i+1):
-                self.vis[b].set_color(self.vis_sorted)
-            plt.pause(self.pause_long)
-
-        self.vis[self.LENGTH-1].set_color(self.vis_sorted)
         plt.show()
 
     def insertion(self):
@@ -338,6 +335,8 @@ class SortVisualizer:
                 self.vis[a+1].set_color(self.vis_unsorted)
                 self.vis[a].set_color(self.vis_unsorted)
 
+        for b in range(self.LENGTH):
+            self.vis[b].set_color(self.vis_sorted)
         plt.show()
 
 # Change values, add self, change len() to self.length
@@ -356,8 +355,9 @@ if __name__ == '__main__':
     key = 49
 
     y = SortVisualizer(test, 0.1, 0.25)
-    # y.selection()
-    y.insertion()
+    y.selection()
+    # y.insertion()
+    # y.merge()
 
 
 
