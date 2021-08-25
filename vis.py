@@ -341,10 +341,27 @@ class SortVisualizer:
             self.vis[b].set_color(self.vis_sorted)
         plt.show()
 
+    def bubble(self):
+        pass
+
+    def merge(self):
+        pass
+
+    def timsort(self):
+        pass
+
+    def quicksort(self):
+        pass
+
+    def heap(self):
+        pass
+
+    def counting(self):
+        pass
+
+    def radix(self):
+        pass
 # Change values, add self, change len() to self.length
-
-
-
 
 
 if __name__ == '__main__':
@@ -357,12 +374,18 @@ if __name__ == '__main__':
     key = 49
 
     y = SortVisualizer(test, 0.1, 0.25)
-    y.selection()
+
+    # y.selection()
     # y.insertion()
+    # y.bubble()
     # y.merge()
+    # y.timsort()
+    # y.quicksort()
+    # y.heap()
+    # y.counting()
+    # y.radix()
 
-
-
+# ---------------------------------------------------------
 
     # x = SearchVisualizer(test3)
     # x.values_sort()
