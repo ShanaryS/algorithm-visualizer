@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 
 # Use an online Jupyter Notebook for visualizations, move to tableau if possible
 # Link to Jupyter in git readme to for visualizations and walkthrough
+# Rename vis.py to main.py once finished. Point to vis.py code implementation.
+# search_algos.pv, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
