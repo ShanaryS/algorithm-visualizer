@@ -16,12 +16,14 @@ import matplotlib.pyplot as plt
 # Return non sorted value for algorithms that require sort
 # Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
 
+# Remove temp variable for swaping two values. Will have to change bar updating method
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Create subplots to visualize multiple at once
 # Currently this gets rid of duplicates nums. See test4
 # Optimize so you don't need to clear graph each update
 # Use an upside down bar graph
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
+# Choose different pause_short and pause_long for each algorithm
 
 class SearchVisualizer:
     def __init__(self, values, pause_short=0.1, pause_long=1.0):   # Look into set_facecolor, set_edgecolor. Maybe solves edge bug
@@ -303,6 +305,8 @@ class SortVisualizer:
             self.values[i] = self.values[index]
             self.values[index] = temp
 
+            # self.values[i], self.values[index] = self.values[index], self.values[i]   - Better way to swap
+
             if i == self.LENGTH-2:
                 for b in range(i, self.LENGTH):
                     self.vis[b].set_color(self.vis_sorted)
@@ -310,7 +314,7 @@ class SortVisualizer:
         plt.show()
 
     def insertion(self):
-        for i in range(1, len(self.values)):
+        for i in range(1, self.LENGTH):
             a = i
 
             self.vis[a].set_color(self.vis_pivot)
@@ -342,7 +346,30 @@ class SortVisualizer:
         plt.show()
 
     def bubble(self):
-        pass
+        for i in range(self.LENGTH-1):
+            for j in range(0, self.LENGTH-i - 1):
+                self.vis[j].set_color(self.vis_pivot)
+                self.vis[j+1].set_color(self.vis_checking)
+                plt.pause(self.pause_long)
+
+                if self.values[j] > self.values[j+1]:
+                    self.vis[j].set_height(self.values[j+1])
+                    self.vis[j].set_color(self.vis_checking)
+
+                    self.values[j], self.values[j+1] = self.values[j+1], self.values[j]
+
+                    self.vis[j+1].set_height(self.values[j+1])
+                    self.vis[j+1].set_color(self.vis_pivot)
+                    plt.pause(self.pause_long)
+
+                self.vis[j].set_color(self.vis_unsorted)
+                self.vis[j+1].set_color(self.vis_unsorted)
+
+                if j == self.LENGTH-i - 2:
+                    self.vis[j+1].set_color(self.vis_sorted)
+
+        self.vis[0].set_color(self.vis_sorted)
+        plt.show()
 
     def merge(self):
         pass
@@ -361,7 +388,8 @@ class SortVisualizer:
 
     def radix(self):
         pass
-# Change values, add self, change len() to self.length
+
+# Search for len( and replace with self.LENGTH
 
 
 if __name__ == '__main__':
@@ -377,7 +405,7 @@ if __name__ == '__main__':
 
     # y.selection()
     # y.insertion()
-    # y.bubble()
+    y.bubble()
     # y.merge()
     # y.timsort()
     # y.quicksort()
