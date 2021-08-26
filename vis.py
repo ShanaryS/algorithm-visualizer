@@ -1,5 +1,4 @@
 import math
-from heapq import heappush, heappop
 import matplotlib.pyplot as plt
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
@@ -359,7 +358,7 @@ class SortVisualizer:
             for j in range(0, self.LENGTH-i - 1):
                 self.vis[j].set_color(self.vis_pivot)
                 self.vis[j+1].set_color(self.vis_checking)
-                plt.pause(self.pause_long)
+                plt.pause(self.pause_short)
 
                 if self.values[j] > self.values[j+1]:
                     # Swaps bars while maintaining color for each
@@ -368,7 +367,7 @@ class SortVisualizer:
                     self.values[j], self.values[j+1] = self.values[j+1], self.values[j]
                     self.vis[j+1].set_height(self.values[j+1])
                     self.vis[j+1].set_color(self.vis_pivot)
-                    plt.pause(self.pause_long)
+                    plt.pause(self.pause_short)
 
                 self.vis[j].set_color(self.vis_unsorted)
                 self.vis[j+1].set_color(self.vis_unsorted)
@@ -378,6 +377,75 @@ class SortVisualizer:
 
         self.vis[0].set_color(self.vis_sorted)
         plt.show()
+
+    def heap(self):
+        # Puts values in heap
+        for i in range(self.LENGTH // 2 - 1, -1, -1):
+            self._heap(self.LENGTH, i)
+
+        # Show that values are now in heap
+        for b in range(self.LENGTH):
+            self.vis[b].set_color(self.vis_min)
+        plt.pause(self.pause_long)
+
+        # Sorts values from min to max, max first
+        for i in range(self.LENGTH - 1, 0, -1):
+            self.vis[i].set_color(self.vis_checking)
+            self.vis[0].set_color(self.vis_checking)
+            for b in range(i):
+                self.vis[b].set_color(self.vis_min)
+            plt.pause(self.pause_short)
+            for b in range(i):
+                self.vis[b].set_color(self.vis_unsorted)
+
+            self.vis[i].set_height(self.values[0])
+            self.values[i], self.values[0] = self.values[0], self.values[i]
+            self.vis[0].set_height(self.values[0])
+            self.vis[i].set_color(self.vis_sorted)
+            plt.pause(self.pause_short)
+            self.vis[0].set_color(self.vis_unsorted)
+
+            self._heap(i, 0)
+
+        self.vis[0].set_color(self.vis_sorted)
+        plt.show()
+
+    def _heap(self, length, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        self.vis[i].set_color(self.vis_checking)
+
+        if left < length:
+            self.vis[left].set_color(self.vis_checking)
+            if self.values[largest] < self.values[left]:
+                largest = left
+
+        if right < length:
+            self.vis[right].set_color(self.vis_checking)
+            if self.values[largest] < self.values[right]:
+                largest = right
+
+        plt.pause(self.pause_short)
+
+        if largest != i:
+            self.vis[i].set_color(self.vis_pivot)
+            self.vis[largest].set_color(self.vis_pivot)
+            plt.pause(self.pause_short)
+
+            self.vis[i].set_height(self.values[largest])
+            self.values[i], self.values[largest] = self.values[largest], self.values[i]
+            self.vis[largest].set_height(self.values[largest])
+            plt.pause(self.pause_short)
+
+            self._heap(length, largest)
+
+        self.vis[i].set_color(self.vis_unsorted)
+        if left < length:
+            self.vis[left].set_color(self.vis_unsorted)
+        if right < length:
+            self.vis[right].set_color(self.vis_unsorted)
 
     def merge(self, i=0, key=-1):
         if key == -1:
@@ -482,68 +550,7 @@ class SortVisualizer:
     def quicksort(self):
         pass
 
-    def heap(self):
-        # Puts values in heap
-        for i in range(self.LENGTH // 2 - 1, -1, -1):
-            self._heap(self.LENGTH, i)
 
-        # Show that values are now in heap
-        plt.pause(self.pause_long)
-
-        # Sorts values from min to max, max first
-        for i in range(self.LENGTH - 1, 0, -1):
-            self.vis[i].set_color(self.vis_checking)
-            self.vis[0].set_color(self.vis_checking)
-            plt.pause(self.pause_short)
-
-            self.vis[i].set_height(self.values[0])
-            self.values[i], self.values[0] = self.values[0], self.values[i]
-            self.vis[0].set_height(self.values[0])
-            self.vis[i].set_color(self.vis_sorted)
-            plt.pause(self.pause_short)
-            self.vis[0].set_color(self.vis_unsorted)
-
-            self._heap(i, 0)
-
-        self.vis[0].set_color(self.vis_sorted)
-        plt.show()
-
-    def _heap(self, length, i):
-        largest = i
-        left = 2 * i + 1
-        right = 2 * i + 2
-
-        self.vis[i].set_color(self.vis_checking)
-
-        if left < length:
-            self.vis[left].set_color(self.vis_checking)
-            if self.values[largest] < self.values[left]:
-                largest = left
-
-        if right < length:
-            self.vis[right].set_color(self.vis_checking)
-            if self.values[largest] < self.values[right]:
-                largest = right
-
-        plt.pause(self.pause_short)
-
-        if largest != i:
-            self.vis[i].set_color(self.vis_pivot)
-            self.vis[largest].set_color(self.vis_pivot)
-            plt.pause(self.pause_short)
-
-            self.vis[i].set_height(self.values[largest])
-            self.values[i], self.values[largest] = self.values[largest], self.values[i]
-            self.vis[largest].set_height(self.values[largest])
-            plt.pause(self.pause_short)
-
-            self._heap(length, largest)
-
-        self.vis[i].set_color(self.vis_unsorted)
-        if left < length:
-            self.vis[left].set_color(self.vis_unsorted)
-        if right < length:
-            self.vis[right].set_color(self.vis_unsorted)
 
 
 if __name__ == '__main__':
@@ -560,10 +567,11 @@ if __name__ == '__main__':
     # y.selection()
     # y.insertion()
     # y.bubble()
+    y.heap()
+
     # y.merge()
     # y.timsort()
     # y.quicksort()
-    y.heap()
     # y.counting()
     # y.radix()
 
