@@ -1,14 +1,19 @@
 import math
 from heapq import heappush, heappop
 import matplotlib.pyplot as plt
+
+""" Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
+"""
+
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
 # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values. set_height for values.
 # plt.gca().axes.xaxis.set_visible(False) to hide xaxis
 
-# Use an online Jupyter Notebook for visualizations, move to tableau if possible
-# Link to Jupyter in git readme to for visualizations and walkthrough
-# Rename vis.py to main.py once finished. Point to vis.py code implementation.
-# search_algos.pv, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
+# Use an online Jupyter Notebook, Repl.it for visualizations, move to tableau if possible
+# Link to Jupyter in git readme to for visualizations and walkthrough as first header
+# Rename vis.py to main.py once finished. Point to *algos.py code implementation.
+# search_algos.py, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
+# Relative speed depending on size. Maybe speed increase n^2 with n size? Or 2n. Or just use time complexity.
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
@@ -24,7 +29,9 @@ import matplotlib.pyplot as plt
 # Use an upside down bar graph
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 # Choose different pause_short and pause_long for each algorithm
+# Animated graphs?
 
+# Add comments explaining each block of code after rewriting
 class SearchVisualizer:
     def __init__(self, values, pause_short=0.1, pause_long=1.0):   # Look into set_facecolor, set_edgecolor. Maybe solves edge bug
         self.values = values
@@ -252,9 +259,14 @@ class SearchVisualizer:
         return self.visualize(-i)
 
 
-# TODO Animated graphs rather than recreating to update values. Show each bar updating rather than just the result
 class SortVisualizer:
+    """Example docstring.
+
+    Add these for every class and function. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
+    """
+
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
+        """Single line doc string"""
         self.values = values
         self.LENGTH = len(self.values)
         # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
@@ -272,6 +284,9 @@ class SortVisualizer:
         # Might need to check to see if all of these are needed in more than one func. If not place in individual func
 
     def visualize(self):
+        """Multi line doc string
+        Example example
+        """
         pass
 
     def selection(self):
@@ -291,21 +306,17 @@ class SortVisualizer:
 
                     index = j
 
-            temp = self.values[i]
-
+            # Swaps bars while maintaining color for each
             self.vis[i].set_height(self.values[index])
-            self.vis[index].set_height(temp)
             self.vis[i].set_color(self.vis_min)
+            self.values[i], self.values[index] = self.values[index], self.values[i]
+            self.vis[index].set_height(self.values[index])
             self.vis[index].set_color(self.vis_pivot)
             plt.pause(self.pause_long)
+
             self.vis[i].set_color(self.vis_sorted)
             for b in range(i+1, self.LENGTH):
                 self.vis[b].set_color(self.vis_unsorted)
-
-            self.values[i] = self.values[index]
-            self.values[index] = temp
-
-            # self.values[i], self.values[index] = self.values[index], self.values[i]   - Better way to swap
 
             if i == self.LENGTH-2:
                 for b in range(i, self.LENGTH):
@@ -320,19 +331,17 @@ class SortVisualizer:
             self.vis[a].set_color(self.vis_pivot)
 
             while a > 0 and self.values[a] < self.values[a - 1]:
+                # Swaps bars while maintaining color for each
                 self.vis[a].set_color(self.vis_pivot)
                 self.vis[a-1].set_color(self.vis_checking)
                 plt.pause(self.pause_long)
                 self.vis[a].set_color(self.vis_unsorted)
                 self.vis[a-1].set_color(self.vis_unsorted)
 
-                temp = self.values[a]
-
                 self.vis[a].set_height(self.values[a-1])
-                self.vis[a-1].set_height(temp)
+                self.values[a], self.values[a-1] = self.values[a-1], self.values[a]
+                self.vis[a-1].set_height(self.values[a-1])
 
-                self.values[a] = self.values[a - 1]
-                self.values[a - 1] = temp
                 a -= 1
             else:
                 self.vis[a+1].set_color(self.vis_checking)
@@ -353,11 +362,10 @@ class SortVisualizer:
                 plt.pause(self.pause_long)
 
                 if self.values[j] > self.values[j+1]:
+                    # Swaps bars while maintaining color for each
                     self.vis[j].set_height(self.values[j+1])
                     self.vis[j].set_color(self.vis_checking)
-
                     self.values[j], self.values[j+1] = self.values[j+1], self.values[j]
-
                     self.vis[j+1].set_height(self.values[j+1])
                     self.vis[j+1].set_color(self.vis_pivot)
                     plt.pause(self.pause_long)
@@ -371,8 +379,78 @@ class SortVisualizer:
         self.vis[0].set_color(self.vis_sorted)
         plt.show()
 
-    def merge(self):
-        pass
+    def merge(self, i=0, key=-1):
+        if key == -1:
+            key = len(self.values) - 1
+
+        if i < key:
+            j = (i + key) // 2
+
+            self.merge(i, j)
+            self.merge(j + 1, key)
+
+            self._merge(self.values, i, j, key)
+
+    # Or just move everything over by 1
+    # Set bars to green as doing the final merge. When j is half.
+    def _merge(self, numbers, i, j, key):   # Is numbers necessary or can i replace with self.values
+        merged_size = key - i + 1
+        merged_numbers = [0] * merged_size
+        merge_pos = 0
+        left_pos = i
+        right_pos = j + 1
+
+        # Compares left and right merge and places lowest of each first.
+        while left_pos <= j and right_pos <= key:
+            self.vis[left_pos].set_color(self.vis_checking)
+            self.vis[right_pos].set_color(self.vis_checking)
+            plt.pause(self.pause_long)
+
+            if numbers[left_pos] <= numbers[right_pos]:
+                self.vis[i + merge_pos].set_height(numbers[left_pos])
+                self.vis[left_pos].set_color(self.vis_unsorted)
+
+                merged_numbers[merge_pos] = numbers[left_pos]
+                left_pos += 1
+            else:
+                self.vis[i + merge_pos].set_height(numbers[right_pos])
+                self.vis[right_pos].set_color(self.vis_unsorted)
+
+                merged_numbers[merge_pos] = numbers[right_pos]
+                right_pos += 1
+
+            merge_pos = merge_pos + 1
+        else:
+            if left_pos > j:
+                self.vis[right_pos].set_color(self.vis_unsorted)
+            else:
+                self.vis[left_pos].set_color(self.vis_unsorted)
+
+        # Runs when right merge ends before left merge. Rest of left's values are just added as it's already sorted.
+        while left_pos <= j:
+            self.vis[i + merge_pos].set_color(self.vis_checking)
+            plt.pause(self.pause_long)
+            self.vis[i + merge_pos].set_height(numbers[left_pos])
+            self.vis[i + merge_pos].set_color(self.vis_unsorted)
+
+            merged_numbers[merge_pos] = numbers[left_pos]
+            left_pos += 1
+            merge_pos += 1
+
+        # Runs when left merge ends before right merge. Rest of right's values are just added as it's already sorted.
+        while right_pos <= key:
+            self.vis[i + merge_pos].set_color(self.vis_checking)
+            plt.pause(self.pause_long)
+            self.vis[i + merge_pos].set_height(numbers[right_pos])
+            self.vis[i + merge_pos].set_color(self.vis_unsorted)
+
+            merged_numbers[merge_pos] = numbers[right_pos]
+            right_pos = right_pos + 1
+            merge_pos = merge_pos + 1
+
+        # Commits the current sorted values to self.values. Redundant for visualization but necessary for the sort.
+        for merge_pos in range(merged_size):
+            numbers[i + merge_pos] = merged_numbers[merge_pos]
 
     def timsort(self):
         pass
@@ -399,28 +477,31 @@ if __name__ == '__main__':
     test2 = random.sample(range(1000), 1000)
     test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-    key = 49
+    k = 49
 
-    y = SortVisualizer(test, 0.1, 0.25)
+    y = SortVisualizer(test, 0.1, .25)
 
     # y.selection()
     # y.insertion()
-    y.bubble()
-    # y.merge()
+    # y.bubble()
+    y.merge()
     # y.timsort()
     # y.quicksort()
     # y.heap()
     # y.counting()
     # y.radix()
 
+    plt.show()  # Put this in visualize for merge
+    print(y.values)
+
 # ---------------------------------------------------------
 
     # x = SearchVisualizer(test3)
     # x.values_sort()
 
-    # x.comparison(key)
-    # x.linear(key)
-    # x.binary(key)
-    # x.jump(key)
-    # x.exponential(key)
-    # x.fibonacci(key)
+    # x.comparison(k)
+    # x.linear(k)
+    # x.binary(k)
+    # x.jump(k)
+    # x.exponential(k)
+    # x.fibonacci(k)
