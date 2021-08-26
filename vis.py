@@ -483,30 +483,67 @@ class SortVisualizer:
         pass
 
     def heap(self):
+        # Puts values in heap
         for i in range(self.LENGTH // 2 - 1, -1, -1):
-            self._heap(self.values, self.LENGTH, i)
+            self._heap(self.LENGTH, i)
 
+        # Show that values are now in heap
+        plt.pause(self.pause_long)
+
+        # Sorts values from min to max, max first
         for i in range(self.LENGTH - 1, 0, -1):
-            self.values[i], self.values[0] = self.values[0], self.values[i]
-            self._heap(self.values, i, 0)
+            self.vis[i].set_color(self.vis_checking)
+            self.vis[0].set_color(self.vis_checking)
+            plt.pause(self.pause_short)
 
-    def _heap(self, values, length, i):
+            self.vis[i].set_height(self.values[0])
+            self.values[i], self.values[0] = self.values[0], self.values[i]
+            self.vis[0].set_height(self.values[0])
+            self.vis[i].set_color(self.vis_sorted)
+            plt.pause(self.pause_short)
+            self.vis[0].set_color(self.vis_unsorted)
+
+            self._heap(i, 0)
+
+        self.vis[0].set_color(self.vis_sorted)
+        plt.show()
+
+    def _heap(self, length, i):
         largest = i
         left = 2 * i + 1
         right = 2 * i + 2
 
-        if left < length and values[i] < values[left]:
-            largest = left
+        self.vis[i].set_color(self.vis_checking)
 
-        if right < length and values[largest] < values[right]:
-            largest = right
+        if left < length:
+            self.vis[left].set_color(self.vis_checking)
+            if self.values[largest] < self.values[left]:
+                largest = left
+
+        if right < length:
+            self.vis[right].set_color(self.vis_checking)
+            if self.values[largest] < self.values[right]:
+                largest = right
+
+        plt.pause(self.pause_short)
 
         if largest != i:
-            values[i], values[largest] = values[largest], values[i]
+            self.vis[i].set_color(self.vis_pivot)
+            self.vis[largest].set_color(self.vis_pivot)
+            plt.pause(self.pause_short)
 
-            self._heap(values, length, largest)
+            self.vis[i].set_height(self.values[largest])
+            self.values[i], self.values[largest] = self.values[largest], self.values[i]
+            self.vis[largest].set_height(self.values[largest])
+            plt.pause(self.pause_short)
 
-# Search for len( and replace with self.LENGTH
+            self._heap(length, largest)
+
+        self.vis[i].set_color(self.vis_unsorted)
+        if left < length:
+            self.vis[left].set_color(self.vis_unsorted)
+        if right < length:
+            self.vis[right].set_color(self.vis_unsorted)
 
 
 if __name__ == '__main__':
@@ -531,8 +568,8 @@ if __name__ == '__main__':
     # y.radix()
 
     # plt.show()  # Put this in visualize for merge
-    # print(y.values)
-    print(sorted(y.values))
+    print(y.values)
+    # print(sorted(y.values))
 
 # ---------------------------------------------------------
 
