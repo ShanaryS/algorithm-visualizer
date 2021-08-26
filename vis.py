@@ -277,7 +277,7 @@ class SortVisualizer:
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
         self.pause_short = pause_short
         self.pause_long = pause_long
-        self.vis_pivot = 'red'
+        self.vis_pivot = 'red'  # Change color names to vis_red, vis_green etc
         self.vis_min = 'magenta'
         self.vis_checking = 'gold'
         self.vis_sorted = 'green'
@@ -391,7 +391,8 @@ class SortVisualizer:
 
             self._merge(self.values, i, j, key)
 
-    # Or just move everything over by 1
+    # Or just move everything over by 1. Doesn't work. For loop at line 429 is the prob. Maybe a new merge sort.
+    # numbers[index] = self.vis[index+1]
     # Set bars to green as doing the final merge. When j is half.
     def _merge(self, numbers, i, j, key):   # Is numbers necessary or can i replace with self.values
         merged_size = key - i + 1
@@ -400,38 +401,51 @@ class SortVisualizer:
         left_pos = i
         right_pos = j + 1
 
+        left_bar, right_bar = left_pos, right_pos
+
         # Compares left and right merge and places lowest of each first.
         while left_pos <= j and right_pos <= key:
-            self.vis[left_pos].set_color(self.vis_checking)
-            self.vis[right_pos].set_color(self.vis_checking)
+            self.vis[left_bar].set_color(self.vis_checking)
+            self.vis[right_bar].set_color(self.vis_checking)
             plt.pause(self.pause_long)
 
+            # If left bar less, it's already in place.
             if numbers[left_pos] <= numbers[right_pos]:
-                self.vis[i + merge_pos].set_height(numbers[left_pos])
-                self.vis[left_pos].set_color(self.vis_unsorted)
+                # self.vis[left_bar].set_height(numbers[left_pos])  - Should be useless if done correctly
+                self.vis[left_bar].set_color(self.vis_unsorted)
+                self.vis[right_bar].set_color(self.vis_unsorted)
+                left_bar += 1
 
                 merged_numbers[merge_pos] = numbers[left_pos]
                 left_pos += 1
+
+            # If right bar is less, shifts everything in between left and right bar to the right.
+            # Moves right bar to the left spot, moves the left bar one spot ahead.
             else:
-                self.vis[i + merge_pos].set_height(numbers[right_pos])
-                self.vis[right_pos].set_color(self.vis_unsorted)
+                self.vis[left_bar].set_height(numbers[right_pos])
+                self.vis[right_bar].set_color(self.vis_unsorted)
+                self.vis[left_bar+1].set_height(numbers[left_pos])
+                self.vis[left_bar+1].set_color(self.vis_checking)
+                for b in range(left_bar+1, right_bar):  # TODO Fix this error
+                    self.vis[b+1].set_height(numbers[b])
+                    print(i, j, key)
+                plt.pause(self.pause_long)
+                self.vis[left_bar].set_color(self.vis_unsorted)
+                self.vis[left_bar+1].set_color(self.vis_unsorted)
+                right_bar += 1
+                left_bar += 1
 
                 merged_numbers[merge_pos] = numbers[right_pos]
                 right_pos += 1
 
             merge_pos = merge_pos + 1
-        else:
-            if left_pos > j:
-                self.vis[right_pos].set_color(self.vis_unsorted)
-            else:
-                self.vis[left_pos].set_color(self.vis_unsorted)
 
         # Runs when right merge ends before left merge. Rest of left's values are just added as it's already sorted.
         while left_pos <= j:
-            self.vis[i + merge_pos].set_color(self.vis_checking)
+            self.vis[left_bar].set_color(self.vis_min)
             plt.pause(self.pause_long)
-            self.vis[i + merge_pos].set_height(numbers[left_pos])
-            self.vis[i + merge_pos].set_color(self.vis_unsorted)
+            self.vis[left_bar].set_color(self.vis_unsorted)
+            left_bar += 1
 
             merged_numbers[merge_pos] = numbers[left_pos]
             left_pos += 1
@@ -439,10 +453,20 @@ class SortVisualizer:
 
         # Runs when left merge ends before right merge. Rest of right's values are just added as it's already sorted.
         while right_pos <= key:
-            self.vis[i + merge_pos].set_color(self.vis_checking)
+            self.vis[left_bar].set_color(self.vis_pivot)
+            self.vis[right_bar].set_color(self.vis_checking)
             plt.pause(self.pause_long)
-            self.vis[i + merge_pos].set_height(numbers[right_pos])
-            self.vis[i + merge_pos].set_color(self.vis_unsorted)
+            self.vis[right_bar].set_color(self.vis_unsorted)
+            self.vis[left_bar].set_height(numbers[right_pos])
+            self.vis[left_bar].set_color(self.vis_checking)
+            self.vis[left_bar+1].set_color(self.vis_pivot)
+            for b in range(left_bar, right_bar):
+                self.vis[b + 1].set_height(numbers[b])
+            plt.pause(self.pause_long)
+            self.vis[left_bar].set_color(self.vis_unsorted)
+            self.vis[left_bar+1].set_color(self.vis_unsorted)
+            right_bar += 1
+            left_bar += 1
 
             merged_numbers[merge_pos] = numbers[right_pos]
             right_pos = right_pos + 1
@@ -452,14 +476,31 @@ class SortVisualizer:
         for merge_pos in range(merged_size):
             numbers[i + merge_pos] = merged_numbers[merge_pos]
 
-    def timsort(self):
+    def timsort(self):  # Need to fix merge sort first
         pass
 
     def quicksort(self):
         pass
 
     def heap(self):
-        pass
+        h = []
+        numbers = []
+
+        plt.pause(self.pause_long)
+
+        for i, value in enumerate(self.values):
+            heappush(h, (i, value))
+
+        # Gave up. Was tired. Might not make sense.
+        for b in range(self.LENGTH):
+            self.vis[b].set_color(self.vis_checking)
+            numbers.append(heappop(h))
+            self.vis[numbers[b][0]].set_color(self.vis_checking)
+            plt.pause(self.pause_long)
+            self.vis[b].set_height(numbers[b][1])
+            self.vis[numbers[b][0]].set_height(self.values[b])
+            self.vis[b].set_color(self.vis_sorted)
+            self.vis[numbers[b][0]].set_color(self.vis_unsorted)
 
     def counting(self):
         pass
@@ -484,14 +525,14 @@ if __name__ == '__main__':
     # y.selection()
     # y.insertion()
     # y.bubble()
-    y.merge()
+    # y.merge()
     # y.timsort()
     # y.quicksort()
-    # y.heap()
+    y.heap()
     # y.counting()
     # y.radix()
 
-    plt.show()  # Put this in visualize for merge
+    # plt.show()  # Put this in visualize for merge
     print(y.values)
 
 # ---------------------------------------------------------
