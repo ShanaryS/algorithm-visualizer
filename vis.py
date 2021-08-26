@@ -475,11 +475,10 @@ class SortVisualizer:
         while left_pos <= j and right_pos <= key:
             self.vis[left_bar].set_color(self.vis_checking)
             self.vis[right_bar].set_color(self.vis_checking)
-            plt.pause(self.pause_long)
+            plt.pause(self.pause_short)
 
             # If left bar less, it's already in place.
             if numbers[left_pos] <= numbers[right_pos]:
-                # self.vis[left_bar].set_height(numbers[left_pos])  - Should be useless if done correctly
                 self.vis[left_bar].set_color(self.vis_unsorted)
                 self.vis[right_bar].set_color(self.vis_unsorted)
                 left_bar += 1
@@ -490,28 +489,28 @@ class SortVisualizer:
             # If right bar is less, shifts everything in between left and right bar to the right.
             # Moves right bar to the left spot, moves the left bar one spot ahead.
             else:
-                self.vis[left_bar].set_height(numbers[right_pos])
-                self.vis[right_bar].set_color(self.vis_unsorted)
-                self.vis[left_bar+1].set_height(numbers[left_pos])
-                self.vis[left_bar+1].set_color(self.vis_checking)
-                for b in range(left_bar+1, right_bar):  # TODO Fix this error
+                for b in range(left_bar, right_bar):                  # Shifts bars between left and right-1 over by 1
                     self.vis[b+1].set_height(numbers[b])
-                    print(i, j, key)
-                plt.pause(self.pause_long)
-                self.vis[left_bar].set_color(self.vis_unsorted)
-                self.vis[left_bar+1].set_color(self.vis_unsorted)
-                right_bar += 1
                 left_bar += 1
+                self.vis[left_bar].set_color(self.vis_checking)       # Adds color to current left bar
+                self.vis[left_bar-1].set_height(numbers[right_pos])   # Moves right bar to left bar's original position
+                self.vis[right_bar].set_color(self.vis_unsorted)      # Removes right bar's original position's color
+                plt.pause(self.pause_short)
+
+                self.vis[left_bar-1].set_color(self.vis_unsorted)     # Removes right bar's color
+                self.vis[left_bar].set_color(self.vis_unsorted)       # Removes left bar's color
+                right_bar += 1
 
                 merged_numbers[merge_pos] = numbers[right_pos]
                 right_pos += 1
 
-            merge_pos = merge_pos + 1
+            merge_pos += 1
 
         # Runs when right merge ends before left merge. Rest of left's values are just added as it's already sorted.
         while left_pos <= j:
             self.vis[left_bar].set_color(self.vis_min)
-            plt.pause(self.pause_long)
+            plt.pause(self.pause_short)
+
             self.vis[left_bar].set_color(self.vis_unsorted)
             left_bar += 1
 
@@ -521,28 +520,29 @@ class SortVisualizer:
 
         # Runs when left merge ends before right merge. Rest of right's values are just added as it's already sorted.
         while right_pos <= key:
-            self.vis[left_bar].set_color(self.vis_pivot)
-            self.vis[right_bar].set_color(self.vis_checking)
-            plt.pause(self.pause_long)
-            self.vis[right_bar].set_color(self.vis_unsorted)
-            self.vis[left_bar].set_height(numbers[right_pos])
-            self.vis[left_bar].set_color(self.vis_checking)
-            self.vis[left_bar+1].set_color(self.vis_pivot)
-            for b in range(left_bar, right_bar):
+            self.vis[right_bar].set_color(self.vis_min)
+            plt.pause(self.pause_short)
+
+            for b in range(left_bar, right_bar):  # Shifts bars between left and right-1 over by 1
                 self.vis[b + 1].set_height(numbers[b])
-            plt.pause(self.pause_long)
-            self.vis[left_bar].set_color(self.vis_unsorted)
-            self.vis[left_bar+1].set_color(self.vis_unsorted)
-            right_bar += 1
             left_bar += 1
+            self.vis[left_bar-1].set_height(numbers[right_pos])  # Moves right bar to left bar's original position
+            self.vis[right_bar].set_color(self.vis_unsorted)  # Removes right bar's original position's color
+            self.vis[left_bar-1].set_color(self.vis_min)    # Adds color to current right bar
+            plt.pause(self.pause_short)
+
+            self.vis[left_bar - 1].set_color(self.vis_unsorted)  # Removes right bar's color
+            right_bar += 1
 
             merged_numbers[merge_pos] = numbers[right_pos]
-            right_pos = right_pos + 1
-            merge_pos = merge_pos + 1
+            right_pos += 1
+            merge_pos += 1
 
+        temp = numbers.copy()
         # Commits the current sorted values to self.values. Redundant for visualization but necessary for the sort.
         for merge_pos in range(merged_size):
             numbers[i + merge_pos] = merged_numbers[merge_pos]
+        print(f"{temp} ---> {numbers} === {[temp[i]-numbers[i] for i in range(self.LENGTH)]}")
 
     def timsort(self):  # Need to fix merge sort first
         pass
@@ -550,7 +550,11 @@ class SortVisualizer:
     def quicksort(self):
         pass
 
+    def counting(self):
+        pass
 
+    def radix(self):
+        pass
 
 
 if __name__ == '__main__':
@@ -567,15 +571,16 @@ if __name__ == '__main__':
     # y.selection()
     # y.insertion()
     # y.bubble()
-    y.heap()
+    # y.heap()
 
     # y.merge()
-    # y.timsort()
+    # # y.timsort()
+
     # y.quicksort()
     # y.counting()
     # y.radix()
 
-    # plt.show()  # Put this in visualize for merge
+    plt.show()  # Put this in visualize for merge
     print(y.values)
     # print(sorted(y.values))
 
