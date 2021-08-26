@@ -483,30 +483,28 @@ class SortVisualizer:
         pass
 
     def heap(self):
-        h = []
-        numbers = []
+        for i in range(self.LENGTH // 2 - 1, -1, -1):
+            self._heap(self.values, self.LENGTH, i)
 
-        plt.pause(self.pause_long)
+        for i in range(self.LENGTH - 1, 0, -1):
+            self.values[i], self.values[0] = self.values[0], self.values[i]
+            self._heap(self.values, i, 0)
 
-        for i, value in enumerate(self.values):
-            heappush(h, (i, value))
+    def _heap(self, values, length, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
 
-        # Gave up. Was tired. Might not make sense.
-        for b in range(self.LENGTH):
-            self.vis[b].set_color(self.vis_checking)
-            numbers.append(heappop(h))
-            self.vis[numbers[b][0]].set_color(self.vis_checking)
-            plt.pause(self.pause_long)
-            self.vis[b].set_height(numbers[b][1])
-            self.vis[numbers[b][0]].set_height(self.values[b])
-            self.vis[b].set_color(self.vis_sorted)
-            self.vis[numbers[b][0]].set_color(self.vis_unsorted)
+        if left < length and values[i] < values[left]:
+            largest = left
 
-    def counting(self):
-        pass
+        if right < length and values[largest] < values[right]:
+            largest = right
 
-    def radix(self):
-        pass
+        if largest != i:
+            values[i], values[largest] = values[largest], values[i]
+
+            self._heap(values, length, largest)
 
 # Search for len( and replace with self.LENGTH
 
@@ -520,7 +518,7 @@ if __name__ == '__main__':
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test, 0.1, .25)
+    y = SortVisualizer(test, 0.1, 1)
 
     # y.selection()
     # y.insertion()
@@ -533,7 +531,8 @@ if __name__ == '__main__':
     # y.radix()
 
     # plt.show()  # Put this in visualize for merge
-    print(y.values)
+    # print(y.values)
+    print(sorted(y.values))
 
 # ---------------------------------------------------------
 

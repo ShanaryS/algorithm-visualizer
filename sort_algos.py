@@ -40,10 +40,10 @@ def merge(values, i=0, k=-1):
         merge(values, i, j)
         merge(values, j + 1, k)
 
-        merge_(values, i, j, k)
+        _merge(values, i, j, k)
 
 
-def merge_(numbers, i, j, k):
+def _merge(numbers, i, j, k):
     merged_size = k - i + 1
     merged_numbers = [0] * merged_size
     merge_pos = 0
@@ -80,7 +80,7 @@ def radix(values):
     for i in range(10):
         buckets.append([])
 
-    max_digits = radix_max(values)
+    max_digits = _radix_max(values)
 
     pow_10 = 1
     for digit_index in range(max_digits):
@@ -107,17 +107,17 @@ def radix(values):
     values.extend(negatives + non_negatives)
 
 
-def radix_max(values):
+def _radix_max(values):
     max_digits = 0
     for num in values:
-        digit_count = radix_length(num)
+        digit_count = _radix_length(num)
         if digit_count > max_digits:
             max_digits = digit_count
 
     return max_digits
 
 
-def radix_length(value):
+def _radix_length(value):
     if value == 0:
         return 1
 
@@ -164,14 +164,14 @@ def quicksort(values, start=0, end=-1):
     if end <= start:
         return
 
-    high = quicksort_(values, start, end)
+    high = _quicksort(values, start, end)
 
     quicksort(values, start, high)
 
     quicksort(values, high + 1, end)
 
 
-def quicksort_(values, start, end):
+def _quicksort(values, start, end):
     midpoint = start + (end - start) // 2
     pivot = values[midpoint]
 
@@ -211,26 +211,44 @@ def bubble(values):
 
 # Converts input into a min heap data structure and pops values.
 # Complexity: Time - O(nlog(n)), Space - O(1), Unstable
-def heapsort(values):
-    h = []
+def heap(values):
+    length = len(values)
 
-    for value in values:
-        heappush(h, value)
+    for i in range(length // 2 - 1, -1, -1):
+        _heap(values, length, i)
 
-    for i in range(len(values)):
-        values[i] = heappop(h)
+    for i in range(length - 1, 0, -1):
+        values[i], values[0] = values[0], values[i]
+        _heap(values, i, 0)
+
+
+def _heap(values, length, i):
+    largest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    if left < length and values[i] < values[left]:
+        largest = left
+
+    if right < length and values[largest] < values[right]:
+        largest = right
+
+    if largest != i:
+        values[i], values[largest] = values[largest], values[i]
+
+        _heap(values, length, largest)
 
 
 # Combination of merge sort and insertion sort. Divides input into blocks, sorts using insertion, combines using merge.
 # Complexity: Time - O(nlog(n)), Space - O(1), Stable
 def timsort(values):
     n = len(values)
-    min_run_ = min_run(n)
+    min_run = _min_run(n)
 
-    for start in range(0, n, min_run_):
+    for start in range(0, n, min_run):
         insertion(values)
 
-    size = min_run_
+    size = min_run
     while size < n:
 
         for left in range(0, n, 2 * size):
@@ -239,7 +257,7 @@ def timsort(values):
             right = min((left + 2 * size - 1), (n - 1))
 
             if mid < right:
-                merge_(values, left, mid, right)
+                _merge(values, left, mid, right)
 
         size = 2 * size
 
@@ -247,7 +265,7 @@ def timsort(values):
 MIN_MERGE = 32
 
 
-def min_run(n):
+def _min_run(n):
     r = 0
     while n >= MIN_MERGE:
         r |= n & 1
