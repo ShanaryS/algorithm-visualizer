@@ -767,27 +767,25 @@ class SortVisualizer:
 if __name__ == '__main__':
     import random
 
+    # 100 values seems to be max with 0.01s pause for short and long
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
-    test2 = random.sample(range(1000), 1000)    # Make random not be uniform
+    test2 = random.sample(range(100), 100)
     test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
     y = SortVisualizer(test3, 0.01, 0.01)
 
-    # y.selection()
-    # y.insertion()
-    # y.bubble()
-    # y.heap()
-    # y.quick()
     # y.merge()
-    # y.timsort()
+    # y.quick()
     # y.radix()
+    # y.heap()
+    # y.timsort()
 
-    print(y.values)
-    print(sorted(y.values))
-    print([y.values[i] - sorted(y.values)[i] for i in range(len(y.values))])
+    # y.insertion()
+    # y.selection()
+    # y.bubble()
 
 # ---------------------------------------------------------
 
