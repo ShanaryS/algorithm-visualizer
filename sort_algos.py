@@ -271,7 +271,3 @@ def _min_run(n):
         r |= n & 1
         n >>= 1
     return n + r
-
-
-def bogosort():
-    pass

@@ -636,8 +636,34 @@ class SortVisualizer:
         for merge_pos in range(merged_size):
             numbers[i + merge_pos] = merged_numbers[merge_pos]
 
-    def timsort(self):  # Need to fix merge sort first
-        pass
+    def timsort(self):
+        min_run = self._min_run(self.LENGTH)
+
+        for start in range(0, self.LENGTH, min_run):
+            self.insertion()
+
+        size = min_run
+        while size < self.LENGTH:
+
+            for left in range(0, self.LENGTH, 2 * size):
+
+                mid = min(self.LENGTH - 1, left + size - 1)
+                right = min((left + 2 * size - 1), (self.LENGTH - 1))
+
+                if mid < right:
+                    self._merge(self.values, left, mid, right)
+
+            size = 2 * size
+
+    @staticmethod
+    def _min_run(n):
+        MIN_MERGE = 32
+
+        r = 0
+        while n >= MIN_MERGE:
+            r |= n & 1
+            n >>= 1
+        return n + r
 
     # TODO More colors for numbers over 9999.
     def radix(self):
