@@ -1,5 +1,6 @@
 import math
 import matplotlib.pyplot as plt
+from collections import OrderedDict
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
 """
@@ -268,7 +269,8 @@ class SortVisualizer:
 
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
         """Single line doc string"""
-        self.values = list(dict.fromkeys(values))   # Removes duplicates. Breaks radix and merge??????????????????
+        # self.values = list(OrderedDict.fromkeys(values))   # Removes duplicates. Breaks radix and merge?????????????????
+        self.values = values
         self.LENGTH = len(self.values)
         # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
         self.names = [i for i in range(self.LENGTH)]    # Sets names to index of self.values.
@@ -282,6 +284,7 @@ class SortVisualizer:
         self.vis_min = 'magenta'
         self.vis_checking = 'gold'
         self.vis_sorted = 'green'
+        self.vis_cyan = 'cyan'
         # Might need to check to see if all of these are needed in more than one func. If not place in individual func
 
     def visualize(self):
@@ -462,6 +465,7 @@ class SortVisualizer:
             self._merge(self.values, i, j, key)
 
     # Or just move everything over by 1. Doesn't work. For loop at line 429 is the prob. Maybe a new merge sort.
+    # Try quicksort or heapsort's method of sliding bars
     # numbers[index] = self.vis[index+1]
     # Set bars to green as doing the final merge. When j is half.
     def _merge(self, numbers, i, j, key):   # Is numbers necessary or can i replace with self.values
@@ -549,22 +553,29 @@ class SortVisualizer:
     def timsort(self):  # Need to fix merge sort first
         pass
 
-    def quicksort(self, start=0, end=-1):
+    def quick(self, start=0, end=-1):
         if end == -1:
             end = self.LENGTH - 1
 
         if end <= start:
             return
 
-        high = self._quicksort(start, end)
+        high = self._quick(start, end)
 
-        self.quicksort(start, high)
+        self.quick(start, high)
 
-        self.quicksort(high + 1, end)
+        self.quick(high + 1, end)
 
-    def _quicksort(self, start, end):
-        midpoint = start + (end - start) // 2
-        pivot = self.values[midpoint]
+        if end == self.LENGTH-1:
+            self.vis[end].set_color(self.vis_sorted)
+
+    def _quick(self, start, end):
+        print(start, end)
+        mid = start + (end - start) // 2
+        pivot = self.values[mid]
+
+        self.vis[mid].set_color(self.vis_pivot)
+        plt.pause(self.pause_short)
 
         low = start
         high = end
@@ -572,19 +583,51 @@ class SortVisualizer:
         done = False
         while not done:
             while self.values[low] < pivot:
-                low = low + 1
+                if low != mid:
+                    self.vis[low].set_color(self.vis_min)
+                    plt.pause(self.pause_short)
+                low += 1
 
             while pivot < self.values[high]:
-                high = high - 1
+                if high != mid:
+                    self.vis[high].set_color(self.vis_checking)
+                    plt.pause(self.pause_short)
+                high -= 1
 
             if low >= high:
                 done = True
             else:
-                temp = self.values[low]
-                self.values[low] = self.values[high]
-                self.values[high] = temp
-                low = low + 1
-                high = high - 1
+                if low != mid:
+                    self.vis[low].set_color(self.vis_checking)
+                if high != mid:
+                    self.vis[high].set_color(self.vis_min)
+                plt.pause(self.pause_short)
+                if low != mid and high != mid:
+                    self.vis[low].set_color(self.vis_min)
+                    self.vis[high].set_color(self.vis_checking)
+                elif low == mid and high == mid:
+                    self.vis[mid].set_color(self.vis_pivot)     # Does nothing. Avoiding using pass
+                elif low == mid:
+                    self.vis[low].set_color(self.vis_min)
+                    self.vis[high].set_color(self.vis_pivot)
+                elif high == mid:
+                    self.vis[high].set_color(self.vis_checking)
+                    self.vis[low].set_color(self.vis_pivot)
+
+                self.vis[low].set_height(self.values[high])
+                self.values[low], self.values[high] = self.values[high], self.values[low]
+                self.vis[high].set_height(self.values[high])
+                plt.pause(self.pause_short)
+
+                low += 1
+                high -= 1
+
+        for b in range(start, end+1):
+            self.vis[b].set_color(self.vis_unsorted)
+
+        if end - start <= 1:
+            for i in range(end+1):
+                self.vis[i].set_color(self.vis_sorted)
 
         return high
 
@@ -681,13 +724,13 @@ if __name__ == '__main__':
     import random
 
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
-    test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]
+    test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = random.sample(range(1000), 1000)
     test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test1, 0.1, 1)
+    y = SortVisualizer(test3, 0.01, 1)    # TODO Test on large values
 
     # y.selection()
     # y.insertion()
@@ -697,10 +740,11 @@ if __name__ == '__main__':
     # y.merge() TODO
     # # y.timsort() TODO
 
-    y.quicksort()
+    y.quick()
     # y.radix()
+    # y.bogosort()
 
-    # plt.show()  # Put this in visualize for merge
+    plt.show()  # Put this in visualize for merge and quick sort
     print(y.values)
     # print(sorted(y.values))
 

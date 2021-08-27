@@ -172,8 +172,8 @@ def quicksort(values, start=0, end=-1):
 
 
 def _quicksort(values, start, end):
-    midpoint = start + (end - start) // 2
-    pivot = values[midpoint]
+    mid = start + (end - start) // 2
+    pivot = values[mid]
 
     low = start
     high = end
@@ -181,10 +181,10 @@ def _quicksort(values, start, end):
     done = False
     while not done:
         while values[low] < pivot:
-            low = low + 1
+            low += 1
 
         while pivot < values[high]:
-            high = high - 1
+            high -= 1
 
         if low >= high:
             done = True
@@ -192,8 +192,8 @@ def _quicksort(values, start, end):
             temp = values[low]
             values[low] = values[high]
             values[high] = temp
-            low = low + 1
-            high = high - 1
+            low += 1
+            high -= 1
 
     return high
 
@@ -271,3 +271,7 @@ def _min_run(n):
         r |= n & 1
         n >>= 1
     return n + r
+
+
+def bogosort():
+    pass
