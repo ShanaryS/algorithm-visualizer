@@ -479,15 +479,13 @@ class SortVisualizer:
             self.vis[right].set_color(self.vis_unsorted)
 
     def quick(self, start=0, end=-1):   # Weird bug where bar is misplaced only once. Can't trace it.
-        pause_short = self.pause
-
         if end == -1:
             end = self.LENGTH - 1
 
         if end <= start:
             return
 
-        high = self._quick(start, end, pause_short)
+        high = self._quick(start, end)
 
         self.quick(start, high)
 
@@ -498,7 +496,9 @@ class SortVisualizer:
             self.vis[end-1].set_color(self.vis_green)  # Sometimes this one is colored.
             plt.show()
 
-    def _quick(self, start, end, pause_short):
+    def _quick(self, start, end):
+        pause_short = self.pause
+
         mid = start + (end - start) // 2
         pivot = self.values[mid]
 
@@ -669,7 +669,7 @@ class SortVisualizer:
         for merge_pos in range(merged_size):
             self.values[i + merge_pos] = merged_numbers[merge_pos]
 
-    def timsort(self):
+    def tim(self):
         min_run = self._min_run(self.LENGTH)
 
         for start in range(0, self.LENGTH, min_run):
@@ -813,7 +813,7 @@ if __name__ == '__main__':
     # y.radix()
     # y.quick()
     # y.heap()
-    # y.timsort()
+    # y.tim()
 
     # y.insertion()
     # y.selection()
