@@ -769,7 +769,7 @@ if __name__ == '__main__':
 
     values = test3
     size = len(values)
-    pause = 110/size * 0.02
+    pause = 100/size * 0.02
 
     y = SortVisualizer(values, pause, pause)
 
