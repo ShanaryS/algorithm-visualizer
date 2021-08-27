@@ -1,5 +1,5 @@
-import math
 import matplotlib.pyplot as plt
+import numpy as np
 from collections import OrderedDict
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
@@ -150,7 +150,7 @@ class SearchVisualizer:
         return self.visualize(-mid)
 
     def jump(self, key):
-        step = int(math.sqrt(self.LENGTH))
+        step = int(np.sqrt(self.LENGTH))     # Using numpy for sqrt, one less thing to import.
         left, right = 0, 0
 
         while left < self.LENGTH and self.values[left] <= key:
@@ -275,7 +275,7 @@ class SortVisualizer:
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
-        self.pause_short = pause_short
+        self.pause_short = pause_short  # plt.pause(0.02) is the min it seems
         self.pause_long = pause_long
         self.vis_red = 'red'
         self.vis_magenta = 'magenta'
@@ -761,20 +761,18 @@ class SortVisualizer:
 
 
 if __name__ == '__main__':
-    import random
-
     # 100 values seems to be max with 0.01s pause for short and long
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
-    test2 = random.sample(range(100), 100)
-    test3 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    test3 = np.random.randint(0, 150, 100)
     k = 49
 
-    y = SortVisualizer(test2, 0.01, 0.01)
+    y = SortVisualizer(test3, 0.02, 0.02)
 
     # Calculate time and speed relation
 
-    # y.merge()
+    y.merge()
     # y.quick()
     # y.radix()
     # y.heap()
@@ -786,8 +784,8 @@ if __name__ == '__main__':
 
 # ---------------------------------------------------------
 
-    # x = SearchVisualizer(test3)
-    # x.values_sort()
+    x = SearchVisualizer(test3)
+    x.values_sort()
 
     # x.comparison(k)
     # x.linear(k)
