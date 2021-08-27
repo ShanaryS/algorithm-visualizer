@@ -14,6 +14,7 @@ from collections import OrderedDict
 # Rename vis.py to main.py once finished. Point to *algos.py code implementation.
 # search_algos.py, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
 # Relative speed depending on size. Maybe speed increase n^2 with n size? Or 2n. Or just use time complexity.
+# Allow generating random graphs
 
 
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
@@ -21,7 +22,7 @@ from collections import OrderedDict
 # Return non sorted value for algorithms that require sort
 # Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
 
-# Remove temp variable for swaping two values. Will have to change bar updating method
+# Remove temp variable for swapping two values. Will have to change bar updating method
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Create subplots to visualize multiple at once
 # Currently this gets rid of duplicates nums. See test4
@@ -269,7 +270,7 @@ class SortVisualizer:
 
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
         """Single line doc string"""
-        # self.values = list(OrderedDict.fromkeys(values))   # Removes duplicates. Breaks radix and merge?????????????????
+        # self.values = list(OrderedDict.fromkeys(values))   # Removes duplicates. Breaks radix and merge??????????????
         self.values = values
         self.LENGTH = len(self.values)
         # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
@@ -452,6 +453,84 @@ class SortVisualizer:
         if right < length:
             self.vis[right].set_color(self.vis_unsorted)
 
+    def quick(self, start=0, end=-1):
+        if end == -1:
+            end = self.LENGTH - 1
+
+        if end <= start:
+            return
+
+        high = self._quick(start, end)
+
+        self.quick(start, high)
+
+        self.quick(high + 1, end)
+
+        if end == self.LENGTH-1:
+            self.vis[end].set_color(self.vis_sorted)
+
+    def _quick(self, start, end):
+        print(start, end)
+        mid = start + (end - start) // 2
+        pivot = self.values[mid]
+
+        self.vis[mid].set_color(self.vis_pivot)
+        plt.pause(self.pause_short)
+
+        low = start
+        high = end
+
+        done = False
+        while not done:
+            while self.values[low] < pivot:
+                if low != mid:
+                    self.vis[low].set_color(self.vis_min)
+                    plt.pause(self.pause_short)
+                low += 1
+
+            while pivot < self.values[high]:
+                if high != mid:
+                    self.vis[high].set_color(self.vis_checking)
+                    plt.pause(self.pause_short)
+                high -= 1
+
+            if low >= high:
+                done = True
+            else:
+                if low != mid:
+                    self.vis[low].set_color(self.vis_checking)
+                if high != mid:
+                    self.vis[high].set_color(self.vis_min)
+                plt.pause(self.pause_short)
+                if low != mid and high != mid:
+                    self.vis[low].set_color(self.vis_min)
+                    self.vis[high].set_color(self.vis_checking)
+                elif low == mid and high == mid:
+                    self.vis[mid].set_color(self.vis_pivot)     # Does nothing. Avoiding using pass
+                elif low == mid:
+                    self.vis[low].set_color(self.vis_min)
+                    self.vis[high].set_color(self.vis_pivot)
+                elif high == mid:
+                    self.vis[high].set_color(self.vis_checking)
+                    self.vis[low].set_color(self.vis_pivot)
+
+                self.vis[low].set_height(self.values[high])
+                self.values[low], self.values[high] = self.values[high], self.values[low]
+                self.vis[high].set_height(self.values[high])
+                plt.pause(self.pause_short)
+
+                low += 1
+                high -= 1
+
+        for b in range(start, end+1):
+            self.vis[b].set_color(self.vis_unsorted)
+
+        if end - start <= 1:
+            for i in range(end+1):
+                self.vis[i].set_color(self.vis_sorted)
+
+        return high
+
     def merge(self, i=0, key=-1):
         if key == -1:
             key = len(self.values) - 1
@@ -548,90 +627,12 @@ class SortVisualizer:
         # Commits the current sorted values to self.values. Redundant for visualization but necessary for the sort.
         for merge_pos in range(merged_size):
             numbers[i + merge_pos] = merged_numbers[merge_pos]
-        print(f"{temp} ---> {numbers} === {[temp[i]-numbers[i] for i in range(self.LENGTH)]}")
 
     def timsort(self):  # Need to fix merge sort first
         pass
 
-    def quick(self, start=0, end=-1):
-        if end == -1:
-            end = self.LENGTH - 1
-
-        if end <= start:
-            return
-
-        high = self._quick(start, end)
-
-        self.quick(start, high)
-
-        self.quick(high + 1, end)
-
-        if end == self.LENGTH-1:
-            self.vis[end].set_color(self.vis_sorted)
-
-    def _quick(self, start, end):
-        print(start, end)
-        mid = start + (end - start) // 2
-        pivot = self.values[mid]
-
-        self.vis[mid].set_color(self.vis_pivot)
-        plt.pause(self.pause_short)
-
-        low = start
-        high = end
-
-        done = False
-        while not done:
-            while self.values[low] < pivot:
-                if low != mid:
-                    self.vis[low].set_color(self.vis_min)
-                    plt.pause(self.pause_short)
-                low += 1
-
-            while pivot < self.values[high]:
-                if high != mid:
-                    self.vis[high].set_color(self.vis_checking)
-                    plt.pause(self.pause_short)
-                high -= 1
-
-            if low >= high:
-                done = True
-            else:
-                if low != mid:
-                    self.vis[low].set_color(self.vis_checking)
-                if high != mid:
-                    self.vis[high].set_color(self.vis_min)
-                plt.pause(self.pause_short)
-                if low != mid and high != mid:
-                    self.vis[low].set_color(self.vis_min)
-                    self.vis[high].set_color(self.vis_checking)
-                elif low == mid and high == mid:
-                    self.vis[mid].set_color(self.vis_pivot)     # Does nothing. Avoiding using pass
-                elif low == mid:
-                    self.vis[low].set_color(self.vis_min)
-                    self.vis[high].set_color(self.vis_pivot)
-                elif high == mid:
-                    self.vis[high].set_color(self.vis_checking)
-                    self.vis[low].set_color(self.vis_pivot)
-
-                self.vis[low].set_height(self.values[high])
-                self.values[low], self.values[high] = self.values[high], self.values[low]
-                self.vis[high].set_height(self.values[high])
-                plt.pause(self.pause_short)
-
-                low += 1
-                high -= 1
-
-        for b in range(start, end+1):
-            self.vis[b].set_color(self.vis_unsorted)
-
-        if end - start <= 1:
-            for i in range(end+1):
-                self.vis[i].set_color(self.vis_sorted)
-
-        return high
-
-    # TODO More colors for numbers over 9999
+    # TODO More colors for numbers over 9999.
+    # Does not work with duplicate numbers. Ignoring for now.
     def radix(self):
         buckets = []
         for i in range(10):
@@ -730,19 +731,18 @@ if __name__ == '__main__':
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test3, 0.01, 1)    # TODO Test on large values
+    y = SortVisualizer(test, 0.01, 0.1)    # TODO Test on large values
 
     # y.selection()
     # y.insertion()
     # y.bubble()
     # y.heap()
-
-    # y.merge() TODO
-    # # y.timsort() TODO
-
     y.quick()
+
+    # y.merge()
+    # y.timsort() TODO
+
     # y.radix()
-    # y.bogosort()
 
     plt.show()  # Put this in visualize for merge and quick sort
     print(y.values)
