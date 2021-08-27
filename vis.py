@@ -20,6 +20,7 @@ from collections import OrderedDict
 # If bogosort happens to sort the list say that they are extremely special and should be proud
 # Say to use smaller array sizes for individual operations, larger sizes for overall picture
 # Explain what each color means for each algo
+# Use fill to just have outline of bar
 # Blurbs of fun tidbits about algos
 # Animated graphs?
 # Add stop button that doesn't require restart of code. Esp for bogosort
@@ -50,6 +51,10 @@ class SearchVisualizer:
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [str(i) for i in values]
+        plt.gca().axes.xaxis.set_visible(False)
+        # plt.gca().axes.yaxis.set_visible(False)
+        plt.axis('off')
+        self.show_axis = False
         self.vis_unchecked = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
@@ -67,6 +72,9 @@ class SearchVisualizer:
         self.names = [str(i) for i in self.values]
         plt.clf()   # Might be costly. Optimization could be to keep different set of sorted values rather than updating
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
+        if not self.show_axis:
+            # plt.axis('off')
+            plt.gca().axes.xaxis.set_visible(False)
 
     def visualize(self, res):
         if isinstance(res, int):
@@ -295,7 +303,9 @@ class SortVisualizer:
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
-        plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
+        # plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
+        # plt.gca().axes.yaxis.set_visible(False)
+        plt.axis('off')
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
@@ -819,7 +829,7 @@ You'll be payed in {np.round((EXPECTED_RUN_TIME / 86400), 2)} DAYS"""
             title = f"""Family? Friends? The outside world?
 Bah! You're gonna be here for {np.round((EXPECTED_RUN_TIME / 604800), 2)} WEEKS"""
         elif EXPECTED_RUN_TIME < 3.154**7:
-            title = f"""This is some serious dedication you have waiting for {np.round((EXPECTED_RUN_TIME / 2.628**6), 2)} MONTHS"
+            title = f"""This is some serious dedication you have, waiting for {np.round((EXPECTED_RUN_TIME / 2.628**6), 2)} MONTHS"
 But since you're, here might as well go all the way right?"""
         elif EXPECTED_RUN_TIME < 3.154**107:
             title = f"""Here you discover the meaning of life. Get comfortable.
@@ -873,14 +883,14 @@ if __name__ == '__main__':
     # y.selection()
     # y.bubble()
 
-    y.bogo()
+    # y.bogo()
 
 # ---------------------------------------------------------
     x = SearchVisualizer(numbers)
     x.values_sort()
     k = 121
 
-    # x.binary(k)
+    x.binary(k)
     # x.jump(k)
     # x.exponential(k)
     # x.fibonacci(k)
