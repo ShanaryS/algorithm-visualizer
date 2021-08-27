@@ -1,3 +1,5 @@
+import numpy as np
+
 # Goes through list left to right comparing values of the current number to all values after, swapping as need
 # Complexity: Time - O(n^2), Space - O(1), Unstable
 def selection(values):
@@ -265,3 +267,26 @@ def _min_run(n):
         r |= n & 1
         n >>= 1
     return n + r
+
+
+# Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
+# Complexity: Time - O(n*n!), Space - O(1), Unstable
+def bogosort(values):
+    while not is_sorted(values):
+        shuffle(values)
+        print(values)
+
+
+def is_sorted(values):
+    length = len(values)
+    for i in range(0, length-1):
+        if values[i] > values[i + 1]:
+            return False
+    return True
+
+
+def shuffle(values):
+    length = len(values)
+    for i in range(0, length):
+        r = np.random.randint(0, length-1)
+        values[i], values[r] = values[r], values[i]

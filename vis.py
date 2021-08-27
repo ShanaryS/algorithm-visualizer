@@ -16,20 +16,24 @@ from collections import OrderedDict
 # search_algos.py, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
 # Allow generating random graphs
 # Add warning for slow algos
+# For bogosort say how long it will take to find ans given array size. Say they are going to be here for a while.
+# If bogosort happens to sort the list say that they are extremely special and should be proud
 # Say to use smaller array sizes for individual operations, larger sizes for overall picture
 # Explain what each color means for each algo
+# Blurbs of fun tidbits about algos
 # Animated graphs?
+# Add stop button that doesn't require restart of code. Esp for bogosort
 # Upside down graph?
 # Allow to go step by step?
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Add pause equation to init.
 # Check whether algos needs pause_long
+# Run algos 10 times on random list on size 5, 10, 25, 50, and 100 to find any and all bugs.
 # Change colors for each algo to be meaningful and consistent across all
 # Don't sort array for linear, but sort of everything else
 # Optimize how to sort for search functions that require sorting
-# Visualize fib numbers in fib. Also red does not fill on dim 100
+# Visualize fib numbers in fib. Also red does not fill on dim 100 and sometimes 5
 # Exponential search bug. Also red seems to be overflowing. Check on dim 100
 # Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
 # Seems as though you can only call each search function once. Need to fix for actual deployment
@@ -37,7 +41,6 @@ from collections import OrderedDict
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algorithms that require sort
 # Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
-# Run algos 10 times on random list on size 5, 10, 25, 50, and 100 to find any and all bugs.
 # Timsort seems to do too much insertion over binary
 
 
@@ -50,7 +53,7 @@ class SearchVisualizer:
         self.vis_unchecked = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
-        self.pause = 150/dim * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150/self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
         self.vis_checking = 'gold'
         self.vis_right = 'green'
         self.vis_wrong = 'red'
@@ -296,7 +299,7 @@ class SortVisualizer:
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
-        self.pause = 150/dim * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150/self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
         self.vis_red = 'red'
         self.vis_magenta = 'magenta'
         self.vis_gold = 'gold'
@@ -796,9 +799,60 @@ class SortVisualizer:
             num = int(num / 10)
         return digits
 
+    # Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
+    def bogo(self):
+        pause_short = self.pause
+        EXPECTED_RUN_TIME = self.LENGTH * ((np.math.factorial(self.LENGTH)) / 3.2)
+
+        if EXPECTED_RUN_TIME < 60:
+            title = f"This should be solved in about {np.round(EXPECTED_RUN_TIME, 2)} SECONDS"
+        elif EXPECTED_RUN_TIME < 3600:
+            title = f"""Expected solve time is {np.round((EXPECTED_RUN_TIME / 60), 2)} MINUTES."
+Dare to increase array size?"""
+        elif EXPECTED_RUN_TIME < 86400:
+            title = f""""Only {np.round((EXPECTED_RUN_TIME / 3600), 2)} HOURS?
+C'mon, that's over in the blink of an eye"""
+        elif EXPECTED_RUN_TIME < 604800:
+            title = f""""This is now your day job?
+You'll be payed in {np.round((EXPECTED_RUN_TIME / 86400), 2)} DAYS"""
+        elif EXPECTED_RUN_TIME < 2.628**6:
+            title = f"""Family? Friends? The outside world?
+Bah! You're gonna be here for {np.round((EXPECTED_RUN_TIME / 604800), 2)} WEEKS"""
+        elif EXPECTED_RUN_TIME < 3.154**7:
+            title = f"""This is some serious dedication you have waiting for {np.round((EXPECTED_RUN_TIME / 2.628**6), 2)} MONTHS"
+But since you're, here might as well go all the way right?"""
+        elif EXPECTED_RUN_TIME < 3.154**107:
+            title = f"""Here you discover the meaning of life. Get comfortable.
+This may take some time. Only {np.round((EXPECTED_RUN_TIME / 3.154**7), 2)} YEARS"""
+        else:
+            title = f"""Congratulations! You won! What did you win? Well you'll just have to wait a measly
+{np.round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out. (The universe dies at 10e+100 YEARS btw.)"""
+
+        plt.title(title)
+
+        while not self._is_sorted():
+            self._shuffle()
+            for b in range(self.LENGTH):
+                self.vis[b].set_height(self.values[b])
+            plt.pause(pause_short)
+
+        for i in range(self.LENGTH):
+            self.vis[i].set_color(self.vis_green)
+        plt.show()
+
+    def _is_sorted(self):
+        for b in range(0, self.LENGTH - 1):
+            if self.values[b] > self.values[b + 1]:
+                return False
+        return True
+
+    def _shuffle(self):
+        for i in range(0, self.LENGTH):
+            r = np.random.randint(0, self.LENGTH-1)
+            self.values[i], self.values[r] = self.values[r], self.values[i]
+
 
 if __name__ == '__main__':
-    # 100 values seems to be max with 0.01s pause for short and long
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
@@ -819,6 +873,8 @@ if __name__ == '__main__':
     # y.selection()
     # y.bubble()
 
+    y.bogo()
+
 # ---------------------------------------------------------
     x = SearchVisualizer(numbers)
     x.values_sort()
@@ -827,6 +883,6 @@ if __name__ == '__main__':
     # x.binary(k)
     # x.jump(k)
     # x.exponential(k)
-    x.fibonacci(k)
+    # x.fibonacci(k)
     # x.linear(k)
     # x.comparison(k)
