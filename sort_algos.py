@@ -57,7 +57,7 @@ def _merge(numbers, i, j, k):
         else:
             merged_numbers[merge_pos] = numbers[right_pos]
             right_pos += 1
-        merge_pos = merge_pos + 1
+        merge_pos += 1
 
     while left_pos <= j:
         merged_numbers[merge_pos] = numbers[left_pos]
@@ -66,8 +66,8 @@ def _merge(numbers, i, j, k):
 
     while right_pos <= k:
         merged_numbers[merge_pos] = numbers[right_pos]
-        right_pos = right_pos + 1
-        merge_pos = merge_pos + 1
+        right_pos += 1
+        merge_pos += 1
 
     for merge_pos in range(merged_size):
         numbers[i + merge_pos] = merged_numbers[merge_pos]
