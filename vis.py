@@ -468,6 +468,7 @@ class SortVisualizer:
 
         if end == self.LENGTH-1:
             self.vis[end].set_color(self.vis_sorted)
+            self.vis[end-1].set_color(self.vis_sorted)  # Sometimes this one is colored.
 
     def _quick(self, start, end):
         print(start, end)
@@ -544,7 +545,7 @@ class SortVisualizer:
             self._merge(self.values, i, j, key)
 
     # Or just move everything over by 1. Doesn't work. For loop at line 429 is the prob. Maybe a new merge sort.
-    # Try quicksort or heapsort's method of sliding bars
+    # Try quicksort method of sliding bars
     # numbers[index] = self.vis[index+1]
     # Set bars to green as doing the final merge. When j is half.
     def _merge(self, numbers, i, j, key):   # Is numbers necessary or can i replace with self.values
@@ -731,7 +732,7 @@ if __name__ == '__main__':
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test, 0.01, 0.1)    # TODO Test on large values
+    y = SortVisualizer(test1, 0.1, 0.1)    # TODO Test on large values
 
     # y.selection()
     # y.insertion()
