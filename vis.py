@@ -29,7 +29,6 @@ from collections import OrderedDict
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Check whether algos needs pause_long
 # Run algos 10 times on random list on size 5, 10, 25, 50, and 100 to find any and all bugs.
 # Change colors for each algo to be meaningful and consistent across all
 # Don't sort array for linear, but sort of everything else
@@ -58,7 +57,7 @@ class SearchVisualizer:
         self.vis_unchecked = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
-        self.pause = 150/self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
         self.vis_checking = 'gold'
         self.vis_right = 'green'
         self.vis_wrong = 'red'
@@ -309,7 +308,7 @@ class SortVisualizer:
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
-        self.pause = 150/self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
         self.vis_red = 'red'
         self.vis_magenta = 'magenta'
         self.vis_gold = 'gold'
@@ -860,39 +859,3 @@ This may take some time. Only {np.round((EXPECTED_RUN_TIME / 3.154**7), 2)} YEAR
         for i in range(0, self.LENGTH):
             r = np.random.randint(0, self.LENGTH-1)
             self.values[i], self.values[r] = self.values[r], self.values[i]
-
-
-if __name__ == '__main__':
-    test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
-    test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
-    test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-
-    dim = 100    # Range from 5 to 100
-    test3 = np.random.randint(0, 150, dim)
-
-    numbers = test3
-    y = SortVisualizer(numbers)
-
-    # y.merge()
-    # y.radix()
-    # y.quick()
-    # y.heap()
-    # y.tim()
-
-    # y.insertion()
-    # y.selection()
-    # y.bubble()
-
-    # y.bogo()
-
-# ---------------------------------------------------------
-    x = SearchVisualizer(numbers)
-    x.values_sort()
-    k = 121
-
-    # x.binary(k)
-    # x.jump(k)
-    # x.exponential(k)
-    # x.fibonacci(k)
-    # x.linear(k)
-    # x.comparison(k)
