@@ -270,10 +270,8 @@ class SortVisualizer:
 
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
         """Single line doc string"""
-        # self.values = list(OrderedDict.fromkeys(values))   # Removes duplicates. Breaks radix and merge??????????????
         self.values = values
         self.LENGTH = len(self.values)
-        # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
         self.names = [i for i in range(self.LENGTH)]    # Sets names to index of self.values.
         plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
         self.vis_unsorted = 'blue'
@@ -563,7 +561,10 @@ class SortVisualizer:
 
             # If left bar less, it's already in place.
             if numbers[left_pos] <= numbers[right_pos]:
-                self.vis[left_bar].set_color(self.vis_unsorted)
+                if i != 0 or key != self.LENGTH-1:
+                    self.vis[left_bar].set_color(self.vis_unsorted)
+                else:
+                    self.vis[left_bar].set_color(self.vis_sorted)
                 self.vis[right_bar].set_color(self.vis_unsorted)
                 left_bar += 1
 
@@ -584,7 +585,10 @@ class SortVisualizer:
                 self.vis[right_bar].set_color(self.vis_unsorted)
                 right_bar += 1
                 plt.pause(self.pause_short)
-                self.vis[left_bar-1].set_color(self.vis_unsorted)
+                if i != 0 or key != self.LENGTH-1:
+                    self.vis[left_bar-1].set_color(self.vis_unsorted)
+                else:
+                    self.vis[left_bar-1].set_color(self.vis_sorted)
                 self.vis[left_bar].set_color(self.vis_unsorted)
 
                 merged_numbers[merge_pos] = numbers[right_pos]
@@ -596,8 +600,10 @@ class SortVisualizer:
         while left_pos <= j:
             self.vis[left_bar].set_color(self.vis_min)
             plt.pause(self.pause_short)
-
-            self.vis[left_bar].set_color(self.vis_unsorted)
+            if i != 0 or key != self.LENGTH-1:
+                self.vis[left_bar].set_color(self.vis_unsorted)
+            else:
+                self.vis[left_bar].set_color(self.vis_sorted)
             left_bar += 1
 
             merged_numbers[merge_pos] = numbers[left_pos]
@@ -616,8 +622,10 @@ class SortVisualizer:
             self.vis[right_bar].set_color(self.vis_unsorted)  # Removes right bar's original position's color
             self.vis[left_bar-1].set_color(self.vis_min)    # Adds color to current right bar
             plt.pause(self.pause_short)
-
-            self.vis[left_bar - 1].set_color(self.vis_unsorted)  # Removes right bar's color
+            if i != 0 or key != self.LENGTH - 1:
+                self.vis[left_bar-1].set_color(self.vis_unsorted)  # Removes right bar's color
+            else:
+                self.vis[left_bar-1].set_color(self.vis_sorted)
             right_bar += 1
 
             merged_numbers[merge_pos] = numbers[right_pos]
@@ -632,22 +640,27 @@ class SortVisualizer:
         pass
 
     # TODO More colors for numbers over 9999.
-    # Does not work with duplicate numbers. Ignoring for now.
     def radix(self):
+        values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
+        length = len(values)
+        names = [i for i in range(length)]
+        plt.clf()   # Might be problematic when showing multiple algos at once.
+        self.vis = plt.bar(names, values, color=self.vis_unsorted)
+
         buckets = []
         for i in range(10):
             buckets.append([])
 
-        max_digits = self._radix_max()
+        max_digits = self._radix_max(values)
         pow_10 = 1
 
         for digit_index in range(max_digits):
-            for num in self.values:
+            for num in values:
                 bucket_index = (abs(num) // pow_10) % 10
                 buckets[bucket_index].append(num)
 
             color = ''  # Used so each digit gets it's own color.
-            temp = self.values.copy()
+            temp = values.copy()
 
             if pow_10 == 1:
                 color = self.vis_checking
@@ -658,20 +671,20 @@ class SortVisualizer:
             elif pow_10 == 1000:
                 color = self.vis_unsorted
 
-            self.values.clear()
+            values.clear()
             for bucket in buckets:
-                self.values.extend(bucket)
+                values.extend(bucket)
                 bucket.clear()
 
             # Main tool for visualizing. Needs to be complicated to push values to the right rather than just replace.
-            for b in range(self.LENGTH):
-                index = temp.index(self.values[b])
+            for b in range(length):
+                index = temp.index(values[b])
                 self.vis[b].set_color(color)
                 self.vis[index].set_color(color)
                 plt.pause(self.pause_short)
 
                 t = temp.copy()
-                temp[b] = self.values[b]
+                temp[b] = values[b]
                 for i in range(b, index):
                     temp[i + 1] = t[i]
                     self.vis[i].set_height(temp[i])
@@ -689,20 +702,22 @@ class SortVisualizer:
 
         negatives = []
         non_negatives = []
-        for num in self.values:
+        for num in values:
             if num < 0:
                 negatives.append(num)
             else:
                 non_negatives.append(num)
         negatives.reverse()
-        self.values.clear()
-        self.values.extend(negatives + non_negatives)
+        values.clear()
+        values.extend(negatives + non_negatives)
 
         plt.show()
+        plt.clf()
+        self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)    # To reset so other funcs can use
 
-    def _radix_max(self):
+    def _radix_max(self, values):
         max_digits = 0
-        for num in self.values:
+        for num in values:
             digit_count = self._radix_length(num)
             if digit_count > max_digits:
                 max_digits = digit_count
@@ -731,17 +746,15 @@ if __name__ == '__main__':
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test3, 0.01, 0.1)    # TODO Test on large values
+    y = SortVisualizer(test, 0.01, 0.01)
 
     # y.selection()
     # y.insertion()
     # y.bubble()
     # y.heap()
     # y.quick()
-
-    y.merge()
-    # y.timsort() TODO
-
+    # y.merge()
+    y.timsort()
     # y.radix()
 
     plt.show()  # Put this in visualize for merge and quick sort
