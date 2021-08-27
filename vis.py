@@ -268,11 +268,11 @@ class SortVisualizer:
 
     def __init__(self, values, pause_short=0.1, pause_long=0.2):
         """Single line doc string"""
-        self.values = values
+        self.values = list(dict.fromkeys(values))   # Removes duplicates. Breaks radix and merge??????????????????
         self.LENGTH = len(self.values)
         # self.names = [str(i) for i in self.values]    - Bar names need to be unique or they overlap. This fails
-        self.names = [i for i in range(self.LENGTH)]
-        plt.gca().axes.xaxis.set_visible(False)
+        self.names = [i for i in range(self.LENGTH)]    # Sets names to index of self.values.
+        plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
@@ -549,8 +549,44 @@ class SortVisualizer:
     def timsort(self):  # Need to fix merge sort first
         pass
 
-    def quicksort(self):
-        pass
+    def quicksort(self, start=0, end=-1):
+        if end == -1:
+            end = self.LENGTH - 1
+
+        if end <= start:
+            return
+
+        high = self._quicksort(start, end)
+
+        self.quicksort(start, high)
+
+        self.quicksort(high + 1, end)
+
+    def _quicksort(self, start, end):
+        midpoint = start + (end - start) // 2
+        pivot = self.values[midpoint]
+
+        low = start
+        high = end
+
+        done = False
+        while not done:
+            while self.values[low] < pivot:
+                low = low + 1
+
+            while pivot < self.values[high]:
+                high = high - 1
+
+            if low >= high:
+                done = True
+            else:
+                temp = self.values[low]
+                self.values[low] = self.values[high]
+                self.values[high] = temp
+                low = low + 1
+                high = high - 1
+
+        return high
 
     # TODO More colors for numbers over 9999
     def radix(self):
@@ -658,11 +694,11 @@ if __name__ == '__main__':
     # y.bubble()
     # y.heap()
 
-    # y.merge()
-    # # y.timsort()
-    # y.quicksort()
+    # y.merge() TODO
+    # # y.timsort() TODO
 
-    y.radix()
+    y.quicksort()
+    # y.radix()
 
     # plt.show()  # Put this in visualize for merge
     print(y.values)
