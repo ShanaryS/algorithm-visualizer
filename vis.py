@@ -665,26 +665,26 @@ class SortVisualizer:
         return n + r
 
     def radix(self):
-        values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
-        length = len(values)
+        numbers = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
+        length = len(numbers)
         names = [i for i in range(length)]
         plt.clf()   # Might be problematic when showing multiple algos at once.
-        self.vis = plt.bar(names, values, color=self.vis_unsorted)
+        self.vis = plt.bar(names, numbers, color=self.vis_unsorted)
 
         buckets = []
         for i in range(10):
             buckets.append([])
 
-        max_digits = self._radix_max(values)
+        max_digits = self._radix_max(numbers)
         pow_10 = 1
 
         for digit_index in range(max_digits):
-            for num in values:
+            for num in numbers:
                 bucket_index = (abs(num) // pow_10) % 10
                 buckets[bucket_index].append(num)
 
             color = ''  # Used so each digit gets it's own color.
-            temp = values.copy()
+            temp = numbers.copy()
 
             if pow_10 == 1:
                 color = self.vis_gold
@@ -695,20 +695,20 @@ class SortVisualizer:
             elif pow_10 == 1000:
                 color = self.vis_cyan
 
-            values.clear()
+            numbers.clear()
             for bucket in buckets:
-                values.extend(bucket)
+                numbers.extend(bucket)
                 bucket.clear()
 
             # Main tool for visualizing. Needs to be complicated to push values to the right rather than just replace.
             for b in range(length):
-                index = temp.index(values[b])
+                index = temp.index(numbers[b])
                 self.vis[b].set_color(color)
                 self.vis[index].set_color(color)
                 plt.pause(self.pause_short)
 
                 t = temp.copy()
-                temp[b] = values[b]
+                temp[b] = numbers[b]
                 for i in range(b, index):
                     temp[i + 1] = t[i]
                     self.vis[i].set_height(temp[i])
@@ -726,22 +726,22 @@ class SortVisualizer:
 
         negatives = []
         non_negatives = []
-        for num in values:
+        for num in numbers:
             if num < 0:
                 negatives.append(num)
             else:
                 non_negatives.append(num)
         negatives.reverse()
-        values.clear()
-        values.extend(negatives + non_negatives)
+        numbers.clear()
+        numbers.extend(negatives + non_negatives)
 
         plt.show()
         plt.clf()
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)    # To reset so other funcs can use
 
-    def _radix_max(self, values):
+    def _radix_max(self, numbers):
         max_digits = 0
-        for num in values:
+        for num in numbers:
             digit_count = self._radix_length(num)
             if digit_count > max_digits:
                 max_digits = digit_count
@@ -749,14 +749,14 @@ class SortVisualizer:
         return max_digits
 
     @staticmethod
-    def _radix_length(value):
-        if value == 0:
+    def _radix_length(num):
+        if num == 0:
             return 1
 
         digits = 0
-        while value != 0:
+        while num != 0:
             digits += 1
-            value = int(value / 10)
+            num = int(num / 10)
         return digits
 
 
@@ -765,12 +765,12 @@ if __name__ == '__main__':
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-    test3 = np.random.randint(0, 150, 100)
+
+    L = 100
+    test3 = np.random.randint(0, 150, L)
+    pause = 150/L * 0.01
 
     values = test3
-    size = len(values)
-    pause = 100/size * 0.02
-
     y = SortVisualizer(values, pause, pause)
 
     # Size - speed relation

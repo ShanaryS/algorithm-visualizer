@@ -1,6 +1,3 @@
-from heapq import heappush, heappop
-
-
 # Goes through list left to right comparing values of the current number to all values after, swapping as need
 # Complexity: Time - O(n^2), Space - O(1), Unstable
 def selection(values):
@@ -22,9 +19,7 @@ def insertion(values):
         a = i
 
         while a > 0 and values[a] < values[a - 1]:
-            temp = values[a]
-            values[a] = values[a - 1]
-            values[a - 1] = temp
+            values[a], values[a-1] = values[a-1], values[a]
             a -= 1
 
 
@@ -75,41 +70,41 @@ def _merge(numbers, i, j, k):
 
 # Only for integers. Places values into buckets from the least to most significant digit. Sorts with buckets
 # Complexity: Time - O(n*k), Space - O(n+k), Stable
-def radix(values):
+def radix(numbers):
     buckets = []
     for i in range(10):
         buckets.append([])
 
-    max_digits = _radix_max(values)
+    max_digits = _radix_max(numbers)
     pow_10 = 1
 
     for digit_index in range(max_digits):
-        for num in values:
+        for num in numbers:
             bucket_index = (abs(num) // pow_10) % 10
             buckets[bucket_index].append(num)
 
-        values.clear()
+        numbers.clear()
         for bucket in buckets:
-            values.extend(bucket)
+            numbers.extend(bucket)
             bucket.clear()
 
         pow_10 = pow_10 * 10
 
     negatives = []
     non_negatives = []
-    for num in values:
+    for num in numbers:
         if num < 0:
             negatives.append(num)
         else:
             non_negatives.append(num)
     negatives.reverse()
-    values.clear()
-    values.extend(negatives + non_negatives)
+    numbers.clear()
+    numbers.extend(negatives + non_negatives)
 
 
-def _radix_max(values):
+def _radix_max(numbers):
     max_digits = 0
-    for num in values:
+    for num in numbers:
         digit_count = _radix_length(num)
         if digit_count > max_digits:
             max_digits = digit_count
@@ -117,14 +112,14 @@ def _radix_max(values):
     return max_digits
 
 
-def _radix_length(value):
-    if value == 0:
+def _radix_length(num):
+    if num == 0:
         return 1
 
     digits = 0
-    while value != 0:
+    while num != 0:
         digits += 1
-        value = int(value / 10)
+        num = int(num / 10)
     return digits
 
 
@@ -201,10 +196,10 @@ def _quicksort(values, start, end):
 # Swaps adjacent elements if they are in the wrong order. Repeats n-1 times with max index to check decreasing by 1.
 # Complexity: Time - O(n^2), Space - O(1), Stable
 def bubble(values):
-    n = len(values)
+    length = len(values)
 
-    for i in range(n - 1):
-        for j in range(0, n - i - 1):
+    for i in range(length - 1):
+        for j in range(0, length - i - 1):
             if values[j] > values[j + 1]:
                 values[j], values[j + 1] = values[j + 1], values[j]
 
@@ -242,19 +237,19 @@ def _heap(values, length, i):
 # Combination of merge sort and insertion sort. Divides input into blocks, sorts using insertion, combines using merge.
 # Complexity: Time - O(nlog(n)), Space - O(1), Stable
 def timsort(values):
-    n = len(values)
-    min_run = _min_run(n)
+    length = len(values)
+    min_run = _min_run(length)
 
-    for start in range(0, n, min_run):
+    for start in range(0, length, min_run):
         insertion(values)
 
     size = min_run
-    while size < n:
+    while size < length:
 
-        for left in range(0, n, 2 * size):
+        for left in range(0, length, 2 * size):
 
-            mid = min(n - 1, left + size - 1)
-            right = min((left + 2 * size - 1), (n - 1))
+            mid = min(length - 1, left + size - 1)
+            right = min((left + 2 * size - 1), (length - 1))
 
             if mid < right:
                 _merge(values, left, mid, right)

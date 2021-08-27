@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 
 # Loops through array once and returns the first item of value key. Complexity: Time - O(n), Space - O(1)
@@ -13,9 +13,9 @@ def linear(values, key):
 # Divides values into halves and checks if key is in that half.
 # Continues until no longer possible. Requires sorted values. Complexity: Time - O(log(n)), Space - O(1)
 def binary(values, key, high=None):
-    low = 0
     if not high:
         high = len(values)
+    low = 0
 
     while high >= low:
         mid = (high + low) // 2
@@ -34,7 +34,7 @@ def binary(values, key, high=None):
 # Requires sorted values. Complexity: Time - O(sqrt(n)), Space - O(1)
 def jump(values, key):
     length = len(values)
-    step = int(math.sqrt(length))
+    step = int(np.sqrt(length))
     left, right = 0, 0
 
     while left < length and values[left] <= key:
