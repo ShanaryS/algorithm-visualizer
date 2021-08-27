@@ -82,17 +82,17 @@ class SearchVisualizer:
     # Turn visualize into function where you pass every color change. This allows you to not show plots individually
     # And can wait and combine them for this function.
     # Maybe paralleling threads? Idk if that would apply in this situation.
-    def comparison(self, key, func1=None, func2=None):  # Use strings to know which functions needs to be compared
-        plt.close()
-        self.vis = plt.figure()
-        a = self.vis.add_subplot(211)
-        b = self.vis.add_subplot(212)
-
-        a.bar(self.names, self.values)
-        b.bar(self.names, self.values)
-
-        self.linear(key, a)
-        self.linear(key, b)
+    # def comparison(self, key, func1=None, func2=None):  # Use strings to know which functions needs to be compared
+    #     plt.close()
+    #     self.vis = plt.figure()
+    #     a = self.vis.add_subplot(211)
+    #     b = self.vis.add_subplot(212)
+    #
+    #     a.bar(self.names, self.values)
+    #     b.bar(self.names, self.values)
+    #
+    #     self.linear(key, a)
+    #     self.linear(key, b)
 
     def linear(self, key, fig=None):  # Only algorithm that does not require sorted values.
         if not fig:
@@ -537,7 +537,7 @@ class SortVisualizer:
             self.merge(i, j)
             self.merge(j + 1, key)
 
-            self._merge( i, j, key)
+            self._merge(i, j, key)
 
         if i == 0 and key == self.LENGTH - 1:
             plt.show()
@@ -767,11 +767,10 @@ if __name__ == '__main__':
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = random.sample(range(100), 100)
-    test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
-    test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    test3 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test3, 0.01, 0.01)
+    y = SortVisualizer(test2, 0.01, 0.01)
 
     # Calculate time and speed relation
 
