@@ -81,8 +81,8 @@ def radix(values):
         buckets.append([])
 
     max_digits = _radix_max(values)
-
     pow_10 = 1
+
     for digit_index in range(max_digits):
         for num in values:
             bucket_index = (abs(num) // pow_10) % 10

@@ -29,6 +29,7 @@ import matplotlib.pyplot as plt
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 # Choose different pause_short and pause_long for each algorithm
 # Animated graphs?
+# Allow to go step by step?
 
 # Add comments explaining each block of code after rewriting
 class SearchVisualizer:
@@ -258,6 +259,7 @@ class SearchVisualizer:
         return self.visualize(-i)
 
 
+# TODO Prevent duplicates in input
 class SortVisualizer:
     """Example docstring.
 
@@ -550,23 +552,106 @@ class SortVisualizer:
     def quicksort(self):
         pass
 
-    def counting(self):
-        pass
-
+    # TODO More colors for numbers over 9999
     def radix(self):
-        pass
+        buckets = []
+        for i in range(10):
+            buckets.append([])
+
+        max_digits = self._radix_max()
+        pow_10 = 1
+
+        for digit_index in range(max_digits):
+            for num in self.values:
+                bucket_index = (abs(num) // pow_10) % 10
+                buckets[bucket_index].append(num)
+
+            color = ''  # Used so each digit gets it's own color.
+            temp = self.values.copy()
+
+            if pow_10 == 1:
+                color = self.vis_checking
+            elif pow_10 == 10:
+                color = self.vis_pivot
+            elif pow_10 == 100:
+                color = self.vis_min
+            elif pow_10 == 1000:
+                color = self.vis_unsorted
+
+            self.values.clear()
+            for bucket in buckets:
+                self.values.extend(bucket)
+                bucket.clear()
+
+            # Main tool for visualizing. Needs to be complicated to push values to the right rather than just replace.
+            for b in range(self.LENGTH):
+                index = temp.index(self.values[b])
+                self.vis[b].set_color(color)
+                self.vis[index].set_color(color)
+                plt.pause(self.pause_short)
+
+                t = temp.copy()
+                temp[b] = self.values[b]
+                for i in range(b, index):
+                    temp[i + 1] = t[i]
+                    self.vis[i].set_height(temp[i])
+                self.vis[index].set_height(temp[index])
+                self.vis[index].set_color(self.vis_unsorted)
+                plt.pause(self.pause_short)
+                if digit_index != max_digits-1:
+                    self.vis[b].set_color(self.vis_unsorted)
+                else:
+                    self.vis[b].set_color(self.vis_sorted)
+
+            plt.pause(self.pause_long)
+
+            pow_10 = pow_10 * 10
+
+        negatives = []
+        non_negatives = []
+        for num in self.values:
+            if num < 0:
+                negatives.append(num)
+            else:
+                non_negatives.append(num)
+        negatives.reverse()
+        self.values.clear()
+        self.values.extend(negatives + non_negatives)
+
+        plt.show()
+
+    def _radix_max(self):
+        max_digits = 0
+        for num in self.values:
+            digit_count = self._radix_length(num)
+            if digit_count > max_digits:
+                max_digits = digit_count
+
+        return max_digits
+
+    @staticmethod
+    def _radix_length(value):
+        if value == 0:
+            return 1
+
+        digits = 0
+        while value != 0:
+            digits += 1
+            value = int(value / 10)
+        return digits
 
 
 if __name__ == '__main__':
     import random
 
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]    # Original test array. Use as base. 48/49
+    test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]
     test2 = random.sample(range(1000), 1000)
     test3 = [74, 83, 4, 62, 23, 71, 22, 13, 69, 6, 16, 9, 99, 97, 34, 18, 93, 61, 15, 64, 55, 72, 35, 50, 63, 25, 26, 54, 36, 47, 2, 66, 38, 81, 95, 46, 79, 77, 28, 49, 56, 76, 41, 27, 82, 24, 10, 7, 3, 75, 48, 90, 51, 98, 33, 21, 37, 52, 80, 17, 42, 29, 19, 11, 20, 96, 43, 59, 57, 88, 8, 5, 94, 84, 87, 68, 30, 60, 12, 0, 1, 40, 14, 31, 45, 92, 70, 32, 67, 73, 78, 89, 65, 44, 86, 53, 39, 58, 85, 91]
     test4 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     k = 49
 
-    y = SortVisualizer(test, 0.1, 1)
+    y = SortVisualizer(test1, 0.1, 1)
 
     # y.selection()
     # y.insertion()
@@ -575,12 +660,11 @@ if __name__ == '__main__':
 
     # y.merge()
     # # y.timsort()
-
     # y.quicksort()
-    # y.counting()
-    # y.radix()
 
-    plt.show()  # Put this in visualize for merge
+    y.radix()
+
+    # plt.show()  # Put this in visualize for merge
     print(y.values)
     # print(sorted(y.values))
 
