@@ -6,36 +6,35 @@ from collections import OrderedDict
 """
 
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
-# plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values. set_height for values.
-# plt.gca().axes.xaxis.set_visible(False) to hide xaxis
+# plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
 
+# UI Elements ----------------------------------------
 # Use an online Jupyter Notebook, Repl.it for visualizations, move to tableau if possible
-# Link to Jupyter in git readme to for visualizations and walkthrough as first header
+# Link to Jupyter in git readme to for visualizations and walkthrough as second header after explaining what it is
+# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 # Rename vis.py to main.py once finished. Point to *algos.py code implementation.
 # search_algos.py, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
-# Relative speed depending on size. Maybe speed increase n^2 with n size? Or 2n. Or just use time complexity.
 # Allow generating random graphs
+# Animated graphs?
+# Upside down graph?
+# Allow to go step by step?
+# Allow comparing multiple algorithims at the same time, subplots maybe
 
-
+# Bug fixes ------------------------------------------
+# Choose different pause_short and pause_long for each algorithm
+# Relative speed depending on size. Maybe speed increase n^2 with n size? Or 2n. Or just use time complexity.
+# Optimize how to sort for search functions that require sorting
+# Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
+# Seems as though you can only call each search function once. Need to fix for actual deployment
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
 # Check on larger list. Make sure all edge cases are dealt with.
 # Return non sorted value for algorithms that require sort
 # Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
 
-# Remove temp variable for swapping two values. Will have to change bar updating method
-# Seems as though you can only call each search function once. Need to fix for actual deployment
-# Create subplots to visualize multiple at once
-# Currently this gets rid of duplicates nums. See test4
-# Optimize so you don't need to clear graph each update
-# Use an upside down bar graph
-# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
-# Choose different pause_short and pause_long for each algorithm
-# Animated graphs?
-# Allow to go step by step?
 
 # Add comments explaining each block of code after rewriting
 class SearchVisualizer:
-    def __init__(self, values, pause_short=0.1, pause_long=1.0):   # Look into set_facecolor, set_edgecolor. Maybe solves edge bug
+    def __init__(self, values, pause_short=0.1, pause_long=1.0):
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [str(i) for i in values]
@@ -82,7 +81,6 @@ class SearchVisualizer:
     # Turn visualize into function where you pass every color change. This allows you to not show plots individually
     # And can wait and combine them for this function.
     # Maybe paralleling threads? Idk if that would apply in this situation.
-    # Figure out how to change default color in line with self.vis_color
     def comparison(self, key, func1=None, func2=None):  # Use strings to know which functions needs to be compared
         plt.close()
         self.vis = plt.figure()
@@ -187,11 +185,11 @@ class SearchVisualizer:
         return self.visualize((-i, right))
 
     # TODO Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
-    def exponential(self, k):
+    def exponential(self, key):
         self.vis[0].set_color(self.vis_checking)
         plt.pause(self.pause_long)
 
-        if self.values[0] == k:
+        if self.values[0] == key:
             for i in range(1, self.LENGTH):
                 self.vis[i].set_color(self.vis_wrong)
             return 0
@@ -200,7 +198,7 @@ class SearchVisualizer:
         self.vis[0].set_color(self.vis_wrong)
         self.vis[i].set_color(self.vis_checking)
 
-        while i < self.LENGTH and self.values[i] <= k:
+        while i < self.LENGTH and self.values[i] <= key:
             i *= 2
             if i <= self.LENGTH:
                 for j in range(temp_low, temp+2):
@@ -214,9 +212,9 @@ class SearchVisualizer:
                 self.vis[j].set_color(self.vis_wrong)
 
         if i < self.LENGTH:
-            return self.binary(k, i)
+            return self.binary(key, i)
         else:
-            return self.binary(k)
+            return self.binary(key)
 
     def fibonacci(self, key):
         fib_minus_2 = 0
