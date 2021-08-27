@@ -766,11 +766,16 @@ if __name__ == '__main__':
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     test3 = np.random.randint(0, 150, 100)
-    k = 49
 
-    y = SortVisualizer(test3, 0.02, 0.02)
+    values = test3
+    size = len(values)
+    pause = 110/size * 0.02
 
-    # Calculate time and speed relation
+    y = SortVisualizer(values, pause, pause)
+
+    # Size - speed relation
+    # For 25s: n = 100 : p = 0.02, n = 50 : p = 0.05, n = 25 : p = 0,125
+    # Time decrease by 0.4t each time n doubles
 
     y.merge()
     # y.quick()
@@ -783,8 +788,8 @@ if __name__ == '__main__':
     # y.bubble()
 
 # ---------------------------------------------------------
-
     x = SearchVisualizer(test3)
+    k = 49
     x.values_sort()
 
     # x.comparison(k)
