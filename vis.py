@@ -890,7 +890,7 @@ if __name__ == '__main__':
     x.values_sort()
     k = 121
 
-    x.binary(k)
+    # x.binary(k)
     # x.jump(k)
     # x.exponential(k)
     # x.fibonacci(k)
