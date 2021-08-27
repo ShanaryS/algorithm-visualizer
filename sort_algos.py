@@ -262,10 +262,9 @@ def timsort(values):
         size = 2 * size
 
 
-MIN_MERGE = 32
-
-
 def _min_run(n):
+    MIN_MERGE = 32
+
     r = 0
     while n >= MIN_MERGE:
         r |= n & 1

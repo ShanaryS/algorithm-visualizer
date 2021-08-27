@@ -261,7 +261,6 @@ class SearchVisualizer:
         return self.visualize(-i)
 
 
-# TODO Prevent duplicates in input
 class SortVisualizer:
     """Example docstring.
 
@@ -272,7 +271,7 @@ class SortVisualizer:
         """Single line doc string"""
         self.values = values
         self.LENGTH = len(self.values)
-        self.names = [i for i in range(self.LENGTH)]    # Sets names to index of self.values.
+        self.names = [i for i in range(self.LENGTH)]
         plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
         self.vis_unsorted = 'blue'
 
