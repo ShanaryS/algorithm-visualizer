@@ -8,7 +8,7 @@ from collections import OrderedDict
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
 # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
 
-# UI Elements ----------------------------------------
+# TODO UI Elements ----------------------------------------
 # Use an online Jupyter Notebook, Repl.it for visualizations, move to tableau if possible
 # Link to Jupyter in git readme to for visualizations and walkthrough as second header after explaining what it is
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
@@ -18,12 +18,13 @@ from collections import OrderedDict
 # Animated graphs?
 # Upside down graph?
 # Allow to go step by step?
-# Allow comparing multiple algorithims at the same time, subplots maybe
+# Allow comparing multiple algorithms at the same time, subplots maybe
 
-# Bug fixes ------------------------------------------
+# TODO Bug fixes ------------------------------------------
 # Choose different pause_short and pause_long for each algorithm
 # Relative speed depending on size. Maybe speed increase n^2 with n size? Or 2n. Or just use time complexity.
 # Optimize how to sort for search functions that require sorting
+# Exponential search bug
 # Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
@@ -77,7 +78,7 @@ class SearchVisualizer:
         plt.show()
         plt.clf()   # Might break something. Idk yet. Maybe it will help to call multiple times per single run
 
-    # TODO Use *args to compare all at once. Or just open each in different windows
+    # Use *args to compare all at once. Or just open each in different windows
     # Turn visualize into function where you pass every color change. This allows you to not show plots individually
     # And can wait and combine them for this function.
     # Maybe paralleling threads? Idk if that would apply in this situation.
@@ -184,7 +185,7 @@ class SearchVisualizer:
 
         return self.visualize((-i, right))
 
-    # TODO Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
+    # Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, key):
         self.vis[0].set_color(self.vis_checking)
         plt.pause(self.pause_long)
