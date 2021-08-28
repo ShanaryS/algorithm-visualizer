@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # ---------------------------------------------------------
     Search = SearchVisualizer(values)
     Search.set_graph()
-    key = 83
+    # key = 83
 
     # Search.binary(key)
     # Search.jump(key)

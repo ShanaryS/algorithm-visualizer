@@ -25,7 +25,9 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Add note: Explain what each color means for each algo
 # Closing figure seems to give errors. Add note to not do that.
 # If algo button doesn't work click generate new array
+# Add ability to change what key is being searched (not necessary)
 # -----------------------------------------------------------------------------------
+# Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
 # Allow to go step by step?
 # Animated matplotlib module?
@@ -58,7 +60,6 @@ class SearchVisualizer:
         if not names:
             names = self.names
         if values is None:
-            # self.values = sorted(self.values)
             values = self.values
 
         plt.clf()
@@ -104,23 +105,23 @@ class SearchVisualizer:
             sort.disconnect(sort_cid)
 
         def linear_search(_):
-            self.linear(83)
+            self.linear(key)
             linear.disconnect(linear_cid)
 
         def binary_search(_):
-            self.binary(83)
+            self.binary(key)
             binary.disconnect(binary_cid)
 
         def jump_search(_):
-            self.jump(83)
+            self.jump(key)
             jump.disconnect(jump_cid)
 
         def exp_search(_):
-            self.exponential(83)
+            self.exponential(key)
             exp.disconnect(exp_cid)
 
         def fib_search(_):
-            self.fibonacci(83)
+            self.fibonacci(key)
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
@@ -130,6 +131,8 @@ class SearchVisualizer:
         jump_cid = jump.on_clicked(jump_search)
         exp_cid = exp.on_clicked(exp_search)
         fib_cid = fib.on_clicked(fib_search)
+
+        key = 49    # Value to search for in algos
 
         plt.show()
 
