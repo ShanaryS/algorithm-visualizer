@@ -1,6 +1,8 @@
 from vis import SearchVisualizer
 from vis import SortVisualizer
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 
 if __name__ == '__main__':
     test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]  # Original test array. Use as base. 48/49
@@ -11,14 +13,14 @@ if __name__ == '__main__':
     test3 = np.random.randint(0, 150, size)
 
     values = test3
-    Sort = SortVisualizer(values)
-    Sort.set_graph()
+    # Sort = SortVisualizer(values)
+    # Sort.set_graph()
 
     # Sort.merge()
     # Sort.radix()
     # Sort.quick()
     # Sort.heap()
-    Sort.tim()
+    # Sort.tim()
 
     # Sort.insertion()
     # Sort.selection()
