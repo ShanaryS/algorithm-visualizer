@@ -14,7 +14,7 @@ if __name__ == '__main__':
     Sort = SortVisualizer(values)
     Sort.set_graph()
 
-    Sort.merge()
+    # Sort.merge()
     # Sort.radix()
     # Sort.quick()
     # Sort.heap()
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     # Search.jump(key)
     # Search.exponential(key)
     # Search.fibonacci(key)
-    # Search.linear(key)
+    Search.linear(key)
     # Search.comparison(key)

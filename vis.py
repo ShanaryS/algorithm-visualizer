@@ -29,7 +29,6 @@ from collections import OrderedDict
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Put creating graph in a separate function so it's easy to clear and update
 # Don't sort array for linear, but sort of everything else
 # Optimize how to sort for search functions that require sorting
 # Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
@@ -125,7 +124,7 @@ class SearchVisualizer:
     #     self.linear(key, b)
 
     def linear(self, key):  # Only algorithm that does not require sorted values.
-        # Gold: Checking - Red: Checked - Green: True
+        self.set_graph(self.names, self.values_unsorted, show_axis='None')
         pause_short = self.pause
 
         for i in range(self.LENGTH):
@@ -143,6 +142,7 @@ class SearchVisualizer:
                 return self.visualize(i)
 
     def binary(self, key, high=None):
+        self.set_graph()
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         if not high:
@@ -202,6 +202,7 @@ class SearchVisualizer:
         return self.visualize(mid)
 
     def jump(self, key):
+        self.set_graph()
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
@@ -248,6 +249,7 @@ class SearchVisualizer:
 
     # Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, key):
+        self.set_graph()
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         self.vis[0].set_color(self.vis_gold)
@@ -283,6 +285,7 @@ class SearchVisualizer:
             return self.binary(key)
 
     def fibonacci(self, key):
+        self.set_graph()
         pause_short = (self.pause * 3) + (self.LENGTH * 0.002)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
@@ -779,13 +782,12 @@ class SortVisualizer:
         return n + r
 
     def radix(self):
-        pause_short = self.pause
-        pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
-
         values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
         length = len(values)
         names = [i for i in range(length)]
         self.set_graph(names, values, show_axis='None')
+        pause_short = self.pause
+        pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         buckets = []
         for i in range(10):
