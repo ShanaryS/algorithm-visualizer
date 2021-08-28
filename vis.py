@@ -29,12 +29,10 @@ from collections import OrderedDict
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Run algos 10 times on random list on size 5, 10, 25, 50, and 100 to find any and all bugs.
 # Change colors for each algo to be meaningful and consistent across all
+# Put creating graph in a seperate function so it's easy to clear and update
 # Don't sort array for linear, but sort of everything else
 # Optimize how to sort for search functions that require sorting
-# Visualize fib numbers in fib. Also red does not fill on dim 100 and sometimes 5
-# Exponential search bug. Also red seems to be overflowing. Check on dim 100
 # Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
 # Seems as though you can only call each search function once. Need to fix for actual deployment
 # Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
@@ -49,7 +47,7 @@ class SearchVisualizer:
     def __init__(self, values):
         self.values = values
         self.LENGTH = len(self.values)
-        self.names = [str(i) for i in values]
+        self.names = [i for i in range(self.LENGTH)]
         plt.gca().axes.xaxis.set_visible(False)
         # plt.gca().axes.yaxis.set_visible(False)
         plt.axis('off')
@@ -58,17 +56,19 @@ class SearchVisualizer:
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
-        self.vis_checking = 'gold'
-        self.vis_right = 'green'
-        self.vis_wrong = 'red'
-        plt.suptitle('Yellow is pivot - Red is not valid - Green is found value')
+        self.vis_gold = 'gold'          # Checking
+        self.vis_magenta = 'magenta'    # Pivot
+        self.vis_cyan = 'cyan'          # Special value unique to that algorithm
+        self.vis_green = 'green'        # Result
+        self.vis_red = 'red'            # Checked but false
+        self.vis_black = 'black'        # Misc
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
 
     def values_sort(self):
         self.values.sort()
-        self.names = [str(i) for i in self.values]
+        self.names = [i for i in range(self.LENGTH)]
         plt.clf()   # Might be costly. Optimization could be to keep different set of sorted values rather than updating
         self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
         if not self.show_axis:
@@ -78,22 +78,25 @@ class SearchVisualizer:
     def visualize(self, res):
         if isinstance(res, int):
             if res > -1:
-                self.vis[res].set_color(self.vis_right)
+                for i in range(self.LENGTH):
+                    self.vis[i].set_color(self.vis_red)
+                self.vis[res].set_color(self.vis_green)
             else:
-                self.vis[res].set_color(self.vis_wrong)
+                for i in range(self.LENGTH):
+                    self.vis[i].set_color(self.vis_red)
                 # for i in range(-res, self.length):
                 #     test[i].set_color(self.vis_wrong)
                 # This may be necessary for exponential to work properly. Leaving just in case.
         else:
             if res[0] > -1:
                 if res[0] < self.LENGTH:
-                    self.vis[res[0]].set_color(self.vis_right)
-                    for i in range(res[0]+1, res[1]+1):
-                        self.vis[i].set_color(self.vis_wrong)
+                    for i in range(self.LENGTH):
+                        self.vis[i].set_color(self.vis_red)
+                    self.vis[res[0]].set_color(self.vis_green)
             else:
-                if -res[0] < self.LENGTH:
-                    for i in range(-res[0], res[1]+1):
-                        self.vis[i].set_color(self.vis_wrong)
+                for i in range(self.LENGTH):
+                    self.vis[i].set_color(self.vis_red)
+
         plt.show()
         plt.clf()   # Might break something. Idk yet. Maybe it will help to call multiple times per single run
 
@@ -113,26 +116,26 @@ class SearchVisualizer:
     #     self.linear(key, a)
     #     self.linear(key, b)
 
-    def linear(self, key, fig=None):  # Only algorithm that does not require sorted values.
+    def linear(self, key):  # Only algorithm that does not require sorted values.
+        # Gold: Checking - Red: Checked - Green: True
         pause_short = self.pause
 
-        if not fig:
-            fig = self.vis
-
         for i in range(self.LENGTH):
+            self.vis[i].set_color(self.vis_gold)
+            plt.pause(pause_short)
+
             if self.values[i] != key:
-                fig[i].set_color(self.vis_wrong)
+                self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_short)
                 if i == self.LENGTH-1:
                     return self.visualize(-i)
             else:
+                for b in range(self.LENGTH):
+                    self.vis[b].set_color(self.vis_red)
                 return self.visualize(i)
 
-    def binary(self, key, high=None, fig=None):
+    def binary(self, key, high=None):
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
-
-        if not fig:
-            fig = self.vis
 
         if not high:
             high = self.LENGTH
@@ -142,7 +145,22 @@ class SearchVisualizer:
 
         while high >= low:
             mid = (high + low) // 2
-            fig[mid].set_color(self.vis_checking)
+
+            if mid >= self.LENGTH:
+                mid = self.LENGTH-1
+                if mid == key:
+                    for i in range(low - 1, mid):
+                        self.vis[i].set_color(self.vis_red)
+                    for i in range(mid + 1, upper):
+                        self.vis[i].set_color(self.vis_red)
+                    return self.visualize(mid)
+                else:
+                    for i in range(self.LENGTH):
+                        self.vis[i].set_color(self.vis_red)
+                    plt.show()
+                    return
+
+            self.vis[mid].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
             if self.values[mid] > key:
@@ -151,7 +169,7 @@ class SearchVisualizer:
                 else:
                     upper = high
                 for i in range(mid, upper):
-                    fig[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
                 high = mid - 1
             elif self.values[mid] < key:
                 if low > 1:
@@ -159,18 +177,21 @@ class SearchVisualizer:
                 else:
                     lower = low
                 for i in range(lower, mid):
-                    fig[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
                 low = mid + 1
             else:
                 for i in range(low-1, mid):
-                    fig[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
                 for i in range(mid+1, upper):
-                    fig[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
                 return self.visualize(mid)
 
-        for i in range(self.LENGTH-1):
-            fig[i].set_color(self.vis_wrong)
-        return self.visualize(-mid)
+        if mid != key:
+            mid = -1
+
+        for i in range(self.LENGTH):
+            self.vis[i].set_color(self.vis_red)
+        return self.visualize(mid)
 
     def jump(self, key):
         pause_short = self.pause
@@ -182,31 +203,36 @@ class SearchVisualizer:
         while left < self.LENGTH and self.values[left] <= key:
             right = min(self.LENGTH - 1, left + step)
 
-            self.vis[left].set_color(self.vis_checking)
-            self.vis[right].set_color(self.vis_checking)
+            self.vis[left].set_color(self.vis_cyan)
+            self.vis[right].set_color(self.vis_cyan)
             plt.pause(pause_long)
 
             if self.values[left] <= key <= self.values[right]:
                 for i in range(right+1, self.LENGTH):
-                    self.vis[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_long)
                 break
             left += step
 
             for i in range(left):
                 if i < self.LENGTH:
-                    self.vis[i].set_color(self.vis_wrong)
+                    self.vis[i].set_color(self.vis_red)
 
         if left >= self.LENGTH or self.values[left] > key:
+            if left != key:
+                left = -1
             return self.visualize((left, right))
 
         right = min(self.LENGTH - 1, right)
         i = left
 
         while i <= right and self.values[i] <= key:
+            self.vis[i].set_color(self.vis_gold)
+            plt.pause(pause_short)
+
             if self.values[i] == key:
                 return self.visualize((i, right))
-            self.vis[i].set_color(self.vis_wrong)
+            self.vis[i].set_color(self.vis_red)
             plt.pause(pause_short)
             i += 1
 
@@ -216,30 +242,32 @@ class SearchVisualizer:
     def exponential(self, key):
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
-        self.vis[0].set_color(self.vis_checking)
+        self.vis[0].set_color(self.vis_gold)
         plt.pause(pause_long)
+        self.vis[0].set_color(self.vis_red)
 
         if self.values[0] == key:
             for i in range(1, self.LENGTH):
-                self.vis[i].set_color(self.vis_wrong)
+                self.vis[i].set_color(self.vis_red)
             return 0
 
         i = temp_low = temp = 1
-        self.vis[0].set_color(self.vis_wrong)
-        self.vis[i].set_color(self.vis_checking)
+        self.vis[0].set_color(self.vis_red)
+        self.vis[i].set_color(self.vis_gold)
 
         while i < self.LENGTH and self.values[i] <= key:
             i *= 2
             if i <= self.LENGTH:
-                for j in range(temp_low, temp+2):
-                    self.vis[j].set_color(self.vis_wrong)
+                for j in range(temp_low, temp):
+                    self.vis[j].set_color(self.vis_red)
+                self.vis[i].set_color(self.vis_cyan)
             plt.pause(pause_long)
             temp = i
             temp_low = int(temp / 2)
 
         if i <= self.LENGTH:
             for j in range(i+1, self.LENGTH):
-                self.vis[j].set_color(self.vis_wrong)
+                self.vis[j].set_color(self.vis_red)
 
         if i < self.LENGTH:
             return self.binary(key, i)
@@ -247,6 +275,7 @@ class SearchVisualizer:
             return self.binary(key)
 
     def fibonacci(self, key):
+        pause_short = (self.pause * 3) + (self.LENGTH * 0.002)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         fib_minus_2 = 0
@@ -254,22 +283,29 @@ class SearchVisualizer:
         fib = fib_minus_1 + fib_minus_2
         i = 1
 
+        self.vis[fib_minus_2].set_color(self.vis_cyan)
+        plt.pause(pause_short)
+
         while fib < self.LENGTH:
             fib_minus_2 = fib_minus_1
             fib_minus_1 = fib
             fib = fib_minus_1 + fib_minus_2
+
+            if fib < self.LENGTH:
+                self.vis[fib].set_color(self.vis_cyan)
+                plt.pause(pause_short)
 
         index = -1
 
         while fib > 1:
             i = min(index + fib_minus_2, (self.LENGTH - 1))
 
-            self.vis[i].set_color(self.vis_checking)
+            self.vis[i].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
             if self.values[i] < key:
                 for j in range(i+1):
-                    self.vis[j].set_color(self.vis_wrong)
+                    self.vis[j].set_color(self.vis_red)
 
                 fib = fib_minus_1
                 fib_minus_1 = fib_minus_2
@@ -277,7 +313,7 @@ class SearchVisualizer:
                 index = i
             elif self.values[i] > key:
                 for j in range(i, self.LENGTH):
-                    self.vis[j].set_color(self.vis_wrong)
+                    self.vis[j].set_color(self.vis_red)
 
                 fib = fib_minus_2
                 fib_minus_1 = fib_minus_1 - fib_minus_2
@@ -288,7 +324,10 @@ class SearchVisualizer:
         if fib_minus_1 and index < (self.LENGTH - 1) and self.values[index + 1] == key:
             return self.visualize(index + 1)
 
-        return self.visualize(-i)
+        if i != key:
+            i = -1
+
+        return self.visualize(i)
 
 
 class SortVisualizer:
@@ -305,15 +344,17 @@ class SortVisualizer:
         # plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
         # plt.gca().axes.yaxis.set_visible(False)
         plt.axis('off')
+        self.show_axis = False
         self.vis_unsorted = 'blue'
 
         self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
-        self.vis_red = 'red'
-        self.vis_magenta = 'magenta'
-        self.vis_gold = 'gold'
-        self.vis_green = 'green'
-        self.vis_cyan = 'cyan'
+        self.vis_gold = 'gold'          # Checking
+        self.vis_magenta = 'magenta'    # Pivot
+        self.vis_cyan = 'cyan'          # Special value unique to that algorithm
+        self.vis_green = 'green'        # Result
+        self.vis_black = 'black'        # Swapping
+        self.vis_red = 'red'            # Misc
 
     def visualize(self):
         """Multi line doc string
@@ -323,7 +364,7 @@ class SortVisualizer:
 
     def selection(self):
         pause_short = self.pause
-        pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
+        pause_long = (self.pause * 3) + (self.LENGTH * 0.001)
 
         for i in range(self.LENGTH - 1):
             self.vis[i].set_color(self.vis_red)
@@ -381,10 +422,12 @@ class SortVisualizer:
 
                 a -= 1
             else:
-                self.vis[a+1].set_color(self.vis_gold)
+                if a < self.LENGTH-1:
+                    self.vis[a+1].set_color(self.vis_gold)
                 self.vis[a].set_color(self.vis_red)
                 plt.pause(pause_short)
-                self.vis[a+1].set_color(self.vis_unsorted)
+                if a < self.LENGTH - 1:
+                    self.vis[a+1].set_color(self.vis_unsorted)
                 self.vis[a].set_color(self.vis_unsorted)
 
         for b in range(self.LENGTH):
@@ -719,6 +762,8 @@ class SortVisualizer:
         names = [i for i in range(length)]
         plt.clf()   # Might be problematic when showing multiple algos at once.
         self.vis = plt.bar(names, values, color=self.vis_unsorted)
+        if not self.show_axis:
+            plt.axis('off')
 
         buckets = []
         for i in range(10):
@@ -811,7 +856,7 @@ class SortVisualizer:
     # Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
     def bogo(self):
         pause_short = self.pause
-        EXPECTED_RUN_TIME = self.LENGTH * ((np.math.factorial(self.LENGTH)) / 3.2)
+        EXPECTED_RUN_TIME = ((np.math.factorial(self.LENGTH)) / 4)
 
         if EXPECTED_RUN_TIME < 60:
             title = f"This should be solved in about {np.round(EXPECTED_RUN_TIME, 2)} SECONDS"
