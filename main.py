@@ -8,13 +8,13 @@ if __name__ == '__main__':
     test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 
     size = 100  # Range from 5 to 100
-    test3 = np.random.randint(0, 100, size)
+    test3 = np.random.randint(0, 150, size)
 
     values = test3
     Sort = SortVisualizer(values)
 
     # Sort.merge()
-    # Sort.radix()
+    Sort.radix()
     # Sort.quick()
     # Sort.heap()
     # Sort.tim()

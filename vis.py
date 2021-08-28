@@ -29,7 +29,6 @@ from collections import OrderedDict
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Change colors for each algo to be meaningful and consistent across all
 # Put creating graph in a seperate function so it's easy to clear and update
 # Don't sort array for linear, but sort of everything else
 # Optimize how to sort for search functions that require sorting
@@ -353,8 +352,8 @@ class SortVisualizer:
         self.vis_magenta = 'magenta'    # Pivot
         self.vis_cyan = 'cyan'          # Special value unique to that algorithm
         self.vis_green = 'green'        # Result
-        self.vis_black = 'black'        # Swapping
-        self.vis_red = 'red'            # Misc
+        self.vis_black = 'black'        # To swap
+        self.vis_red = 'red'            # Moving
 
     def visualize(self):
         """Multi line doc string
@@ -367,7 +366,7 @@ class SortVisualizer:
         pause_long = (self.pause * 3) + (self.LENGTH * 0.001)
 
         for i in range(self.LENGTH - 1):
-            self.vis[i].set_color(self.vis_red)
+            self.vis[i].set_color(self.vis_black)
             plt.pause(pause_long)
 
             index = i
@@ -376,7 +375,7 @@ class SortVisualizer:
                 plt.pause(pause_short)
 
                 if self.values[j] < self.values[index]:
-                    self.vis[j].set_color(self.vis_magenta)
+                    self.vis[j].set_color(self.vis_cyan)
                     if index != i:
                         self.vis[index].set_color(self.vis_gold)
 
@@ -384,10 +383,10 @@ class SortVisualizer:
 
             # Swaps bars while maintaining color for each
             self.vis[i].set_height(self.values[index])
-            self.vis[i].set_color(self.vis_magenta)
+            self.vis[i].set_color(self.vis_cyan)
             self.values[i], self.values[index] = self.values[index], self.values[i]
             self.vis[index].set_height(self.values[index])
-            self.vis[index].set_color(self.vis_red)
+            self.vis[index].set_color(self.vis_black)
             plt.pause(pause_long)
 
             self.vis[i].set_color(self.vis_green)
@@ -471,7 +470,7 @@ class SortVisualizer:
 
         # Show that values are now in heap
         for b in range(self.LENGTH):
-            self.vis[b].set_color(self.vis_magenta)
+            self.vis[b].set_color(self.vis_black)
         plt.pause(pause_long)
 
         # Sorts values from min to max, max first
@@ -479,7 +478,7 @@ class SortVisualizer:
             self.vis[i].set_color(self.vis_gold)
             self.vis[0].set_color(self.vis_gold)
             for b in range(i):
-                self.vis[b].set_color(self.vis_magenta)
+                self.vis[b].set_color(self.vis_black)
             plt.pause(pause_short)
             for b in range(i):
                 self.vis[b].set_color(self.vis_unsorted)
@@ -557,7 +556,7 @@ class SortVisualizer:
         mid = start + (end - start) // 2
         pivot = self.values[mid]
 
-        self.vis[mid].set_color(self.vis_red)
+        self.vis[mid].set_color(self.vis_magenta)
         plt.pause(pause_short)
 
         low = start
@@ -567,13 +566,13 @@ class SortVisualizer:
         while not done:
             while self.values[low] < pivot:
                 if low != mid:
-                    self.vis[low].set_color(self.vis_magenta)
+                    self.vis[low].set_color(self.vis_red)
                     plt.pause(pause_short)
                 low += 1
 
             while pivot < self.values[high]:
                 if high != mid:
-                    self.vis[high].set_color(self.vis_gold)
+                    self.vis[high].set_color(self.vis_cyan)
                     plt.pause(pause_short)
                 high -= 1
 
@@ -581,21 +580,21 @@ class SortVisualizer:
                 done = True
             else:
                 if low != mid:
-                    self.vis[low].set_color(self.vis_gold)
+                    self.vis[low].set_color(self.vis_cyan)
                 if high != mid:
-                    self.vis[high].set_color(self.vis_magenta)
+                    self.vis[high].set_color(self.vis_red)
                 plt.pause(pause_short)
                 if low != mid and high != mid:
-                    self.vis[low].set_color(self.vis_magenta)
-                    self.vis[high].set_color(self.vis_gold)
-                elif low == mid and high == mid:
-                    self.vis[mid].set_color(self.vis_red)     # Does nothing. Avoiding using pass
-                elif low == mid:
-                    self.vis[low].set_color(self.vis_magenta)
-                    self.vis[high].set_color(self.vis_red)
-                elif high == mid:
-                    self.vis[high].set_color(self.vis_gold)
                     self.vis[low].set_color(self.vis_red)
+                    self.vis[high].set_color(self.vis_cyan)
+                elif low == mid and high == mid:
+                    self.vis[mid].set_color(self.vis_magenta)     # Does nothing. Avoiding using pass
+                elif low == mid:
+                    self.vis[low].set_color(self.vis_red)
+                    self.vis[high].set_color(self.vis_magenta)
+                elif high == mid:
+                    self.vis[high].set_color(self.vis_cyan)
+                    self.vis[low].set_color(self.vis_magenta)
 
                 self.vis[low].set_height(self.values[high])
                 self.values[low], self.values[high] = self.values[high], self.values[low]
@@ -643,7 +642,7 @@ class SortVisualizer:
 
         # Compares left and right merge and places lowest of each first.
         while left_pos <= j and right_pos <= key:
-            self.vis[left_bar].set_color(self.vis_gold)
+            self.vis[left_bar].set_color(self.vis_red)
             self.vis[right_bar].set_color(self.vis_gold)
             plt.pause(pause_short)
 
@@ -668,7 +667,7 @@ class SortVisualizer:
                     temp[b + 1] = t[b]
                     self.vis[b].set_height(temp[b])
                 left_bar += 1
-                self.vis[left_bar].set_color(self.vis_gold)
+                self.vis[left_bar].set_color(self.vis_red)
                 self.vis[right_bar].set_height(temp[right_bar])
                 self.vis[right_bar].set_color(self.vis_unsorted)
                 right_bar += 1
@@ -781,13 +780,13 @@ class SortVisualizer:
             temp = values.copy()
 
             if pow_10 == 1:
-                color = self.vis_gold
-            elif pow_10 == 10:
-                color = self.vis_red
-            elif pow_10 == 100:
-                color = self.vis_magenta
-            elif pow_10 == 1000:
                 color = self.vis_cyan
+            elif pow_10 == 10:
+                color = self.vis_magenta
+            elif pow_10 == 100:
+                color = self.vis_red
+            elif pow_10 == 1000:
+                color = self.vis_black
 
             values.clear()
             for bucket in buckets:
@@ -798,7 +797,7 @@ class SortVisualizer:
             for b in range(length):
                 index = temp.index(values[b])
                 self.vis[b].set_color(color)
-                self.vis[index].set_color(color)
+                self.vis[index].set_color(self.vis_gold)
                 plt.pause(pause_short)
 
                 t = temp.copy()
