@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
-search_alogs, sort_algos, and pathfinder_algos for pure implementation without visuals."""
+search_algos, sort_algos, and pathfinder_algos for pure implementation without visuals."""
 
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
 # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
@@ -58,7 +58,7 @@ class SearchVisualizer:
         if not names:
             names = self.names
         if values is None:
-            self.values = sorted(self.values)
+            # self.values = sorted(self.values)
             values = self.values
 
         plt.clf()
@@ -93,33 +93,33 @@ class SearchVisualizer:
         fib_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
         fib = Button(ax=fib_loc, label='Fibonacci')
 
-        def generate_new_array(event):
+        def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
             self.values = np.random.randint(0, 150, 100)
             self.set_graph(self.names, self.values)
             generate.disconnect(generate_cid)
 
-        def sort_array(event):
+        def sort_array(_):
             self.values.sort()
             self.set_graph(self.names, self.values)
             sort.disconnect(sort_cid)
 
-        def linear_search(event):
+        def linear_search(_):
             self.linear(83)
             linear.disconnect(linear_cid)
 
-        def binary_search(event):
+        def binary_search(_):
             self.binary(83)
             binary.disconnect(binary_cid)
 
-        def jump_search(event):
+        def jump_search(_):
             self.jump(83)
             jump.disconnect(jump_cid)
 
-        def exp_search(event):
+        def exp_search(_):
             self.exponential(83)
             exp.disconnect(exp_cid)
 
-        def fib_search(event):
+        def fib_search(_):
             self.fibonacci(83)
             fib.disconnect(fib_cid)
 
@@ -175,7 +175,7 @@ class SearchVisualizer:
     #     self.linear(key, b)
 
     def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
-        self.set_graph(self.names, self.values, show_axis='None')
+        self.set_graph()
         pause_short = self.pause
 
         for i in range(self.LENGTH):
