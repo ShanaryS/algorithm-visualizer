@@ -996,7 +996,7 @@ class SortVisualizer:
         values.extend(negatives + non_negatives)
 
         plt.show()
-        self.set_graph()    # To reset so other funcs can use
+        # self.set_graph()    # To reset so other funcs can use. Causes reset after it's finished.
 
     def _radix_max(self, values):
         max_digits = 0
