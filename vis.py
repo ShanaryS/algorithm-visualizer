@@ -406,8 +406,9 @@ class SortVisualizer:
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
+        self.size = 50  # This is controlled by the slider in the interactive plot.
 
-        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems.
         self.vis_default = 'blue'
         self.vis_gold = 'gold'        # Checking
         self.vis_magenta = 'magenta'  # Pivot
@@ -443,6 +444,9 @@ class SortVisualizer:
 
         generate_loc = plt.axes([0.35, 0.9, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
+        size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
+        size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
+                      valinit=self.size, valstep=1,orientation='vertical')
         sel_loc = plt.axes([0.225, 0.03, 0.15, 0.05])
         sel = Button(ax=sel_loc, label='Selection', color='orange')
         ins_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
@@ -463,9 +467,13 @@ class SortVisualizer:
         bogo = Button(ax=bogo_loc, label='Bogosort', color='red')
 
         def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
-            self.values = np.random.randint(0, 150, 100)
-            self.set_graph(self.names, self.values)
+            self.values = np.random.randint(0, 150, self.LENGTH)
+            self.set_graph()
             generate.disconnect(generate_cid)
+
+        def change_size(_):
+            self.size = int(size.val)
+            self.update_values()
 
         def sel_sort(_):
             self.selection()
@@ -504,6 +512,7 @@ class SortVisualizer:
             bogo.disconnect(bogo_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
+        size_cid = size.on_changed(change_size)
         sel_cid = sel.on_clicked(sel_sort)
         ins_cid = ins.on_clicked(ins_sort)
         bub_cid = bub.on_clicked(bub_sort)
@@ -515,6 +524,13 @@ class SortVisualizer:
         bogo_cid = bogo.on_clicked(bogo_sort)
 
         plt.show()
+
+    def update_values(self):
+        self.LENGTH = self.size
+        self.values = np.random.randint(0, 150, self.LENGTH)
+        self.names = [i for i in range(self.LENGTH)]
+        self.pause = 150 / self.LENGTH * 0.01
+        self.set_graph()
 
     def selection(self):
         pause_short = self.pause

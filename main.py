@@ -9,7 +9,7 @@ if __name__ == '__main__':
     test1 = [4, 89, 1, 9, 69, 49, 149, 84, 15, 79, 41, 62, 19]  # No duplicates
     test2 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 
-    size = 100  # Range from 5 to 100
+    size = 50  # Range from 5 to 100
     test3 = np.random.randint(0, 150, size)
 
     values = test3
