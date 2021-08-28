@@ -29,7 +29,7 @@ from collections import OrderedDict
 # Allow comparing multiple algorithms at the same time, subplots maybe
 
 # TODO Bug fixes ------------------------------------------
-# Put creating graph in a seperate function so it's easy to clear and update
+# Put creating graph in a separate function so it's easy to clear and update
 # Don't sort array for linear, but sort of everything else
 # Optimize how to sort for search functions that require sorting
 # Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
@@ -44,34 +44,43 @@ from collections import OrderedDict
 # Add comments explaining each block of code after rewriting
 class SearchVisualizer:
     def __init__(self, values):
-        self.values = values
-        self.LENGTH = len(self.values)
+        self.values_unsorted = values
+        self.values_sorted = sorted(values)
+        self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
-        plt.gca().axes.xaxis.set_visible(False)
-        # plt.gca().axes.yaxis.set_visible(False)
-        plt.axis('off')
-        self.show_axis = False
-        self.vis_unchecked = 'blue'
+        # self._values_sorted = sorted(values)
+        # self._names_sorted = [str(i) for i in values]
+        # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
 
-        self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
+        self.vis_default = 'blue'
         self.vis_gold = 'gold'          # Checking
         self.vis_magenta = 'magenta'    # Pivot
         self.vis_cyan = 'cyan'          # Special value unique to that algorithm
         self.vis_green = 'green'        # Result
         self.vis_red = 'red'            # Checked but false
         self.vis_black = 'black'        # Misc
-        # self._values_sorted = sorted(values)
-        # self._names_sorted = [str(i) for i in values]
-        # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
 
-    def values_sort(self):
-        self.values.sort()
-        self.names = [i for i in range(self.LENGTH)]
-        plt.clf()   # Might be costly. Optimization could be to keep different set of sorted values rather than updating
-        self.vis = plt.bar(self.names, self.values, color=self.vis_unchecked)
-        if not self.show_axis:
-            # plt.axis('off')
+        self.vis = None                 # Set plot by calling set_graph in driver code
+
+    def set_graph(self, names=None, values=None, show_axis='None'):
+        if not names:
+            names = self.names
+        if not values:
+            values = self.values_sorted
+
+        plt.clf()
+        self.vis = plt.bar(names, values, color=self.vis_default)
+
+        if show_axis == 'None':
+            plt.axis('off')
+        elif show_axis == 'x':
+            plt.axis('on')
+            plt.gca().axes.xaxis.set_visible(True)
+            plt.gca().axes.yaxis.set_visible(False)
+        elif show_axis == 'y':
+            plt.axis('on')
+            plt.gca().axes.xaxis.set_visible(True)
             plt.gca().axes.xaxis.set_visible(False)
 
     def visualize(self, res):
@@ -123,7 +132,7 @@ class SearchVisualizer:
             self.vis[i].set_color(self.vis_gold)
             plt.pause(pause_short)
 
-            if self.values[i] != key:
+            if self.values_unsorted[i] != key:
                 self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_short)
                 if i == self.LENGTH-1:
@@ -162,7 +171,7 @@ class SearchVisualizer:
             self.vis[mid].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
-            if self.values[mid] > key:
+            if self.values_sorted[mid] > key:
                 if high < self.LENGTH-2:
                     upper = high+1
                 else:
@@ -170,7 +179,7 @@ class SearchVisualizer:
                 for i in range(mid, upper):
                     self.vis[i].set_color(self.vis_red)
                 high = mid - 1
-            elif self.values[mid] < key:
+            elif self.values_sorted[mid] < key:
                 if low > 1:
                     lower = low-1
                 else:
@@ -199,14 +208,14 @@ class SearchVisualizer:
         step = int(np.sqrt(self.LENGTH))     # Using numpy for sqrt, one less thing to import.
         left, right = 0, 0
 
-        while left < self.LENGTH and self.values[left] <= key:
+        while left < self.LENGTH and self.values_sorted[left] <= key:
             right = min(self.LENGTH - 1, left + step)
 
             self.vis[left].set_color(self.vis_cyan)
             self.vis[right].set_color(self.vis_cyan)
             plt.pause(pause_long)
 
-            if self.values[left] <= key <= self.values[right]:
+            if self.values_sorted[left] <= key <= self.values_sorted[right]:
                 for i in range(right+1, self.LENGTH):
                     self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_long)
@@ -217,7 +226,7 @@ class SearchVisualizer:
                 if i < self.LENGTH:
                     self.vis[i].set_color(self.vis_red)
 
-        if left >= self.LENGTH or self.values[left] > key:
+        if left >= self.LENGTH or self.values_sorted[left] > key:
             if left != key:
                 left = -1
             return self.visualize((left, right))
@@ -225,11 +234,11 @@ class SearchVisualizer:
         right = min(self.LENGTH - 1, right)
         i = left
 
-        while i <= right and self.values[i] <= key:
+        while i <= right and self.values_sorted[i] <= key:
             self.vis[i].set_color(self.vis_gold)
             plt.pause(pause_short)
 
-            if self.values[i] == key:
+            if self.values_sorted[i] == key:
                 return self.visualize((i, right))
             self.vis[i].set_color(self.vis_red)
             plt.pause(pause_short)
@@ -245,7 +254,7 @@ class SearchVisualizer:
         plt.pause(pause_long)
         self.vis[0].set_color(self.vis_red)
 
-        if self.values[0] == key:
+        if self.values_sorted[0] == key:
             for i in range(1, self.LENGTH):
                 self.vis[i].set_color(self.vis_red)
             return 0
@@ -254,7 +263,7 @@ class SearchVisualizer:
         self.vis[0].set_color(self.vis_red)
         self.vis[i].set_color(self.vis_gold)
 
-        while i < self.LENGTH and self.values[i] <= key:
+        while i < self.LENGTH and self.values_sorted[i] <= key:
             i *= 2
             if i <= self.LENGTH:
                 for j in range(temp_low, temp):
@@ -302,7 +311,7 @@ class SearchVisualizer:
             self.vis[i].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
-            if self.values[i] < key:
+            if self.values_sorted[i] < key:
                 for j in range(i+1):
                     self.vis[j].set_color(self.vis_red)
 
@@ -310,7 +319,7 @@ class SearchVisualizer:
                 fib_minus_1 = fib_minus_2
                 fib_minus_2 = fib - fib_minus_1
                 index = i
-            elif self.values[i] > key:
+            elif self.values_sorted[i] > key:
                 for j in range(i, self.LENGTH):
                     self.vis[j].set_color(self.vis_red)
 
@@ -320,7 +329,7 @@ class SearchVisualizer:
             else:
                 return self.visualize(i)
 
-        if fib_minus_1 and index < (self.LENGTH - 1) and self.values[index + 1] == key:
+        if fib_minus_1 and index < (self.LENGTH - 1) and self.values_sorted[index + 1] == key:
             return self.visualize(index + 1)
 
         if i != key:
@@ -340,20 +349,37 @@ class SortVisualizer:
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
-        # plt.gca().axes.xaxis.set_visible(False)         # Hides x axis values. Prevents needing to update them.
-        # plt.gca().axes.yaxis.set_visible(False)
-        plt.axis('off')
-        self.show_axis = False
-        self.vis_unsorted = 'blue'
 
-        self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
-        self.vis_gold = 'gold'          # Checking
-        self.vis_magenta = 'magenta'    # Pivot
-        self.vis_cyan = 'cyan'          # Special value unique to that algorithm
-        self.vis_green = 'green'        # Result
-        self.vis_black = 'black'        # To swap
-        self.vis_red = 'red'            # Moving
+        self.vis_default = 'blue'
+        self.vis_gold = 'gold'        # Checking
+        self.vis_magenta = 'magenta'  # Pivot
+        self.vis_cyan = 'cyan'        # Special value unique to that algorithm
+        self.vis_green = 'green'      # Result
+        self.vis_black = 'black'      # To swap
+        self.vis_red = 'red'          # Moving
+
+        self.vis = None               # Set plot by calling set_graph in driver code
+
+    def set_graph(self, names=None, values=None, show_axis='None'):
+        if not names:
+            names = self.names
+        if not values:
+            values = self.values
+
+        plt.clf()
+        self.vis = plt.bar(names, values, color=self.vis_default)
+
+        if show_axis == 'None':
+            plt.axis('off')
+        elif show_axis == 'x':
+            plt.axis('on')
+            plt.gca().axes.xaxis.set_visible(True)
+            plt.gca().axes.yaxis.set_visible(False)
+        elif show_axis == 'y':
+            plt.axis('on')
+            plt.gca().axes.xaxis.set_visible(True)
+            plt.gca().axes.xaxis.set_visible(False)
 
     def visualize(self):
         """Multi line doc string
@@ -391,7 +417,7 @@ class SortVisualizer:
 
             self.vis[i].set_color(self.vis_green)
             for b in range(i+1, self.LENGTH):
-                self.vis[b].set_color(self.vis_unsorted)
+                self.vis[b].set_color(self.vis_default)
 
             if i == self.LENGTH-2:
                 for b in range(i, self.LENGTH):
@@ -412,8 +438,8 @@ class SortVisualizer:
                 self.vis[a].set_color(self.vis_red)
                 self.vis[a-1].set_color(self.vis_gold)
                 plt.pause(pause_short)
-                self.vis[a].set_color(self.vis_unsorted)
-                self.vis[a-1].set_color(self.vis_unsorted)
+                self.vis[a].set_color(self.vis_default)
+                self.vis[a-1].set_color(self.vis_default)
 
                 self.vis[a].set_height(self.values[a-1])
                 self.values[a], self.values[a-1] = self.values[a-1], self.values[a]
@@ -426,8 +452,8 @@ class SortVisualizer:
                 self.vis[a].set_color(self.vis_red)
                 plt.pause(pause_short)
                 if a < self.LENGTH - 1:
-                    self.vis[a+1].set_color(self.vis_unsorted)
-                self.vis[a].set_color(self.vis_unsorted)
+                    self.vis[a+1].set_color(self.vis_default)
+                self.vis[a].set_color(self.vis_default)
 
         for b in range(self.LENGTH):
             self.vis[b].set_color(self.vis_green)
@@ -451,8 +477,8 @@ class SortVisualizer:
                     self.vis[j+1].set_color(self.vis_red)
                     plt.pause(pause_short)
 
-                self.vis[j].set_color(self.vis_unsorted)
-                self.vis[j+1].set_color(self.vis_unsorted)
+                self.vis[j].set_color(self.vis_default)
+                self.vis[j+1].set_color(self.vis_default)
 
                 if j == self.LENGTH-i - 2:
                     self.vis[j+1].set_color(self.vis_green)
@@ -481,14 +507,14 @@ class SortVisualizer:
                 self.vis[b].set_color(self.vis_black)
             plt.pause(pause_short)
             for b in range(i):
-                self.vis[b].set_color(self.vis_unsorted)
+                self.vis[b].set_color(self.vis_default)
 
             self.vis[i].set_height(self.values[0])
             self.values[i], self.values[0] = self.values[0], self.values[i]
             self.vis[0].set_height(self.values[0])
             self.vis[i].set_color(self.vis_green)
             plt.pause(pause_short)
-            self.vis[0].set_color(self.vis_unsorted)
+            self.vis[0].set_color(self.vis_default)
 
             self._heap(i, 0, pause_short)
 
@@ -526,11 +552,11 @@ class SortVisualizer:
 
             self._heap(length, largest, pause_short)
 
-        self.vis[i].set_color(self.vis_unsorted)
+        self.vis[i].set_color(self.vis_default)
         if left < length:
-            self.vis[left].set_color(self.vis_unsorted)
+            self.vis[left].set_color(self.vis_default)
         if right < length:
-            self.vis[right].set_color(self.vis_unsorted)
+            self.vis[right].set_color(self.vis_default)
 
     def quick(self, start=0, end=-1):   # Weird bug where bar is misplaced only once. Can't trace it.
         if end == -1:
@@ -605,7 +631,7 @@ class SortVisualizer:
                 high -= 1
 
         for b in range(start, end+1):
-            self.vis[b].set_color(self.vis_unsorted)
+            self.vis[b].set_color(self.vis_default)
 
         if end - start <= 1:
             for i in range(end+1):
@@ -649,10 +675,10 @@ class SortVisualizer:
             # If left bar less, it's already in place.
             if self.values[left_pos] <= self.values[right_pos]:
                 if i != 0 or key != self.LENGTH-1:
-                    self.vis[left_bar].set_color(self.vis_unsorted)
+                    self.vis[left_bar].set_color(self.vis_default)
                 else:
                     self.vis[left_bar].set_color(self.vis_green)
-                self.vis[right_bar].set_color(self.vis_unsorted)
+                self.vis[right_bar].set_color(self.vis_default)
                 left_bar += 1
 
                 merged_numbers[merge_pos] = self.values[left_pos]
@@ -669,14 +695,14 @@ class SortVisualizer:
                 left_bar += 1
                 self.vis[left_bar].set_color(self.vis_red)
                 self.vis[right_bar].set_height(temp[right_bar])
-                self.vis[right_bar].set_color(self.vis_unsorted)
+                self.vis[right_bar].set_color(self.vis_default)
                 right_bar += 1
                 plt.pause(pause_short)
                 if i != 0 or key != self.LENGTH-1:
-                    self.vis[left_bar-1].set_color(self.vis_unsorted)
+                    self.vis[left_bar-1].set_color(self.vis_default)
                 else:
                     self.vis[left_bar-1].set_color(self.vis_green)
-                self.vis[left_bar].set_color(self.vis_unsorted)
+                self.vis[left_bar].set_color(self.vis_default)
 
                 merged_numbers[merge_pos] = self.values[right_pos]
                 right_pos += 1
@@ -688,7 +714,7 @@ class SortVisualizer:
             self.vis[left_bar].set_color(self.vis_magenta)
             plt.pause(pause_short)
             if i != 0 or key != self.LENGTH-1:
-                self.vis[left_bar].set_color(self.vis_unsorted)
+                self.vis[left_bar].set_color(self.vis_default)
             else:
                 self.vis[left_bar].set_color(self.vis_green)
             left_bar += 1
@@ -706,11 +732,11 @@ class SortVisualizer:
                 self.vis[b + 1].set_height(self.values[b])
             left_bar += 1
             self.vis[left_bar-1].set_height(self.values[right_pos])  # Moves right bar to left bar's original position
-            self.vis[right_bar].set_color(self.vis_unsorted)  # Removes right bar's original position's color
+            self.vis[right_bar].set_color(self.vis_default)  # Removes right bar's original position's color
             self.vis[left_bar-1].set_color(self.vis_magenta)    # Adds color to current right bar
             plt.pause(pause_short)
             if i != 0 or key != self.LENGTH - 1:
-                self.vis[left_bar-1].set_color(self.vis_unsorted)  # Removes right bar's color
+                self.vis[left_bar-1].set_color(self.vis_default)  # Removes right bar's color
             else:
                 self.vis[left_bar-1].set_color(self.vis_green)
             right_bar += 1
@@ -759,10 +785,7 @@ class SortVisualizer:
         values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
         length = len(values)
         names = [i for i in range(length)]
-        plt.clf()   # Might be problematic when showing multiple algos at once.
-        self.vis = plt.bar(names, values, color=self.vis_unsorted)
-        if not self.show_axis:
-            plt.axis('off')
+        self.set_graph(names, values, show_axis='None')
 
         buckets = []
         for i in range(10):
@@ -806,10 +829,10 @@ class SortVisualizer:
                     temp[i + 1] = t[i]
                     self.vis[i].set_height(temp[i])
                 self.vis[index].set_height(temp[index])
-                self.vis[index].set_color(self.vis_unsorted)
+                self.vis[index].set_color(self.vis_default)
                 plt.pause(pause_short)
                 if digit_index != max_digits-1:
-                    self.vis[b].set_color(self.vis_unsorted)
+                    self.vis[b].set_color(self.vis_default)
                 else:
                     self.vis[b].set_color(self.vis_green)
 
@@ -829,8 +852,7 @@ class SortVisualizer:
         values.extend(negatives + non_negatives)
 
         plt.show()
-        plt.clf()
-        self.vis = plt.bar(self.names, self.values, color=self.vis_unsorted)    # To reset so other funcs can use
+        self.set_graph()    # To reset so other funcs can use
 
     def _radix_max(self, values):
         max_digits = 0

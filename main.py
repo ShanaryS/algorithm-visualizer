@@ -12,9 +12,10 @@ if __name__ == '__main__':
 
     values = test3
     Sort = SortVisualizer(values)
+    Sort.set_graph()
 
-    # Sort.merge()
-    Sort.radix()
+    Sort.merge()
+    # Sort.radix()
     # Sort.quick()
     # Sort.heap()
     # Sort.tim()
@@ -27,7 +28,7 @@ if __name__ == '__main__':
 
     # ---------------------------------------------------------
     Search = SearchVisualizer(values)
-    Search.values_sort()
+    Search.set_graph()
     key = 83
 
     # Search.binary(key)
