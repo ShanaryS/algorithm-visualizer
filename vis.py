@@ -23,9 +23,7 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Add note: Use smaller array sizes for individual operations, larger sizes for overall picture
 # Add note: Tidbits about algos
 # Add note: Explain what each color means for each algo
-# Closing figure seems to give errors. Add note to not do that.
-# If algo button doesn't work click generate new array
-# Add ability to change what key is being searched (not necessary)
+# Seems a bit slow in places. Maybe speed it up. Maybe visualize func call or updating every value to red.
 # -----------------------------------------------------------------------------------
 # Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
@@ -83,15 +81,15 @@ class SearchVisualizer:
 
         # Buttons ---------------------------------------------------------------------------
 
-        generate_loc = plt.axes([0.15, 0.2, 0.3, 0.05])  # left, bottom, width, height
+        generate_loc = plt.axes([0.35, 0.9, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                       valinit=self.size, valstep=1, orientation='vertical')
         text_loc = plt.axes([0.475, 0.01, 0.3, 0.05])
         text = TextBox(ax=text_loc, label='Enter search value (1-150): ', initial=str(self.key))
-        sort_loc = plt.axes([0.55, 0.2, 0.3, 0.05])
-        sort = Button(ax=sort_loc, label='Sort Array')
+        sort_loc = plt.axes([0.25, 0.2, 0.3, 0.05])
+        sort = Button(ax=sort_loc, label='Sort Array', color='green')
         linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
         linear = Button(ax=linear_loc, label='Linear', color='yellow')
         binary_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
@@ -113,7 +111,13 @@ class SearchVisualizer:
             self.update_values()
 
         def change_key(_):
-            self.key = text.text
+            try:
+                if int(text.text) > 0:
+                    self.key = int(text.text)
+                else:
+                    self.key = 44
+            except ValueError:
+                self.key = 44
 
         def sort_array(_):
             self.values.sort()
@@ -142,7 +146,7 @@ class SearchVisualizer:
 
         generate_cid = generate.on_clicked(generate_new_array)
         size_cid = size.on_changed(change_size)
-        text_cid = text.on_text_change(change_key)
+        text_cid = text.on_submit(change_key)
         sort_cid = sort.on_clicked(sort_array)
         linear_cid = linear.on_clicked(linear_search)
         binary_cid = binary.on_clicked(binary_search)
