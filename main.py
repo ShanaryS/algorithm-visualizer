@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # Sort.radix()
     # Sort.quick()
     # Sort.heap()
-    # Sort.tim()
+    Sort.tim()
 
     # Sort.insertion()
     # Sort.selection()
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     # Search.jump(key)
     # Search.exponential(key)
     # Search.fibonacci(key)
-    Search.linear(key)
+    # Search.linear(key)
     # Search.comparison(key)

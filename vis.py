@@ -3,47 +3,36 @@ import numpy as np
 from collections import OrderedDict
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
-"""
+search_alogs, sort_algos, and pathfinder_algos for pure implementation without visuals."""
 
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
 # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
 
-# TODO UI Elements ----------------------------------------
+# TODO UI Elements ------------------------------------------------------------------
 # Use an online Jupyter Notebook, Repl.it for visualizations, move to tableau if possible
 # Link to Jupyter in git readme to for visualizations and walkthrough as second header after explaining what it is
-# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
-# Rename vis.py to main.py once finished. Point to *algos.py code implementation.
-# search_algos.py, sort_algos.py, and pathfinding_algos.py are used for pure algorithms with no visualization
+# -----------------------------------------------------------------------------------
 # Allow generating random graphs
-# Add warning for slow algos
-# For bogosort say how long it will take to find ans given array size. Say they are going to be here for a while.
-# If bogosort happens to sort the list say that they are extremely special and should be proud
-# Say to use smaller array sizes for individual operations, larger sizes for overall picture
-# Explain what each color means for each algo
-# Use fill to just have outline of bar
-# Blurbs of fun tidbits about algos
-# Animated graphs?
+# Allow to run multiple times without needing to restart code
+# Add slider to control array size and speed
 # Add stop button that doesn't require restart of code. Esp for bogosort
-# Upside down graph?
+# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
+# Add Note: Warning for slow algos
+# Add note: Use smaller array sizes for individual operations, larger sizes for overall picture
+# Add note: Tidbits about algos
+# Add note: Explain what each color means for each algo
+# -----------------------------------------------------------------------------------
+# Add comments to everything that needs it
 # Allow to go step by step?
+# Animated matplotlib module?
 # Allow comparing multiple algorithms at the same time, subplots maybe
-
-# TODO Bug fixes ------------------------------------------
-# Don't sort array for linear, but sort of everything else
-# Optimize how to sort for search functions that require sorting
-# Look into set_facecolor, set_edgecolor. Maybe solves edge bug in search algos.
-# Seems as though you can only call each search function once. Need to fix for actual deployment
-# Putting plt.pause() in if statements are what causes the outline color and slows down visualizer. Only part of it
-# Check on larger list. Make sure all edge cases are dealt with.
-# Return non sorted value for algorithms that require sort
-# Use dict of key=Values and value=index in reverse order to get original index for searches. Or use list values[0]
-# Timsort seems to do too much insertion over binary
+# Upside down graph?
+# Use fill and overlapping bars for coordinate plane?
 
 
-# Add comments explaining each block of code after rewriting
 class SearchVisualizer:
     def __init__(self, values):
-        self.values_unsorted = values
+        self.values_unsorted = values       # Used for linear search.
         self.values_sorted = sorted(values)
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
@@ -123,7 +112,7 @@ class SearchVisualizer:
     #     self.linear(key, a)
     #     self.linear(key, b)
 
-    def linear(self, key):  # Only algorithm that does not require sorted values.
+    def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
         self.set_graph(self.names, self.values_unsorted, show_axis='None')
         pause_short = self.pause
 
@@ -752,7 +741,7 @@ class SortVisualizer:
         for merge_pos in range(merged_size):
             self.values[i + merge_pos] = merged_numbers[merge_pos]
 
-    def tim(self):
+    def tim(self):      # Seems to use insertion too much. Possibly a bug.
         min_run = self._min_run(self.LENGTH)
 
         for start in range(0, self.LENGTH, min_run):
@@ -773,7 +762,7 @@ class SortVisualizer:
 
     @staticmethod
     def _min_run(n):
-        MIN_MERGE = 32
+        MIN_MERGE = 51
 
         r = 0
         while n >= MIN_MERGE:
