@@ -421,7 +421,7 @@ class SortVisualizer:
     def set_graph(self, names=None, values=None, show_axis='None'):
         if not names:
             names = self.names
-        if not values:
+        if values is None:
             values = self.values
 
         plt.clf()
@@ -439,11 +439,82 @@ class SortVisualizer:
             plt.gca().axes.xaxis.set_visible(True)
             plt.gca().axes.xaxis.set_visible(False)
 
-    def visualize(self):
-        """Multi line doc string
-        Example example
-        """
-        pass
+        # Buttons ---------------------------------------------------------------------------
+
+        generate_loc = plt.axes([0.35, 0.9, 0.3, 0.05])  # left, bottom, width, height
+        generate = Button(ax=generate_loc, label='Generate New Array')
+        sel_loc = plt.axes([0.225, 0.17, 0.15, 0.05])
+        sel = Button(ax=sel_loc, label='Selection')
+        ins_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
+        ins = Button(ax=ins_loc, label='Insertion')
+        bub_loc = plt.axes([0.225, 0.03, 0.15, 0.05])
+        bub = Button(ax=bub_loc, label='Bubble')
+        heap_loc = plt.axes([0.425, 0.17, 0.15, 0.05])
+        heap = Button(ax=heap_loc, label='Heapsort')
+        quick_loc = plt.axes([0.425, 0.1, 0.15, 0.05])
+        quick = Button(ax=quick_loc, label='Quicksort')
+        merge_loc = plt.axes([0.425, 0.03, 0.15, 0.05])
+        merge = Button(ax=merge_loc, label='Mergesort')
+        tim_loc = plt.axes([0.625, 0.17, 0.15, 0.05])
+        tim = Button(ax=tim_loc, label='Timsort')
+        radix_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
+        radix = Button(ax=radix_loc, label='Radix')
+        bogo_loc = plt.axes([0.625, 0.03, 0.15, 0.05])
+        bogo = Button(ax=bogo_loc, label='Bogosort')
+
+        def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
+            self.values = np.random.randint(0, 150, 100)
+            self.set_graph(self.names, self.values)
+            generate.disconnect(generate_cid)
+
+        def sel_sort(_):
+            self.selection()
+            sel.disconnect(sel_cid)
+
+        def ins_sort(_):
+            self.insertion()
+            ins.disconnect(ins_cid)
+
+        def bub_sort(_):
+            self.bubble()
+            bub.disconnect(bub_cid)
+
+        def heap_sort(_):
+            self.heap()
+            heap.disconnect(heap_cid)
+
+        def quick_sort(_):
+            self.quick()
+            quick.disconnect(quick_cid)
+
+        def merge_sort(_):
+            self.merge()
+            merge.disconnect(merge_cid)
+
+        def tim_sort(_):
+            self.tim()
+            tim.disconnect(tim_cid)
+
+        def radix_sort(_):
+            self.radix()
+            radix.disconnect(radix_cid)
+
+        def bogo_sort(_):
+            self.bogo()
+            bogo.disconnect(bogo_cid)
+
+        generate_cid = generate.on_clicked(generate_new_array)
+        sel_cid = sel.on_clicked(sel_sort)
+        ins_cid = ins.on_clicked(ins_sort)
+        bub_cid = bub.on_clicked(bub_sort)
+        heap_cid = heap.on_clicked(heap_sort)
+        quick_cid = quick.on_clicked(quick_sort)
+        merge_cid = merge.on_clicked(merge_sort)
+        tim_cid = tim.on_clicked(tim_sort)
+        radix_cid = radix.on_clicked(radix_sort)
+        bogo_cid = bogo.on_clicked(bogo_sort)
+
+        plt.show()
 
     def selection(self):
         pause_short = self.pause
