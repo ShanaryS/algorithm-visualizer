@@ -65,7 +65,7 @@ class SearchVisualizer:
     def set_graph(self, names=None, values=None, show_axis='None'):
         if not names:
             names = self.names
-        if not values:
+        if values is None:
             values = self.values_sorted
 
         plt.clf()
