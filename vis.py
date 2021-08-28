@@ -467,7 +467,7 @@ class SortVisualizer:
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
-                      valinit=self.size, valstep=1,orientation='vertical')
+                      valinit=self.size, valstep=1, orientation='vertical')
         sel_loc = plt.axes([0.225, 0.03, 0.15, 0.05])
         sel = Button(ax=sel_loc, label='Selection', color='orange')
         ins_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
