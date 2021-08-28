@@ -36,8 +36,7 @@ search_alogs, sort_algos, and pathfinder_algos for pure implementation without v
 
 class SearchVisualizer:
     def __init__(self, values):
-        self.values_unsorted = values       # Used for linear search.
-        self.values_sorted = sorted(values)
+        self.values = values
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
         # self._values_sorted = sorted(values)
@@ -59,8 +58,8 @@ class SearchVisualizer:
         if not names:
             names = self.names
         if values is None:
-            self.values_sorted = sorted(self.values_unsorted)
-            values = self.values_sorted
+            self.values = sorted(self.values)
+            values = self.values
 
         plt.clf()
         self.vis = plt.bar(names, values, color=self.vis_default)
@@ -79,8 +78,10 @@ class SearchVisualizer:
 
         # Buttons ---------------------------------------------------------------------------
 
-        generate_loc = plt.axes([0.35, 0.2, 0.3, 0.05])  # left, bottom, width, height
+        generate_loc = plt.axes([0.15, 0.2, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array')
+        sort_loc = plt.axes([0.55, 0.2, 0.3, 0.05])
+        sort = Button(ax=sort_loc, label='Sort Array')
         linear_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
         linear = Button(ax=linear_loc, label='Linear')
         binary_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
@@ -93,9 +94,14 @@ class SearchVisualizer:
         fib = Button(ax=fib_loc, label='Fibonacci')
 
         def generate_new_array(event):
-            self.values_unsorted = np.random.randint(0, 150, 100)
-            self.set_graph(self.names, self.values_unsorted)
+            self.values = np.random.randint(0, 150, 100)
+            self.set_graph(self.names, self.values)
             generate.disconnect(generate_cid)
+
+        def sort_array(event):
+            self.values.sort()
+            self.set_graph(self.names, self.values)
+            sort.disconnect(sort_cid)
 
         def linear_search(event):
             self.linear(83)
@@ -118,6 +124,7 @@ class SearchVisualizer:
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
+        sort_cid = sort.on_clicked(sort_array)
         linear_cid = linear.on_clicked(linear_search)
         binary_cid = binary.on_clicked(binary_search)
         jump_cid = jump.on_clicked(jump_search)
@@ -168,14 +175,14 @@ class SearchVisualizer:
     #     self.linear(key, b)
 
     def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
-        self.set_graph(self.names, self.values_unsorted, show_axis='None')
+        self.set_graph(self.names, self.values, show_axis='None')
         pause_short = self.pause
 
         for i in range(self.LENGTH):
             self.vis[i].set_color(self.vis_gold)
             plt.pause(pause_short)
 
-            if self.values_unsorted[i] != key:
+            if self.values[i] != key:
                 self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_short)
                 if i == self.LENGTH-1:
@@ -215,7 +222,7 @@ class SearchVisualizer:
             self.vis[mid].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
-            if self.values_sorted[mid] > key:
+            if self.values[mid] > key:
                 if high < self.LENGTH-2:
                     upper = high+1
                 else:
@@ -223,7 +230,7 @@ class SearchVisualizer:
                 for i in range(mid, upper):
                     self.vis[i].set_color(self.vis_red)
                 high = mid - 1
-            elif self.values_sorted[mid] < key:
+            elif self.values[mid] < key:
                 if low > 1:
                     lower = low-1
                 else:
@@ -253,14 +260,14 @@ class SearchVisualizer:
         step = int(np.sqrt(self.LENGTH))     # Using numpy for sqrt, one less thing to import.
         left, right = 0, 0
 
-        while left < self.LENGTH and self.values_sorted[left] <= key:
+        while left < self.LENGTH and self.values[left] <= key:
             right = min(self.LENGTH - 1, left + step)
 
             self.vis[left].set_color(self.vis_cyan)
             self.vis[right].set_color(self.vis_cyan)
             plt.pause(pause_long)
 
-            if self.values_sorted[left] <= key <= self.values_sorted[right]:
+            if self.values[left] <= key <= self.values[right]:
                 for i in range(right+1, self.LENGTH):
                     self.vis[i].set_color(self.vis_red)
                 plt.pause(pause_long)
@@ -271,7 +278,7 @@ class SearchVisualizer:
                 if i < self.LENGTH:
                     self.vis[i].set_color(self.vis_red)
 
-        if left >= self.LENGTH or self.values_sorted[left] > key:
+        if left >= self.LENGTH or self.values[left] > key:
             if left != key:
                 left = -1
             return self.visualize((left, right))
@@ -279,11 +286,11 @@ class SearchVisualizer:
         right = min(self.LENGTH - 1, right)
         i = left
 
-        while i <= right and self.values_sorted[i] <= key:
+        while i <= right and self.values[i] <= key:
             self.vis[i].set_color(self.vis_gold)
             plt.pause(pause_short)
 
-            if self.values_sorted[i] == key:
+            if self.values[i] == key:
                 return self.visualize((i, right))
             self.vis[i].set_color(self.vis_red)
             plt.pause(pause_short)
@@ -300,7 +307,7 @@ class SearchVisualizer:
         plt.pause(pause_long)
         self.vis[0].set_color(self.vis_red)
 
-        if self.values_sorted[0] == key:
+        if self.values[0] == key:
             for i in range(1, self.LENGTH):
                 self.vis[i].set_color(self.vis_red)
             return 0
@@ -309,7 +316,7 @@ class SearchVisualizer:
         self.vis[0].set_color(self.vis_red)
         self.vis[i].set_color(self.vis_gold)
 
-        while i < self.LENGTH and self.values_sorted[i] <= key:
+        while i < self.LENGTH and self.values[i] <= key:
             i *= 2
             if i <= self.LENGTH:
                 for j in range(temp_low, temp):
@@ -358,7 +365,7 @@ class SearchVisualizer:
             self.vis[i].set_color(self.vis_magenta)
             plt.pause(pause_long)
 
-            if self.values_sorted[i] < key:
+            if self.values[i] < key:
                 for j in range(i+1):
                     self.vis[j].set_color(self.vis_red)
 
@@ -366,7 +373,7 @@ class SearchVisualizer:
                 fib_minus_1 = fib_minus_2
                 fib_minus_2 = fib - fib_minus_1
                 index = i
-            elif self.values_sorted[i] > key:
+            elif self.values[i] > key:
                 for j in range(i, self.LENGTH):
                     self.vis[j].set_color(self.vis_red)
 
@@ -376,7 +383,7 @@ class SearchVisualizer:
             else:
                 return self.visualize(i)
 
-        if fib_minus_1 and index < (self.LENGTH - 1) and self.values_sorted[index + 1] == key:
+        if fib_minus_1 and index < (self.LENGTH - 1) and self.values[index + 1] == key:
             return self.visualize(index + 1)
 
         if i != key:
