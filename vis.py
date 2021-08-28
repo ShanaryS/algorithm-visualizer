@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button, Slider
+from matplotlib.widgets import Button, Slider, TextBox
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
 search_algos, sort_algos, and pathfinder_algos for pure implementation without visuals."""
@@ -42,6 +42,7 @@ class SearchVisualizer:
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
         self.size = 50
+        self.key = 44
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
@@ -81,22 +82,24 @@ class SearchVisualizer:
         # Buttons ---------------------------------------------------------------------------
 
         generate_loc = plt.axes([0.15, 0.2, 0.3, 0.05])  # left, bottom, width, height
-        generate = Button(ax=generate_loc, label='Generate New Array')
+        generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                       valinit=self.size, valstep=1, orientation='vertical')
+        text_loc = plt.axes([0.475, 0.01, 0.3, 0.05])
+        text = TextBox(ax=text_loc, label='Enter search value (1-150): ', initial=str(self.key))
         sort_loc = plt.axes([0.55, 0.2, 0.3, 0.05])
         sort = Button(ax=sort_loc, label='Sort Array')
-        linear_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
-        linear = Button(ax=linear_loc, label='Linear')
-        binary_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
-        binary = Button(ax=binary_loc, label='Binary')
-        jump_loc = plt.axes([0.425, 0.1, 0.15, 0.05])
-        jump = Button(ax=jump_loc, label='Jump')
-        exp_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
-        exp = Button(ax=exp_loc, label='Exponential')
-        fib_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
-        fib = Button(ax=fib_loc, label='Fibonacci')
+        linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
+        linear = Button(ax=linear_loc, label='Linear', color='yellow')
+        binary_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
+        binary = Button(ax=binary_loc, label='Binary', color='green')
+        jump_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
+        jump = Button(ax=jump_loc, label='Jump', color='green')
+        exp_loc = plt.axes([0.425, 0.1, 0.15, 0.05])
+        exp = Button(ax=exp_loc, label='Exponential', color='green')
+        fib_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
+        fib = Button(ax=fib_loc, label='Fibonacci', color='green')
 
         def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
             self.values = np.random.randint(0, 150, self.LENGTH)
@@ -107,41 +110,43 @@ class SearchVisualizer:
             self.size = int(size.val)
             self.update_values()
 
+        def change_key(_):
+            self.key = text.text
+
         def sort_array(_):
             self.values.sort()
             self.set_graph(self.names, self.values)
             sort.disconnect(sort_cid)
 
         def linear_search(_):
-            self.linear(key)
+            self.linear(self.key)
             linear.disconnect(linear_cid)
 
         def binary_search(_):
-            self.binary(key)
+            self.binary(self.key)
             binary.disconnect(binary_cid)
 
         def jump_search(_):
-            self.jump(key)
+            self.jump(self.key)
             jump.disconnect(jump_cid)
 
         def exp_search(_):
-            self.exponential(key)
+            self.exponential(self.key)
             exp.disconnect(exp_cid)
 
         def fib_search(_):
-            self.fibonacci(key)
+            self.fibonacci(self.key)
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
         size_cid = size.on_changed(change_size)
+        text_cid = text.on_text_change(change_key)
         sort_cid = sort.on_clicked(sort_array)
         linear_cid = linear.on_clicked(linear_search)
         binary_cid = binary.on_clicked(binary_search)
         jump_cid = jump.on_clicked(jump_search)
         exp_cid = exp.on_clicked(exp_search)
         fib_cid = fib.on_clicked(fib_search)
-
-        key = 49    # Value to search for in algos
 
         plt.show()
 
