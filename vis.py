@@ -37,7 +37,9 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 
 
 class SearchVisualizer:
-    def __init__(self, values):
+    def __init__(self, values=None):
+        if not values:
+            values = np.random.randint(0, 150, 50)
         self.values = values
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
@@ -422,8 +424,10 @@ class SortVisualizer:
     Add these for every class and function. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
     """
 
-    def __init__(self, values):
+    def __init__(self, values=None):
         """Single line doc string"""
+        if not values:
+            values = np.random.randint(0, 150, 50)
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
