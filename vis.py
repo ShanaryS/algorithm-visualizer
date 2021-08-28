@@ -41,6 +41,7 @@ class SearchVisualizer:
         self.values = values
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
+        self.size = 50
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
@@ -81,6 +82,9 @@ class SearchVisualizer:
 
         generate_loc = plt.axes([0.15, 0.2, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array')
+        size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
+        size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
+                      valinit=self.size, valstep=1, orientation='vertical')
         sort_loc = plt.axes([0.55, 0.2, 0.3, 0.05])
         sort = Button(ax=sort_loc, label='Sort Array')
         linear_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
@@ -95,9 +99,13 @@ class SearchVisualizer:
         fib = Button(ax=fib_loc, label='Fibonacci')
 
         def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
-            self.values = np.random.randint(0, 150, 100)
-            self.set_graph(self.names, self.values)
+            self.values = np.random.randint(0, 150, self.LENGTH)
+            self.set_graph()
             generate.disconnect(generate_cid)
+
+        def change_size(_):
+            self.size = int(size.val)
+            self.update_values()
 
         def sort_array(_):
             self.values.sort()
@@ -125,6 +133,7 @@ class SearchVisualizer:
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
+        size_cid = size.on_changed(change_size)
         sort_cid = sort.on_clicked(sort_array)
         linear_cid = linear.on_clicked(linear_search)
         binary_cid = binary.on_clicked(binary_search)
@@ -135,6 +144,13 @@ class SearchVisualizer:
         key = 49    # Value to search for in algos
 
         plt.show()
+
+    def update_values(self):
+        self.LENGTH = self.size
+        self.values = np.random.randint(0, 150, self.LENGTH)
+        self.names = [i for i in range(self.LENGTH)]
+        self.pause = 150 / self.LENGTH * 0.01
+        self.set_graph()
 
     def visualize(self, res):
         if isinstance(res, int):

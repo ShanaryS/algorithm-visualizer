@@ -13,8 +13,9 @@ if __name__ == '__main__':
     test3 = np.random.randint(0, 150, size)
 
     values = test3
-    Sort = SortVisualizer(values)
-    Sort.set_graph()
+
+    # Sort = SortVisualizer(values)
+    # Sort.set_graph()
 
     # Sort.merge()
     # Sort.radix()
@@ -29,8 +30,8 @@ if __name__ == '__main__':
     # Sort.bogo()
 
     # ---------------------------------------------------------
-    # Search = SearchVisualizer(values)
-    # Search.set_graph()
+    Search = SearchVisualizer(values)
+    Search.set_graph()
     # key = 83
 
     # Search.binary(key)
