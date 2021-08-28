@@ -24,6 +24,7 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Add note: Tidbits about algos
 # Add note: Explain what each color means for each algo
 # Seems a bit slow in places. Maybe speed it up. Maybe visualize func call or updating every value to red.
+# Clear text when bogo no longer selected. Just reset title?
 # -----------------------------------------------------------------------------------
 # Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
