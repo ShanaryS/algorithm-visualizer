@@ -25,7 +25,6 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Add note: Explain what each color means for each algo
 # Seems a bit slow in places. Maybe speed it up. Maybe visualize func call or updating every value to red.
 # Clear text when bogo no longer selected. Just reset title?
-# Set different figures for each visualize so it can run in parallel. Might not be necessary for jupyter rewrite.
 # -----------------------------------------------------------------------------------
 # Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
@@ -187,7 +186,7 @@ class SearchVisualizer:
                 for i in range(self.LENGTH):
                     self.vis[i].set_color(self.vis_red)
 
-        # plt.show()
+        plt.draw()
         # plt.clf()   # Might break something. Idk yet. Maybe it will help to call multiple times per single run
 
     # Use *args to compare all at once. Or just open each in different windows
@@ -224,10 +223,11 @@ class SearchVisualizer:
                     self.vis[b].set_color(self.vis_red)
                 return self.visualize(i)
 
-    def binary(self, key, high=None):
-        self.values.sort()
-        self.set_graph()
-        plt.pause(1)
+    def binary(self, key, high=None, reset=True):
+        if reset is True:   # Exponential calls binary. This is to avoid resetting colors when it does.
+            self.values.sort()
+            self.set_graph()
+            plt.pause(1)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         if not high:
@@ -250,7 +250,7 @@ class SearchVisualizer:
                 else:
                     for i in range(self.LENGTH):
                         self.vis[i].set_color(self.vis_red)
-                    plt.show()
+                    plt.draw()
                     return
 
             self.vis[mid].set_color(self.vis_magenta)
@@ -369,15 +369,14 @@ class SearchVisualizer:
                 self.vis[j].set_color(self.vis_red)
 
         if i < self.LENGTH:
-            return self.binary(key, i)
+            return self.binary(key, i, reset=False)
         else:
-            return self.binary(key)
+            return self.binary(key, reset=False)
 
     def fibonacci(self, key):
         self.values.sort()
         self.set_graph()
         plt.pause(1)
-        pause_short = (self.pause * 3) + (self.LENGTH * 0.002)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         fib_minus_2 = 0
@@ -386,7 +385,7 @@ class SearchVisualizer:
         i = 1
 
         self.vis[fib_minus_2].set_color(self.vis_cyan)
-        plt.pause(pause_short)
+        plt.pause(pause_long)
 
         while fib < self.LENGTH:
             fib_minus_2 = fib_minus_1
@@ -395,7 +394,7 @@ class SearchVisualizer:
 
             if fib < self.LENGTH:
                 self.vis[fib].set_color(self.vis_cyan)
-                plt.pause(pause_short)
+                plt.pause(pause_long)
 
         index = -1
 
@@ -607,7 +606,7 @@ class SortVisualizer:
                 for b in range(i, self.LENGTH):
                     self.vis[b].set_color(self.vis_green)
 
-        plt.show()
+        plt.draw()
 
     def insertion(self):
         pause_short = self.pause
@@ -641,7 +640,7 @@ class SortVisualizer:
 
         for b in range(self.LENGTH):
             self.vis[b].set_color(self.vis_green)
-        plt.show()
+        plt.draw()
 
     def bubble(self):
         pause_short = self.pause
@@ -668,7 +667,7 @@ class SortVisualizer:
                     self.vis[j+1].set_color(self.vis_green)
 
         self.vis[0].set_color(self.vis_green)
-        plt.show()
+        plt.draw()
 
     def heap(self):
         pause_short = self.pause
@@ -703,7 +702,7 @@ class SortVisualizer:
             self._heap(i, 0, pause_short)
 
         self.vis[0].set_color(self.vis_green)
-        plt.show()
+        plt.draw()
 
     def _heap(self, length, i, pause_short):
         largest = i
@@ -758,7 +757,7 @@ class SortVisualizer:
         if end == self.LENGTH-1:
             self.vis[end].set_color(self.vis_green)
             self.vis[end-1].set_color(self.vis_green)  # Sometimes this one is colored.
-            plt.show()
+            plt.draw()
 
     def _quick(self, start, end):
         pause_short = self.pause
@@ -836,7 +835,7 @@ class SortVisualizer:
             self._merge(i, j, key)
 
         if i == 0 and key == self.LENGTH - 1:
-            plt.show()
+            plt.draw()
 
     def _merge(self, i, j, key):
         pause_short = self.pause
@@ -1034,7 +1033,7 @@ class SortVisualizer:
         values.clear()
         values.extend(negatives + non_negatives)
 
-        plt.show()
+        plt.draw()
         # self.set_graph()    # To reset so other funcs can use. Causes reset after it's finished.
 
     def _radix_max(self, values):
@@ -1096,7 +1095,7 @@ This may take some time. Only {np.round((EXPECTED_RUN_TIME / 3.154**7), 2)} YEAR
 
         for i in range(self.LENGTH):
             self.vis[i].set_color(self.vis_green)
-        plt.show()
+        plt.draw()
 
     def _is_sorted(self):
         for b in range(0, self.LENGTH - 1):
