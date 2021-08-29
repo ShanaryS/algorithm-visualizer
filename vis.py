@@ -10,8 +10,8 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
 
 # TODO UI Elements ------------------------------------------------------------------
-# Use an online Jupyter Notebook, Repl.it for visualizations, move to tableau if possible
-# Link to Jupyter in git readme to for visualizations and walkthrough as second header after explaining what it is
+# Use Repl.it for visualizations, different work spaces for each func?
+# Link to github, link to different repl.it for search, sort, and path with buttons similar to blinder
 # -----------------------------------------------------------------------------------
 # Seems plt.draw() is needed for interactive graphs
 # Allow generating random graphs
@@ -25,6 +25,7 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Add note: Explain what each color means for each algo
 # Seems a bit slow in places. Maybe speed it up. Maybe visualize func call or updating every value to red.
 # Clear text when bogo no longer selected. Just reset title?
+# Set different figures for each visualize so it can run in parallel. Might not be necessary for jupyter rewrite.
 # -----------------------------------------------------------------------------------
 # Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
@@ -67,7 +68,7 @@ class SearchVisualizer:
 
         plt.clf()
         self.vis = plt.bar(names, values, color=self.vis_default)
-        plt.subplots_adjust(left=0.1, bottom=0.3)
+        plt.subplots_adjust(left=0.15, bottom=0.3)
 
         if show_axis == 'None':
             plt.axis('off')
@@ -82,14 +83,14 @@ class SearchVisualizer:
 
         # Buttons ---------------------------------------------------------------------------
 
-        generate_loc = plt.axes([0.35, 0.9, 0.3, 0.05])  # left, bottom, width, height
+        generate_loc = plt.axes([0.2, 0.2, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                       valinit=self.size, valstep=1, orientation='vertical')
         text_loc = plt.axes([0.475, 0.01, 0.3, 0.05])
         text = TextBox(ax=text_loc, label='Enter search value (1-150): ', initial=str(self.key))
-        sort_loc = plt.axes([0.35, 0.2, 0.3, 0.05])
+        sort_loc = plt.axes([0.60, 0.2, 0.3, 0.05])
         sort = Button(ax=sort_loc, label='Sort Array', color='cyan')
         linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
         linear = Button(ax=linear_loc, label='Linear', color='yellow')
@@ -146,8 +147,8 @@ class SearchVisualizer:
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
-        size_cid = size.on_changed(change_size)
-        text_cid = text.on_submit(change_key)
+        size.on_changed(change_size)
+        text.on_submit(change_key)
         sort_cid = sort.on_clicked(sort_array)
         linear_cid = linear.on_clicked(linear_search)
         binary_cid = binary.on_clicked(binary_search)
@@ -465,7 +466,7 @@ class SortVisualizer:
 
         plt.clf()
         self.vis = plt.bar(names, values, color=self.vis_default)
-        plt.subplots_adjust(left=0.1, bottom=0.3)
+        plt.subplots_adjust(left=0.15, bottom=0.3)
 
         if show_axis == 'None':
             plt.axis('off')
@@ -480,7 +481,7 @@ class SortVisualizer:
 
         # Buttons ---------------------------------------------------------------------------
 
-        generate_loc = plt.axes([0.35, 0.9, 0.3, 0.05])  # left, bottom, width, height
+        generate_loc = plt.axes([0.35, 0.235, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
@@ -550,7 +551,7 @@ class SortVisualizer:
             bogo.disconnect(bogo_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
-        size_cid = size.on_changed(change_size)
+        size.on_changed(change_size)
         sel_cid = sel.on_clicked(sel_sort)
         ins_cid = ins.on_clicked(ins_sort)
         bub_cid = bub.on_clicked(bub_sort)
