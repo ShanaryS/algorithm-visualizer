@@ -89,8 +89,8 @@ class SearchVisualizer:
                       valinit=self.size, valstep=1, orientation='vertical')
         text_loc = plt.axes([0.475, 0.01, 0.3, 0.05])
         text = TextBox(ax=text_loc, label='Enter search value (1-150): ', initial=str(self.key))
-        sort_loc = plt.axes([0.25, 0.2, 0.3, 0.05])
-        sort = Button(ax=sort_loc, label='Sort Array', color='green')
+        sort_loc = plt.axes([0.35, 0.2, 0.3, 0.05])
+        sort = Button(ax=sort_loc, label='Sort Array', color='cyan')
         linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
         linear = Button(ax=linear_loc, label='Linear', color='yellow')
         binary_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
@@ -122,7 +122,7 @@ class SearchVisualizer:
 
         def sort_array(_):
             self.values.sort()
-            self.set_graph(self.names, self.values)
+            self.set_graph()
             sort.disconnect(sort_cid)
 
         def linear_search(_):
@@ -224,7 +224,9 @@ class SearchVisualizer:
                 return self.visualize(i)
 
     def binary(self, key, high=None):
+        self.values.sort()
         self.set_graph()
+        plt.pause(1)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         if not high:
@@ -284,7 +286,9 @@ class SearchVisualizer:
         return self.visualize(mid)
 
     def jump(self, key):
+        self.values.sort()
         self.set_graph()
+        plt.pause(1)
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
@@ -331,7 +335,9 @@ class SearchVisualizer:
 
     # Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, key):
+        self.values.sort()
         self.set_graph()
+        plt.pause(1)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
         self.vis[0].set_color(self.vis_gold)
@@ -367,7 +373,9 @@ class SearchVisualizer:
             return self.binary(key)
 
     def fibonacci(self, key):
+        self.values.sort()
         self.set_graph()
+        plt.pause(1)
         pause_short = (self.pause * 3) + (self.LENGTH * 0.002)
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
