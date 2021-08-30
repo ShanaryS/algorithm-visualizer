@@ -12,11 +12,8 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # TODO UI Elements ------------------------------------------------------------------
 # Use Repl.it for visualizations, different work spaces for each func?
 # Link to github, link to different repl.it for search, sort, and path with buttons similar to blinder
+# Add note that it's faster when ran locally vs online
 # -----------------------------------------------------------------------------------
-# Seems plt.draw() is needed for interactive graphs
-# Allow generating random graphs
-# Allow to run multiple times without needing to restart code
-# Add slider to control array size and speed
 # Add stop button that doesn't require restart of code. Esp for bogosort
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 # Add Note: Warning for slow algos
@@ -84,6 +81,8 @@ class SearchVisualizer:
 
         generate_loc = plt.axes([0.2, 0.2, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
+        stop_loc = plt.axes([0.85, 0.01, 0.1, 0.05])  # left, bottom, width, height
+        stop = Button(ax=stop_loc, label='Stop', color='red')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                       valinit=self.size, valstep=1, orientation='vertical')
@@ -106,6 +105,11 @@ class SearchVisualizer:
             self.values = np.random.randint(0, 150, self.LENGTH)
             self.set_graph()
             generate.disconnect(generate_cid)
+
+        def stop_graph(_):
+            plt.close()
+            self.set_graph()
+            stop.disconnect(stop_cid)
 
         def change_size(_):
             self.size = int(size.val)
@@ -146,6 +150,7 @@ class SearchVisualizer:
             fib.disconnect(fib_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
+        stop_cid = stop.on_clicked(stop_graph)
         size.on_changed(change_size)
         text.on_submit(change_key)
         sort_cid = sort.on_clicked(sort_array)
@@ -482,6 +487,8 @@ class SortVisualizer:
 
         generate_loc = plt.axes([0.35, 0.235, 0.3, 0.05])  # left, bottom, width, height
         generate = Button(ax=generate_loc, label='Generate New Array', color='cyan')
+        stop_loc = plt.axes([0.85, 0.03, 0.1, 0.05])  # left, bottom, width, height
+        stop = Button(ax=stop_loc, label='Stop', color='red')
         size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
         size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                       valinit=self.size, valstep=1, orientation='vertical')
@@ -502,12 +509,17 @@ class SortVisualizer:
         radix_loc = plt.axes([0.425, 0.17, 0.15, 0.05])
         radix = Button(ax=radix_loc, label='Radix', color='green')
         bogo_loc = plt.axes([0.625, 0.03, 0.15, 0.05])
-        bogo = Button(ax=bogo_loc, label='Bogosort', color='red')
+        bogo = Button(ax=bogo_loc, label='Bogosort', color='tomato')
 
         def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
             self.values = np.random.randint(0, 150, self.LENGTH)
             self.set_graph()
             generate.disconnect(generate_cid)
+
+        def stop_graph(_):
+            plt.close()
+            self.set_graph()
+            stop.disconnect(stop_cid)
 
         def change_size(_):
             self.size = int(size.val)
@@ -550,6 +562,7 @@ class SortVisualizer:
             bogo.disconnect(bogo_cid)
 
         generate_cid = generate.on_clicked(generate_new_array)
+        stop_cid = stop.on_clicked(stop_graph)
         size.on_changed(change_size)
         sel_cid = sel.on_clicked(sel_sort)
         ins_cid = ins.on_clicked(ins_sort)
