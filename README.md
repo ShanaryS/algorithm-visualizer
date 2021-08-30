@@ -1,4 +1,4 @@
-# algorithm-visualizer
+# Algorithm Visualizer
 **Searching Visualizer:** https://replit.com/@ShanaryS/Searching-Visualizer?v=1
 [![Searching Vis](https://user-images.githubusercontent.com/86130442/131284335-149bfffc-9735-4ed3-a79d-16f07958b446.png)](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
 
