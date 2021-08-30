@@ -27,11 +27,11 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 class SearchVisualizer:
     def __init__(self, values=None):
         if not values:
-            values = np.random.randint(0, 150, 50)
+            values = np.random.randint(0, 150, 25)
         self.values = values
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
-        self.size = 25
+        self.size = len(self.values)
         self.key = 44
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
@@ -437,11 +437,11 @@ class SortVisualizer:
     def __init__(self, values=None):
         """Single line doc string"""
         if not values:
-            values = np.random.randint(0, 150, 50)
+            values = np.random.randint(0, 150, 25)
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
-        self.size = 25  # This is controlled by the slider in the interactive plot.
+        self.size = len(self.values)  # This is controlled by the slider in the interactive plot.
         self.is_sorted = False
 
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems.
