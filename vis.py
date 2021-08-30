@@ -12,16 +12,10 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # TODO UI Elements ------------------------------------------------------------------
 # Use Repl.it for visualizations, different work spaces for each func?
 # Link to github, link to different repl.it for search, sort, and path with buttons similar to blinder
-# Add note that it's faster when ran locally vs online
 # -----------------------------------------------------------------------------------
-# Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
-# Add Note: Warning for slow algos
-# Add note: Use smaller array sizes for individual operations, larger sizes for overall picture
 # Add note: Tidbits about algos
 # Add note: Explain what each color means for each algo
-# Clear text when bogo no longer selected. Just reset title?
 # -----------------------------------------------------------------------------------
-# Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
 # Add comments to everything that needs it
 # Allow to go step by step?
 # Animated matplotlib module?
@@ -448,6 +442,7 @@ class SortVisualizer:
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
         self.size = 50  # This is controlled by the slider in the interactive plot.
+        self.is_sorted = False
 
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems.
         self.vis_default = 'blue'
@@ -512,50 +507,89 @@ class SortVisualizer:
         def generate_new_array(_):      # Argument is typically called event but using _ to suppress errors
             self.values = np.random.randint(0, 150, self.LENGTH)
             self.set_graph()
+            self.is_sorted = False
             generate.disconnect(generate_cid)
 
         def stop_graph(_):
             plt.close()
             self.set_graph()
+            self.is_sorted = True
             stop.disconnect(stop_cid)
 
         def change_size(_):
             self.size = int(size.val)
             self.update_values()
+            self.is_sorted = False
 
         def sel_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.selection()
             sel.disconnect(sel_cid)
 
         def ins_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.insertion()
             ins.disconnect(ins_cid)
 
         def bub_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.bubble()
             bub.disconnect(bub_cid)
 
         def heap_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.heap()
             heap.disconnect(heap_cid)
 
         def quick_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.quick()
             quick.disconnect(quick_cid)
 
         def merge_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.merge()
             merge.disconnect(merge_cid)
 
         def tim_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.tim()
             tim.disconnect(tim_cid)
 
         def radix_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.radix()
             radix.disconnect(radix_cid)
 
         def bogo_sort(_):
+            if self.is_sorted:
+                self.values = np.random.randint(0, 150, self.LENGTH)
+                self.set_graph()
+            self.is_sorted = True
             self.bogo()
             bogo.disconnect(bogo_cid)
 
