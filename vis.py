@@ -31,7 +31,7 @@ class SearchVisualizer:
         self.values = values
         self.LENGTH = len(values)
         self.names = [i for i in range(self.LENGTH)]
-        self.size = 50
+        self.size = 25
         self.key = 44
         # self._values_sorted = sorted(values)
         # self._names_sorted = [str(i) for i in values]
@@ -441,7 +441,7 @@ class SortVisualizer:
         self.values = values
         self.LENGTH = len(self.values)
         self.names = [i for i in range(self.LENGTH)]
-        self.size = 50  # This is controlled by the slider in the interactive plot.
+        self.size = 25  # This is controlled by the slider in the interactive plot.
         self.is_sorted = False
 
         self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems.
