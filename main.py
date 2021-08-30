@@ -4,8 +4,8 @@ from vis import SortVisualizer
 if __name__ == '__main__':
     Search = SearchVisualizer()
     Sort = SortVisualizer()
-    Search.set_graph()
-    # Sort.set_graph()
+    # Search.set_graph()
+    Sort.set_graph()
 
     # Below was to test without GUI. No longer need doesn't harm to keep
     # test = [4, 89, 1, 9, 69, 49, 149, 84, 15, 15, 79, 41, 9, 62, 19]  # Original test array. Use as base. 48/49

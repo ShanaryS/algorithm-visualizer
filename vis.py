@@ -14,13 +14,11 @@ search_algos, sort_algos, and pathfinder_algos for pure implementation without v
 # Link to github, link to different repl.it for search, sort, and path with buttons similar to blinder
 # Add note that it's faster when ran locally vs online
 # -----------------------------------------------------------------------------------
-# Add stop button that doesn't require restart of code. Esp for bogosort
 # Add note: Animation speed for each algorithm is chosen for clarity and not completely indicative of real world speed.
 # Add Note: Warning for slow algos
 # Add note: Use smaller array sizes for individual operations, larger sizes for overall picture
 # Add note: Tidbits about algos
 # Add note: Explain what each color means for each algo
-# Seems a bit slow in places. Maybe speed it up. Maybe visualize func call or updating every value to red.
 # Clear text when bogo no longer selected. Just reset title?
 # -----------------------------------------------------------------------------------
 # Known issues. Pushing matplotlib hard so it may stutter but shouldn't crash. Buttons always work
@@ -1075,30 +1073,31 @@ class SortVisualizer:
         EXPECTED_RUN_TIME = ((np.math.factorial(self.LENGTH)) / 4)
 
         if EXPECTED_RUN_TIME < 60:
-            title = f"This should be solved in about {np.round(EXPECTED_RUN_TIME, 2)} SECONDS"
+            text = f"This should be solved in about {round(EXPECTED_RUN_TIME, 2)} SECONDS"
         elif EXPECTED_RUN_TIME < 3600:
-            title = f"""Expected solve time is {np.round((EXPECTED_RUN_TIME / 60), 2)} MINUTES."
+            text = f"""Expected solve time is {round((EXPECTED_RUN_TIME / 60), 2)} MINUTES."
 Dare to increase array size?"""
         elif EXPECTED_RUN_TIME < 86400:
-            title = f""""Only {np.round((EXPECTED_RUN_TIME / 3600), 2)} HOURS?
+            text = f""""Only {round((EXPECTED_RUN_TIME / 3600), 2)} HOURS?
 C'mon, that's over in the blink of an eye"""
         elif EXPECTED_RUN_TIME < 604800:
-            title = f""""This is now your day job?
-You'll be payed in {np.round((EXPECTED_RUN_TIME / 86400), 2)} DAYS"""
+            text = f""""This is now your day job?
+You'll be payed in {round((EXPECTED_RUN_TIME / 86400), 2)} DAYS"""
         elif EXPECTED_RUN_TIME < 2.628**6:
-            title = f"""Family? Friends? The outside world?
-Bah! You're gonna be here for {np.round((EXPECTED_RUN_TIME / 604800), 2)} WEEKS"""
+            text = f"""Family? Friends? The outside world?
+Bah! You're gonna be here for {round((EXPECTED_RUN_TIME / 604800), 2)} WEEKS"""
         elif EXPECTED_RUN_TIME < 3.154**7:
-            title = f"""This is some serious dedication you have, waiting for {np.round((EXPECTED_RUN_TIME / 2.628**6), 2)} MONTHS"
+            text = f"""This is some serious dedication you have, waiting for {round((EXPECTED_RUN_TIME / 2.628**6), 2)} MONTHS"
 But since you're, here might as well go all the way right?"""
         elif EXPECTED_RUN_TIME < 3.154**107:
-            title = f"""Here you discover the meaning of life. Get comfortable.
-This may take some time. Only {np.round((EXPECTED_RUN_TIME / 3.154**7), 2)} YEARS"""
+            text = f"""Here you discover the meaning of life. Get comfortable. This make take 
+time. Only {round((EXPECTED_RUN_TIME / 3.154**7), 2)} YEARS"""
         else:
-            title = f"""Congratulations! You won! What did you win? Well you'll just have to wait a measly
-{np.round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out. (The universe dies at 10e+100 YEARS btw.)"""
+            text = f"""Congratulations! You won! What did you win? Well you'll just have to wait a 
+measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
+(The universe dies at 10e+100 YEARS btw.)"""
 
-        plt.title(title)
+        plt.suptitle(text)
 
         while not self._is_sorted():
             self._shuffle()
