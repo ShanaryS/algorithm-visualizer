@@ -1153,3 +1153,9 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
         for i in range(0, self.LENGTH):
             r = np.random.randint(0, self.LENGTH-1)
             self.values[i], self.values[r] = self.values[r], self.values[i]
+
+
+class PathfindingVisualizer:
+    def __init__(self):
+        pass
+
