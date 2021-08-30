@@ -4,8 +4,5 @@
 
 **Searching Visualizer:** Try it here - https://replit.com/@ShanaryS/Searching-Visualizer?v=1
 [![Searching Demo](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)
-1. What does the project do?
-2. Who is it for?
-3. Why is it different?
-4. How to use it?
-5. How does it work?
+# About
+This project gives a nice visualization of how different sorting algorithms work. This is helpful to anyone trying to understand these algorithms or even to someone who has already grasped them. This was implemented fully using numpy and matplotlib in python. It's also fully interactive though matplotlib is being push to its limits.
