@@ -37,7 +37,7 @@ class SearchVisualizer:
         # self._names_sorted = [str(i) for i in values]
         # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
 
-        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems
+        self.pause = 150 / self.LENGTH * 0.01  # 50 instead of 150 for replit. plt.pause(0.02) is the min it seems
         self.vis_default = 'blue'
         self.vis_gold = 'gold'          # Checking
         self.vis_magenta = 'magenta'    # Pivot
@@ -444,7 +444,7 @@ class SortVisualizer:
         self.size = len(self.values)  # This is controlled by the slider in the interactive plot.
         self.is_sorted = False
 
-        self.pause = 150 / self.LENGTH * 0.01  # plt.pause(0.02) is the min it seems.
+        self.pause = 150 / self.LENGTH * 0.01  # 50 instead of 150 for replit. plt.pause(0.02) is the min it seems.
         self.vis_default = 'blue'
         self.vis_gold = 'gold'        # Checking
         self.vis_magenta = 'magenta'  # Pivot
