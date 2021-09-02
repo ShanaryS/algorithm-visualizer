@@ -1372,16 +1372,16 @@ class Square(PathfindingVisualizer):
         return self.row, self.col
 
     def is_open(self):
-        return self.color == self.GREEN
+        return self.color == self.TURQUOISE
 
     def is_closed(self):
-        return self.color == self.RED
+        return self.color == self.BLUE
 
     def is_start(self):
-        return self.color == self.ORANGE
+        return self.color == self.GREEN
 
     def is_end(self):
-        return self.color == self.TURQUOISE
+        return self.color == self.RED
 
     def is_barrier(self):
         return self.color == self.BLACK
@@ -1390,22 +1390,22 @@ class Square(PathfindingVisualizer):
         self.color = self.WHITE
 
     def set_open(self):
-        self.color = self.GREEN
+        self.color = self.TURQUOISE
 
     def set_closed(self):
-        self.color = self.RED
+        self.color = self.BLUE
 
     def set_start(self):
-        self.color = self.ORANGE
+        self.color = self.GREEN
 
     def set_end(self):
-        self.color = self.TURQUOISE
+        self.color = self.RED
 
     def set_barrier(self):
         self.color = self.BLACK
 
     def set_path(self):
-        self.color = self.PURPLE
+        self.color = self.YELLOW
 
     def draw_square(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))
