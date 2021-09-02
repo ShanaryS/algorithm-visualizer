@@ -27,7 +27,7 @@ class PathfindingVisualizer:
         self.WIDTH = 800
         self.HEIGHT = 800
         self.WINDOW = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Pathfinding Visualizer")
+        pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
         self.FPS = 1000
         self.ROWS = 50
@@ -51,8 +51,19 @@ class PathfindingVisualizer:
         self.START_COLOR = self.GREEN
         self.MID_COLOR = self.ORANGE
         self.END_COLOR = self.RED
-        self.BARRIER_COLOR = self.BLACK
+        self.WALL_COLOR = self.BLACK
         self.PATH_COLOR = self.YELLOW
+        self.TEXT_COLOR = self.RED
+
+        pygame.font.init()
+        self.font = pygame.font.SysFont('Comic Sans MS', 12)
+        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)", True, self.TEXT_COLOR)
+        self.legend_remove_node = self.font.render("Remove Node - Right Click", True, self.TEXT_COLOR)
+        self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.TEXT_COLOR)
+        self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.TEXT_COLOR)
+        self.legend_a_star = self.font.render("A* - Press 'A'", True, self.TEXT_COLOR)
+        self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra:", True, self.TEXT_COLOR)
+        self.vis_text_a_star = self.font.render("Visualizing A*:", True, self.TEXT_COLOR)
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         clock = pygame.time.Clock()
@@ -64,7 +75,8 @@ class PathfindingVisualizer:
         run = True
         while run:
             clock.tick(self.FPS)
-            self.draw(graph)
+            self.draw(graph, legend=True)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -86,7 +98,7 @@ class PathfindingVisualizer:
                     elif square != start and square != end:
                         # noinspection PyUnresolvedReferences
                         # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
-                        square.set_barrier()
+                        square.set_wall()
                 elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
@@ -108,18 +120,6 @@ class PathfindingVisualizer:
                             elif square == end:
                                 end = None
 
-                # Run A* with "A" key on keyboard
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_a and start and end:
-                        self.reset_algo(graph)
-                        for row in graph:
-                            for square in row:
-                                square.update_neighbours(graph)
-
-                        # noinspection PyTypeChecker
-                        # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
-                        self.a_star(graph, start, end)
-
                 # Run Dijkstra with "D" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_d and start and end:
@@ -131,6 +131,18 @@ class PathfindingVisualizer:
                         # noinspection PyTypeChecker
                         # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
                         self.dijkstra(graph, start, end)
+
+                # Run A* with "A" key on keyboard
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a and start and end:
+                        self.reset_algo(graph)
+                        for row in graph:
+                            for square in row:
+                                square.update_neighbours(graph)
+
+                        # noinspection PyTypeChecker
+                        # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
+                        self.a_star(graph, start, end)
 
         pygame.quit()
 
@@ -149,21 +161,40 @@ class PathfindingVisualizer:
             pygame.draw.line(self.WINDOW, self.GREY, (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
             pygame.draw.line(self.WINDOW, self.GREY, (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
 
-    def reset_algo(self, graph):    # Resets algo colors while keep board obstacles
-        for i in range(self.ROWS):
-            for j in range(self.ROWS):
-                square = graph[i][j]
-                if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
-                    square.reset()
+    def draw_legend(self):
+        self.WINDOW.blit(self.legend_add_node, (0, 0))
+        self.WINDOW.blit(self.legend_remove_node, (0, self.SQUARE_SIZE*1))
+        self.WINDOW.blit(self.legend_clear_graph, (0, self.SQUARE_SIZE*2))
+        self.WINDOW.blit(self.legend_dijkstra, (0, self.SQUARE_SIZE*3))
+        self.WINDOW.blit(self.legend_a_star, (0, self.SQUARE_SIZE*4))
+        pygame.display.update()
 
-    def draw(self, graph):
+    def draw_vis_text(self, dijkstra=False, a_star=False):
+        if dijkstra:
+            self.WINDOW.blit(self.vis_text_dijkstra, (0, 0))
+        elif a_star:
+            self.WINDOW.blit(self.vis_text_a_star, (0, 0))
+
+        pygame.display.update()
+
+    def draw(self, graph, legend=False, display_update=True):
         self.WINDOW.fill(self.DEFAULT_COLOR)
         for row in graph:
             for square in row:
                 square.draw_square(self.WINDOW)
 
         self.draw_graph()
-        pygame.display.update()
+        if legend:
+            self.draw_legend()
+        if display_update:
+            pygame.display.update()
+
+    def reset_algo(self, graph):    # Resets algo colors while keep board obstacles
+        for i in range(self.ROWS):
+            for j in range(self.ROWS):
+                square = graph[i][j]
+                if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
+                    square.reset()
 
     def get_clicked_pos(self, pos):
         y, x = pos
@@ -209,7 +240,8 @@ class PathfindingVisualizer:
                         open_set_hash.add(nei)
                         nei.set_open()
 
-            self.draw(graph)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(dijkstra=True)
 
             if curr_square != start:
                 curr_square.set_closed()
@@ -255,7 +287,8 @@ class PathfindingVisualizer:
                         open_set_hash.add(nei)
                         nei.set_open()
 
-            self.draw(graph)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(a_star=True)
 
             if curr_square != start:
                 curr_square.set_closed()
@@ -294,13 +327,13 @@ class Square(PathfindingVisualizer):
 
     def update_neighbours(self, graph):
         self.neighbours = []
-        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_barrier():  # Down
+        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_wall():  # Down
             self.neighbours.append(graph[self.row+1][self.col])
-        if self.row > 0 and not graph[self.row-1][self.col].is_barrier():  # UP
+        if self.row > 0 and not graph[self.row-1][self.col].is_wall():  # UP
             self.neighbours.append(graph[self.row-1][self.col])
-        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_barrier():  # RIGHT
+        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_wall():  # RIGHT
             self.neighbours.append(graph[self.row][self.col+1])
-        if self.col > 0 and not graph[self.row][self.col-1].is_barrier():  # LEFT
+        if self.col > 0 and not graph[self.row][self.col-1].is_wall():  # LEFT
             self.neighbours.append(graph[self.row][self.col-1])
 
     def is_open(self):
@@ -318,8 +351,8 @@ class Square(PathfindingVisualizer):
     def is_end(self):
         return self.color == self.END_COLOR
 
-    def is_barrier(self):
-        return self.color == self.BARRIER_COLOR
+    def is_wall(self):
+        return self.color == self.WALL_COLOR
 
     def is_path(self):
         return self.color == self.PATH_COLOR
@@ -342,8 +375,8 @@ class Square(PathfindingVisualizer):
     def set_end(self):
         self.color = self.END_COLOR
 
-    def set_barrier(self):
-        self.color = self.BARRIER_COLOR
+    def set_wall(self):
+        self.color = self.WALL_COLOR
 
     def set_path(self):
         self.color = self.PATH_COLOR
