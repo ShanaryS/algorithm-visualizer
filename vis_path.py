@@ -45,6 +45,15 @@ class PathfindingVisualizer:
         self.TURQUOISE = (64, 224, 208)
         self.GREY = (128, 128, 128)
 
+        self.DEFAULT_COLOR = self.WHITE
+        self.OPEN_COLOR = self.TURQUOISE
+        self.CLOSED_COLOR = self.BLUE
+        self.START_COLOR = self.GREEN
+        self.MID_COLOR = self.ORANGE
+        self.END_COLOR = self.RED
+        self.BARRIER_COLOR = self.BLACK
+        self.PATH_COLOR = self.YELLOW
+
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         clock = pygame.time.Clock()
         graph = self.set_graph()
@@ -102,6 +111,7 @@ class PathfindingVisualizer:
                 # Run A* with "A" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a and start and end:
+                        self.reset_algo(graph)
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
@@ -113,6 +123,7 @@ class PathfindingVisualizer:
                 # Run Dijkstra with "D" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_d and start and end:
+                        self.reset_algo(graph)
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
@@ -138,8 +149,15 @@ class PathfindingVisualizer:
             pygame.draw.line(self.WINDOW, self.GREY, (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
             pygame.draw.line(self.WINDOW, self.GREY, (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
 
+    def reset_algo(self, graph):    # Resets algo colors while keep board obstacles
+        for i in range(self.ROWS):
+            for j in range(self.ROWS):
+                square = graph[i][j]
+                if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
+                    square.reset()
+
     def draw(self, graph):
-        self.WINDOW.fill(self.WHITE)
+        self.WINDOW.fill(self.DEFAULT_COLOR)
         for row in graph:
             for square in row:
                 square.draw_square(self.WINDOW)
@@ -266,7 +284,7 @@ class Square(PathfindingVisualizer):
         self.y = self.col * self.SQUARE_SIZE
         self.neighbours = []
         self.total_rows = self.ROWS
-        self.color = self.WHITE
+        self.color = self.DEFAULT_COLOR
 
     def __lt__(self, other):    # Allows comparison of length of squares
         return False
@@ -286,46 +304,49 @@ class Square(PathfindingVisualizer):
             self.neighbours.append(graph[self.row][self.col-1])
 
     def is_open(self):
-        return self.color == self.TURQUOISE
+        return self.color == self.OPEN_COLOR
 
     def is_closed(self):
-        return self.color == self.BLUE
+        return self.color == self.CLOSED_COLOR
 
     def is_start(self):
-        return self.color == self.GREEN
+        return self.color == self.START_COLOR
 
     def is_mid(self):
-        return self.color == self.ORANGE
+        return self.color == self.MID_COLOR
 
     def is_end(self):
-        return self.color == self.RED
+        return self.color == self.END_COLOR
 
     def is_barrier(self):
-        return self.color == self.BLACK
+        return self.color == self.BARRIER_COLOR
+
+    def is_path(self):
+        return self.color == self.PATH_COLOR
 
     def reset(self):
-        self.color = self.WHITE
+        self.color = self.DEFAULT_COLOR
 
     def set_open(self):
-        self.color = self.TURQUOISE
+        self.color = self.OPEN_COLOR
 
     def set_closed(self):
-        self.color = self.BLUE
+        self.color = self.CLOSED_COLOR
 
     def set_start(self):
-        self.color = self.GREEN
+        self.color = self.START_COLOR
 
     def set_mid(self):
-        self.color = self.ORANGE
+        self.color = self.MID_COLOR
 
     def set_end(self):
-        self.color = self.RED
+        self.color = self.END_COLOR
 
     def set_barrier(self):
-        self.color = self.BLACK
+        self.color = self.BARRIER_COLOR
 
     def set_path(self):
-        self.color = self.YELLOW
+        self.color = self.PATH_COLOR
 
     def draw_square(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))

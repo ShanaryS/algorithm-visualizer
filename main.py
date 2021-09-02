@@ -13,15 +13,14 @@ if __name__ == '__main__':
     Path.main()
 
     # TODO
-    # Change speed for each algos. Use clock tick?
-    # Allow buttons to change algos
-    # Add legend
     # Add mazes, recursive and random
     # Random shapes
     # Allow change algos without changing barriers, start, end, mid (if open, colsed, path, change)
     # Allow changing nodes after completion
-    # Go from point A, to B, and then C
+    # Go from point start, mid, end. Maybe add mid=False as last arg. Prob treat mid as an end.
     # Add weight node
+    # Add legend
+    # Allow buttons to change algos
     # Add other algos
     # Create gifs of different path finding algos
     # Use Jeff's city data as SQL database, allow to pick from any city to another
