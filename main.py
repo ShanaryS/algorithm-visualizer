@@ -10,6 +10,17 @@ if __name__ == '__main__':
     Path = PathfindingVisualizer()
     Path.main()
 
+    # TODO Delete unnecessary files
+    # Add other algos
+    # Allow buttons to change algos
+    # Add legend
+    # Add mazes
+    # Add bomb node
+    # Separate each visualizer into different files
+    # Create gifs of different path finding algos
+    # Find replacement for replit
+    # Update resume
+
     # ---------------------------------------------------------------------------------------------
 
     # Below was to test without GUI. No longer need doesn't harm to keep
@@ -47,6 +58,3 @@ if __name__ == '__main__':
     # # Search.fibonacci(key)
     # # Search.linear(key)
     # # Search.comparison(key)
-
-
-
