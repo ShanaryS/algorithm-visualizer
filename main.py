@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # Separate each visualizer into different files
     # Create gifs of different path finding algos
     # Find replacement for replit
-    # Update resume
+    # Update r
 
     # ---------------------------------------------------------------------------------------------
 
