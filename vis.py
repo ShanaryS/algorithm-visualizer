@@ -2,7 +2,6 @@ from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-import sys
 import pygame
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
@@ -1157,28 +1156,186 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
             self.values[i], self.values[r] = self.values[r], self.values[i]
 
 
+# Stuff I will prob need
+# rect = pygame.Rect(x_loc, y_loc, x_len, y_len)
+# self.WINDOW.blit(source, (x_loc, y_loc or Rect))
+# pygame.draw.rect(self.WINDOW, color, rect, width>0 for line)
+# pygame.draw.line(self.WINDOW, color, start_pos, end+pos, width)
+# pygame.draw.lines()
+# pygame.font.init()
+# pygame.font.SysFont()
+# pygame.time.delay()
+# rect.colliderect(rect2) # to check if two rect collided
+# pygame.USEREVENT + n /// pygame.event.post(pygame.event.Event(pygame.USEREVENT)) # Where n is a unique event
+# put stuff in event loop if checking for inputs
+# Set so can't change edge border of game
+# Allow rectangle graph instead of just square
+# Any way to put square size in either class? Check all methods that use rows to see if can replace with self.ROWS
+# Using self.WIDTH instead of passing width for main
+# Allow diag transitions or maybe not
+# Add middle click option?
 class PathfindingVisualizer:
     def __init__(self):
-        LENGTH = 800
-        self.WINDOW = pygame.display.set_mode((LENGTH, LENGTH))
+        self.WIDTH = 800
+        self.HEIGHT = 800
+        self.WINDOW = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Pathfinding Visualizer")
 
-        self.FPS = 60
+        # Replicate colors of clement
+        self.FPS = 1000
+        self.ROWS = 50
+
         self.WHITE = (255, 255, 255)
+        self.BLACK = (0, 0, 0)
+        self.RED = (255, 0, 0)
+        self.GREEN = (0, 255, 0)
+        self.BLUE = (0, 0, 255)
+        self.YELLOW = (255, 255, 0)
+        self.ORANGE = (255, 165, 0)
+        self.PURPLE = (128, 0, 128)
+        self.TURQUOISE = (64, 224, 208)
+        self.GREY = (128, 128, 128)
 
-    def draw_window(self):
-        self.WINDOW.fill(self.WHITE)
-        pygame.display.update()
-
-    def main(self):
+    def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         clock = pygame.time.Clock()
+        graph = self.set_graph(self.ROWS, self.WIDTH)
+
+        start = None
+        end = None
+
         run = True
+        started = False
         while run:
             clock.tick(self.FPS)
+            self.draw(self.WINDOW, graph, self.ROWS, self.WIDTH)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                    pygame.quit()
 
-            self.draw_window()
+                if started:     # Prevents inputs while algorithm has started
+                    continue
 
-        pygame.quit()
+                if pygame.mouse.get_pressed(3)[0]:       # LEFT
+                    pos = pygame.mouse.get_pos()
+                    row, col = self.get_clicked_pos(pos, self.ROWS, self.WIDTH)
+                    square = graph[row][col]
+                    if not start:
+                        start = square
+                        start.set_start()
+                    elif not end:
+                        end = square
+                        end.set_end()
+                    elif square != start and square != end:
+                        square.set_barrier()
+                elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
+                    pass
+
+        self.main()
+
+    @staticmethod
+    def set_graph(rows, width):
+        graph = []
+        square_size = width // rows
+        for i in range(rows):
+            graph.append([])
+            for j in range(rows):
+                square = Node(i, j, square_size, rows)
+                graph[i].append(square)
+
+        return graph
+
+    def draw_graph(self, window, rows, width):
+        square_size = width // rows
+        for i in range(rows):
+            pygame.draw.line(window, self.GREY, (0, i * square_size), (width, i * square_size))
+            pygame.draw.line(window, self.GREY, (i * square_size, 0), (i * square_size, width))
+            # for j in range(rows):
+            #     pygame.draw.line(window, self.GREY, (j * square_size, 0), (j * square_size, width))
+
+    def draw(self, window, graph, rows, width):
+        window.fill(self.WHITE)
+        for row in graph:
+            for square in row:
+                square.draw_square(window)
+
+        self.draw_graph(window, rows, width)
+        pygame.display.update()
+
+    @staticmethod
+    def get_clicked_pos(pos, rows, width):
+        square_size = width // rows
+        y, x = pos
+
+        row = y // square_size
+        col = x // square_size
+
+        return row, col
+
+    @staticmethod
+    def heuristic(pos1, pos2):
+        x1, y1 = pos1
+        x2, y2 = pos2
+        return abs(x1 - x2) + abs(y1 - y2)
+
+
+class Node(PathfindingVisualizer):
+    def __init__(self, row, col, width, total_rows):
+        super().__init__()
+        self.row = row
+        self.col = col
+        self.width = width
+        self.x = self.row * self.width
+        self.y = self.col * self.width
+        self.neighbours = []
+        self.total_rows = total_rows
+        self.color = self.WHITE
+
+    def get_pos(self):
+        return self.row, self.col
+
+    def is_open(self):
+        return self.color == self.GREEN
+
+    def is_closed(self):
+        return self.color == self.RED
+
+    def is_start(self):
+        return self.color == self.ORANGE
+
+    def is_end(self):
+        return self.color == self.TURQUOISE
+
+    def is_barrier(self):
+        return self.color == self.BLACK
+
+    def reset(self):
+        self.color = self.WHITE
+
+    def set_open(self):
+        self.color = self.GREEN
+
+    def set_closed(self):
+        self.color = self.RED
+
+    def set_start(self):
+        self.color = self.ORANGE
+
+    def set_end(self):
+        self.color = self.TURQUOISE
+
+    def set_barrier(self):
+        self.color = self.BLACK
+
+    def set_path(self):
+        self.color = self.PURPLE
+
+    def draw_square(self, window):
+        pygame.draw.rect(window, self.color, (self.x, self.y, self.width, self.width))
+
+    def update_neighbors(self, graph):
+        pass
+
+    def __lt__(self, other):
+        return False
+

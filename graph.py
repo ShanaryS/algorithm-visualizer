@@ -24,6 +24,7 @@ class Graph:
         self.add_directed_edge(vertex_a, vertex_b, weight)
         self.add_directed_edge(vertex_b, vertex_a, weight)
 
+
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
