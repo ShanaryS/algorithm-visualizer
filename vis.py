@@ -1312,12 +1312,14 @@ class PathfindingVisualizer:
 
     # Reorganize dict comp for g score and open_set. Match with a*
     def dijkstra(self, graph, start, end):  # Maybe change to only use source at start per wiki
-        queue_pos = 0   # May not be needed
-        g_score = {start: 0}
-        came_from = {}
+        queue_pos = 0
         open_set = PriorityQueue()
-        open_set.put((g_score[start], queue_pos, start))
+        open_set.put((0, queue_pos, start))
         open_set_hash = {start}
+
+        g_score = {square: float('inf') for row in graph for square in row}
+        g_score[start] = 0
+        came_from = {}
 
         for row in graph:
             for square in row:
@@ -1333,7 +1335,7 @@ class PathfindingVisualizer:
             curr_square = open_set.get()[2]
             open_set_hash.remove(curr_square)
 
-            if curr_square == end:  # May need to change to wiki version, this is what draws the best path line
+            if curr_square == end:
                 self.best_path(came_from, end, graph)
                 start.set_start()
                 end.set_end()
@@ -1362,13 +1364,13 @@ class PathfindingVisualizer:
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
+        open_set_hash = {start}
+
         came_from = {}
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
         f_score = {square: float('inf') for row in graph for square in row}
         f_score[start] = self.heuristic(start.get_pos(), end.get_pos())
-
-        open_set_hash = {start}
 
         while not open_set.empty():
             for event in pygame.event.get():
