@@ -205,6 +205,7 @@ class SearchVisualizer:
     #     self.linear(key, b)
 
     def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
+        """Loops through array once and returns the first item of value key. Complexity: Time - O(n), Space - O(1)"""
         self.set_graph()
         pause_short = self.pause
 
@@ -223,6 +224,9 @@ class SearchVisualizer:
                 return self.visualize(i)
 
     def binary(self, key, high=None, reset=True):
+        """Divides values into halves and checks if key is in that half.
+        Continues until no longer possible. Requires sorted values. Complexity: Time - O(log(n)), Space - O(1)
+        """
         if reset is True:   # Exponential calls binary. This is to avoid resetting colors when it does.
             self.values.sort()
             self.set_graph()
@@ -286,6 +290,9 @@ class SearchVisualizer:
         return self.visualize(mid)
 
     def jump(self, key):
+        """Optimization for linear search. Similar to binary but steps by a sqrt(n) instead of halving current window.
+        Requires sorted values. Complexity: Time - O(sqrt(n)), Space - O(1)
+        """
         self.values.sort()
         self.set_graph()
         plt.pause(1)
@@ -335,6 +342,10 @@ class SearchVisualizer:
 
     # Does weird stuff when searching for 48 with values. The height arg for binary search probably is the cause.
     def exponential(self, key):
+        """Optimization for binary search. Faster finding of upper bound.
+        Finds upper bound in 2^i operations where i is the desired index. Complexity: Time - O(log(i)), Space - O(1)
+        Best when index is relatively close to the beginning of the array, such as with unbounded or infinite arrays
+        """
         self.values.sort()
         self.set_graph()
         plt.pause(1)
@@ -373,6 +384,9 @@ class SearchVisualizer:
             return self.binary(key, reset=False)
 
     def fibonacci(self, key):
+        """Creates fibonacci numbers up to the length of the list, then iterates downward until target value is in range
+        Useful for very large numbers as it avoids division. Complexity: Time - O(log(n)), Space - O(1)
+        """
         self.values.sort()
         self.set_graph()
         plt.pause(1)
@@ -618,6 +632,9 @@ class SortVisualizer:
         self.set_graph()
 
     def selection(self):
+        """Goes through list comparing values of the current number to all values after, swapping as needed.
+        Complexity: Time - O(n^2), Space - O(1), Unstable
+        """
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.001)
 
@@ -656,6 +673,9 @@ class SortVisualizer:
         plt.draw()
 
     def insertion(self):
+        """Splits input into the sorted and unsorted parts. Places unsorted elements to the correct position.
+        Complexity: Time - O(n^2), Space - O(1), Stable
+        """
         pause_short = self.pause
 
         for i in range(1, self.LENGTH):
@@ -690,6 +710,10 @@ class SortVisualizer:
         plt.draw()
 
     def bubble(self):
+        """Swaps adjacent elements if they are in the wrong order.
+        Repeats n-1 times with max index to check decreasing by 1.
+        Complexity: Time - O(n^2), Space - O(1), Stable
+        """
         pause_short = self.pause
 
         for i in range(self.LENGTH-1):
@@ -717,6 +741,9 @@ class SortVisualizer:
         plt.draw()
 
     def heap(self):
+        """Converts input into a max heap data structure and pops values.
+        Complexity: Time - O(nlog(n)), Space - O(1), Unstable
+        """
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
@@ -789,6 +816,10 @@ class SortVisualizer:
             self.vis[right].set_color(self.vis_default)
 
     def quick(self, start=0, end=-1):   # Weird bug where bar is misplaced only once. Can't trace it.
+        """Sets a pivot value and places every value below the pivot before and all values greater after.
+        Repeats recursively until only single element partitions remains.
+        Complexity: Time - O(nlog(n)), Space - O(log(n)), Unstable
+        """
         if end == -1:
             end = self.LENGTH - 1
 
@@ -870,6 +901,9 @@ class SortVisualizer:
         return high
 
     def merge(self, i=0, key=-1):
+        """Recursively splits input in halves. Sorts each element at each level bottom up.
+        Complexity: Time - O(nlog(n)), Space - O(n), Stable
+        """
         if key == -1:
             key = self.LENGTH - 1
 
@@ -980,6 +1014,10 @@ class SortVisualizer:
             self.values[i + merge_pos] = merged_numbers[merge_pos]
 
     def tim(self):      # Seems to use insertion too much. Possibly a bug.
+        """Combination of merge sort and insertion sort.
+        Divides input into blocks, sorts using insertion, combines using merge.
+        Complexity: Time - O(nlog(n)), Space - O(1), Stable
+        """
         min_run = self._min_run(self.LENGTH)
 
         for start in range(0, self.LENGTH, min_run):
@@ -1009,6 +1047,9 @@ class SortVisualizer:
         return n + r
 
     def radix(self):
+        """Only for integers. Places values into buckets from the least to most significant digit. Sorts with buckets
+        Complexity: Time - O(n*k), Space - O(n+k), Stable
+        """
         values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
         length = len(values)
         names = [i for i in range(length)]
@@ -1105,6 +1146,9 @@ class SortVisualizer:
 
     # Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
     def bogo(self):
+        """Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
+        Complexity: Time - O(n*n!), Space - O(1), Unstable
+        """
         pause_short = self.pause
         EXPECTED_RUN_TIME = ((np.math.factorial(self.LENGTH)) / 4)
 
@@ -1430,8 +1474,22 @@ class Square(PathfindingVisualizer):
         self.total_rows = self.ROWS
         self.color = self.WHITE
 
+    def __lt__(self, other):    # Allows comparison of length of squares
+        return False
+
     def get_pos(self):
         return self.row, self.col
+
+    def update_neighbours(self, graph):
+        self.neighbours = []
+        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_barrier():  # Down
+            self.neighbours.append(graph[self.row+1][self.col])
+        if self.row > 0 and not graph[self.row-1][self.col].is_barrier():  # UP
+            self.neighbours.append(graph[self.row-1][self.col])
+        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_barrier():  # RIGHT
+            self.neighbours.append(graph[self.row][self.col+1])
+        if self.col > 0 and not graph[self.row][self.col-1].is_barrier():  # LEFT
+            self.neighbours.append(graph[self.row][self.col-1])
 
     def is_open(self):
         return self.color == self.TURQUOISE
@@ -1441,6 +1499,9 @@ class Square(PathfindingVisualizer):
 
     def is_start(self):
         return self.color == self.GREEN
+
+    def is_mid(self):
+        return self.color == self.ORANGE
 
     def is_end(self):
         return self.color == self.RED
@@ -1460,6 +1521,9 @@ class Square(PathfindingVisualizer):
     def set_start(self):
         self.color = self.GREEN
 
+    def set_mid(self):
+        self.color = self.ORANGE
+
     def set_end(self):
         self.color = self.RED
 
@@ -1471,17 +1535,3 @@ class Square(PathfindingVisualizer):
 
     def draw_square(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))
-
-    def update_neighbours(self, graph):
-        self.neighbours = []
-        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_barrier():  # Down
-            self.neighbours.append(graph[self.row+1][self.col])
-        if self.row > 0 and not graph[self.row-1][self.col].is_barrier():  # UP
-            self.neighbours.append(graph[self.row-1][self.col])
-        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_barrier():  # RIGHT
-            self.neighbours.append(graph[self.row][self.col+1])
-        if self.col > 0 and not graph[self.row][self.col-1].is_barrier():  # LEFT
-            self.neighbours.append(graph[self.row][self.col-1])
-
-    def __lt__(self, other):
-        return False

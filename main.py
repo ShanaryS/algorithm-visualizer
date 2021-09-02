@@ -16,10 +16,14 @@ if __name__ == '__main__':
     # Allow buttons to change algos
     # Add legend
     # Add mazes, recursive and random
+    # Random shapes
+    # Allow change algos without changing barriers, start, end, mid (if open, colsed, path, change)
     # Allow changing nodes after completion
-    # Add bomb node
+    # Go from point A, to B, and then C
+    # Add weight node
     # Separate each visualizer into different files
     # Create gifs of different path finding algos
+    # Use Jeff's city data as SQL database, allow to pick from any city to another
     # Find replacement for replit
     # Update r
 
