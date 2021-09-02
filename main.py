@@ -12,8 +12,7 @@ if __name__ == '__main__':
     Path = PathfindingVisualizer()
     Path.main()
 
-    # TODO Delete unnecessary files
-    # Add other algos
+    # TODO
     # Change speed for each algos. Use clock tick?
     # Allow buttons to change algos
     # Add legend
@@ -23,7 +22,7 @@ if __name__ == '__main__':
     # Allow changing nodes after completion
     # Go from point A, to B, and then C
     # Add weight node
-    # Separate each visualizer into different files
+    # Add other algos
     # Create gifs of different path finding algos
     # Use Jeff's city data as SQL database, allow to pick from any city to another
     # Find replacement for replit

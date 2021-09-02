@@ -155,8 +155,7 @@ class PathfindingVisualizer:
 
         return row, col
 
-    # Reorganize dict comp for g score and open_set. Match with a*
-    def dijkstra(self, graph, start, end):  # Maybe change to only use source at start per wiki
+    def dijkstra(self, graph, start, end):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -165,12 +164,6 @@ class PathfindingVisualizer:
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
         came_from = {}
-
-        for row in graph:
-            for square in row:
-                if square != start:
-                    g_score[square] = float('inf')
-                    open_set.put((g_score[square], queue_pos, square))
 
         while not open_set.empty():
             for event in pygame.event.get():
