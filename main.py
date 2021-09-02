@@ -6,7 +6,6 @@ if __name__ == '__main__':
 
     # Search.set_graph()
     # Sort.set_graph()
-
     Path = PathfindingVisualizer()
     Path.main()
 
