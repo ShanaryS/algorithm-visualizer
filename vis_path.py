@@ -1,6 +1,7 @@
 import pygame
 from queue import PriorityQueue
 
+
 # Stuff I will prob need
 # rect = pygame.Rect(x_loc, y_loc, x_len, y_len)
 # self.WINDOW.blit(source, (x_loc, y_loc or Rect))

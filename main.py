@@ -1,4 +1,6 @@
-from vis import SearchVisualizer, SortVisualizer, PathfindingVisualizer
+from vis_search import SearchVisualizer
+from vis_sort import SortVisualizer
+from vis_path import PathfindingVisualizer
 
 if __name__ == '__main__':
     Search = SearchVisualizer()
@@ -26,6 +28,26 @@ if __name__ == '__main__':
     # Use Jeff's city data as SQL database, allow to pick from any city to another
     # Find replacement for replit
     # Update r
+
+    """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
+    search_algos, sort_algos, and pathfinder_algos for pure implementation without visuals."""
+
+    # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html for bar funcs
+    # plt.xticks(x_values, xticks) to change tick name under graph, update list and reset values.
+
+    # TODO UI Elements ------------------------------------------------------------------
+    # Use Repl.it for visualizations, different work spaces for each func?
+    # Link to github, link to different repl.it for search, sort, and path with buttons similar to blinder
+    # -----------------------------------------------------------------------------------
+    # Add note: Tidbits about algos
+    # Add note: Explain what each color means for each algo
+    # -----------------------------------------------------------------------------------
+    # Add comments to everything that needs it
+    # Allow to go step by step?
+    # Animated matplotlib module?
+    # Allow comparing multiple algorithms at the same time, subplots maybe
+    # Upside down graph?
+    # Use fill and overlapping bars for coordinate plane?
 
     # ---------------------------------------------------------------------------------------------
 
