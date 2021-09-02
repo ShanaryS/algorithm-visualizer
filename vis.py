@@ -1210,7 +1210,6 @@ class PathfindingVisualizer:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-                    pygame.quit()
 
                 if started:     # Prevents inputs while algorithm has started
                     continue
@@ -1256,7 +1255,7 @@ class PathfindingVisualizer:
                             elif square == end:
                                 end = None
 
-        self.main()
+        pygame.quit()
 
     def set_graph(self):
         graph = []
