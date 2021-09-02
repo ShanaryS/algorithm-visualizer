@@ -1,8 +1,9 @@
-from collections import OrderedDict
+import pygame
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-import pygame
+from collections import OrderedDict
+from queue import PriorityQueue
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
 search_algos, sort_algos, and pathfinder_algos for pure implementation without visuals."""
@@ -1172,6 +1173,10 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
 # Allow diag transitions or maybe not
 # Pygame slow startup, check in separate python file
 # Replicate colors of clement
+# Add UI elements to select different algos
+# Maybe algo args in constructor, might be cleaner
+
+# Inspired by Tech With Tim
 class PathfindingVisualizer:
     def __init__(self):
         self.WIDTH = 800
@@ -1247,13 +1252,21 @@ class PathfindingVisualizer:
                     for i in range(self.ROWS):
                         for j in range(self.ROWS):
                             square = graph[i][j]
-                            # noinspection PyUnresolvedReferences
-                            # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
                             square.reset()
                             if square == start:
                                 start = None
                             elif square == end:
                                 end = None
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE and not started:
+                        for row in graph:
+                            for square in row:
+                                square.update_neighbours(graph)
+
+                        # noinspection PyTypeChecker
+                        # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
+                        self.a_star(graph, start, end)
 
         pygame.quit()
 
@@ -1262,7 +1275,7 @@ class PathfindingVisualizer:
         for i in range(self.ROWS):
             graph.append([])
             for j in range(self.ROWS):
-                square = Node(i, j)
+                square = Square(i, j)
                 graph[i].append(square)
 
         return graph
@@ -1289,6 +1302,58 @@ class PathfindingVisualizer:
 
         return row, col
 
+    def a_star(self, graph, start, end):
+        queue_pos = 0
+        open_set = PriorityQueue()
+        open_set.put((0, queue_pos, start))
+        came_from = {}
+        g_score = {square: float('inf') for row in graph for square in row}
+        g_score[start] = 0
+        f_score = {square: float('inf') for row in graph for square in row}
+        f_score[start] = self.heuristic(start.get_pos(), end.get_pos())
+
+        open_set_hash = {start}
+
+        while not open_set.empty():
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            curr_square = open_set.get()[2]
+            open_set_hash.remove(curr_square)
+
+            if curr_square == end:
+                self.best_path(came_from, end, graph)
+                start.set_start()
+                end.set_end()
+                return True
+
+            for nei in curr_square.neighbours:
+                temp_g_score = g_score[curr_square] + 1
+
+                if temp_g_score < g_score[nei]:
+                    came_from[nei] = curr_square
+                    g_score[nei] = temp_g_score
+                    f_score[nei] = temp_g_score + self.heuristic(nei.get_pos(), end.get_pos())
+                    if nei not in open_set_hash:
+                        queue_pos += 1
+                        open_set.put((f_score[nei], queue_pos, nei))
+                        open_set_hash.add(nei)
+                        nei.set_open()
+
+            self.draw(graph)
+
+            if curr_square != start:
+                curr_square.set_closed()
+
+        return False
+
+    def best_path(self, came_from, curr_square, graph):
+        while curr_square in came_from:
+            curr_square = came_from[curr_square]
+            curr_square.set_path()
+            self.draw(graph)
+
     @staticmethod
     def heuristic(pos1, pos2):
         x1, y1 = pos1
@@ -1296,7 +1361,7 @@ class PathfindingVisualizer:
         return abs(x1 - x2) + abs(y1 - y2)
 
 
-class Node(PathfindingVisualizer):
+class Square(PathfindingVisualizer):
     def __init__(self, row, col):
         super().__init__()
         self.row = row
@@ -1349,8 +1414,16 @@ class Node(PathfindingVisualizer):
     def draw_square(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))
 
-    def update_neighbors(self, graph):
-        pass
+    def update_neighbours(self, graph):
+        self.neighbours = []
+        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_barrier():  # Down
+            self.neighbours.append(graph[self.row+1][self.col])
+        if self.row > 0 and not graph[self.row-1][self.col].is_barrier():  # UP
+            self.neighbours.append(graph[self.row-1][self.col])
+        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_barrier():  # RIGHT
+            self.neighbours.append(graph[self.row][self.col+1])
+        if self.col > 0 and not graph[self.row][self.col-1].is_barrier():  # LEFT
+            self.neighbours.append(graph[self.row][self.col-1])
 
     def __lt__(self, other):
         return False
