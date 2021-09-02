@@ -6,14 +6,17 @@ if __name__ == '__main__':
 
     # Search.set_graph()
     # Sort.set_graph()
+
     Path = PathfindingVisualizer()
     Path.main()
 
     # TODO Delete unnecessary files
     # Add other algos
+    # Change speed for each algos. Use clock tick?
     # Allow buttons to change algos
     # Add legend
-    # Add mazes
+    # Add mazes, recursive and random
+    # Allow changing nodes after completion
     # Add bomb node
     # Separate each visualizer into different files
     # Create gifs of different path finding algos

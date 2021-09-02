@@ -1254,8 +1254,9 @@ class PathfindingVisualizer:
                             elif square == end:
                                 end = None
 
+                # Run A* with "A" key on keyboard
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE and start and end:
+                    if event.key == pygame.K_a and start and end:
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
@@ -1263,6 +1264,17 @@ class PathfindingVisualizer:
                         # noinspection PyTypeChecker
                         # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
                         self.a_star(graph, start, end)
+
+                # Run Dijkstra with "D" key on keyboard
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_d and start and end:
+                        for row in graph:
+                            for square in row:
+                                square.update_neighbours(graph)
+
+                        # noinspection PyTypeChecker
+                        # PyCharm bug, doesn't realize that square is a Square class object. This removes it.
+                        self.dijkstra(graph, start, end)
 
         pygame.quit()
 
@@ -1297,6 +1309,54 @@ class PathfindingVisualizer:
         col = x // self.SQUARE_SIZE
 
         return row, col
+
+    # Reorganize dict comp for g score and open_set. Match with a*
+    def dijkstra(self, graph, start, end):  # Maybe change to only use source at start per wiki
+        queue_pos = 0   # May not be needed
+        g_score = {start: 0}
+        came_from = {}
+        open_set = PriorityQueue()
+        open_set.put((g_score[start], queue_pos, start))
+        open_set_hash = {start}
+
+        for row in graph:
+            for square in row:
+                if square != start:
+                    g_score[square] = float('inf')
+                    open_set.put((g_score[square], queue_pos, square))
+
+        while not open_set.empty():
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            curr_square = open_set.get()[2]
+            open_set_hash.remove(curr_square)
+
+            if curr_square == end:  # May need to change to wiki version, this is what draws the best path line
+                self.best_path(came_from, end, graph)
+                start.set_start()
+                end.set_end()
+                return True
+
+            for nei in curr_square.neighbours:
+                temp_g_score = g_score[curr_square] + 1
+
+                if temp_g_score < g_score[nei]:
+                    came_from[nei] = curr_square
+                    g_score[nei] = temp_g_score
+                    if nei not in open_set_hash:
+                        queue_pos += 1
+                        open_set.put((g_score[nei], queue_pos, nei))
+                        open_set_hash.add(nei)
+                        nei.set_open()
+
+            self.draw(graph)
+
+            if curr_square != start:
+                curr_square.set_closed()
+
+        return False
 
     def a_star(self, graph, start, end):
         queue_pos = 0
@@ -1344,17 +1404,17 @@ class PathfindingVisualizer:
 
         return False
 
-    def best_path(self, came_from, curr_square, graph):
-        while curr_square in came_from:
-            curr_square = came_from[curr_square]
-            curr_square.set_path()
-            self.draw(graph)
-
     @staticmethod
     def heuristic(pos1, pos2):
         x1, y1 = pos1
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
+
+    def best_path(self, came_from, curr_square, graph):
+        while curr_square in came_from:
+            curr_square = came_from[curr_square]
+            curr_square.set_path()
+            self.draw(graph)
 
 
 class Square(PathfindingVisualizer):
