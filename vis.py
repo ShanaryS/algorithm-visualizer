@@ -1167,15 +1167,11 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
 # pygame.time.delay()
 # rect.colliderect(rect2) # to check if two rect collided
 # pygame.USEREVENT + n /// pygame.event.post(pygame.event.Event(pygame.USEREVENT)) # Where n is a unique event
-# put stuff in event loop if checking for inputs
 # Set so can't change edge border of game
 # Allow rectangle graph instead of just square
-# Any way to put square size in either class? Check all methods that use rows to see if can replace with self.ROWS
-# Using self.WIDTH instead of passing width for main
 # Allow diag transitions or maybe not
-# Add middle click option?
-# Update node to use inherited variables when done
 # Pygame slow startup, check in separate python file
+# Replicate colors of clement
 class PathfindingVisualizer:
     def __init__(self):
         self.WIDTH = 800
@@ -1183,10 +1179,10 @@ class PathfindingVisualizer:
         self.WINDOW = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Pathfinding Visualizer")
 
-        # Replicate colors of clement
         self.FPS = 1000
         self.ROWS = 50
-        # self.COLS = 50    Think this will be needed to make rectangle graph
+        # self.COLS = 50        # Use to make graph none square but requires a lot of reworking
+        self.SQUARE_SIZE = 16   # num squares = (self.WIDTH/self.SQUARE_SIZE) * (self.HEIGHT/self.SQUARE_SIZE)
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -1264,20 +1260,18 @@ class PathfindingVisualizer:
 
     def set_graph(self):
         graph = []
-        square_size = self.WIDTH // self.ROWS
         for i in range(self.ROWS):
             graph.append([])
             for j in range(self.ROWS):
-                square = Node(i, j, square_size, self.ROWS)
+                square = Node(i, j)
                 graph[i].append(square)
 
         return graph
 
     def draw_graph(self):
-        square_size = self.WIDTH // self.ROWS
         for i in range(self.ROWS):
-            pygame.draw.line(self.WINDOW, self.GREY, (0, i * square_size), (self.WIDTH, i * square_size))
-            pygame.draw.line(self.WINDOW, self.GREY, (i * square_size, 0), (i * square_size, self.WIDTH))
+            pygame.draw.line(self.WINDOW, self.GREY, (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
+            pygame.draw.line(self.WINDOW, self.GREY, (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
 
     def draw(self, graph):
         self.WINDOW.fill(self.WHITE)
@@ -1289,11 +1283,10 @@ class PathfindingVisualizer:
         pygame.display.update()
 
     def get_clicked_pos(self, pos):
-        square_size = self.WIDTH // self.ROWS
         y, x = pos
 
-        row = y // square_size
-        col = x // square_size
+        row = y // self.SQUARE_SIZE
+        col = x // self.SQUARE_SIZE
 
         return row, col
 
@@ -1305,15 +1298,14 @@ class PathfindingVisualizer:
 
 
 class Node(PathfindingVisualizer):
-    def __init__(self, row, col, width, total_rows):
+    def __init__(self, row, col):
         super().__init__()
         self.row = row
         self.col = col
-        self.width = width
-        self.x = self.row * self.width
-        self.y = self.col * self.width
+        self.x = self.row * self.SQUARE_SIZE
+        self.y = self.col * self.SQUARE_SIZE
         self.neighbours = []
-        self.total_rows = total_rows
+        self.total_rows = self.ROWS
         self.color = self.WHITE
 
     def get_pos(self):
@@ -1356,11 +1348,10 @@ class Node(PathfindingVisualizer):
         self.color = self.PURPLE
 
     def draw_square(self, window):
-        pygame.draw.rect(window, self.color, (self.x, self.y, self.width, self.width))
+        pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))
 
     def update_neighbors(self, graph):
         pass
 
     def __lt__(self, other):
         return False
-
