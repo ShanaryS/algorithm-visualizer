@@ -1208,16 +1208,12 @@ class PathfindingVisualizer:
         end = None
 
         run = True
-        started = False
         while run:
             clock.tick(self.FPS)
             self.draw(graph)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-
-                if started:     # Prevents inputs while algorithm has started
-                    continue
 
                 if pygame.mouse.get_pressed(3)[0]:       # LEFT
                     pos = pygame.mouse.get_pos()
@@ -1259,7 +1255,7 @@ class PathfindingVisualizer:
                                 end = None
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE and not started:
+                    if event.key == pygame.K_SPACE and start and end:
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
