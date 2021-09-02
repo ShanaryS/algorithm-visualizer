@@ -6,9 +6,19 @@ if __name__ == '__main__':
 
     # Search.set_graph()
     # Sort.set_graph()
-
     Path = PathfindingVisualizer()
     Path.main()
+
+    # TODO Delete unnecessary files
+    # Add other algos
+    # Allow buttons to change algos
+    # Add legend
+    # Add mazes
+    # Add bomb node
+    # Separate each visualizer into different files
+    # Create gifs of different path finding algos
+    # Find replacement for replit
+    # Update r
 
     # ---------------------------------------------------------------------------------------------
 
