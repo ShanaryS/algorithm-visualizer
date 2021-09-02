@@ -2,6 +2,8 @@ from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
+import sys
+import pygame
 
 """ Docstrings explaining the file. Module way. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
 search_algos, sort_algos, and pathfinder_algos for pure implementation without visuals."""
@@ -1157,5 +1159,26 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
 
 class PathfindingVisualizer:
     def __init__(self):
-        pass
+        LENGTH = 800
+        self.WINDOW = pygame.display.set_mode((LENGTH, LENGTH))
+        pygame.display.set_caption("Pathfinding Visualizer")
 
+        self.FPS = 60
+        self.WHITE = (255, 255, 255)
+
+    def draw_window(self):
+        self.WINDOW.fill(self.WHITE)
+        pygame.display.update()
+
+    def main(self):
+        clock = pygame.time.Clock()
+        run = True
+        while run:
+            clock.tick(self.FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+            self.draw_window()
+
+        pygame.quit()
