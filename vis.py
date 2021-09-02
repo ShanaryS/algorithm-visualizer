@@ -1174,6 +1174,8 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
 # Using self.WIDTH instead of passing width for main
 # Allow diag transitions or maybe not
 # Add middle click option?
+# Update node to use inherited variables when done
+# Pygame slow startup, check in separate python file
 class PathfindingVisualizer:
     def __init__(self):
         self.WIDTH = 800
@@ -1184,6 +1186,7 @@ class PathfindingVisualizer:
         # Replicate colors of clement
         self.FPS = 1000
         self.ROWS = 50
+        # self.COLS = 50    Think this will be needed to make rectangle graph
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -1198,7 +1201,7 @@ class PathfindingVisualizer:
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         clock = pygame.time.Clock()
-        graph = self.set_graph(self.ROWS, self.WIDTH)
+        graph = self.set_graph()
 
         start = None
         end = None
@@ -1207,7 +1210,7 @@ class PathfindingVisualizer:
         started = False
         while run:
             clock.tick(self.FPS)
-            self.draw(self.WINDOW, graph, self.ROWS, self.WIDTH)
+            self.draw(graph)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -1218,53 +1221,75 @@ class PathfindingVisualizer:
 
                 if pygame.mouse.get_pressed(3)[0]:       # LEFT
                     pos = pygame.mouse.get_pos()
-                    row, col = self.get_clicked_pos(pos, self.ROWS, self.WIDTH)
+                    row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
-                    if not start:
+                    if not start and square != end:
                         start = square
-                        start.set_start()
-                    elif not end:
+                        # noinspection PyUnresolvedReferences
+                        # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
+                        square.set_start()
+                    elif not end and square != start:
                         end = square
+                        # noinspection PyUnresolvedReferences
+                        # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
                         end.set_end()
                     elif square != start and square != end:
+                        # noinspection PyUnresolvedReferences
+                        # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
                         square.set_barrier()
                 elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
-                    pass
+                    pos = pygame.mouse.get_pos()
+                    row, col = self.get_clicked_pos(pos)
+                    square = graph[row][col]
+                    # noinspection PyUnresolvedReferences
+                    # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
+                    square.reset()
+                    if square == start:
+                        start = None
+                    elif square == end:
+                        end = None
+                elif pygame.mouse.get_pressed(3)[1]:
+                    for i in range(self.ROWS):
+                        for j in range(self.ROWS):
+                            square = graph[i][j]
+                            # noinspection PyUnresolvedReferences
+                            # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
+                            square.reset()
+                            if square == start:
+                                start = None
+                            elif square == end:
+                                end = None
 
         self.main()
 
-    @staticmethod
-    def set_graph(rows, width):
+    def set_graph(self):
         graph = []
-        square_size = width // rows
-        for i in range(rows):
+        square_size = self.WIDTH // self.ROWS
+        for i in range(self.ROWS):
             graph.append([])
-            for j in range(rows):
-                square = Node(i, j, square_size, rows)
+            for j in range(self.ROWS):
+                square = Node(i, j, square_size, self.ROWS)
                 graph[i].append(square)
 
         return graph
 
-    def draw_graph(self, window, rows, width):
-        square_size = width // rows
-        for i in range(rows):
-            pygame.draw.line(window, self.GREY, (0, i * square_size), (width, i * square_size))
-            pygame.draw.line(window, self.GREY, (i * square_size, 0), (i * square_size, width))
-            # for j in range(rows):
-            #     pygame.draw.line(window, self.GREY, (j * square_size, 0), (j * square_size, width))
+    def draw_graph(self):
+        square_size = self.WIDTH // self.ROWS
+        for i in range(self.ROWS):
+            pygame.draw.line(self.WINDOW, self.GREY, (0, i * square_size), (self.WIDTH, i * square_size))
+            pygame.draw.line(self.WINDOW, self.GREY, (i * square_size, 0), (i * square_size, self.WIDTH))
 
-    def draw(self, window, graph, rows, width):
-        window.fill(self.WHITE)
+    def draw(self, graph):
+        self.WINDOW.fill(self.WHITE)
         for row in graph:
             for square in row:
-                square.draw_square(window)
+                square.draw_square(self.WINDOW)
 
-        self.draw_graph(window, rows, width)
+        self.draw_graph()
         pygame.display.update()
 
-    @staticmethod
-    def get_clicked_pos(pos, rows, width):
-        square_size = width // rows
+    def get_clicked_pos(self, pos):
+        square_size = self.WIDTH // self.ROWS
         y, x = pos
 
         row = y // square_size
