@@ -216,7 +216,7 @@ class PathfindingVisualizer:
         return row, col
 
     def draw_recursive_maze(self, graph, chamber=None):
-        division_limit = 15
+        division_limit = 20
 
         if not chamber:
             chamber_width = len(graph)
