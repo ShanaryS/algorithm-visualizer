@@ -59,6 +59,8 @@ class PathfindingVisualizer:
         self.dijkstra_finished = False
         self.a_star_finished = False
         self.maze = False   # Used to prevent drawing extra walls during maze
+        self.start_or_end_clicked = []   # Used for dragging start and end once algos are finished
+        self.wall_nodes = set()     # Used to reinstate walls after deletion for mazes and dragging
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         graph = self.set_graph()
@@ -74,40 +76,65 @@ class PathfindingVisualizer:
                 if event.type == pygame.QUIT:
                     run = False
 
+                if not pygame.mouse.get_pressed(3)[0]:
+                    self.start_or_end_clicked.clear()
                 if pygame.mouse.get_pressed(3)[0]:       # LEFT
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
-                    if not start and square != end:
+                    if (self.dijkstra_finished or self.a_star_finished) and start and end:
+                        if self.start_or_end_clicked:
+                            if square != start and square != end:
+                                last_square = self.start_or_end_clicked[0]
+                                if last_square == 'start':
+                                    if start in self.wall_nodes:
+                                        start.set_wall()
+                                    else:
+                                        start.reset()
+                                    start = square
+                                    start.set_start()
+                                elif last_square == 'end':
+                                    if end in self.wall_nodes:
+                                        end.set_wall()
+                                    else:
+                                        end.reset()
+                                    end = square
+                                    end.set_end()
+                                if self.dijkstra_finished:
+                                    self.algo_no_vis(graph, start, end, dijkstra=True)
+                                elif self.a_star_finished:
+                                    self.algo_no_vis(graph, start, end, a_star=True)
+                        elif square is start:
+                            self.start_or_end_clicked.append('start')
+                        elif square is end:
+                            self.start_or_end_clicked.append('end')
+                    elif not start and square != end:
                         start = square
                         square.set_start()
 
-                        if self.dijkstra_finished is True and start is not None and end is not None:
-                            self.reset_algo(graph)
-                            self.dijkstra(graph, start, end, visualize=False)
-                            self.dijkstra_finished = True
-                        if self.a_star_finished is True and start is not None and end is not None:
-                            self.reset_algo(graph)
-                            self.a_star(graph, start, end, visualize=False)
-                            self.a_star_finished = True
+                        if self.dijkstra_finished and start and end:
+                            self.algo_no_vis(graph, start, end, dijkstra=True)
+                        if self.a_star_finished and start and end:
+                            self.algo_no_vis(graph, start, end, a_star=True)
                     elif not end and square != start:
                         end = square
                         end.set_end()
 
-                        if self.dijkstra_finished is True and start is not None and end is not None:
-                            self.reset_algo(graph)
-                            self.dijkstra(graph, start, end, visualize=False)
-                            self.dijkstra_finished = True
-                        if self.a_star_finished is True and start is not None and end is not None:
-                            self.reset_algo(graph)
-                            self.a_star(graph, start, end, visualize=False)
-                            self.a_star_finished = True
+                        if self.dijkstra_finished and start and end:
+                            self.algo_no_vis(graph, start, end, dijkstra=True)
+                        if self.a_star_finished and start and end:
+                            self.algo_no_vis(graph, start, end, a_star=True)
                     elif square != start and square != end and self.maze is False:
                         square.set_wall()
+                        self.wall_nodes.add(square)
                 elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
+
+                    if square.is_wall:
+                        self.wall_nodes.remove(square)
+
                     square.reset()
                     if square == start:
                         start = None
@@ -250,7 +277,7 @@ class PathfindingVisualizer:
                 square = graph[i][j]
                 square.reset()
 
-    def reset_algo(self, graph):    # Resets algo colors while keep board obstacles
+    def reset_algo(self, graph):    # Resets algo colors while keeping board obstacles
         self.dijkstra_finished = False
         self.a_star_finished = False
         for i in range(self.rows):
@@ -295,7 +322,7 @@ class PathfindingVisualizer:
             open_set_hash.remove(curr_square)
 
             if curr_square == end:
-                self.best_path(came_from, end, graph)
+                self.best_path(came_from, end, graph, visualize=visualize)
                 start.set_start()
                 end.set_end()
                 return True
@@ -342,7 +369,7 @@ class PathfindingVisualizer:
             open_set_hash.remove(curr_square)
 
             if curr_square == end:
-                self.best_path(came_from, end, graph)
+                self.best_path(came_from, end, graph, visualize=visualize)
                 start.set_start()
                 end.set_end()
                 return True
@@ -375,15 +402,27 @@ class PathfindingVisualizer:
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
-    def best_path(self, came_from, curr_square, graph):
+    def best_path(self, came_from, curr_square, graph, visualize=True):
         while curr_square in came_from:
             curr_square = came_from[curr_square]
             curr_square.set_path()
-            self.draw(graph)
+            if visualize:
+                self.draw(graph)
+
+    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
+        if dijkstra:
+            self.reset_algo(graph)
+            self.dijkstra(graph, start, end, visualize=False)
+            self.dijkstra_finished = True
+        if a_star:
+            self.reset_algo(graph)
+            self.a_star(graph, start, end, visualize=False)
+            self.a_star_finished = True
 
     def draw_recursive_maze(self, graph, chamber=None, visualize=True):
         """Implemented following wikipedia guidelines.
         https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
+        Inspired by https://github.com/ChrisKneller/pygame-pathfinder
         """
         division_limit = 3
 
@@ -404,6 +443,7 @@ class PathfindingVisualizer:
         if chamber_width >= division_limit:
             for y in range(chamber_height):
                 graph[chamber_left + x_divide][chamber_top + y].set_wall()
+                self.wall_nodes.add(graph[chamber_left + x_divide][chamber_top + y])
                 if visualize:
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(recursive_maze=True)
@@ -411,6 +451,7 @@ class PathfindingVisualizer:
         if chamber_height >= division_limit:
             for x in range(chamber_width):
                 graph[chamber_left + x][chamber_top + y_divide].set_wall()
+                self.wall_nodes.add(graph[chamber_left + x][chamber_top + y_divide])
                 if visualize:
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(recursive_maze=True)
@@ -459,6 +500,7 @@ class PathfindingVisualizer:
                 if y >= self.rows:
                     y = self.rows - 1
             graph[x][y].reset()
+            self.wall_nodes.discard(graph[x][y])
             if visualize:
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(recursive_maze=True)
