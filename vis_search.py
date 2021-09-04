@@ -12,9 +12,6 @@ class SearchVisualizer:
         self.names = [i for i in range(self.LENGTH)]
         self.size = len(self.values)
         self.key = 44
-        # self._values_sorted = sorted(values)
-        # self._names_sorted = [str(i) for i in values]
-        # Alternative way to sort values for non linear searches. Currently using values_sort function instead.
 
         self.pause = 150 / self.LENGTH * 0.01  # 50 instead of 150 for replit. plt.pause(0.02) is the min it seems
         self.vis_default = 'blue'
@@ -149,9 +146,7 @@ class SearchVisualizer:
             else:
                 for i in range(self.LENGTH):
                     self.vis[i].set_color(self.vis_red)
-                # for i in range(-res, self.length):
-                #     test[i].set_color(self.vis_wrong)
-                # This may be necessary for exponential to work properly. Leaving just in case.
+
         else:
             if res[0] > -1:
                 if res[0] < self.LENGTH:
@@ -163,23 +158,6 @@ class SearchVisualizer:
                     self.vis[i].set_color(self.vis_red)
 
         plt.draw()
-        # plt.clf()   # Might break something. Idk yet. Maybe it will help to call multiple times per single run
-
-    # Use *args to compare all at once. Or just open each in different windows
-    # Turn visualize into function where you pass every color change. This allows you to not show plots individually
-    # And can wait and combine them for this function.
-    # Maybe paralleling threads? Idk if that would apply in this situation.
-    # def comparison(self, key, func1=None, func2=None):  # Use strings to know which functions needs to be compared
-    #     plt.close()
-    #     self.vis = plt.figure()
-    #     a = self.vis.add_subplot(211)
-    #     b = self.vis.add_subplot(212)
-    #
-    #     a.bar(self.names, self.values)
-    #     b.bar(self.names, self.values)
-    #
-    #     self.linear(key, a)
-    #     self.linear(key, b)
 
     def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
         """Loops through array once and returns the first item of value key. Complexity: Time - O(n), Space - O(1)"""
