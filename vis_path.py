@@ -49,7 +49,7 @@ class PathfindingVisualizer:
         self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.TEXT_COLOR)
         self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.TEXT_COLOR)
         self.legend_a_star = self.font.render("A* - Press 'A'", True, self.TEXT_COLOR)
-        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G'", True, self.TEXT_COLOR)
+        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G' or 'V'", True, self.TEXT_COLOR)
         self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.TEXT_COLOR)
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra:", True, self.TEXT_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*:", True, self.TEXT_COLOR)
@@ -128,6 +128,15 @@ class PathfindingVisualizer:
                     if event.key == pygame.K_g:
                         self.reset_graph(graph)
                         self.draw_recursive_maze(graph)
+                        self.maze = True
+                        start = None
+                        end = None
+
+                # Draw recursive maze with NO VISUALIZATIONS with "V" key on keyboard
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_v:
+                        self.reset_graph(graph)
+                        self.draw_recursive_maze(graph, visualize=False)
                         self.maze = True
                         start = None
                         end = None
@@ -351,7 +360,7 @@ class PathfindingVisualizer:
             curr_square.set_path()
             self.draw(graph)
 
-    def draw_recursive_maze(self, graph, chamber=None):
+    def draw_recursive_maze(self, graph, chamber=None, visualize=True):
         """Implemented following wikipedia guidelines.
         https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
         """
@@ -374,14 +383,16 @@ class PathfindingVisualizer:
         if chamber_width >= division_limit:
             for y in range(chamber_height):
                 graph[chamber_left + x_divide][chamber_top + y].set_wall()
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(recursive_maze=True)
+                if visualize:
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(recursive_maze=True)
 
         if chamber_height >= division_limit:
             for x in range(chamber_width):
                 graph[chamber_left + x][chamber_top + y_divide].set_wall()
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(recursive_maze=True)
+                if visualize:
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(recursive_maze=True)
 
         if chamber_width < division_limit and chamber_height < division_limit:
             return
@@ -406,7 +417,6 @@ class PathfindingVisualizer:
         gaps_to_offset = [x for x in range(num_gaps-1, self.ROWS, num_gaps)]
 
         for wall in random.sample(walls, num_gaps):
-            print(wall, x_divide)
             if wall[3] == 1:
                 x = random.randrange(wall[0], wall[0] + wall[2])
                 y = wall[1]
@@ -428,11 +438,15 @@ class PathfindingVisualizer:
                 if y >= self.ROWS:
                     y = self.ROWS - 1
             graph[x][y].reset()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(recursive_maze=True)
+            if visualize:
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(recursive_maze=True)
 
         for chamber in chambers:
-            self.draw_recursive_maze(graph, chamber)
+            if visualize:
+                self.draw_recursive_maze(graph, chamber)
+            else:
+                self.draw_recursive_maze(graph, chamber, visualize=False)
 
 
 class Square(PathfindingVisualizer):
