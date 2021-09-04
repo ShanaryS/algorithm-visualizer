@@ -1,26 +1,8 @@
 import pygame
 from queue import PriorityQueue
 import random
+import time
 
-
-# Stuff I will prob need
-# rect = pygame.Rect(x_loc, y_loc, x_len, y_len)
-# self.WINDOW.blit(source, (x_loc, y_loc or Rect))
-# pygame.draw.rect(self.WINDOW, color, rect, width>0 for line)
-# pygame.draw.line(self.WINDOW, color, start_pos, end+pos, width)
-# pygame.draw.lines()
-# pygame.font.init()
-# pygame.font.SysFont()
-# pygame.time.delay()
-# rect.colliderect(rect2) # to check if two rect collided
-# pygame.USEREVENT + n /// pygame.event.post(pygame.event.Event(pygame.USEREVENT)) # Where n is a unique event
-# Set so can't change edge border of game
-# Allow rectangle graph instead of just square
-# Allow diag transitions or maybe not
-# Pygame slow startup, check in separate python file
-# Replicate colors of clement
-# Add UI elements to select different algos
-# Maybe algo args in constructor, might be cleaner
 
 # noinspection PyUnresolvedReferences, PyTypeChecker
 # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
@@ -33,10 +15,10 @@ class PathfindingVisualizer:
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
-        self.FPS = 1000
-        self.ROWS = 50
+        # Recursive divison only works on certain row values. 46,47,94,95
+        self.ROWS = 95
         # self.COLS = 50        # Use to make graph none square but requires a lot of reworking
-        self.SQUARE_SIZE = 16   # num squares = (self.WIDTH/self.SQUARE_SIZE) * (self.HEIGHT/self.SQUARE_SIZE)
+        self.SQUARE_SIZE = self.WIDTH / self.ROWS
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -73,7 +55,6 @@ class PathfindingVisualizer:
         self.vis_text_recursive_maze = self.font.render("Creating recursive maze:", True, self.TEXT_COLOR)
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
-        clock = pygame.time.Clock()
         graph = self.set_graph()
 
         start = None
@@ -81,7 +62,6 @@ class PathfindingVisualizer:
 
         run = True
         while run:
-            clock.tick(self.FPS)
             self.draw(graph, legend=True)
 
             for event in pygame.event.get():
@@ -167,12 +147,11 @@ class PathfindingVisualizer:
 
     def draw_legend(self):
         self.WINDOW.blit(self.legend_add_node, (0, 0))
-        self.WINDOW.blit(self.legend_remove_node, (0, self.SQUARE_SIZE*1))
-        self.WINDOW.blit(self.legend_clear_graph, (0, self.SQUARE_SIZE*2))
-        self.WINDOW.blit(self.legend_dijkstra, (0, self.SQUARE_SIZE*3))
-        self.WINDOW.blit(self.legend_a_star, (0, self.SQUARE_SIZE*4))
-        self.WINDOW.blit(self.legend_recursive_maze, (0, self.SQUARE_SIZE*5))
-        pygame.display.update()
+        self.WINDOW.blit(self.legend_remove_node, (0, 16*1))
+        self.WINDOW.blit(self.legend_clear_graph, (0, 16*2))
+        self.WINDOW.blit(self.legend_dijkstra, (0, 16*3))
+        self.WINDOW.blit(self.legend_a_star, (0, 16*4))
+        self.WINDOW.blit(self.legend_recursive_maze, (0, 16*5))
 
     def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False):
         if dijkstra:
@@ -211,16 +190,19 @@ class PathfindingVisualizer:
 
     def get_clicked_pos(self, pos):
         y, x = pos
-        row = y // self.SQUARE_SIZE
-        col = x // self.SQUARE_SIZE
+        row = int(y // self.SQUARE_SIZE)
+        col = int(x // self.SQUARE_SIZE)
         return row, col
 
     def draw_recursive_maze(self, graph, chamber=None):
-        division_limit = 20
+        """Implemented following wikipedia guidelines.
+        https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
+        """
+        division_limit = 3
 
-        if not chamber:
+        if chamber is None:
             chamber_width = len(graph)
-            chamber_height = len(graph[0])
+            chamber_height = len(graph[1])
             chamber_left = 0
             chamber_top = 0
         else:
@@ -262,10 +244,12 @@ class PathfindingVisualizer:
 
         walls = (left, right, top, bottom)
 
-        gaps = 3
-        gaps_to_offset = [x for x in range(2, self.ROWS, gaps)]
+        # Number of gaps to leave after each division into four sub quadrants. See docstring for deeper explanation.
+        num_gaps = 3
+        gaps_to_offset = [x for x in range(num_gaps-1, self.ROWS, num_gaps)]
 
-        for wall in random.sample(walls, gaps):
+        for wall in random.sample(walls, num_gaps):
+            print(wall, x_divide)
             if wall[3] == 1:
                 x = random.randrange(wall[0], wall[0] + wall[2])
                 y = wall[1]
