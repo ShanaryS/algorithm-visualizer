@@ -53,7 +53,7 @@ class PathfindingVisualizer:
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra:", True, self.TEXT_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*:", True, self.TEXT_COLOR)
         self.vis_text_recursive_maze = self.font.render("Creating recursive maze:", True, self.TEXT_COLOR)
-        self.vis_text_graph_size = self.font.render("Changing graph size... May take up to a minute",
+        self.vis_text_graph_size = self.font.render("Changing graph size... May take up to 30 seconds",
                                                     True, self.TEXT_COLOR)
 
         self.dijkstra_finished = False
@@ -167,8 +167,6 @@ class PathfindingVisualizer:
                     if event.key == pygame.K_s:
                         if self.rows != 22:
                             graph = self.change_graph_size(graph, 22)
-                            self.draw(graph, legend=True)
-
                             start = None
                             end = None
 
@@ -176,11 +174,7 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         if self.rows != 46:
-                            self.change_graph_size(graph, 46)
-
-                            graph = self.set_graph()
-                            self.draw(graph, legend=True)
-
+                            graph = self.change_graph_size(graph, 46)
                             start = None
                             end = None
 
@@ -188,11 +182,7 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
                         if self.rows != 95:
-                            self.change_graph_size(graph, 95)
-
-                            graph = self.set_graph()
-                            self.draw(graph, legend=True)
-
+                            graph = self.change_graph_size(graph, 95)
                             start = None
                             end = None
 
@@ -272,9 +262,12 @@ class PathfindingVisualizer:
         self.reset_graph(graph)
         self.rows = new_row_size
         self.square_size = self.WIDTH / self.rows
-        self.draw(graph, display_update=False)
+
+        # All needed to show that graph size is change. Two draw_vis_text is needed for switching to large
         self.draw_vis_text(graph_size=True)
-        return self.set_graph()
+        graph = self.set_graph()
+        self.draw(graph, display_update=False)
+        return graph
 
     def get_clicked_pos(self, pos):
         y, x = pos
