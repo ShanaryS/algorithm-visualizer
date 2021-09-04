@@ -182,9 +182,7 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
                         if self.rows != 95:
-                            print(f"First: {graph[1][1].row} {graph[1][1].x} - Second: {graph[-1][-1].row} {graph[-1][-1].x}")
                             graph = self.change_graph_size(95)
-                            print(f"First: {graph[1][1].row} {graph[1][1].x} - Second: {graph[-1][-1].row} {graph[-1][-1].x}")
                             start = None
                             end = None
 
