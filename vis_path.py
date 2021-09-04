@@ -133,7 +133,7 @@ class PathfindingVisualizer:
                     square = graph[row][col]
 
                     if square.is_wall:
-                        self.wall_nodes.remove(square)
+                        self.wall_nodes.discard(square)
 
                     square.reset()
                     if square == start:
