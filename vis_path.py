@@ -15,8 +15,8 @@ class PathfindingVisualizer:
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
-        # Recursive divison only works on certain row values. 46,47,94,95
-        self.ROWS = 95
+        # Recursive division only works on certain row values. 22,23,46,47,94,95.
+        self.ROWS = 46
         # self.COLS = 50        # Use to make graph none square but requires a lot of reworking
         self.SQUARE_SIZE = self.WIDTH / self.ROWS
 
@@ -49,10 +49,13 @@ class PathfindingVisualizer:
         self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.TEXT_COLOR)
         self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.TEXT_COLOR)
         self.legend_a_star = self.font.render("A* - Press 'A'", True, self.TEXT_COLOR)
-        self.legend_recursive_maze = self.font.render("Create recursive maze - Press 'M'", True, self.TEXT_COLOR)
+        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G'", True, self.TEXT_COLOR)
+        self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.TEXT_COLOR)
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra:", True, self.TEXT_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*:", True, self.TEXT_COLOR)
         self.vis_text_recursive_maze = self.font.render("Creating recursive maze:", True, self.TEXT_COLOR)
+        self.vis_text_graph_size = self.font.render("Changing graph size... May take up to a minute",
+                                                    True, self.TEXT_COLOR)
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         graph = self.set_graph()
@@ -118,13 +121,47 @@ class PathfindingVisualizer:
 
                         self.a_star(graph, start, end)
 
-                # Draw recursive maze with "M" key on keyboard
+                # Draw recursive maze with "G" key on keyboard
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_m:
+                    if event.key == pygame.K_g:
                         self.reset_graph(graph)
                         self.draw_recursive_maze(graph)
                         start = None
                         end = None
+
+                # Redraw small maze with "S" key on keyboard if not currently small
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_s:
+                        if self.ROWS != 22:
+                            graph = self.change_graph_size(graph, 22)
+                            self.draw(graph, legend=True)
+
+                            start = None
+                            end = None
+
+                # Redraw medium maze with "M" key on keyboard if not currently medium
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        if self.ROWS != 46:
+                            self.change_graph_size(graph, 46)
+
+                            graph = self.set_graph()
+                            self.draw(graph, legend=True)
+
+                            start = None
+                            end = None
+
+                # Redraw large maze with "L" key on keyboard if not currently large
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_l:
+                        if self.ROWS != 95:
+                            self.change_graph_size(graph, 95)
+
+                            graph = self.set_graph()
+                            self.draw(graph, legend=True)
+
+                            start = None
+                            end = None
 
         pygame.quit()
 
@@ -138,42 +175,47 @@ class PathfindingVisualizer:
 
         return graph
 
-    def draw_graph(self):
-        for i in range(self.ROWS):
-            pygame.draw.line(self.WINDOW, self.LINE_COLOR,
-                             (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
-            pygame.draw.line(self.WINDOW, self.LINE_COLOR,
-                             (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
-
-    def draw_legend(self):
-        self.WINDOW.blit(self.legend_add_node, (0, 0))
-        self.WINDOW.blit(self.legend_remove_node, (0, 16*1))
-        self.WINDOW.blit(self.legend_clear_graph, (0, 16*2))
-        self.WINDOW.blit(self.legend_dijkstra, (0, 16*3))
-        self.WINDOW.blit(self.legend_a_star, (0, 16*4))
-        self.WINDOW.blit(self.legend_recursive_maze, (0, 16*5))
-
-    def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False):
-        if dijkstra:
-            self.WINDOW.blit(self.vis_text_dijkstra, (0, 0))
-        elif a_star:
-            self.WINDOW.blit(self.vis_text_a_star, (0, 0))
-        elif recursive_maze:
-            self.WINDOW.blit(self.vis_text_recursive_maze, (0, 0))
-
-        pygame.display.update()
-
     def draw(self, graph, legend=False, display_update=True):
         self.WINDOW.fill(self.DEFAULT_COLOR)
         for row in graph:
             for square in row:
                 square.draw_square(self.WINDOW)
 
-        self.draw_graph()
+        self._draw_lines()
         if legend:
-            self.draw_legend()
+            self._draw_legend()
         if display_update:
             pygame.display.update()
+
+    def _draw_lines(self):
+        for i in range(self.ROWS):
+            pygame.draw.line(self.WINDOW, self.LINE_COLOR,
+                             (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
+            pygame.draw.line(self.WINDOW, self.LINE_COLOR,
+                             (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
+
+    def _draw_legend(self):
+        self.WINDOW.blit(self.legend_add_node, (0, 15*46))
+        self.WINDOW.blit(self.legend_remove_node, (0, 15*47))
+        self.WINDOW.blit(self.legend_clear_graph, (0, 15*48))
+        self.WINDOW.blit(self.legend_dijkstra, (0, 15*49))
+        self.WINDOW.blit(self.legend_a_star, (0, 15*50))
+        self.WINDOW.blit(self.legend_recursive_maze, (0, 15*51))
+        self.WINDOW.blit(self.legend_graph_size, (0, 15*52))
+
+    def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False, graph_size=False):
+        if dijkstra:
+            self.WINDOW.blit(self.vis_text_dijkstra, (0, 15*52))
+        elif a_star:
+            self.WINDOW.blit(self.vis_text_a_star, (0, 15*52))
+        elif recursive_maze:
+            self.WINDOW.blit(self.vis_text_recursive_maze, (0, 15*52))
+        elif graph_size:
+            self.WINDOW.blit(self.vis_text_graph_size,
+                             (self.WIDTH//2 - self.vis_text_graph_size.get_width()//2,
+                              self.HEIGHT//2 - self.vis_text_graph_size.get_height()//2))
+
+        pygame.display.update()
 
     def reset_graph(self, graph):
         for i in range(self.ROWS):
@@ -188,94 +230,19 @@ class PathfindingVisualizer:
                 if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
                     square.reset()
 
+    def change_graph_size(self, graph, new_row_size):
+        self.reset_graph(graph)
+        self.ROWS = new_row_size
+        self.SQUARE_SIZE = self.WIDTH / self.ROWS
+        self.draw(graph, display_update=False)
+        self.draw_vis_text(graph_size=True)
+        return self.set_graph()
+
     def get_clicked_pos(self, pos):
         y, x = pos
         row = int(y // self.SQUARE_SIZE)
         col = int(x // self.SQUARE_SIZE)
         return row, col
-
-    def draw_recursive_maze(self, graph, chamber=None):
-        """Implemented following wikipedia guidelines.
-        https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
-        """
-        division_limit = 3
-
-        if chamber is None:
-            chamber_width = len(graph)
-            chamber_height = len(graph[1])
-            chamber_left = 0
-            chamber_top = 0
-        else:
-            chamber_width = chamber[2]
-            chamber_height = chamber[3]
-            chamber_left = chamber[0]
-            chamber_top = chamber[1]
-
-        x_divide = int(chamber_width/2)
-        y_divide = int(chamber_height/2)
-
-        if chamber_width >= division_limit:
-            for y in range(chamber_height):
-                graph[chamber_left + x_divide][chamber_top + y].set_wall()
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(recursive_maze=True)
-
-        if chamber_height >= division_limit:
-            for x in range(chamber_width):
-                graph[chamber_left + x][chamber_top + y_divide].set_wall()
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(recursive_maze=True)
-
-        if chamber_width < division_limit and chamber_height < division_limit:
-            return
-
-        top_left = (chamber_left, chamber_top, x_divide, y_divide)
-        top_right = (chamber_left + x_divide+1, chamber_top, chamber_width - x_divide-1, y_divide)
-        bottom_left = (chamber_left, chamber_top + y_divide+1, x_divide, chamber_height - y_divide-1)
-        bottom_right = (chamber_left + x_divide+1, chamber_top + y_divide+1,
-                        chamber_width - x_divide-1, chamber_height - y_divide-1)
-
-        chambers = (top_left, top_right, bottom_left, bottom_right)
-
-        left = (chamber_left, chamber_top + y_divide, x_divide, 1)
-        right = (chamber_left + x_divide+1, chamber_top + y_divide, chamber_width - x_divide-1, 1)
-        top = (chamber_left + x_divide, chamber_top, 1, y_divide)
-        bottom = (chamber_left + x_divide, chamber_top + y_divide+1, 1, chamber_height - y_divide-1)
-
-        walls = (left, right, top, bottom)
-
-        # Number of gaps to leave after each division into four sub quadrants. See docstring for deeper explanation.
-        num_gaps = 3
-        gaps_to_offset = [x for x in range(num_gaps-1, self.ROWS, num_gaps)]
-
-        for wall in random.sample(walls, num_gaps):
-            print(wall, x_divide)
-            if wall[3] == 1:
-                x = random.randrange(wall[0], wall[0] + wall[2])
-                y = wall[1]
-                if x in gaps_to_offset and y in gaps_to_offset:
-                    if wall[2] == x_divide:
-                        x -= 1
-                    else:
-                        x += 1
-                if x >= self.ROWS:
-                    x = self.ROWS-1
-            else:
-                x = wall[0]
-                y = random.randrange(wall[1], wall[1] + wall[3])
-                if y in gaps_to_offset and x in gaps_to_offset:
-                    if wall[3] == y_divide:
-                        y -= 1
-                    else:
-                        y += 1
-                if y >= self.ROWS:
-                    y = self.ROWS - 1
-            graph[x][y].reset()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(recursive_maze=True)
-
-        for chamber in chambers:
-            self.draw_recursive_maze(graph, chamber)
 
     def dijkstra(self, graph, start, end):
         queue_pos = 0
@@ -379,6 +346,89 @@ class PathfindingVisualizer:
             curr_square = came_from[curr_square]
             curr_square.set_path()
             self.draw(graph)
+
+    def draw_recursive_maze(self, graph, chamber=None):
+        """Implemented following wikipedia guidelines.
+        https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
+        """
+        division_limit = 3
+
+        if chamber is None:
+            chamber_width = len(graph)
+            chamber_height = len(graph[1])
+            chamber_left = 0
+            chamber_top = 0
+        else:
+            chamber_width = chamber[2]
+            chamber_height = chamber[3]
+            chamber_left = chamber[0]
+            chamber_top = chamber[1]
+
+        x_divide = int(chamber_width/2)
+        y_divide = int(chamber_height/2)
+
+        if chamber_width >= division_limit:
+            for y in range(chamber_height):
+                graph[chamber_left + x_divide][chamber_top + y].set_wall()
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(recursive_maze=True)
+
+        if chamber_height >= division_limit:
+            for x in range(chamber_width):
+                graph[chamber_left + x][chamber_top + y_divide].set_wall()
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(recursive_maze=True)
+
+        if chamber_width < division_limit and chamber_height < division_limit:
+            return
+
+        top_left = (chamber_left, chamber_top, x_divide, y_divide)
+        top_right = (chamber_left + x_divide+1, chamber_top, chamber_width - x_divide-1, y_divide)
+        bottom_left = (chamber_left, chamber_top + y_divide+1, x_divide, chamber_height - y_divide-1)
+        bottom_right = (chamber_left + x_divide+1, chamber_top + y_divide+1,
+                        chamber_width - x_divide-1, chamber_height - y_divide-1)
+
+        chambers = (top_left, top_right, bottom_left, bottom_right)
+
+        left = (chamber_left, chamber_top + y_divide, x_divide, 1)
+        right = (chamber_left + x_divide+1, chamber_top + y_divide, chamber_width - x_divide-1, 1)
+        top = (chamber_left + x_divide, chamber_top, 1, y_divide)
+        bottom = (chamber_left + x_divide, chamber_top + y_divide+1, 1, chamber_height - y_divide-1)
+
+        walls = (left, right, top, bottom)
+
+        # Number of gaps to leave after each division into four sub quadrants. See docstring for deeper explanation.
+        num_gaps = 3
+        gaps_to_offset = [x for x in range(num_gaps-1, self.ROWS, num_gaps)]
+
+        for wall in random.sample(walls, num_gaps):
+            print(wall, x_divide)
+            if wall[3] == 1:
+                x = random.randrange(wall[0], wall[0] + wall[2])
+                y = wall[1]
+                if x in gaps_to_offset and y in gaps_to_offset:
+                    if wall[2] == x_divide:
+                        x -= 1
+                    else:
+                        x += 1
+                if x >= self.ROWS:
+                    x = self.ROWS-1
+            else:
+                x = wall[0]
+                y = random.randrange(wall[1], wall[1] + wall[3])
+                if y in gaps_to_offset and x in gaps_to_offset:
+                    if wall[3] == y_divide:
+                        y -= 1
+                    else:
+                        y += 1
+                if y >= self.ROWS:
+                    y = self.ROWS - 1
+            graph[x][y].reset()
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(recursive_maze=True)
+
+        for chamber in chambers:
+            self.draw_recursive_maze(graph, chamber)
 
 
 class Square(PathfindingVisualizer):
