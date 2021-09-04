@@ -1,7 +1,6 @@
 import pygame
 from queue import PriorityQueue
 import random
-import time
 
 
 # noinspection PyUnresolvedReferences, PyTypeChecker
@@ -16,9 +15,9 @@ class PathfindingVisualizer:
         pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
         # Recursive division only works on certain row values. 22,23,46,47,94,95.
-        self.ROWS = 46
+        self.rows = 46
         # self.COLS = 50        # Use to make graph none square but requires a lot of reworking
-        self.SQUARE_SIZE = self.WIDTH / self.ROWS
+        self.square_size = self.WIDTH / self.rows
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -57,6 +56,8 @@ class PathfindingVisualizer:
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to a minute",
                                                     True, self.TEXT_COLOR)
 
+        self.dijkstra_finished = False
+        self.a_star_finished = False
         self.maze = False   # Used to prevent drawing extra walls during maze
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
@@ -80,9 +81,27 @@ class PathfindingVisualizer:
                     if not start and square != end:
                         start = square
                         square.set_start()
+
+                        if self.dijkstra_finished is True and start is not None and end is not None:
+                            self.reset_algo(graph)
+                            self.dijkstra(graph, start, end, visualize=False)
+                            self.dijkstra_finished = True
+                        if self.a_star_finished is True and start is not None and end is not None:
+                            self.reset_algo(graph)
+                            self.a_star(graph, start, end, visualize=False)
+                            self.a_star_finished = True
                     elif not end and square != start:
                         end = square
                         end.set_end()
+
+                        if self.dijkstra_finished is True and start is not None and end is not None:
+                            self.reset_algo(graph)
+                            self.dijkstra(graph, start, end, visualize=False)
+                            self.dijkstra_finished = True
+                        if self.a_star_finished is True and start is not None and end is not None:
+                            self.reset_algo(graph)
+                            self.a_star(graph, start, end, visualize=False)
+                            self.a_star_finished = True
                     elif square != start and square != end and self.maze is False:
                         square.set_wall()
                 elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
@@ -112,6 +131,7 @@ class PathfindingVisualizer:
                                 square.update_neighbours(graph)
 
                         self.dijkstra(graph, start, end)
+                        self.dijkstra_finished = True
 
                 # Run A* with "A" key on keyboard
                 if event.type == pygame.KEYDOWN:
@@ -122,6 +142,7 @@ class PathfindingVisualizer:
                                 square.update_neighbours(graph)
 
                         self.a_star(graph, start, end)
+                        self.a_star_finished = True
 
                 # Draw recursive maze with "G" key on keyboard
                 if event.type == pygame.KEYDOWN:
@@ -144,7 +165,7 @@ class PathfindingVisualizer:
                 # Redraw small maze with "S" key on keyboard if not currently small
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
-                        if self.ROWS != 22:
+                        if self.rows != 22:
                             graph = self.change_graph_size(graph, 22)
                             self.draw(graph, legend=True)
 
@@ -154,7 +175,7 @@ class PathfindingVisualizer:
                 # Redraw medium maze with "M" key on keyboard if not currently medium
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
-                        if self.ROWS != 46:
+                        if self.rows != 46:
                             self.change_graph_size(graph, 46)
 
                             graph = self.set_graph()
@@ -166,7 +187,7 @@ class PathfindingVisualizer:
                 # Redraw large maze with "L" key on keyboard if not currently large
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
-                        if self.ROWS != 95:
+                        if self.rows != 95:
                             self.change_graph_size(graph, 95)
 
                             graph = self.set_graph()
@@ -179,9 +200,9 @@ class PathfindingVisualizer:
 
     def set_graph(self):
         graph = []
-        for i in range(self.ROWS):
+        for i in range(self.rows):
             graph.append([])
-            for j in range(self.ROWS):
+            for j in range(self.rows):
                 square = Square(i, j)
                 graph[i].append(square)
 
@@ -200,11 +221,11 @@ class PathfindingVisualizer:
             pygame.display.update()
 
     def _draw_lines(self):
-        for i in range(self.ROWS):
+        for i in range(self.rows):
             pygame.draw.line(self.WINDOW, self.LINE_COLOR,
-                             (0, i * self.SQUARE_SIZE), (self.WIDTH, i * self.SQUARE_SIZE))
+                             (0, i * self.square_size), (self.WIDTH, i * self.square_size))
             pygame.draw.line(self.WINDOW, self.LINE_COLOR,
-                             (i * self.SQUARE_SIZE, 0), (i * self.SQUARE_SIZE, self.WIDTH))
+                             (i * self.square_size, 0), (i * self.square_size, self.WIDTH))
 
     def _draw_legend(self):
         self.WINDOW.blit(self.legend_add_node, (0, 15*46))
@@ -230,34 +251,38 @@ class PathfindingVisualizer:
         pygame.display.update()
 
     def reset_graph(self, graph):
+        self.dijkstra_finished = False
+        self.a_star_finished = False
         self.maze = False
-        for i in range(self.ROWS):
-            for j in range(self.ROWS):
+        for i in range(self.rows):
+            for j in range(self.rows):
                 square = graph[i][j]
                 square.reset()
 
     def reset_algo(self, graph):    # Resets algo colors while keep board obstacles
-        for i in range(self.ROWS):
-            for j in range(self.ROWS):
+        self.dijkstra_finished = False
+        self.a_star_finished = False
+        for i in range(self.rows):
+            for j in range(self.rows):
                 square = graph[i][j]
                 if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
                     square.reset()
 
     def change_graph_size(self, graph, new_row_size):
         self.reset_graph(graph)
-        self.ROWS = new_row_size
-        self.SQUARE_SIZE = self.WIDTH / self.ROWS
+        self.rows = new_row_size
+        self.square_size = self.WIDTH / self.rows
         self.draw(graph, display_update=False)
         self.draw_vis_text(graph_size=True)
         return self.set_graph()
 
     def get_clicked_pos(self, pos):
         y, x = pos
-        row = int(y // self.SQUARE_SIZE)
-        col = int(x // self.SQUARE_SIZE)
+        row = int(y // self.square_size)
+        col = int(x // self.square_size)
         return row, col
 
-    def dijkstra(self, graph, start, end):
+    def dijkstra(self, graph, start, end, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -293,15 +318,16 @@ class PathfindingVisualizer:
                         open_set_hash.add(nei)
                         nei.set_open()
 
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(dijkstra=True)
+            if visualize:
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(dijkstra=True)
 
             if curr_square != start:
                 curr_square.set_closed()
 
         return False
 
-    def a_star(self, graph, start, end):
+    def a_star(self, graph, start, end, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -340,8 +366,9 @@ class PathfindingVisualizer:
                         open_set_hash.add(nei)
                         nei.set_open()
 
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(a_star=True)
+            if visualize:
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(a_star=True)
 
             if curr_square != start:
                 curr_square.set_closed()
@@ -414,7 +441,7 @@ class PathfindingVisualizer:
 
         # Number of gaps to leave after each division into four sub quadrants. See docstring for deeper explanation.
         num_gaps = 3
-        gaps_to_offset = [x for x in range(num_gaps-1, self.ROWS, num_gaps)]
+        gaps_to_offset = [x for x in range(num_gaps - 1, self.rows, num_gaps)]
 
         for wall in random.sample(walls, num_gaps):
             if wall[3] == 1:
@@ -425,8 +452,8 @@ class PathfindingVisualizer:
                         x -= 1
                     else:
                         x += 1
-                if x >= self.ROWS:
-                    x = self.ROWS-1
+                if x >= self.rows:
+                    x = self.rows - 1
             else:
                 x = wall[0]
                 y = random.randrange(wall[1], wall[1] + wall[3])
@@ -435,8 +462,8 @@ class PathfindingVisualizer:
                         y -= 1
                     else:
                         y += 1
-                if y >= self.ROWS:
-                    y = self.ROWS - 1
+                if y >= self.rows:
+                    y = self.rows - 1
             graph[x][y].reset()
             if visualize:
                 self.draw(graph, display_update=False)
@@ -454,10 +481,10 @@ class Square(PathfindingVisualizer):
         super().__init__()
         self.row = row
         self.col = col
-        self.x = self.row * self.SQUARE_SIZE
-        self.y = self.col * self.SQUARE_SIZE
+        self.x = self.row * self.square_size
+        self.y = self.col * self.square_size
         self.neighbours = []
-        self.total_rows = self.ROWS
+        self.total_rows = self.rows
         self.color = self.DEFAULT_COLOR
 
     def __lt__(self, other):    # Allows comparison of length of squares
@@ -468,11 +495,11 @@ class Square(PathfindingVisualizer):
 
     def update_neighbours(self, graph):
         self.neighbours = []
-        if self.row < self.ROWS-1 and not graph[self.row+1][self.col].is_wall():  # Down
+        if self.row < self.rows-1 and not graph[self.row + 1][self.col].is_wall():  # Down
             self.neighbours.append(graph[self.row+1][self.col])
         if self.row > 0 and not graph[self.row-1][self.col].is_wall():  # UP
             self.neighbours.append(graph[self.row-1][self.col])
-        if self.col < self.ROWS-1 and not graph[self.row][self.col+1].is_wall():  # RIGHT
+        if self.col < self.rows-1 and not graph[self.row][self.col + 1].is_wall():  # RIGHT
             self.neighbours.append(graph[self.row][self.col+1])
         if self.col > 0 and not graph[self.row][self.col-1].is_wall():  # LEFT
             self.neighbours.append(graph[self.row][self.col-1])
@@ -523,4 +550,4 @@ class Square(PathfindingVisualizer):
         self.color = self.PATH_COLOR
 
     def draw_square(self, window):
-        pygame.draw.rect(window, self.color, (self.x, self.y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+        pygame.draw.rect(window, self.color, (self.x, self.y, int(self.square_size), int(self.square_size)))
