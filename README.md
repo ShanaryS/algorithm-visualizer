@@ -1,13 +1,13 @@
 # Algorithm Visualizer
-**Pathfinding Visualizer:** [Try it!](https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1)
+**Pathfinding Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1)
 
 [![Pathfinding Demo](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)
 
-**Sorting Visualizer:** [Try it!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)
+**Sorting Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)
 
 [![Sorting Demo](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)
 
-**Searching Visualizer:** [Try it!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
+**Searching Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
 
 [![Searching Demo](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)
 
