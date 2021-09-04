@@ -1,7 +1,7 @@
 # Algorithm Visualizer
 **Pathfinding Visualizer:**
 
-[![Pathfinding Demo](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)   (1 min)
+[![Pathfinding Demo](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)          (1 min)
 
 **Sorting Visualizer:** Try it here - https://replit.com/@ShanaryS/Sorting-Visualizer?v=1
 
