@@ -166,7 +166,7 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
                         if self.rows != 22:
-                            graph = self.change_graph_size(graph, 22)
+                            graph = self.change_graph_size(22)
                             start = None
                             end = None
 
@@ -174,7 +174,7 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         if self.rows != 46:
-                            graph = self.change_graph_size(graph, 46)
+                            graph = self.change_graph_size(46)
                             start = None
                             end = None
 
@@ -182,7 +182,9 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
                         if self.rows != 95:
-                            graph = self.change_graph_size(graph, 95)
+                            print(f"First: {graph[1][1].row} {graph[1][1].x} - Second: {graph[-1][-1].row} {graph[-1][-1].x}")
+                            graph = self.change_graph_size(95)
+                            print(f"First: {graph[1][1].row} {graph[1][1].x} - Second: {graph[-1][-1].row} {graph[-1][-1].x}")
                             start = None
                             end = None
 
@@ -194,6 +196,7 @@ class PathfindingVisualizer:
             graph.append([])
             for j in range(self.rows):
                 square = Square(i, j)
+                square.update_values(self.rows, self.square_size)
                 graph[i].append(square)
 
         return graph
@@ -258,21 +261,21 @@ class PathfindingVisualizer:
                 if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
                     square.reset()
 
-    def change_graph_size(self, graph, new_row_size):
-        self.reset_graph(graph)
+    def change_graph_size(self, new_row_size):
+        self.draw_vis_text(graph_size=True)
+
         self.rows = new_row_size
         self.square_size = self.WIDTH / self.rows
 
-        # All needed to show that graph size is change. Two draw_vis_text is needed for switching to large
-        self.draw_vis_text(graph_size=True)
         graph = self.set_graph()
-        self.draw(graph, display_update=False)
+        self.draw(graph)
+
         return graph
 
     def get_clicked_pos(self, pos):
         y, x = pos
-        row = int(y // self.square_size)
-        col = int(x // self.square_size)
+        row = int(y / self.square_size)
+        col = int(x / self.square_size)
         return row, col
 
     def dijkstra(self, graph, start, end, visualize=True):
@@ -468,16 +471,23 @@ class PathfindingVisualizer:
             else:
                 self.draw_recursive_maze(graph, chamber, visualize=False)
 
+    def get_rows(self):
+        return self.rows
+
+    def get_square_size(self):
+        return self.square_size
+
 
 class Square(PathfindingVisualizer):
     def __init__(self, row, col):
         super().__init__()
+        self.rows = self.rows
+        self.square_size = self.square_size
         self.row = row
         self.col = col
         self.x = self.row * self.square_size
         self.y = self.col * self.square_size
         self.neighbours = []
-        self.total_rows = self.rows
         self.color = self.DEFAULT_COLOR
 
     def __lt__(self, other):    # Allows comparison of length of squares
@@ -544,3 +554,9 @@ class Square(PathfindingVisualizer):
 
     def draw_square(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, int(self.square_size), int(self.square_size)))
+
+    def update_values(self, rows, square_size):
+        self.rows = rows
+        self.square_size = square_size
+        self.x = self.row * self.square_size
+        self.y = self.col * self.square_size
