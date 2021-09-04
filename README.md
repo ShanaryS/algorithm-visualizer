@@ -1,5 +1,6 @@
 # Algorithm Visualizer
 **Pathfinding Visualizer:**
+
 [![Pathfinding Demo](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)](https://user-images.githubusercontent.com/86130442/132087598-616c7f42-f792-4a5e-bb33-90fd156d8eeb.gif)
 (This gif is 1 minute long)
 
