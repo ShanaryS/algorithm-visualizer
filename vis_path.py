@@ -57,6 +57,8 @@ class PathfindingVisualizer:
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to a minute",
                                                     True, self.TEXT_COLOR)
 
+        self.maze = False   # Used to prevent drawing extra walls during maze
+
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         graph = self.set_graph()
 
@@ -81,7 +83,7 @@ class PathfindingVisualizer:
                     elif not end and square != start:
                         end = square
                         end.set_end()
-                    elif square != start and square != end:
+                    elif square != start and square != end and self.maze is False:
                         square.set_wall()
                 elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
                     pos = pygame.mouse.get_pos()
@@ -126,6 +128,7 @@ class PathfindingVisualizer:
                     if event.key == pygame.K_g:
                         self.reset_graph(graph)
                         self.draw_recursive_maze(graph)
+                        self.maze = True
                         start = None
                         end = None
 
@@ -218,6 +221,7 @@ class PathfindingVisualizer:
         pygame.display.update()
 
     def reset_graph(self, graph):
+        self.maze = False
         for i in range(self.ROWS):
             for j in range(self.ROWS):
                 square = graph[i][j]
