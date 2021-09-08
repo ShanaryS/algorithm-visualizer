@@ -564,7 +564,6 @@ class PathfindingVisualizer:
 
             for nei in curr_square.neighbours:
                 if curr_square.is_open() and nei.is_open_alt():
-                    # All the duplicate function calls are needed to draw some nodes one at a time
                     if draw_best_path:
                         self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
                                                    curr_square, nei, visualize=visualize)
@@ -620,21 +619,14 @@ class PathfindingVisualizer:
     def best_path_bi_dijkstra(self, graph, came_from_start, came_from_end,
                               first_meet_node, second_meet_node, visualize=True):
         self.best_path(graph, came_from_start, first_meet_node, visualize=visualize)
-        self.draw(graph, display_update=False)
-        self.draw_vis_text(best_path=True)
-        time.sleep(self.best_path_sleep)
+        # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
         first_meet_node.set_path()
-        self.draw(graph, display_update=False)
-        self.draw_vis_text(best_path=True)
-        time.sleep(self.best_path_sleep)
+        # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
 
         second_meet_node.set_path()
-        self.draw(graph, display_update=False)
-        self.draw_vis_text(best_path=True)
+        # To not skip the last two at once, need a draw and draw_vis_text here
         self.best_path(graph, came_from_end, second_meet_node, reverse=True, visualize=visualize)
-        self.draw(graph, display_update=False)
-        self.draw_vis_text(best_path=True)
-        time.sleep(self.best_path_sleep)
+        # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
 
     def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, bi_dijkstra=False, visualize=True):
         """Used if algos need to reach mid node first"""
