@@ -106,7 +106,7 @@ class PathfindingVisualizer:
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    if (self.dijkstra_finished or self.a_star_finished) and start and end:
+                    if (self.dijkstra_finished or self.a_star_finished or self.bi_dijkstra_finished) and start and end:
                         if self.ordinal_node_clicked:
                             if square != start and square != mid and square != end:
                                 last_square = self.ordinal_node_clicked[0]
@@ -143,6 +143,11 @@ class PathfindingVisualizer:
                                         self.start_mid_end(graph, start, mid, end, a_star=True, visualize=False)
                                     else:
                                         self.algo_no_vis(graph, start, end, a_star=True)
+                                elif self.bi_dijkstra_finished:
+                                    if mid:
+                                        self.start_mid_end(graph, start, mid, end, bi_dijkstra=True, visualize=False)
+                                    else:
+                                        self.algo_no_vis(graph, start, end, bi_dijkstraTrue)
 
                         elif square is start:
                             self.ordinal_node_clicked.append('start')
@@ -157,16 +162,20 @@ class PathfindingVisualizer:
 
                         if self.dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, dijkstra=True)
-                        if self.a_star_finished and start and end:
+                        elif self.a_star_finished and start and end:
                             self.algo_no_vis(graph, start, end, a_star=True)
+                        elif self.bi_dijkstra_finished and start and end:
+                            self.algo_no_vis(grpah, start, end, bi_dijkstra=True)
                     elif not end and square != start and square != mid:
                         end = square
                         square.set_end()
 
                         if self.dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, dijkstra=True)
-                        if self.a_star_finished and start and end:
+                        elif self.a_star_finished and start and end:
                             self.algo_no_vis(graph, start, end, a_star=True)
+                        elif self.bi_dijkstra_finished and start and end:
+                            self.algo_no_vis(graph, start, end, bi_dijkstra=True)
                     elif square != start and square != mid and square != end and self.maze is False:
                         square.set_wall()
                         self.wall_nodes.add(square)
@@ -392,6 +401,7 @@ class PathfindingVisualizer:
     def reset_graph(self, graph):
         self.dijkstra_finished = False
         self.a_star_finished = False
+        self.bi_dijkstra_finished = False
         self.maze = False
         for i in range(self.rows):
             for j in range(self.rows):
@@ -402,6 +412,7 @@ class PathfindingVisualizer:
     def reset_algo(self, graph):
         self.dijkstra_finished = False
         self.a_star_finished = False
+        self.bi_dijkstra_finished = False
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
@@ -574,7 +585,7 @@ class PathfindingVisualizer:
 
                         return True
 
-                    return came_from_start, came_from_end
+                    return came_from_start, came_from_end, curr_square, nei
 
                 elif curr_square.is_open_alt() and nei.is_open():
                     if draw_best_path:
@@ -597,7 +608,7 @@ class PathfindingVisualizer:
 
                         return True
 
-                    return came_from_start, came_from_end
+                    return came_from_start, came_from_end, nei, curr_square
 
             if temp[3] == 'start':
                 for nei in curr_square.neighbours:
@@ -629,7 +640,7 @@ class PathfindingVisualizer:
 
             if visualize and not curr_square.is_closed():
                 self.draw(graph, display_update=False)
-                self.draw_vis_text(dijkstra=True)
+                self.draw_vis_text(bi_dijkstra=True)
 
             if curr_square != start and curr_square != end and curr_square != ignore_node:
                 curr_square.set_closed()
@@ -650,7 +661,8 @@ class PathfindingVisualizer:
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
-        if a_star:
+
+        elif a_star:
             if visualize:
                 start_to_mid = self.a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
                 mid_to_end = self.a_star(graph, mid, end, ignore_node=start, draw_best_path=False)
@@ -663,8 +675,53 @@ class PathfindingVisualizer:
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
 
+        elif bi_dijkstra:
+            if visualize:
+                start_to_mid = self.bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
+                mid_to_end = self.bi_dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
+            else:
+                start_to_mid = self.algo_no_vis(graph, start, mid, bi_dijkstra=True,
+                                                ignore_node=end, draw_best_path=False)
+                mid_to_end = self.algo_no_vis(graph, mid, end, bi_dijkstra=True, ignore_node=start,
+                                              draw_best_path=False, reset=False)
+                start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
+
+            self.best_path(graph, start_to_mid[0], start_to_mid[2], visualize=visualize)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+            start_to_mid[2].set_path()
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+
+            start_to_mid[3].set_path()
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            self.best_path(graph, start_to_mid[1], start_to_mid[3], reverse=True, visualize=visualize)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+
+            self.best_path(graph, mid_to_end[0], mid_to_end[2], visualize=visualize)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+            mid_to_end[2].set_path()
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+
+            mid_to_end[3].set_path()
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            self.best_path(graph, mid_to_end[1], mid_to_end[3], reverse=True, visualize=visualize)
+            self.draw(graph, display_update=False)
+            self.draw_vis_text(best_path=True)
+            time.sleep(self.best_path_sleep)
+
     # Skip steps to end when visualizing algo. Used when dragging ordinal node once finished
-    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False,
+    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False,
                     ignore_node=None, draw_best_path=True, reset=True):
         if dijkstra:
             if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
@@ -678,7 +735,7 @@ class PathfindingVisualizer:
             else:
                 return self.dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
-        if a_star:
+        elif a_star:
             if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
             self.a_star_finished = True
@@ -689,6 +746,19 @@ class PathfindingVisualizer:
                 start.set_start()  # Fixes start disappearing when dragging
             else:
                 return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
+
+        elif bi_dijkstra:
+            if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
+                self.reset_algo(graph)
+            self.bi_dijkstra_finished = True
+
+            # Separates calling algo_no_vis with mid node or not
+            if draw_best_path:
+                self.bi_dijkstra(graph, start, end, visualize=False)
+                start.set_start()  # Fixes start disappearing when dragging
+            else:
+                return self.bi_dijkstra(graph, start, end, ignore_node=ignore_node,
+                                        draw_best_path=False, visualize=False)
 
     def best_path(self, graph, came_from, curr_square, reverse=False, visualize=True):
         # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
