@@ -55,11 +55,11 @@ class PathfindingVisualizer:
                                                    True, self.LEGEND_COLOR)
         self.legend_clear_graph = self.font.render("Press 'SPACE' - Clear graph", True, self.LEGEND_COLOR)
         self.legend_graph_size = self.font.render("Press 'S', 'M', 'L' - Change graph size", True, self.LEGEND_COLOR)
-        self.legend_dijkstra = self.font.render("Press 'D' - Dijkstra", True, self.LEGEND_COLOR)
-        self.legend_a_star = self.font.render("Press 'A' - A*", True, self.LEGEND_COLOR)
-        self.legend_bi_dijkstra = self.font.render("Press 'B' - Bi-directional Dijkstra", True, self.LEGEND_COLOR)
-        self.legend_recursive_maze = self.font.render("Press 'G' - Generate maze", True, self.LEGEND_COLOR)
-        self.legend_instant_recursive_maze = self.font.render("Press 'V' - Instantly generate maze",
+        self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.LEGEND_COLOR)
+        self.legend_a_star = self.font.render("A* - Press 'A'", True, self.LEGEND_COLOR)
+        self.legend_bi_dijkstra = self.font.render("Bi-directional Dijkstra - Press 'B'", True, self.LEGEND_COLOR)
+        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G'", True, self.LEGEND_COLOR)
+        self.legend_instant_recursive_maze = self.font.render("Generate maze (Instantly) - Press 'I'",
                                                               True, self.LEGEND_COLOR)
 
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VIS_COLOR)
@@ -252,9 +252,9 @@ class PathfindingVisualizer:
                         mid = None
                         end = None
 
-                # Draw recursive maze with NO VISUALIZATIONS with "V" key on keyboard
+                # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_v:
+                    if event.key == pygame.K_i:
                         self.reset_graph(graph)
                         self.draw_recursive_maze(graph, visualize=False)
                         self.maze = True
