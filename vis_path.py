@@ -403,9 +403,15 @@ class PathfindingVisualizer:
         return abs(x1 - x2) + abs(y1 - y2)
 
     def best_path(self, came_from, curr_square, graph, visualize=True):
+        path = []
+        curr_square.set_end()
+
         while curr_square in came_from:
             curr_square = came_from[curr_square]
-            curr_square.set_path()
+            path.append(curr_square)
+
+        for square in path[len(path)-2::-1]:
+            square.set_path()
             if visualize:
                 self.draw(graph)
 
