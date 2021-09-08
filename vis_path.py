@@ -72,8 +72,9 @@ class PathfindingVisualizer:
 
         self.dijkstra_finished = False
         self.a_star_finished = False
+        self.bi_dijkstra_finished = False
         self.maze = False   # Used to prevent drawing extra walls during maze
-        self.start_or_end_clicked = []   # Used for dragging start and end once algos are finished
+        self.ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
         self.wall_nodes = set()     # Used to reinstate walls after deletion for mazes and dragging
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
@@ -91,16 +92,22 @@ class PathfindingVisualizer:
                 if event.type == pygame.QUIT:
                     run = False
 
+                # Used to know if no longer dragging ordinal node after algo completion
                 if not pygame.mouse.get_pressed(3)[0]:
-                    self.start_or_end_clicked.clear()
-                if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < self.HEIGHT:       # LEFT
+                    self.ordinal_node_clicked.clear()
+
+                # LEFT CLICK within graph
+                if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+                    # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
+
                     if (self.dijkstra_finished or self.a_star_finished) and start and end:
-                        if self.start_or_end_clicked:
+                        if self.ordinal_node_clicked:
                             if square != start and square != end:
-                                last_square = self.start_or_end_clicked[0]
+                                last_square = self.ordinal_node_clicked[0]
+
                                 if last_square == 'start':
                                     if start in self.wall_nodes:
                                         start.set_wall()
@@ -115,14 +122,17 @@ class PathfindingVisualizer:
                                         end.reset()
                                     end = square
                                     square.set_end()
+
                                 if self.dijkstra_finished:
                                     self.algo_no_vis(graph, start, end, dijkstra=True)
                                 elif self.a_star_finished:
                                     self.algo_no_vis(graph, start, end, a_star=True)
+
                         elif square is start:
-                            self.start_or_end_clicked.append('start')
+                            self.ordinal_node_clicked.append('start')
                         elif square is end:
-                            self.start_or_end_clicked.append('end')
+                            self.ordinal_node_clicked.append('end')
+
                     elif not start and square != mid and square != end:
                         start = square
                         square.set_start()
@@ -142,14 +152,19 @@ class PathfindingVisualizer:
                     elif square != start and square != mid and square != end and self.maze is False:
                         square.set_wall()
                         self.wall_nodes.add(square)
-                elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < self.HEIGHT:     # RIGHT
+
+                # RIGHT CLICK within graph
+                elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+                    # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
+                    # If square to remove is wall, need to remove it from wall_node to retain accuracy
                     if square.is_wall():
                         self.wall_nodes.discard(square)
 
+                    # Reset square and ordinal node if it was any
                     square.reset()
                     if square == start:
                         start = None
@@ -157,14 +172,19 @@ class PathfindingVisualizer:
                         mid = None
                     elif square == end:
                         end = None
-                elif pygame.mouse.get_pressed(3)[1] and not mid:
+
+                # MIDDLE CLICK within graph
+                elif pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+                    # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    if square != start and square != end:
-                        mid = square
-                        square.set_mid()
+                    # Set square to mid if no square is already mid
+                    if not mid:
+                        if square != start and square != end:
+                            mid = square
+                            square.set_mid()
 
                 # Reset graph with "SPACE" on keyboard
                 if event.type == pygame.KEYDOWN:
