@@ -4,6 +4,7 @@ import random
 import time
 
 """Visualizer for major pathfinding algorithms such as Dijkstra, A*, and my own creation Bi-directional Dijkstra.
+Implemented entirely with pygame.
 Node and square used interchangeably.
 """
 
@@ -12,6 +13,7 @@ Node and square used interchangeably.
 # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
 class PathfindingVisualizer:
     """Where all the algorithms and operations reside. Call main() to run."""
+
     def __init__(self):
         """Creates the window size, graph size, colors, text, and many more variables"""
 

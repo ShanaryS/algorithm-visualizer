@@ -2,8 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
 
+"""Visualizer for major searching algorithms such as Binary, Exponential, and Fibonacci.
+Implemented with matplotlib and numpy.
+"""
+
 
 class SearchVisualizer:
+    """Where all the algorithms and operations reside."""
+
     def __init__(self, values=None):
         if not values:
             values = np.random.randint(0, 150, 30)

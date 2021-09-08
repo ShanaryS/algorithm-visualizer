@@ -3,15 +3,15 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
 from collections import OrderedDict
 
+"""Visualizer for major sorting algorithms such as Mergesort, Heapsort, and Timsort.
+Implemented with matplotlib and numpy.
+"""
+
 
 class SortVisualizer:
-    """Example docstring.
-
-    Add these for every class and function. https://www.python.org/dev/peps/pep-0257/#multi-line-docstrings
-    """
+    """Where all the algorithms and operations reside."""
 
     def __init__(self, values=None):
-        """Single line doc string"""
         if not values:
             values = np.random.randint(0, 150, 30)
         self.values = values
