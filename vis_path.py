@@ -41,7 +41,7 @@ class PathfindingVisualizer:
         self.WALL_COLOR = self.BLACK
         self.PATH_COLOR = self.YELLOW
         self.LEGEND_COLOR = self.BLACK
-        self.VIS_COLOR = self.BLACK
+        self.VIS_COLOR = self.RED
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
