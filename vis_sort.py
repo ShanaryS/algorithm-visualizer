@@ -32,15 +32,19 @@ class SortVisualizer:
         self.vis = None               # Set plot by calling set_graph in driver code
 
     def set_graph(self, names=None, values=None, show_axis='None'):
+        """Creates graph. Gets called each time it updates"""
+
         if not names:
             names = self.names
         if values is None:
             values = self.values
 
+        # Clears previous graph for update
         plt.clf()
         self.vis = plt.bar(names, values, color=self.vis_default)
         plt.subplots_adjust(left=0.15, bottom=0.3)
 
+        # Shows axis if called
         if show_axis == 'None':
             plt.axis('off')
         elif show_axis == 'x':
@@ -185,6 +189,8 @@ class SortVisualizer:
         plt.show()
 
     def update_values(self):
+        """Used for updating slider of array size"""
+
         self.LENGTH = self.size
         self.values = np.random.randint(0, 150, self.LENGTH)
         self.names = [i for i in range(self.LENGTH)]
@@ -195,6 +201,7 @@ class SortVisualizer:
         """Goes through list comparing values of the current number to all values after, swapping as needed.
         Complexity: Time - O(n^2), Space - O(1), Unstable
         """
+
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.001)
 
@@ -236,6 +243,7 @@ class SortVisualizer:
         """Splits input into the sorted and unsorted parts. Places unsorted elements to the correct position.
         Complexity: Time - O(n^2), Space - O(1), Stable
         """
+
         pause_short = self.pause
 
         for i in range(1, self.LENGTH):
@@ -274,6 +282,7 @@ class SortVisualizer:
         Repeats n-1 times with max index to check decreasing by 1.
         Complexity: Time - O(n^2), Space - O(1), Stable
         """
+
         pause_short = self.pause
 
         for i in range(self.LENGTH-1):
@@ -304,6 +313,7 @@ class SortVisualizer:
         """Converts input into a max heap data structure and pops values.
         Complexity: Time - O(nlog(n)), Space - O(1), Unstable
         """
+
         pause_short = self.pause
         pause_long = (self.pause * 3) + (self.LENGTH * 0.005)
 
@@ -380,6 +390,7 @@ class SortVisualizer:
         Repeats recursively until only single element partitions remains.
         Complexity: Time - O(nlog(n)), Space - O(log(n)), Unstable
         """
+
         if end == -1:
             end = self.LENGTH - 1
 
@@ -464,6 +475,7 @@ class SortVisualizer:
         """Recursively splits input in halves. Sorts each element at each level bottom up.
         Complexity: Time - O(nlog(n)), Space - O(n), Stable
         """
+
         if key == -1:
             key = self.LENGTH - 1
 
@@ -578,6 +590,7 @@ class SortVisualizer:
         Divides input into blocks, sorts using insertion, combines using merge.
         Complexity: Time - O(nlog(n)), Space - O(1), Stable
         """
+
         min_run = self._min_run(self.LENGTH)
 
         for start in range(0, self.LENGTH, min_run):
@@ -610,6 +623,7 @@ class SortVisualizer:
         """Only for integers. Places values into buckets from the least to most significant digit. Sorts with buckets
         Complexity: Time - O(n*k), Space - O(n+k), Stable
         """
+
         values = list(OrderedDict.fromkeys(self.values))   # Doesn't work with duplicate numbers so this ignores them.
         length = len(values)
         names = [i for i in range(length)]
@@ -709,6 +723,7 @@ class SortVisualizer:
         """Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
         Complexity: Time - O(n*n!), Space - O(1), Unstable
         """
+
         pause_short = self.pause
         EXPECTED_RUN_TIME = ((np.math.factorial(self.LENGTH)) / 4)
 

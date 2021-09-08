@@ -31,15 +31,19 @@ class SearchVisualizer:
         self.vis = None                 # Set plot by calling set_graph in driver code
 
     def set_graph(self, names=None, values=None, show_axis='None'):
+        """Creates graph. Gets called each time it updates"""
+
         if not names:
             names = self.names
         if values is None:
             values = self.values
 
+        # Clears previous graph for update
         plt.clf()
         self.vis = plt.bar(names, values, color=self.vis_default)
         plt.subplots_adjust(left=0.15, bottom=0.3)
 
+        # Shows axis if called
         if show_axis == 'None':
             plt.axis('off')
         elif show_axis == 'x':
@@ -137,6 +141,8 @@ class SearchVisualizer:
         plt.show()
 
     def update_values(self):
+        """Used for updating slider of array size"""
+
         self.LENGTH = self.size
         self.values = np.random.randint(0, 150, self.LENGTH)
         self.names = [i for i in range(self.LENGTH)]
@@ -144,6 +150,8 @@ class SearchVisualizer:
         self.set_graph()
 
     def visualize(self, res):
+        """Visualizes the final result of search"""
+
         if isinstance(res, int):
             if res > -1:
                 for i in range(self.LENGTH):
@@ -167,6 +175,7 @@ class SearchVisualizer:
 
     def linear(self, key):  # Only algorithm that does not require sorted values. Use to find unsorted index.
         """Loops through array once and returns the first item of value key. Complexity: Time - O(n), Space - O(1)"""
+
         self.set_graph()
         pause_short = self.pause
 
@@ -188,6 +197,7 @@ class SearchVisualizer:
         """Divides values into halves and checks if key is in that half.
         Continues until no longer possible. Requires sorted values. Complexity: Time - O(log(n)), Space - O(1)
         """
+
         if reset is True:   # Exponential calls binary. This is to avoid resetting colors when it does.
             self.values.sort()
             self.set_graph()
@@ -254,6 +264,7 @@ class SearchVisualizer:
         """Optimization for linear search. Similar to binary but steps by a sqrt(n) instead of halving current window.
         Requires sorted values. Complexity: Time - O(sqrt(n)), Space - O(1)
         """
+
         self.values.sort()
         self.set_graph()
         plt.pause(1)
@@ -307,6 +318,7 @@ class SearchVisualizer:
         Finds upper bound in 2^i operations where i is the desired index. Complexity: Time - O(log(i)), Space - O(1)
         Best when index is relatively close to the beginning of the array, such as with unbounded or infinite arrays
         """
+
         self.values.sort()
         self.set_graph()
         plt.pause(1)
@@ -348,6 +360,7 @@ class SearchVisualizer:
         """Creates fibonacci numbers up to the length of the list, then iterates downward until target value is in range
         Useful for very large numbers as it avoids division. Complexity: Time - O(log(n)), Space - O(1)
         """
+
         self.values.sort()
         self.set_graph()
         plt.pause(1)
