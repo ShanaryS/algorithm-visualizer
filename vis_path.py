@@ -565,13 +565,14 @@ class PathfindingVisualizer:
                 return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
     def best_path(self, graph, came_from, curr_square, meet_node=None, visualize=True):
+        # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
         if isinstance(came_from, bool):
             return
 
         # Path reconstruction if bidirectional
         if meet_node:
             if visualize:
-                time.sleep(0.001)
+                time.sleep(0.0025)
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(best_path=True)
 
