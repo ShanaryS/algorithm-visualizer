@@ -5,10 +5,10 @@ Ability to draw custom walls and drag nodes after algorithm completion:
 ![Pathfinding Demo #1](https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif)
 
 Add mid node to layer the search! Able to drag mid node as well:
-![Pathfinding Demo #2](https://user-images.githubusercontent.com/86130442/132489163-63270dcd-6d37-4e65-b269-0b61ed372f37.gif)
+![Pathfinding Demo #2](https://user-images.githubusercontent.com/86130442/132563386-554f632d-e1bf-41f8-9e5d-1f6e06487186.gif)
 
 Generate a maze to be wowed. Can watch the beautiful animation or instantly generate new ones:
-![Pathfinding Demo #3](https://user-images.githubusercontent.com/86130442/132563386-554f632d-e1bf-41f8-9e5d-1f6e06487186.gif)
+![Pathfinding Demo #3](https://user-images.githubusercontent.com/86130442/132563681-c7387b5b-f8b3-4e7b-9578-34428a0f850c.gif)
 
 
 **Sorting Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)
