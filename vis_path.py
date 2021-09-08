@@ -520,6 +520,7 @@ class PathfindingVisualizer:
                 start_to_mid = self.algo_no_vis(graph, start, mid, dijkstra=True, ignore_node=end, draw_best_path=False)
                 mid_to_end = self.algo_no_vis(graph, mid, end, dijkstra=True, ignore_node=start,
                                               draw_best_path=False, reset=False)
+                start.set_start(), mid.set_mid(), end.set_end()
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
@@ -531,27 +532,31 @@ class PathfindingVisualizer:
                 start_to_mid = self.algo_no_vis(graph, start, mid, a_star=True, ignore_node=end, draw_best_path=False)
                 mid_to_end = self.algo_no_vis(graph, mid, end, a_star=True, ignore_node=start,
                                               draw_best_path=False, reset=False)
+                start.set_start(), mid.set_mid(), end.set_end()
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
 
+    # Skip steps to end when visualizing algo. Used when dragging ordinal node once finished
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False,
                     ignore_node=None, draw_best_path=True, reset=True):
         if dijkstra:
-            if reset:
+            if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
             self.dijkstra_finished = True
 
+            # Separates calling algo_no_vis with mid node or not
             if draw_best_path:
                 self.dijkstra(graph, start, end, visualize=False)
             else:
                 return self.dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
         if a_star:
-            if reset:
+            if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
             self.a_star_finished = True
 
+            # Separates calling algo_no_vis with mid node or not
             if draw_best_path:
                 self.a_star(graph, start, end, visualize=False)
             else:
