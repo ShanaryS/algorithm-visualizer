@@ -41,7 +41,7 @@ class PathfindingVisualizer:
         self.WALL_COLOR = self.BLACK
         self.PATH_COLOR = self.YELLOW
         self.LEGEND_COLOR = self.BLACK
-        self.VIS_COLOR = self.RED
+        self.VIS_COLOR = self.BLACK
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
@@ -57,6 +57,7 @@ class PathfindingVisualizer:
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VIS_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VIS_COLOR)
         self.vis_text_bi_dijkstra = self.font.render("Visualizing Bi-directional Dijkstra...", True, self.VIS_COLOR)
+        self.vis_text_best_path = self.font.render("Laying best path...", True, self.VIS_COLOR)
         self.vis_text_recursive_maze = self.font.render("Generating recursive maze...", True, self.VIS_COLOR)
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to 30 seconds",
                                                     True, self.VIS_COLOR)
@@ -263,17 +264,35 @@ class PathfindingVisualizer:
         self.WINDOW.blit(self.legend_bi_dijkstra, (self.WIDTH - self.vis_text_bi_dijkstra.get_width(), 15*55.1))
         self.WINDOW.blit(self.legend_recursive_maze, (self.WIDTH - 191, 15*56.1))
 
-    def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False, graph_size=False):
+    def draw_vis_text(self, dijkstra=False, a_star=False, bi_dijkstra=False,
+                      best_path=False, recursive_maze=False, graph_size=False):
+
+        center_graph = self.HEIGHT//2
+        center_white_space = self.HEIGHT + (self.WINDOW_HEIGHT - self.HEIGHT)//2
         if dijkstra:
-            self.WINDOW.blit(self.vis_text_dijkstra, (0, 15*52))
+            self.WINDOW.blit(self.vis_text_dijkstra,
+                             (self.WIDTH//2 - self.vis_text_dijkstra.get_width()//2,
+                              center_white_space - self.vis_text_dijkstra.get_height()//2))
         elif a_star:
-            self.WINDOW.blit(self.vis_text_a_star, (0, 15*52))
+            self.WINDOW.blit(self.vis_text_a_star,
+                             (self.WIDTH//2 - self.vis_text_a_star.get_width()//2,
+                              center_white_space - self.vis_text_a_star.get_height()//2))
+        elif bi_dijkstra:
+            self.WINDOW.blit(self.vis_text_bi_dijkstra,
+                             (self.WIDTH//2 - self.vis_text_bi_dijkstra.get_width()//2,
+                              center_white_space - self.vis_text_bi_dijkstra.get_height()//2))
+        elif best_path:
+            self.WINDOW.blit(self.vis_text_best_path,
+                             (self.WIDTH // 2 - self.vis_text_best_path.get_width() // 2,
+                              center_white_space - self.vis_text_best_path.get_height() // 2))
         elif recursive_maze:
-            self.WINDOW.blit(self.vis_text_recursive_maze, (0, 15*52))
+            self.WINDOW.blit(self.vis_text_recursive_maze,
+                             (self.WIDTH//2 - self.vis_text_recursive_maze.get_width()//2,
+                              center_white_space - self.vis_text_recursive_maze.get_height()//2))
         elif graph_size:
             self.WINDOW.blit(self.vis_text_graph_size,
                              (self.WIDTH//2 - self.vis_text_graph_size.get_width()//2,
-                              self.HEIGHT//2 - self.vis_text_graph_size.get_height()//2))
+                              center_graph - self.vis_text_graph_size.get_height()//2))
 
         pygame.display.update()
 
@@ -414,11 +433,17 @@ class PathfindingVisualizer:
     def best_path(self, came_from, curr_square, graph, mid=None, meet_node=None, visualize=True):
         # Path reconstruction if mid node
         if mid:
-            pass
+            if visualize:
+                time.sleep(0.001)
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(best_path=True)
 
         # Path reconstruction if bidirectional
         elif meet_node:
-            pass
+            if visualize:
+                time.sleep(0.001)
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(best_path=True)
 
         # Path reconstruction if no mid node or not bidirectional
         else:
@@ -433,7 +458,8 @@ class PathfindingVisualizer:
                 square.set_path()
                 if visualize:
                     time.sleep(0.001)
-                    self.draw(graph)
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(best_path=True)
 
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
         if dijkstra:
