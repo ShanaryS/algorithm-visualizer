@@ -165,7 +165,7 @@ class PathfindingVisualizer:
                         elif self.a_star_finished and start and end:
                             self.algo_no_vis(graph, start, end, a_star=True)
                         elif self.bi_dijkstra_finished and start and end:
-                            self.algo_no_vis(grpah, start, end, bi_dijkstra=True)
+                            self.algo_no_vis(graph, start, end, bi_dijkstra=True)
                     elif not end and square != start and square != mid:
                         end = square
                         square.set_end()
@@ -212,6 +212,13 @@ class PathfindingVisualizer:
                         if square != start and square != end:
                             mid = square
                             square.set_mid()
+
+                            if self.dijkstra_finished and start and mid and end:
+                                self.start_mid_end(graph, start, mid, end, dijkstra=True, visualize=False)
+                            elif self.a_star_finished and start and mid and end:
+                                self.start_mid_end(graph, start, mid, end, a_star=True, visualize=False)
+                            elif self.bi_dijkstra_finished and start and mid and end:
+                                self.start_mid_end(graph, start, mid, end, bi_dijkstra=True, visualize=False)
 
                 # Reset graph with "SPACE" on keyboard
                 if event.type == pygame.KEYDOWN:
