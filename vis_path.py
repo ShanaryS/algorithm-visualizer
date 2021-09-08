@@ -586,7 +586,7 @@ class PathfindingVisualizer:
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
 
-        # Keeps track of start to end path for every node in graph. A linked list basically.
+        # Keeps track of next node for every node in graph. A linked list basically.
         came_from = {}
 
         # Continues until every node has been checked or best path found
@@ -601,6 +601,7 @@ class PathfindingVisualizer:
             curr_square = open_set.get()[2]
             open_set_hash.remove(curr_square)
 
+            # Terminates if found the best path
             if curr_square == end:
                 if draw_best_path:
                     self.best_path(graph, came_from, end, visualize=visualize)
@@ -608,6 +609,7 @@ class PathfindingVisualizer:
 
                 return came_from
 
+            # Decides the order of neighbours to check
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
 
@@ -621,10 +623,12 @@ class PathfindingVisualizer:
                         if nei != end and nei.color != self.CLOSED_COLOR and nei != ignore_node:
                             nei.set_open()
 
+            # Only visualize if called. Checks if square is closed to not repeat when mid node included.
             if visualize and not curr_square.is_closed():
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(dijkstra=True)
 
+            # Sets square to closed after finished checking
             if curr_square != start and curr_square != ignore_node:
                 curr_square.set_closed()
 
@@ -632,25 +636,35 @@ class PathfindingVisualizer:
 
     def a_star(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
         """Code for the A* algorithm"""
+
+        # Used to determine the order of squares to check. Order of args helper decide the priority.
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
         open_set_hash = {start}
 
-        came_from = {}
+        # Determine what is the best square to check
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
         f_score = {square: float('inf') for row in graph for square in row}
         f_score[start] = self.heuristic(start.get_pos(), end.get_pos())
 
+        # Keeps track of next node for every node in graph. A linked list basically.
+        came_from = {}
+
+        # Continues until every node has been checked or best path found
         while not open_set.empty():
+
+            # If uses closes window the program terminates
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
+            # Gets the square currently being checked
             curr_square = open_set.get()[2]
             open_set_hash.remove(curr_square)
 
+            # Terminates if found the best path
             if curr_square == end:
                 if draw_best_path:
                     self.best_path(graph, came_from, end, visualize=visualize)
@@ -658,6 +672,7 @@ class PathfindingVisualizer:
 
                 return came_from
 
+            # Decides the order of neighbours to check
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
 
@@ -672,10 +687,12 @@ class PathfindingVisualizer:
                         if nei != end and nei.color != self.CLOSED_COLOR and nei != ignore_node:
                             nei.set_open()
 
+            # Only visualize if called. Checks if square is closed to not repeat when mid node included.
             if visualize and not curr_square.is_closed():
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(a_star=True)
 
+            # Sets square to closed after finished checking
             if curr_square != start and curr_square != ignore_node:
                 curr_square.set_closed()
 
@@ -683,12 +700,15 @@ class PathfindingVisualizer:
 
     @staticmethod
     def heuristic(pos1, pos2):
+        """Used by A* to prioritize traveling towards next node"""
         x1, y1 = pos1
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
     def bi_dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
         """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
+
+        # Used to determine the order of squares to check. Order of args helper decide the priority.
         queue_pos = 0
         open_set = PriorityQueue()
         open_set_hash = {start, end}
@@ -696,21 +716,29 @@ class PathfindingVisualizer:
         queue_pos += 1
         open_set.put((0, queue_pos, end, 'end'))
 
+        # Determine what is the best square to check
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
         g_score[end] = 0
+
+        # Keeps track of next node for every node in graph. A linked list basically.
         came_from_start = {}
         came_from_end = {}
 
+        # Continues until every node has been checked or best path found
         while not open_set.empty():
+
+            # If uses closes window the program terminates
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
+            # Gets the square currently being checked
             temp = open_set.get()
             curr_square = temp[2]
             open_set_hash.remove(curr_square)
 
+            # Terminates if found the best path
             for nei in curr_square.neighbours:
                 if curr_square.is_open() and nei.is_open_alt():
                     if draw_best_path:
@@ -728,6 +756,7 @@ class PathfindingVisualizer:
 
                     return came_from_start, came_from_end, nei, curr_square
 
+            # Decides the order of neighbours to check for both swarms.
             if temp[3] == 'start':
                 for nei in curr_square.neighbours:
                     temp_g_score = g_score[curr_square] + 1
@@ -741,7 +770,6 @@ class PathfindingVisualizer:
                             open_set_hash.add(nei)
                             if nei != end and nei.color != self.CLOSED_COLOR and nei != ignore_node:
                                 nei.set_open()
-
             elif temp[3] == 'end':
                 for nei in curr_square.neighbours:
                     temp_g_score = g_score[curr_square] + 1
@@ -756,10 +784,12 @@ class PathfindingVisualizer:
                             if nei != start and nei.color != self.CLOSED_COLOR and nei != ignore_node:
                                 nei.set_open_alt()
 
+            # Only visualize if called. Checks if square is closed to not repeat when mid node included.
             if visualize and not curr_square.is_closed():
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(bi_dijkstra=True)
 
+            # Sets square to closed after finished checking
             if curr_square != start and curr_square != end and curr_square != ignore_node:
                 curr_square.set_closed()
 
@@ -767,15 +797,19 @@ class PathfindingVisualizer:
 
     def best_path_bi_dijkstra(self, graph, came_from_start, came_from_end,
                               first_meet_node, second_meet_node, visualize=True):
-        # Fixes a weird bug I can't trace
+        """Used by bi_dijkstra to draw best path from in two parts"""
+
+        # Fixes bug when can't find a path
         if isinstance(came_from_start, bool) or isinstance(came_from_end, bool):
             return
 
+        # Draws best path for first swarm
         self.best_path(graph, came_from_start, first_meet_node, visualize=visualize)
         # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
         first_meet_node.set_path()
         # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
 
+        # Draws best path for second swarm
         second_meet_node.set_path()
         # To not skip the last two at once, need a draw and draw_vis_text here
         self.best_path(graph, came_from_end, second_meet_node, reverse=True, visualize=visualize)
@@ -783,6 +817,8 @@ class PathfindingVisualizer:
 
     def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, bi_dijkstra=False, visualize=True):
         """Used if algos need to reach mid node first"""
+
+        # Selects the correct algo to use
         if dijkstra:
             if visualize:
                 start_to_mid = self.dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
@@ -795,7 +831,6 @@ class PathfindingVisualizer:
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
-
         elif a_star:
             if visualize:
                 start_to_mid = self.a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
@@ -808,7 +843,6 @@ class PathfindingVisualizer:
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
-
         elif bi_dijkstra:
             if visualize:
                 start_to_mid = self.bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
@@ -828,9 +862,11 @@ class PathfindingVisualizer:
                 self.best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
                                            mid_to_end[2], mid_to_end[3], visualize=visualize)
 
-    # Skip steps to end when visualizing algo. Used when dragging ordinal node once finished
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False,
                     ignore_node=None, draw_best_path=True, reset=True):
+        """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
+
+        # Selects the correct algo to use
         if dijkstra:
             if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
@@ -842,7 +878,6 @@ class PathfindingVisualizer:
                 start.set_start()  # Fixes start disappearing when dragging
             else:
                 return self.dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
-
         elif a_star:
             if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
@@ -854,7 +889,6 @@ class PathfindingVisualizer:
                 start.set_start()  # Fixes start disappearing when dragging
             else:
                 return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
-
         elif bi_dijkstra:
             if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
                 self.reset_algo(graph)
@@ -869,15 +903,19 @@ class PathfindingVisualizer:
                                         draw_best_path=False, visualize=False)
 
     def best_path(self, graph, came_from, curr_square, reverse=False, visualize=True):
+        """Main algo for reconstructing path"""
+
         # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
         if isinstance(came_from, bool):
             return
 
+        # Puts node path into list so it's easier to traverse in either direction and choose start and end points
         path = []
         while curr_square in came_from:
             curr_square = came_from[curr_square]
             path.append(curr_square)
 
+        # Need to traverse in reverse depending on what part of algo
         if reverse:
             for square in path[:-1]:
                 square.set_path()
@@ -894,12 +932,16 @@ class PathfindingVisualizer:
                     self.draw_vis_text(best_path=True)
 
     def draw_recursive_maze(self, graph, chamber=None, visualize=True):
-        """Implemented following wikipedia guidelines.
+        """Creates maze using recursive division.
+        Implemented following wikipedia guidelines.
         https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
         Inspired by https://github.com/ChrisKneller/pygame-pathfinder
         """
+
+        # Sets min size for division
         division_limit = 3
 
+        # Creates chambers to divide into
         if chamber is None:
             chamber_width = len(graph)
             chamber_height = len(graph[1])
@@ -911,9 +953,11 @@ class PathfindingVisualizer:
             chamber_left = chamber[0]
             chamber_top = chamber[1]
 
+        # Helps with location of chambers
         x_divide = int(chamber_width/2)
         y_divide = int(chamber_height/2)
 
+        # Draws vertical maze line within chamber
         if chamber_width >= division_limit:
             for y in range(chamber_height):
                 graph[chamber_left + x_divide][chamber_top + y].set_wall()
@@ -922,6 +966,7 @@ class PathfindingVisualizer:
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(recursive_maze=True)
 
+        # Draws horizontal maze line within chamber
         if chamber_height >= division_limit:
             for x in range(chamber_width):
                 graph[chamber_left + x][chamber_top + y_divide].set_wall()
@@ -930,28 +975,36 @@ class PathfindingVisualizer:
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(recursive_maze=True)
 
+        # Terminates if below division limit
         if chamber_width < division_limit and chamber_height < division_limit:
             return
 
+        # Defining limits on where to draw walls
         top_left = (chamber_left, chamber_top, x_divide, y_divide)
         top_right = (chamber_left + x_divide+1, chamber_top, chamber_width - x_divide-1, y_divide)
         bottom_left = (chamber_left, chamber_top + y_divide+1, x_divide, chamber_height - y_divide-1)
         bottom_right = (chamber_left + x_divide+1, chamber_top + y_divide+1,
                         chamber_width - x_divide-1, chamber_height - y_divide-1)
 
+        # Combines all chambers into one object
         chambers = (top_left, top_right, bottom_left, bottom_right)
 
+        # Defines location of the walls
         left = (chamber_left, chamber_top + y_divide, x_divide, 1)
         right = (chamber_left + x_divide+1, chamber_top + y_divide, chamber_width - x_divide-1, 1)
         top = (chamber_left + x_divide, chamber_top, 1, y_divide)
         bottom = (chamber_left + x_divide, chamber_top + y_divide+1, 1, chamber_height - y_divide-1)
 
+        # Combines walls into one object
         walls = (left, right, top, bottom)
 
-        # Number of gaps to leave after each division into four sub quadrants. See docstring for deeper explanation.
+        # Number of gaps to leave in walls after each division into four sub quadrants.
         num_gaps = 3
+
+        # Prevents drawing wall over gaps
         gaps_to_offset = [x for x in range(num_gaps - 1, self.rows, num_gaps)]
 
+        # Draws the gaps into the walls
         for wall in random.sample(walls, num_gaps):
             if wall[3] == 1:
                 x = random.randrange(wall[0], wall[0] + wall[2])
@@ -979,22 +1032,21 @@ class PathfindingVisualizer:
                 self.draw(graph, display_update=False)
                 self.draw_vis_text(recursive_maze=True)
 
+        # Recursively divides chambers
         for chamber in chambers:
             if visualize:
                 self.draw_recursive_maze(graph, chamber)
             else:
                 self.draw_recursive_maze(graph, chamber, visualize=False)
 
-    def get_rows(self):
-        return self.rows
-
-    def get_square_size(self):
-        return self.square_size
-
 
 class Square(PathfindingVisualizer):
+    """Defines the properties needed for each node on graph"""
     def __init__(self, row, col):
+        # Gains access to parent class methods and attributes
         super().__init__()
+
+        # Defines attributes of nodes
         self.rows = self.rows
         self.square_size = self.square_size
         self.row = row
@@ -1004,13 +1056,16 @@ class Square(PathfindingVisualizer):
         self.neighbours = []
         self.color = self.DEFAULT_COLOR
 
-    def __lt__(self, other):    # Allows comparison of length of squares
+    def __lt__(self, other):
+        """Allows comparison of squares"""
         return False
 
     def get_pos(self):
+        """Returns the square location"""
         return self.row, self.col
 
     def update_neighbours(self, graph):
+        """Updates the neighbours in the four cardinal directions"""
         self.neighbours = []
         if self.row < self.rows-1 and not graph[self.row + 1][self.col].is_wall():  # Down
             self.neighbours.append(graph[self.row+1][self.col])
@@ -1022,63 +1077,83 @@ class Square(PathfindingVisualizer):
             self.neighbours.append(graph[self.row][self.col-1])
 
     def is_empty(self):
+        """Checks if blank node"""
         return self.color == self.DEFAULT_COLOR
 
     def is_open(self):
+        """Checks if open node"""
         return self.color == self.OPEN_COLOR
 
     def is_open_alt(self):
+        """Checks if open node for second swarm of bi_dijkstra"""
         return self.color == self.OPEN_ALT_COLOR
 
     def is_closed(self):
+        """Checks if closed node"""
         return self.color == self.CLOSED_COLOR
 
     def is_start(self):
+        """Checks if start node"""
         return self.color == self.START_COLOR
 
     def is_mid(self):
+        """Checks if mid node"""
         return self.color == self.MID_COLOR
 
     def is_end(self):
+        """Checks if end node"""
         return self.color == self.END_COLOR
 
     def is_wall(self):
+        """Checks if wall node"""
         return self.color == self.WALL_COLOR
 
     def is_path(self):
+        """Checks if path node"""
         return self.color == self.PATH_COLOR
 
     def reset(self):
+        """Sets node to blank"""
         self.color = self.DEFAULT_COLOR
 
     def set_open(self):
+        """Sets node to open"""
         self.color = self.OPEN_COLOR
 
     def set_open_alt(self):
+        """Sets node to open for second swarm of bi_dijkstra"""
         self.color = self.OPEN_ALT_COLOR
 
     def set_closed(self):
+        """Sets node to closed"""
         self.color = self.CLOSED_COLOR
 
     def set_start(self):
+        """Sets node to start"""
         self.color = self.START_COLOR
 
     def set_mid(self):
+        """Sets node to mid"""
         self.color = self.MID_COLOR
 
     def set_end(self):
+        """Sets node to end"""
         self.color = self.END_COLOR
 
     def set_wall(self):
+        """Sets node to wall"""
         self.color = self.WALL_COLOR
 
     def set_path(self):
+        """Sets node to path"""
         self.color = self.PATH_COLOR
 
     def draw_square(self, window):
+        """Updates the square with node type"""
         pygame.draw.rect(window, self.color, (self.x, self.y, int(self.square_size), int(self.square_size)))
 
     def update_values(self, rows, square_size):
+        """Updates the attributes of node. Used when changing graph size"""
         self.rows = rows
         self.square_size = square_size
         self.x = self.row * self.square_size
