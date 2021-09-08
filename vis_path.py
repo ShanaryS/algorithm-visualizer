@@ -13,6 +13,7 @@ class PathfindingVisualizer:
         self.WIDTH = 800
         self.HEIGHT = 800
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+        self.LEGEND_AREA = pygame.Rect(0, self.HEIGHT, self.WINDOW_WIDTH, self.WINDOW_HEIGHT - self.HEIGHT)
         pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
         # Recursive division only works on certain row values. 22,23,46,47,94,95.
@@ -32,6 +33,7 @@ class PathfindingVisualizer:
         self.GREY = (128, 128, 128)
 
         self.DEFAULT_COLOR = self.WHITE
+        self.LEGEND_AREA_COLOR = self.GREY
         self.LINE_COLOR = self.GREY
         self.OPEN_COLOR = self.TURQUOISE
         self.CLOSED_COLOR = self.BLUE
@@ -237,6 +239,7 @@ class PathfindingVisualizer:
 
     def draw(self, graph, legend=False, display_update=True):
         self.WINDOW.fill(self.DEFAULT_COLOR)
+        self.WINDOW.fill(self.LEGEND_AREA_COLOR, self.LEGEND_AREA)
         for row in graph:
             for square in row:
                 square.draw_square(self.WINDOW)
@@ -271,27 +274,27 @@ class PathfindingVisualizer:
                       best_path=False, recursive_maze=False, graph_size=False):
 
         center_graph = self.HEIGHT//2
-        center_white_space = self.HEIGHT + (self.WINDOW_HEIGHT - self.HEIGHT)//2
+        center_legend_area = self.HEIGHT + (self.WINDOW_HEIGHT - self.HEIGHT)//2
         if dijkstra:
             self.WINDOW.blit(self.vis_text_dijkstra,
                              (self.WIDTH//2 - self.vis_text_dijkstra.get_width()//2,
-                              center_white_space - self.vis_text_dijkstra.get_height()//2))
+                              center_legend_area - self.vis_text_dijkstra.get_height()//2))
         elif a_star:
             self.WINDOW.blit(self.vis_text_a_star,
                              (self.WIDTH//2 - self.vis_text_a_star.get_width()//2,
-                              center_white_space - self.vis_text_a_star.get_height()//2))
+                              center_legend_area - self.vis_text_a_star.get_height()//2))
         elif bi_dijkstra:
             self.WINDOW.blit(self.vis_text_bi_dijkstra,
                              (self.WIDTH//2 - self.vis_text_bi_dijkstra.get_width()//2,
-                              center_white_space - self.vis_text_bi_dijkstra.get_height()//2))
+                              center_legend_area - self.vis_text_bi_dijkstra.get_height()//2))
         elif best_path:
             self.WINDOW.blit(self.vis_text_best_path,
                              (self.WIDTH // 2 - self.vis_text_best_path.get_width() // 2,
-                              center_white_space - self.vis_text_best_path.get_height() // 2))
+                              center_legend_area - self.vis_text_best_path.get_height() // 2))
         elif recursive_maze:
             self.WINDOW.blit(self.vis_text_recursive_maze,
                              (self.WIDTH//2 - self.vis_text_recursive_maze.get_width()//2,
-                              center_white_space - self.vis_text_recursive_maze.get_height()//2))
+                              center_legend_area - self.vis_text_recursive_maze.get_height()//2))
         elif graph_size:
             self.WINDOW.blit(self.vis_text_graph_size,
                              (self.WIDTH//2 - self.vis_text_graph_size.get_width()//2,
