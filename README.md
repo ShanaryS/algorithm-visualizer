@@ -1,11 +1,14 @@
 # Algorithm Visualizer
 **Pathfinding Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1)
 
-Ability to draw custom walls and drag nodes after algorithm completion:![Pathfinding Demo #1](https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif)
+Ability to draw custom walls and drag nodes after algorithm completion:
+![Pathfinding Demo #1](https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif)
+
 
 **Sorting Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)
 
 [![Sorting Demo](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)
+
 
 **Searching Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
 
