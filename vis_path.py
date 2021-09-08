@@ -9,7 +9,7 @@ import time
 class PathfindingVisualizer:
     def __init__(self):
         self.WINDOW_WIDTH = 800
-        self.WINDOW_HEIGHT = 900
+        self.WINDOW_HEIGHT = 860
         self.WIDTH = 800
         self.HEIGHT = 800
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
@@ -41,22 +41,25 @@ class PathfindingVisualizer:
         self.WALL_COLOR = self.BLACK
         self.PATH_COLOR = self.YELLOW
         self.LEGEND_COLOR = self.BLACK
-        self.VISUALIZING_COLOR = self.RED
+        self.VIS_COLOR = self.RED
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
-        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)", True, self.LEGEND_COLOR)
+        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)",
+                                                True, self.LEGEND_COLOR)
         self.legend_remove_node = self.font.render("Remove Node - Right Click", True, self.LEGEND_COLOR)
         self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.LEGEND_COLOR)
         self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.LEGEND_COLOR)
         self.legend_a_star = self.font.render("A* - Press 'A'", True, self.LEGEND_COLOR)
+        self.legend_bi_dijkstra = self.font.render("Bi-directional Dijkstra - Press 'B'", True, self.LEGEND_COLOR)
         self.legend_recursive_maze = self.font.render("Generate maze - Press 'G' or 'V'", True, self.LEGEND_COLOR)
         self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.LEGEND_COLOR)
-        self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VISUALIZING_COLOR)
-        self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VISUALIZING_COLOR)
-        self.vis_text_recursive_maze = self.font.render("Generating recursive maze...", True, self.VISUALIZING_COLOR)
+        self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VIS_COLOR)
+        self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VIS_COLOR)
+        self.vis_text_bi_dijkstra = self.font.render("Visualizing Bi-directional Dijkstra...", True, self.VIS_COLOR)
+        self.vis_text_recursive_maze = self.font.render("Generating recursive maze...", True, self.VIS_COLOR)
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to 30 seconds",
-                                                    True, self.VISUALIZING_COLOR)
+                                                    True, self.VIS_COLOR)
 
         self.dijkstra_finished = False
         self.a_star_finished = False
@@ -248,13 +251,17 @@ class PathfindingVisualizer:
                              (i * self.square_size, 0), (i * self.square_size, self.WIDTH))
 
     def _draw_legend(self):
-        self.WINDOW.blit(self.legend_add_node, (0, 15*52.9))
-        self.WINDOW.blit(self.legend_remove_node, (0, 15*53.9))
-        self.WINDOW.blit(self.legend_clear_graph, (0, 15*54.9))
-        self.WINDOW.blit(self.legend_dijkstra, (0, 15*55.9))
-        self.WINDOW.blit(self.legend_a_star, (0, 15*56.9))
-        self.WINDOW.blit(self.legend_recursive_maze, (0, 15*57.9))
-        self.WINDOW.blit(self.legend_graph_size, (0, 15*58.9))
+        # Left legend
+        self.WINDOW.blit(self.legend_add_node, (2, 15*53.1))
+        self.WINDOW.blit(self.legend_remove_node, (2, 15*54.1))
+        self.WINDOW.blit(self.legend_clear_graph, (2, 15*55.1))
+        self.WINDOW.blit(self.legend_graph_size, (2, 15*56.1))
+
+        # Right legend
+        self.WINDOW.blit(self.legend_dijkstra, (self.WIDTH - self.vis_text_dijkstra.get_width(), 15*53.1))
+        self.WINDOW.blit(self.legend_a_star, (self.WIDTH - self.vis_text_a_star.get_width(), 15*54.1))
+        self.WINDOW.blit(self.legend_bi_dijkstra, (self.WIDTH - self.vis_text_bi_dijkstra.get_width(), 15*55.1))
+        self.WINDOW.blit(self.legend_recursive_maze, (self.WIDTH - 191, 15*56.1))
 
     def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False, graph_size=False):
         if dijkstra:
