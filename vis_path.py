@@ -1,6 +1,7 @@
 import pygame
 from queue import PriorityQueue
 import random
+import time
 
 
 # noinspection PyUnresolvedReferences, PyTypeChecker
@@ -402,18 +403,29 @@ class PathfindingVisualizer:
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
-    def best_path(self, came_from, curr_square, graph, visualize=True):
-        path = []
-        curr_square.set_end()
+    def best_path(self, came_from, curr_square, graph, mid=None, meet_node=None, visualize=True):
+        # Path reconstruction if mid node
+        if mid:
+            pass
 
-        while curr_square in came_from:
-            curr_square = came_from[curr_square]
-            path.append(curr_square)
+        # Path reconstruction if bidirectional
+        elif meet_node:
+            pass
 
-        for square in path[len(path)-2::-1]:
-            square.set_path()
-            if visualize:
-                self.draw(graph)
+        # Path reconstruction if no mid node or not bidirectional
+        else:
+            path = []
+            curr_square.set_end()
+
+            while curr_square in came_from:
+                curr_square = came_from[curr_square]
+                path.append(curr_square)
+
+            for square in path[len(path)-2::-1]:
+                square.set_path()
+                if visualize:
+                    time.sleep(0.001)
+                    self.draw(graph)
 
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
         if dijkstra:
