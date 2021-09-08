@@ -5,10 +5,13 @@ This is a tool to visualize the operations of the most popular pathfinding, sort
 
 **Pathfinding Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1)
 
-Ability to draw custom walls and drag nodes after algorithm completion:
+<p align="center">
+  Ability to draw custom walls and drag nodes after algorithm completion:
+</p>
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif" alt="animated" />
-</center>
+</p>
 
 Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with full recursive divison animations or instantly:
 :-------------------------:|:-------------------------:
