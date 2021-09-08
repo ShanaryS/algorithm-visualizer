@@ -416,3 +416,11 @@ class SearchVisualizer:
             i = -1
 
         return self.visualize(i)
+
+
+'''
+New features for the future:
+
+Maybe use time.sleep instead of plt.pause
+
+'''
