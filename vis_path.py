@@ -566,46 +566,16 @@ class PathfindingVisualizer:
                 if curr_square.is_open() and nei.is_open_alt():
                     # All the duplicate function calls are needed to draw some nodes one at a time
                     if draw_best_path:
-                        self.best_path(graph, came_from_start, curr_square, visualize=visualize)
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-                        curr_square.set_path()
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-
-                        nei.set_path()
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        self.best_path(graph, came_from_end, nei, reverse=True, visualize=visualize)
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-
+                        self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
+                                                   curr_square, nei, visualize=visualize)
                         return True
 
                     return came_from_start, came_from_end, curr_square, nei
 
                 elif curr_square.is_open_alt() and nei.is_open():
                     if draw_best_path:
-                        self.best_path(graph, came_from_start, nei, visualize=visualize)
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-                        nei.set_path()
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-
-                        curr_square.set_path()
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        self.best_path(graph, came_from_end, curr_square, reverse=True, visualize=visualize)
-                        self.draw(graph, display_update=False)
-                        self.draw_vis_text(best_path=True)
-                        time.sleep(self.best_path_sleep)
-
+                        self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
+                                                   nei, curr_square, visualize=visualize)
                         return True
 
                     return came_from_start, came_from_end, nei, curr_square
@@ -647,6 +617,25 @@ class PathfindingVisualizer:
 
         return False
 
+    def best_path_bi_dijkstra(self, graph, came_from_start, came_from_end,
+                              first_meet_node, second_meet_node, visualize=True):
+        self.best_path(graph, came_from_start, first_meet_node, visualize=visualize)
+        self.draw(graph, display_update=False)
+        self.draw_vis_text(best_path=True)
+        time.sleep(self.best_path_sleep)
+        first_meet_node.set_path()
+        self.draw(graph, display_update=False)
+        self.draw_vis_text(best_path=True)
+        time.sleep(self.best_path_sleep)
+
+        second_meet_node.set_path()
+        self.draw(graph, display_update=False)
+        self.draw_vis_text(best_path=True)
+        self.best_path(graph, came_from_end, second_meet_node, reverse=True, visualize=visualize)
+        self.draw(graph, display_update=False)
+        self.draw_vis_text(best_path=True)
+        time.sleep(self.best_path_sleep)
+
     def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, bi_dijkstra=False, visualize=True):
         """Used if algos need to reach mid node first"""
         if dijkstra:
@@ -686,39 +675,10 @@ class PathfindingVisualizer:
                                               draw_best_path=False, reset=False)
                 start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
-            self.best_path(graph, start_to_mid[0], start_to_mid[2], visualize=visualize)
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
-            start_to_mid[2].set_path()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
-
-            start_to_mid[3].set_path()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            self.best_path(graph, start_to_mid[1], start_to_mid[3], reverse=True, visualize=visualize)
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
-
-            self.best_path(graph, mid_to_end[0], mid_to_end[2], visualize=visualize)
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
-            mid_to_end[2].set_path()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
-
-            mid_to_end[3].set_path()
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            self.best_path(graph, mid_to_end[1], mid_to_end[3], reverse=True, visualize=visualize)
-            self.draw(graph, display_update=False)
-            self.draw_vis_text(best_path=True)
-            time.sleep(self.best_path_sleep)
+            self.best_path_bi_dijkstra(graph, start_to_mid[0], start_to_mid[1],
+                                       start_to_mid[2], start_to_mid[3], visualize=visualize)
+            self.best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
+                                       mid_to_end[2], mid_to_end[3], visualize=visualize)
 
     # Skip steps to end when visualizing algo. Used when dragging ordinal node once finished
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False,
