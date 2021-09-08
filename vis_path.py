@@ -618,6 +618,10 @@ class PathfindingVisualizer:
 
     def best_path_bi_dijkstra(self, graph, came_from_start, came_from_end,
                               first_meet_node, second_meet_node, visualize=True):
+        # Fixes a weird bug I can't trace
+        if isinstance(came_from_start, bool) or isinstance(came_from_end, bool):
+            return
+
         self.best_path(graph, came_from_start, first_meet_node, visualize=visualize)
         # To not skip the last two at once, need a draw, draw_vis_text, and time.sleep here
         first_meet_node.set_path()
