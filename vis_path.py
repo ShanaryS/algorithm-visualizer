@@ -77,6 +77,7 @@ class PathfindingVisualizer:
         graph = self.set_graph()
 
         start = None
+        mid = None
         end = None
 
         run = True
@@ -103,14 +104,14 @@ class PathfindingVisualizer:
                                     else:
                                         start.reset()
                                     start = square
-                                    start.set_start()
+                                    square.set_start()
                                 elif last_square == 'end':
                                     if end in self.wall_nodes:
                                         end.set_wall()
                                     else:
                                         end.reset()
                                     end = square
-                                    end.set_end()
+                                    square.set_end()
                                 if self.dijkstra_finished:
                                     self.algo_no_vis(graph, start, end, dijkstra=True)
                                 elif self.a_star_finished:
@@ -129,7 +130,7 @@ class PathfindingVisualizer:
                             self.algo_no_vis(graph, start, end, a_star=True)
                     elif not end and square != start:
                         end = square
-                        end.set_end()
+                        square.set_end()
 
                         if self.dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, dijkstra=True)
@@ -143,21 +144,26 @@ class PathfindingVisualizer:
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    if square.is_wall:
-                        self.wall_nodes.discard(square)
+                    if square.is_empty:
+                        mid = square
+                        square.set_mid()
 
-                    square.reset()
-                    if square == start:
-                        start = None
-                    elif square == end:
-                        end = None
+                    else:
+                        if square.is_wall:
+                            self.wall_nodes.discard(square)
+
+                        square.reset()
+                        if square == start:
+                            start = None
+                        elif square == end:
+                            end = None
                 elif pygame.mouse.get_pressed(3)[1]:
                     self.reset_graph(graph)
                     if start:
-                        start.reset()
                         start = None
+                    if mid:
+                        mid = None
                     if end:
-                        end.reset()
                         end = None
 
                 # Run Dijkstra with "D" key on keyboard
@@ -604,6 +610,9 @@ class Square(PathfindingVisualizer):
             self.neighbours.append(graph[self.row][self.col+1])
         if self.col > 0 and not graph[self.row][self.col-1].is_wall():  # LEFT
             self.neighbours.append(graph[self.row][self.col-1])
+
+    def is_empty(self):
+        return self.color == self.DEFAULT_COLOR
 
     def is_open(self):
         return self.color == self.OPEN_COLOR
