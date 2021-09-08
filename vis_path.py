@@ -147,7 +147,7 @@ class PathfindingVisualizer:
                                     if mid:
                                         self.start_mid_end(graph, start, mid, end, bi_dijkstra=True, visualize=False)
                                     else:
-                                        self.algo_no_vis(graph, start, end, bi_dijkstraTrue)
+                                        self.algo_no_vis(graph, start, end, bi_dijkstra=True)
 
                         elif square is start:
                             self.ordinal_node_clicked.append('start')
