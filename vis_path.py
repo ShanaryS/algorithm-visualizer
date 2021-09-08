@@ -144,27 +144,34 @@ class PathfindingVisualizer:
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    if square.is_empty:
-                        mid = square
-                        square.set_mid()
+                    if square.is_wall:
+                        self.wall_nodes.discard(square)
 
-                    else:
-                        if square.is_wall:
-                            self.wall_nodes.discard(square)
-
-                        square.reset()
-                        if square == start:
-                            start = None
-                        elif square == end:
-                            end = None
-                elif pygame.mouse.get_pressed(3)[1]:
-                    self.reset_graph(graph)
-                    if start:
+                    square.reset()
+                    if square == start:
                         start = None
-                    if mid:
+                    elif square == mid:
                         mid = None
-                    if end:
+                    elif square == end:
                         end = None
+                elif pygame.mouse.get_pressed(3)[1] and not mid:
+                    pos = pygame.mouse.get_pos()
+                    row, col = self.get_clicked_pos(pos)
+                    square = graph[row][col]
+
+                    mid = square
+                    square.set_mid()
+
+                # Reset graph with "C" on keyboard
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        self.reset_graph(graph)
+                        if start:
+                            start = None
+                        if mid:
+                            mid = None
+                        if end:
+                            end = None
 
                 # Run Dijkstra with "D" key on keyboard
                 if event.type == pygame.KEYDOWN:
@@ -174,8 +181,12 @@ class PathfindingVisualizer:
                             for square in row:
                                 square.update_neighbours(graph)
 
-                        self.dijkstra(graph, start, end)
                         self.dijkstra_finished = True
+
+                        if mid:
+                            self.start_mid_end(graph, start, mid, end, dijkstra=True)
+                        else:
+                            self.dijkstra(graph, start, end)
 
                 # Run A* with "A" key on keyboard
                 if event.type == pygame.KEYDOWN:
@@ -185,8 +196,12 @@ class PathfindingVisualizer:
                             for square in row:
                                 square.update_neighbours(graph)
 
-                        self.a_star(graph, start, end)
                         self.a_star_finished = True
+
+                        if mid:
+                            self.start_mid_end(graph, start, mid, end, a_star=True)
+                        else:
+                            self.a_star(graph, start, end)
 
                 # Draw recursive maze with "G" key on keyboard
                 if event.type == pygame.KEYDOWN:
@@ -343,7 +358,7 @@ class PathfindingVisualizer:
         col = int(x / self.square_size)
         return row, col
 
-    def dijkstra(self, graph, start, end, visualize=True):
+    def dijkstra(self, graph, start, end, draw_best_path=True, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -362,10 +377,11 @@ class PathfindingVisualizer:
             open_set_hash.remove(curr_square)
 
             if curr_square == end:
-                self.best_path(came_from, end, graph, visualize=visualize)
-                start.set_start()
-                end.set_end()
-                return True
+                if draw_best_path:
+                    self.best_path(graph, came_from, end, visualize=visualize)
+                    return True
+
+                return came_from
 
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
@@ -388,7 +404,7 @@ class PathfindingVisualizer:
 
         return False
 
-    def a_star(self, graph, start, end, visualize=True):
+    def a_star(self, graph, start, end, draw_best_path=True, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -409,10 +425,11 @@ class PathfindingVisualizer:
             open_set_hash.remove(curr_square)
 
             if curr_square == end:
-                self.best_path(came_from, end, graph, visualize=visualize)
-                start.set_start()
-                end.set_end()
-                return True
+                if draw_best_path:
+                    self.best_path(graph, came_from, end, visualize=visualize)
+                    return True
+
+                return came_from
 
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
@@ -442,16 +459,36 @@ class PathfindingVisualizer:
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
-    def best_path(self, came_from, curr_square, graph, mid=None, meet_node=None, visualize=True):
-        # Path reconstruction if mid node
-        if mid:
-            if visualize:
-                time.sleep(0.001)
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(best_path=True)
+    def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, visualize=True):
+        """Used if algos need to reach mid node first"""
+        if dijkstra:
+            start_to_mid = self.dijkstra(graph, start, mid, draw_best_path=False)
+            mid_to_end = self.dijkstra(graph, mid, end, draw_best_path=False)
 
+            mid.set_mid(), end.set_end()
+            self.best_path(graph, start_to_mid, mid, visualize=visualize)
+            self.best_path(graph, mid_to_end, end, visualize=visualize)
+        if a_star:
+            start_to_mid = self.a_star(graph, start, mid, draw_best_path=False)
+            mid_to_end = self.a_star(graph, mid, end, draw_best_path=False)
+
+            mid.set_mid(), end.set_end()
+            self.best_path(graph, start_to_mid, mid, visualize=visualize)
+            self.best_path(graph, mid_to_end, end, visualize=visualize)
+
+    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
+        if dijkstra:
+            self.reset_algo(graph)
+            self.dijkstra(graph, start, end, visualize=False)
+            self.dijkstra_finished = True
+        if a_star:
+            self.reset_algo(graph)
+            self.a_star(graph, start, end, visualize=False)
+            self.a_star_finished = True
+
+    def best_path(self, graph, came_from, curr_square, meet_node=None, visualize=True):
         # Path reconstruction if bidirectional
-        elif meet_node:
+        if meet_node:
             if visualize:
                 time.sleep(0.001)
                 self.draw(graph, display_update=False)
@@ -460,7 +497,6 @@ class PathfindingVisualizer:
         # Path reconstruction if no mid node or not bidirectional
         else:
             path = []
-            curr_square.set_end()
 
             while curr_square in came_from:
                 curr_square = came_from[curr_square]
@@ -472,16 +508,6 @@ class PathfindingVisualizer:
                     time.sleep(0.001)
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(best_path=True)
-
-    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
-        if dijkstra:
-            self.reset_algo(graph)
-            self.dijkstra(graph, start, end, visualize=False)
-            self.dijkstra_finished = True
-        if a_star:
-            self.reset_algo(graph)
-            self.a_star(graph, start, end, visualize=False)
-            self.a_star_finished = True
 
     def draw_recursive_maze(self, graph, chamber=None, visualize=True):
         """Implemented following wikipedia guidelines.
