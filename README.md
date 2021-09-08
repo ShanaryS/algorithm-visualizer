@@ -9,12 +9,12 @@ Add mid node to layer the search! Able to drag mid node as well:
 
 Generate a maze to be wowed. Can watch the beautiful animation or instantly generate new ones:
 ![Pathfinding Demo #3](https://user-images.githubusercontent.com/86130442/132563681-c7387b5b-f8b3-4e7b-9578-34428a0f850c.gif)
-
+***
 
 **Sorting Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)
 
 [![Sorting Demo](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)
-
+***
 
 **Searching Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
 
