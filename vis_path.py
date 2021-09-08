@@ -678,10 +678,13 @@ class PathfindingVisualizer:
                                               draw_best_path=False, reset=False)
                 start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
-            self.best_path_bi_dijkstra(graph, start_to_mid[0], start_to_mid[1],
-                                       start_to_mid[2], start_to_mid[3], visualize=visualize)
-            self.best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
-                                       mid_to_end[2], mid_to_end[3], visualize=visualize)
+            # Fixes bug when can't find a path
+            if not isinstance(start_to_mid, bool):
+                self.best_path_bi_dijkstra(graph, start_to_mid[0], start_to_mid[1],
+                                           start_to_mid[2], start_to_mid[3], visualize=visualize)
+            if not isinstance(mid_to_end, bool):
+                self.best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
+                                           mid_to_end[2], mid_to_end[3], visualize=visualize)
 
     # Skip steps to end when visualizing algo. Used when dragging ordinal node once finished
     def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False,
