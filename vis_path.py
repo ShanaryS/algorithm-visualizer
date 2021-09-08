@@ -105,7 +105,7 @@ class PathfindingVisualizer:
 
                     if (self.dijkstra_finished or self.a_star_finished) and start and end:
                         if self.ordinal_node_clicked:
-                            if square != start and square != end:
+                            if square != start and square != mid and square != end:
                                 last_square = self.ordinal_node_clicked[0]
 
                                 if last_square == 'start':
@@ -115,6 +115,13 @@ class PathfindingVisualizer:
                                         start.reset()
                                     start = square
                                     square.set_start()
+                                elif last_square == 'mid':
+                                    if mid in self.wall_nodes:
+                                        mid.set_wall()
+                                    else:
+                                        mid.reset()
+                                    mid = square
+                                    square.set_mid()
                                 elif last_square == 'end':
                                     if end in self.wall_nodes:
                                         end.set_wall()
@@ -124,12 +131,20 @@ class PathfindingVisualizer:
                                     square.set_end()
 
                                 if self.dijkstra_finished:
-                                    self.algo_no_vis(graph, start, end, dijkstra=True)
+                                    if mid:
+                                        self.start_mid_end(graph, start, mid, end, dijkstra=True, visualize=False)
+                                    else:
+                                        self.algo_no_vis(graph, start, end, dijkstra=True)
                                 elif self.a_star_finished:
-                                    self.algo_no_vis(graph, start, end, a_star=True)
+                                    if mid:
+                                        self.start_mid_end(graph, start, mid, end, a_star=True, visualize=False)
+                                    else:
+                                        self.algo_no_vis(graph, start, end, a_star=True)
 
                         elif square is start:
                             self.ordinal_node_clicked.append('start')
+                        elif square is mid:
+                            self.ordinal_node_clicked.append('mid')
                         elif square is end:
                             self.ordinal_node_clicked.append('end')
 
@@ -365,13 +380,14 @@ class PathfindingVisualizer:
                 square = graph[i][j]
                 square.reset()
 
-    def reset_algo(self, graph):    # Resets algo colors while keeping board obstacles
+    # Resets algo colors while keeping board obstacles
+    def reset_algo(self, graph):
         self.dijkstra_finished = False
         self.a_star_finished = False
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
-                if square.color == self.TURQUOISE or square.color == self.BLUE or square.color == self.YELLOW:
+                if square.is_open() or square.is_closed() or square.is_path():
                     square.reset()
 
     def change_graph_size(self, new_row_size):
@@ -391,7 +407,7 @@ class PathfindingVisualizer:
         col = int(x / self.square_size)
         return row, col
 
-    def dijkstra(self, graph, start, end, ignore_node=False, draw_best_path=True, visualize=True):
+    def dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -438,7 +454,7 @@ class PathfindingVisualizer:
 
         return False
 
-    def a_star(self, graph, start, end, ignore_node=False, draw_best_path=True, visualize=True):
+    def a_star(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -497,29 +513,54 @@ class PathfindingVisualizer:
     def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, visualize=True):
         """Used if algos need to reach mid node first"""
         if dijkstra:
-            start_to_mid = self.dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = self.dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
+            if visualize:
+                start_to_mid = self.dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
+                mid_to_end = self.dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
+            else:
+                start_to_mid = self.algo_no_vis(graph, start, mid, dijkstra=True, ignore_node=end, draw_best_path=False)
+                mid_to_end = self.algo_no_vis(graph, mid, end, dijkstra=True, ignore_node=start,
+                                              draw_best_path=False, reset=False)
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
         if a_star:
-            start_to_mid = self.a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = self.a_star(graph, mid, end, ignore_node=start, draw_best_path=False)
+            if visualize:
+                start_to_mid = self.a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
+                mid_to_end = self.a_star(graph, mid, end, ignore_node=start, draw_best_path=False)
+            else:
+                start_to_mid = self.algo_no_vis(graph, start, mid, a_star=True, ignore_node=end, draw_best_path=False)
+                mid_to_end = self.algo_no_vis(graph, mid, end, a_star=True, ignore_node=start,
+                                              draw_best_path=False, reset=False)
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
 
-    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False):
+    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False,
+                    ignore_node=None, draw_best_path=True, reset=True):
         if dijkstra:
-            self.reset_algo(graph)
-            self.dijkstra(graph, start, end, visualize=False)
+            if reset:
+                self.reset_algo(graph)
             self.dijkstra_finished = True
+
+            if draw_best_path:
+                self.dijkstra(graph, start, end, visualize=False)
+            else:
+                return self.dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
+
         if a_star:
-            self.reset_algo(graph)
-            self.a_star(graph, start, end, visualize=False)
+            if reset:
+                self.reset_algo(graph)
             self.a_star_finished = True
 
+            if draw_best_path:
+                self.a_star(graph, start, end, visualize=False)
+            else:
+                return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
+
     def best_path(self, graph, came_from, curr_square, meet_node=None, visualize=True):
+        if isinstance(came_from, bool):
+            return
+
         # Path reconstruction if bidirectional
         if meet_node:
             if visualize:
