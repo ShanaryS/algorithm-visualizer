@@ -9,7 +9,7 @@ import time
 class PathfindingVisualizer:
     def __init__(self):
         self.WINDOW_WIDTH = 800
-        self.WINDOW_HEIGHT = 800
+        self.WINDOW_HEIGHT = 900
         self.WIDTH = 800
         self.HEIGHT = 800
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
@@ -40,22 +40,23 @@ class PathfindingVisualizer:
         self.END_COLOR = self.RED
         self.WALL_COLOR = self.BLACK
         self.PATH_COLOR = self.YELLOW
-        self.TEXT_COLOR = self.RED
+        self.LEGEND_COLOR = self.BLACK
+        self.VISUALIZING_COLOR = self.RED
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
-        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)", True, self.TEXT_COLOR)
-        self.legend_remove_node = self.font.render("Remove Node - Right Click", True, self.TEXT_COLOR)
-        self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.TEXT_COLOR)
-        self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.TEXT_COLOR)
-        self.legend_a_star = self.font.render("A* - Press 'A'", True, self.TEXT_COLOR)
-        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G' or 'V'", True, self.TEXT_COLOR)
-        self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.TEXT_COLOR)
-        self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra:", True, self.TEXT_COLOR)
-        self.vis_text_a_star = self.font.render("Visualizing A*:", True, self.TEXT_COLOR)
-        self.vis_text_recursive_maze = self.font.render("Creating recursive maze:", True, self.TEXT_COLOR)
+        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)", True, self.LEGEND_COLOR)
+        self.legend_remove_node = self.font.render("Remove Node - Right Click", True, self.LEGEND_COLOR)
+        self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.LEGEND_COLOR)
+        self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.LEGEND_COLOR)
+        self.legend_a_star = self.font.render("A* - Press 'A'", True, self.LEGEND_COLOR)
+        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G' or 'V'", True, self.LEGEND_COLOR)
+        self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.LEGEND_COLOR)
+        self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VISUALIZING_COLOR)
+        self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VISUALIZING_COLOR)
+        self.vis_text_recursive_maze = self.font.render("Generating recursive maze...", True, self.VISUALIZING_COLOR)
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to 30 seconds",
-                                                    True, self.TEXT_COLOR)
+                                                    True, self.VISUALIZING_COLOR)
 
         self.dijkstra_finished = False
         self.a_star_finished = False
@@ -79,7 +80,7 @@ class PathfindingVisualizer:
 
                 if not pygame.mouse.get_pressed(3)[0]:
                     self.start_or_end_clicked.clear()
-                if pygame.mouse.get_pressed(3)[0]:       # LEFT
+                if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] <= self.HEIGHT:       # LEFT
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
@@ -128,7 +129,7 @@ class PathfindingVisualizer:
                     elif square != start and square != end and self.maze is False:
                         square.set_wall()
                         self.wall_nodes.add(square)
-                elif pygame.mouse.get_pressed(3)[2]:     # RIGHT
+                elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] <= self.HEIGHT:     # RIGHT
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
@@ -247,13 +248,13 @@ class PathfindingVisualizer:
                              (i * self.square_size, 0), (i * self.square_size, self.WIDTH))
 
     def _draw_legend(self):
-        self.WINDOW.blit(self.legend_add_node, (0, 15*46))
-        self.WINDOW.blit(self.legend_remove_node, (0, 15*47))
-        self.WINDOW.blit(self.legend_clear_graph, (0, 15*48))
-        self.WINDOW.blit(self.legend_dijkstra, (0, 15*49))
-        self.WINDOW.blit(self.legend_a_star, (0, 15*50))
-        self.WINDOW.blit(self.legend_recursive_maze, (0, 15*51))
-        self.WINDOW.blit(self.legend_graph_size, (0, 15*52))
+        self.WINDOW.blit(self.legend_add_node, (0, 15*52.9))
+        self.WINDOW.blit(self.legend_remove_node, (0, 15*53.9))
+        self.WINDOW.blit(self.legend_clear_graph, (0, 15*54.9))
+        self.WINDOW.blit(self.legend_dijkstra, (0, 15*55.9))
+        self.WINDOW.blit(self.legend_a_star, (0, 15*56.9))
+        self.WINDOW.blit(self.legend_recursive_maze, (0, 15*57.9))
+        self.WINDOW.blit(self.legend_graph_size, (0, 15*58.9))
 
     def draw_vis_text(self, dijkstra=False, a_star=False, recursive_maze=False, graph_size=False):
         if dijkstra:
