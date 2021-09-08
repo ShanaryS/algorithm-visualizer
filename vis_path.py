@@ -9,7 +9,7 @@ import time
 class PathfindingVisualizer:
     def __init__(self):
         self.WINDOW_WIDTH = 800
-        self.WINDOW_HEIGHT = 860
+        self.WINDOW_HEIGHT = 879
         self.WIDTH = 800
         self.HEIGHT = 800
         self.WINDOW = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
@@ -50,14 +50,17 @@ class PathfindingVisualizer:
 
         self.legend_add_node = self.font.render("Left Click - Add Node (Start -> End -> Walls)",
                                                 True, self.LEGEND_COLOR)
-        self.legend_remove_node = self.font.render("Right Click - Remove Node (Add Mid node if empty)",
+        self.legend_add_mid_node = self.font.render("Middle Click - Add mid node", True, self.LEGEND_COLOR)
+        self.legend_remove_node = self.font.render("Right Click - Remove Node",
                                                    True, self.LEGEND_COLOR)
-        self.legend_clear_graph = self.font.render("Middle Click - Clear graph", True, self.LEGEND_COLOR)
+        self.legend_clear_graph = self.font.render("Press 'C' - Clear graph", True, self.LEGEND_COLOR)
         self.legend_graph_size = self.font.render("Press 'S', 'M', 'L' - Change graph size", True, self.LEGEND_COLOR)
         self.legend_dijkstra = self.font.render("Press 'D' - Dijkstra", True, self.LEGEND_COLOR)
         self.legend_a_star = self.font.render("Press 'A' - A*", True, self.LEGEND_COLOR)
         self.legend_bi_dijkstra = self.font.render("Press 'B' - Bi-directional Dijkstra", True, self.LEGEND_COLOR)
-        self.legend_recursive_maze = self.font.render("Press 'G' or 'V' - Generate maze", True, self.LEGEND_COLOR)
+        self.legend_recursive_maze = self.font.render("Press 'G' - Generate maze", True, self.LEGEND_COLOR)
+        self.legend_instant_recursive_maze = self.font.render("Press 'V' - Instantly generate maze",
+                                                              True, self.LEGEND_COLOR)
 
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VIS_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VIS_COLOR)
@@ -286,16 +289,20 @@ class PathfindingVisualizer:
 
     def _draw_legend(self):
         # Left legend
-        self.WINDOW.blit(self.legend_add_node, (2, 15*53.1))
-        self.WINDOW.blit(self.legend_remove_node, (2, 15*54.1))
-        self.WINDOW.blit(self.legend_clear_graph, (2, 15*55.1))
-        self.WINDOW.blit(self.legend_graph_size, (2, 15*56.1))
+        self.WINDOW.blit(self.legend_add_node, (2, 15*53.1 + 3))
+        self.WINDOW.blit(self.legend_add_mid_node, (2, 15*54.1 + 3))
+        self.WINDOW.blit(self.legend_remove_node, (2, 15*55.1 + 3))
+        self.WINDOW.blit(self.legend_clear_graph, (2, 15*56.1 + 3))
+        self.WINDOW.blit(self.legend_graph_size, (2, 15*57.1 + 3))
 
         # Right legend
-        self.WINDOW.blit(self.legend_dijkstra, (self.WIDTH - self.vis_text_dijkstra.get_width(), 15*53.1))
-        self.WINDOW.blit(self.legend_a_star, (self.WIDTH - self.vis_text_a_star.get_width(), 15*54.1))
-        self.WINDOW.blit(self.legend_bi_dijkstra, (self.WIDTH - self.vis_text_bi_dijkstra.get_width(), 15*55.1))
-        self.WINDOW.blit(self.legend_recursive_maze, (self.WIDTH - 191, 15*56.1))
+        self.WINDOW.blit(self.legend_dijkstra, (self.WIDTH - self.legend_dijkstra.get_width()-2, 15*53.1 + 3))
+        self.WINDOW.blit(self.legend_a_star, (self.WIDTH - self.legend_a_star.get_width()-2, 15*54.1 + 3))
+        self.WINDOW.blit(self.legend_bi_dijkstra, (self.WIDTH - self.legend_bi_dijkstra.get_width()-2, 15*55.1 + 3))
+        self.WINDOW.blit(self.legend_recursive_maze,
+                         (self.WIDTH - self.legend_recursive_maze.get_width()-2, 15*56.1 + 3))
+        self.WINDOW.blit(self.legend_instant_recursive_maze,
+                         (self.WIDTH - self.legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
 
     def draw_vis_text(self, dijkstra=False, a_star=False, bi_dijkstra=False,
                       best_path=False, recursive_maze=False, graph_size=False):
@@ -483,14 +490,12 @@ class PathfindingVisualizer:
             start_to_mid = self.dijkstra(graph, start, mid, draw_best_path=False)
             mid_to_end = self.dijkstra(graph, mid, end, draw_best_path=False)
 
-            mid.set_mid(), end.set_end()
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
         if a_star:
             start_to_mid = self.a_star(graph, start, mid, draw_best_path=False)
             mid_to_end = self.a_star(graph, mid, end, draw_best_path=False)
 
-            mid.set_mid(), end.set_end()
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
 
