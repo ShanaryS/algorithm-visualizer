@@ -520,7 +520,7 @@ class PathfindingVisualizer:
                 start_to_mid = self.algo_no_vis(graph, start, mid, dijkstra=True, ignore_node=end, draw_best_path=False)
                 mid_to_end = self.algo_no_vis(graph, mid, end, dijkstra=True, ignore_node=start,
                                               draw_best_path=False, reset=False)
-                start.set_start(), mid.set_mid(), end.set_end()
+                start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
@@ -532,7 +532,7 @@ class PathfindingVisualizer:
                 start_to_mid = self.algo_no_vis(graph, start, mid, a_star=True, ignore_node=end, draw_best_path=False)
                 mid_to_end = self.algo_no_vis(graph, mid, end, a_star=True, ignore_node=start,
                                               draw_best_path=False, reset=False)
-                start.set_start(), mid.set_mid(), end.set_end()
+                start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
             self.best_path(graph, start_to_mid, mid, visualize=visualize)
             self.best_path(graph, mid_to_end, end, visualize=visualize)
@@ -548,6 +548,7 @@ class PathfindingVisualizer:
             # Separates calling algo_no_vis with mid node or not
             if draw_best_path:
                 self.dijkstra(graph, start, end, visualize=False)
+                start.set_start()  # Fixes start disappearing when dragging
             else:
                 return self.dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
@@ -559,6 +560,7 @@ class PathfindingVisualizer:
             # Separates calling algo_no_vis with mid node or not
             if draw_best_path:
                 self.a_star(graph, start, end, visualize=False)
+                start.set_start()  # Fixes start disappearing when dragging
             else:
                 return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
