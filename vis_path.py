@@ -30,12 +30,14 @@ class PathfindingVisualizer:
         self.ORANGE = (255, 165, 0)
         self.PURPLE = (128, 0, 128)
         self.TURQUOISE = (64, 224, 208)
+        self.TURQUOISE_ALT = (64, 223, 208)
         self.GREY = (128, 128, 128)
 
         self.DEFAULT_COLOR = self.WHITE
         self.LEGEND_AREA_COLOR = self.GREY
         self.LINE_COLOR = self.GREY
         self.OPEN_COLOR = self.TURQUOISE
+        self.OPEN_ALT_COLOR = self.TURQUOISE_ALT
         self.CLOSED_COLOR = self.BLUE
         self.START_COLOR = self.GREEN
         self.MID_COLOR = self.ORANGE
@@ -76,6 +78,7 @@ class PathfindingVisualizer:
         self.maze = False   # Used to prevent drawing extra walls during maze
         self.ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
         self.wall_nodes = set()     # Used to reinstate walls after deletion for mazes and dragging
+        self.best_path_sleep = 0.0025
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
         graph = self.set_graph()
@@ -242,6 +245,21 @@ class PathfindingVisualizer:
                         else:
                             self.a_star(graph, start, end)
 
+                # Run Bi-directional Dijkstra with "B" key on keyboard
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_b and start and end:
+                        self.reset_algo(graph)
+                        for row in graph:
+                            for square in row:
+                                square.update_neighbours(graph)
+
+                        self.bi_dijkstra_finished = True
+
+                        if mid:
+                            self.start_mid_end(graph, start, mid, end, bi_dijkstra=True)
+                        else:
+                            self.bi_dijkstra(graph, start, end)
+
                 # Draw recursive maze with "G" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_g:
@@ -387,7 +405,7 @@ class PathfindingVisualizer:
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
-                if square.is_open() or square.is_closed() or square.is_path():
+                if square.is_open() or square.is_open_alt() or square.is_closed() or square.is_path():
                     square.reset()
 
     def change_graph_size(self, new_row_size):
@@ -510,7 +528,115 @@ class PathfindingVisualizer:
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
-    def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, visualize=True):
+    def bi_dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+        queue_pos = 0
+        open_set = PriorityQueue()
+        open_set_hash = {start, end}
+        open_set.put((0, queue_pos, start, 'start'))
+        queue_pos += 1
+        open_set.put((0, queue_pos, end, 'end'))
+
+        g_score = {square: float('inf') for row in graph for square in row}
+        g_score[start] = 0
+        g_score[end] = 0
+        came_from_start = {}
+        came_from_end = {}
+
+        while not open_set.empty():
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            temp = open_set.get()
+            curr_square = temp[2]
+            open_set_hash.remove(curr_square)
+
+            for nei in curr_square.neighbours:
+                if curr_square.is_open() and nei.is_open_alt():
+                    # All the duplicate function calls are needed to draw some nodes one at a time
+                    if draw_best_path:
+                        self.best_path(graph, came_from_start, curr_square, visualize=visualize)
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+                        curr_square.set_path()
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+
+                        nei.set_path()
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        self.best_path(graph, came_from_end, nei, reverse=True, visualize=visualize)
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+
+                        return True
+
+                    return came_from_start, came_from_end
+
+                elif curr_square.is_open_alt() and nei.is_open():
+                    if draw_best_path:
+                        self.best_path(graph, came_from_start, nei, visualize=visualize)
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+                        nei.set_path()
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+
+                        curr_square.set_path()
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        self.best_path(graph, came_from_end, curr_square, reverse=True, visualize=visualize)
+                        self.draw(graph, display_update=False)
+                        self.draw_vis_text(best_path=True)
+                        time.sleep(self.best_path_sleep)
+
+                        return True
+
+                    return came_from_start, came_from_end
+
+            if temp[3] == 'start':
+                for nei in curr_square.neighbours:
+                    temp_g_score = g_score[curr_square] + 1
+
+                    if temp_g_score < g_score[nei]:
+                        came_from_start[nei] = curr_square
+                        g_score[nei] = temp_g_score
+                        if nei not in open_set_hash:
+                            queue_pos += 1
+                            open_set.put((g_score[nei], queue_pos, nei, 'start'))
+                            open_set_hash.add(nei)
+                            if nei != end and nei.color != self.CLOSED_COLOR and nei != ignore_node:
+                                nei.set_open()
+
+            elif temp[3] == 'end':
+                for nei in curr_square.neighbours:
+                    temp_g_score = g_score[curr_square] + 1
+
+                    if temp_g_score < g_score[nei]:
+                        came_from_end[nei] = curr_square
+                        g_score[nei] = temp_g_score
+                        if nei not in open_set_hash:
+                            queue_pos += 1
+                            open_set.put((g_score[nei], queue_pos, nei, 'end'))
+                            open_set_hash.add(nei)
+                            if nei != start and nei.color != self.CLOSED_COLOR and nei != ignore_node:
+                                nei.set_open_alt()
+
+            if visualize and not curr_square.is_closed():
+                self.draw(graph, display_update=False)
+                self.draw_vis_text(dijkstra=True)
+
+            if curr_square != start and curr_square != end and curr_square != ignore_node:
+                curr_square.set_closed()
+
+        return False
+
+    def start_mid_end(self, graph, start, mid, end, dijkstra=False, a_star=False, bi_dijkstra=False, visualize=True):
         """Used if algos need to reach mid node first"""
         if dijkstra:
             if visualize:
@@ -564,30 +690,28 @@ class PathfindingVisualizer:
             else:
                 return self.a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
 
-    def best_path(self, graph, came_from, curr_square, meet_node=None, visualize=True):
+    def best_path(self, graph, came_from, curr_square, reverse=False, visualize=True):
         # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
         if isinstance(came_from, bool):
             return
 
-        # Path reconstruction if bidirectional
-        if meet_node:
-            if visualize:
-                time.sleep(0.0025)
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(best_path=True)
+        path = []
+        while curr_square in came_from:
+            curr_square = came_from[curr_square]
+            path.append(curr_square)
 
-        # Path reconstruction if no mid node or not bidirectional
+        if reverse:
+            for square in path[:-1]:
+                square.set_path()
+                if visualize:
+                    time.sleep(self.best_path_sleep)
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(best_path=True)
         else:
-            path = []
-
-            while curr_square in came_from:
-                curr_square = came_from[curr_square]
-                path.append(curr_square)
-
             for square in path[len(path)-2::-1]:
                 square.set_path()
                 if visualize:
-                    time.sleep(0.0025)
+                    time.sleep(self.best_path_sleep)
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(best_path=True)
 
@@ -725,6 +849,9 @@ class Square(PathfindingVisualizer):
     def is_open(self):
         return self.color == self.OPEN_COLOR
 
+    def is_open_alt(self):
+        return self.color == self.OPEN_ALT_COLOR
+
     def is_closed(self):
         return self.color == self.CLOSED_COLOR
 
@@ -748,6 +875,9 @@ class Square(PathfindingVisualizer):
 
     def set_open(self):
         self.color = self.OPEN_COLOR
+
+    def set_open_alt(self):
+        self.color = self.OPEN_ALT_COLOR
 
     def set_closed(self):
         self.color = self.CLOSED_COLOR
