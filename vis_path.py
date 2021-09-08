@@ -45,15 +45,18 @@ class PathfindingVisualizer:
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
-        self.legend_add_node = self.font.render("Add Node - Left Click (Start -> End -> Walls)",
+
+        self.legend_add_node = self.font.render("Left Click - Add Node (Start -> End -> Walls)",
                                                 True, self.LEGEND_COLOR)
-        self.legend_remove_node = self.font.render("Remove Node - Right Click", True, self.LEGEND_COLOR)
-        self.legend_clear_graph = self.font.render("Clear Graph - Middle Click", True, self.LEGEND_COLOR)
-        self.legend_dijkstra = self.font.render("Dijkstra - Press 'D'", True, self.LEGEND_COLOR)
-        self.legend_a_star = self.font.render("A* - Press 'A'", True, self.LEGEND_COLOR)
-        self.legend_bi_dijkstra = self.font.render("Bi-directional Dijkstra - Press 'B'", True, self.LEGEND_COLOR)
-        self.legend_recursive_maze = self.font.render("Generate maze - Press 'G' or 'V'", True, self.LEGEND_COLOR)
-        self.legend_graph_size = self.font.render("Change graph size - Press 'S', 'M', 'L'", True, self.LEGEND_COLOR)
+        self.legend_remove_node = self.font.render("Right Click - Remove Node (Add Mid node if empty)",
+                                                   True, self.LEGEND_COLOR)
+        self.legend_clear_graph = self.font.render("Middle Click - Clear graph", True, self.LEGEND_COLOR)
+        self.legend_graph_size = self.font.render("Press 'S', 'M', 'L' - Change graph size", True, self.LEGEND_COLOR)
+        self.legend_dijkstra = self.font.render("Press 'D' - Dijkstra", True, self.LEGEND_COLOR)
+        self.legend_a_star = self.font.render("Press 'A' - A*", True, self.LEGEND_COLOR)
+        self.legend_bi_dijkstra = self.font.render("Press 'B' - Bi-directional Dijkstra", True, self.LEGEND_COLOR)
+        self.legend_recursive_maze = self.font.render("Press 'G' or 'V' - Generate maze", True, self.LEGEND_COLOR)
+
         self.vis_text_dijkstra = self.font.render("Visualizing Dijkstra...", True, self.VIS_COLOR)
         self.vis_text_a_star = self.font.render("Visualizing A*...", True, self.VIS_COLOR)
         self.vis_text_bi_dijkstra = self.font.render("Visualizing Bi-directional Dijkstra...", True, self.VIS_COLOR)
