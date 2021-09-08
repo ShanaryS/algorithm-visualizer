@@ -3,11 +3,19 @@ from queue import PriorityQueue
 import random
 import time
 
+"""Visualizer for major pathfinding algorithms such as Dijkstra, A*, and my own creation Bi-directional Dijkstra.
+Node and square used interchangeably.
+"""
+
 
 # noinspection PyUnresolvedReferences, PyTypeChecker
 # PyCharm bug, doesn't realize that square is a Node class object. Above comment removes it.
 class PathfindingVisualizer:
+    """Where all the algorithms and operations reside. Call main() to run."""
     def __init__(self):
+        """Creates the window size, graph size, colors, text, and many more variables"""
+
+        # Defining window properties as well as graph size
         self.WINDOW_WIDTH = 800
         self.WINDOW_HEIGHT = 879
         self.WIDTH = 800
@@ -17,10 +25,11 @@ class PathfindingVisualizer:
         pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
         # Recursive division only works on certain row values. 22,23,46,47,94,95.
-        self.rows = 46
+        self.rows = 46  # Number of rows get changed to change the size of graph, viable values for maze above.
         # self.COLS = 50        # Use to make graph none square but requires a lot of reworking
-        self.square_size = self.WIDTH / self.rows
+        self.square_size = self.WIDTH / self.rows   # The square size on the graph
 
+        # Defining all colors that the program may use. Everything from node color to text color
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
         self.RED = (255, 0, 0)
@@ -33,6 +42,7 @@ class PathfindingVisualizer:
         self.TURQUOISE_ALT = (64, 223, 208)
         self.GREY = (128, 128, 128)
 
+        # Assigning colors to different conditions to allow easy updating and readability.
         self.DEFAULT_COLOR = self.WHITE
         self.LEGEND_AREA_COLOR = self.GREY
         self.LINE_COLOR = self.GREY
@@ -47,6 +57,7 @@ class PathfindingVisualizer:
         self.LEGEND_COLOR = self.BLACK
         self.VIS_COLOR = self.RED
 
+        # Creates the text needed for legend and when visualizing
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 12)
 
@@ -72,6 +83,7 @@ class PathfindingVisualizer:
         self.vis_text_graph_size = self.font.render("Changing graph size... May take up to 30 seconds",
                                                     True, self.VIS_COLOR)
 
+        # Extra variables needed in scope of entire class for different functions.
         self.dijkstra_finished = False
         self.a_star_finished = False
         self.bi_dijkstra_finished = False
@@ -81,8 +93,10 @@ class PathfindingVisualizer:
         self.best_path_sleep = 0.0025
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
+        """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
         graph = self.set_graph()
 
+        # Defining ordinal nodes to be used within the loop in various places
         start = None
         mid = None
         end = None
@@ -91,6 +105,7 @@ class PathfindingVisualizer:
         while run:
             self.draw(graph, legend=True)
 
+            # Allow clicking the "X" on the pygame window to end the program
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -99,18 +114,25 @@ class PathfindingVisualizer:
                 if not pygame.mouse.get_pressed(3)[0]:
                     self.ordinal_node_clicked.clear()
 
-                # LEFT CLICK within graph
+                # LEFT MOUSE CLICK. self.HEIGHT condition prevents out of bound when clicking on legend.
                 if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+
                     # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
+                    # Checks if algo is completed, used for dragging algo
                     if (self.dijkstra_finished or self.a_star_finished or self.bi_dijkstra_finished) and start and end:
-                        if self.ordinal_node_clicked:
-                            if square != start and square != mid and square != end:
-                                last_square = self.ordinal_node_clicked[0]
 
+                        # Checks if ordinal node is being dragged
+                        if self.ordinal_node_clicked:
+
+                            # Checks if the mouse is currently on an ordinal node, no need to update anything
+                            if square != start and square != mid and square != end:
+                                last_square = self.ordinal_node_clicked[0]  # Used to move ordinal node to new pos
+
+                                # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                                 if last_square == 'start':
                                     if start in self.wall_nodes:
                                         start.set_wall()
@@ -133,6 +155,7 @@ class PathfindingVisualizer:
                                     end = square
                                     square.set_end()
 
+                                # Runs the algo again instantly with no visualizations, handles whether mid exists
                                 if self.dijkstra_finished:
                                     if mid:
                                         self.start_mid_end(graph, start, mid, end, dijkstra=True, visualize=False)
@@ -149,6 +172,7 @@ class PathfindingVisualizer:
                                     else:
                                         self.algo_no_vis(graph, start, end, bi_dijkstra=True)
 
+                        # If ordinal node is not being dragged, prepare it to
                         elif square is start:
                             self.ordinal_node_clicked.append('start')
                         elif square is mid:
@@ -156,38 +180,48 @@ class PathfindingVisualizer:
                         elif square is end:
                             self.ordinal_node_clicked.append('end')
 
+                    # If start node does not exist, create it. If not currently ordinal node.
                     elif not start and square != mid and square != end:
                         start = square
                         square.set_start()
 
+                        # Handles removing and adding start manually instead of dragging on algo completion.
                         if self.dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, dijkstra=True)
                         elif self.a_star_finished and start and end:
                             self.algo_no_vis(graph, start, end, a_star=True)
                         elif self.bi_dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, bi_dijkstra=True)
+
+                    # If end node does not exist, and start node does exist, create end node.
+                    # If not currently ordinal node.
                     elif not end and square != start and square != mid:
                         end = square
                         square.set_end()
 
+                        # Handles removing and adding end manually instead of dragging on algo completion.
                         if self.dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, dijkstra=True)
                         elif self.a_star_finished and start and end:
                             self.algo_no_vis(graph, start, end, a_star=True)
                         elif self.bi_dijkstra_finished and start and end:
                             self.algo_no_vis(graph, start, end, bi_dijkstra=True)
+
+                    # If start and end node exists, create wall. If not currently ordinal node.
+                    # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
                     elif square != start and square != mid and square != end and self.maze is False:
                         square.set_wall()
                         self.wall_nodes.add(square)
 
-                # RIGHT CLICK within graph
+                # RIGHT MOUSE CLICK. self.HEIGHT condition prevents out of bound when clicking on legend.
                 elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+
                     # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    # If square to remove is wall, need to remove it from wall_node to retain accuracy
+                    # If square to remove is wall, need to remove it from wall_node as well to retain accuracy
                     if square.is_wall():
                         self.wall_nodes.discard(square)
 
@@ -200,19 +234,21 @@ class PathfindingVisualizer:
                     elif square == end:
                         end = None
 
-                # MIDDLE CLICK within graph
+                # MIDDLE MOUSE CLICK. self.HEIGHT condition prevents out of bound when clicking on legend.
                 elif pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < self.HEIGHT:
+
                     # Get square clicked
                     pos = pygame.mouse.get_pos()
                     row, col = self.get_clicked_pos(pos)
                     square = graph[row][col]
 
-                    # Set square to mid if no square is already mid
+                    # Set square to mid if no square is already mid, and not currently ordinal node.
                     if not mid:
                         if square != start and square != end:
                             mid = square
                             square.set_mid()
 
+                            # Handles removing and adding mid manually instead of dragging on algo completion.
                             if self.dijkstra_finished and start and mid and end:
                                 self.start_mid_end(graph, start, mid, end, dijkstra=True, visualize=False)
                             elif self.a_star_finished and start and mid and end:
@@ -224,6 +260,8 @@ class PathfindingVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.reset_graph(graph)
+
+                        # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         if start:
                             start = None
                         if mid:
@@ -234,13 +272,19 @@ class PathfindingVisualizer:
                 # Run Dijkstra with "D" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_d and start and end:
+
+                        # Resets algo visualizations without removing ordinal nodes or walls
                         self.reset_algo(graph)
+
+                        # Updates neighbours in case anything has changed
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
 
+                        # Necessary to for dragging nodes on completion
                         self.dijkstra_finished = True
 
+                        # Handles whether or not mid exists
                         if mid:
                             self.start_mid_end(graph, start, mid, end, dijkstra=True)
                         else:
@@ -249,13 +293,19 @@ class PathfindingVisualizer:
                 # Run A* with "A" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a and start and end:
+
+                        # Resets algo visualizations without removing ordinal nodes or walls
                         self.reset_algo(graph)
+
+                        # Updates neighbours in case anything has changed
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
 
+                        # Necessary to for dragging nodes on completion
                         self.a_star_finished = True
 
+                        # Handles whether or not mid exists
                         if mid:
                             self.start_mid_end(graph, start, mid, end, a_star=True)
                         else:
@@ -264,13 +314,19 @@ class PathfindingVisualizer:
                 # Run Bi-directional Dijkstra with "B" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_b and start and end:
+
+                        # Resets algo visualizations without removing ordinal nodes or walls
                         self.reset_algo(graph)
+
+                        # Updates neighbours in case anything has changed
                         for row in graph:
                             for square in row:
                                 square.update_neighbours(graph)
 
+                        # Necessary to for dragging nodes on completion
                         self.bi_dijkstra_finished = True
 
+                        # Handles whether or not mid exists
                         if mid:
                             self.start_mid_end(graph, start, mid, end, bi_dijkstra=True)
                         else:
@@ -279,9 +335,17 @@ class PathfindingVisualizer:
                 # Draw recursive maze with "G" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_g:
+
+                        # Resets entire graph to prevent any unintended behaviour
                         self.reset_graph(graph)
+
+                        # Draw maze
                         self.draw_recursive_maze(graph)
+
+                        # Necessary for handling dragging over barriers if in maze
                         self.maze = True
+
+                        # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
                         mid = None
                         end = None
@@ -289,9 +353,17 @@ class PathfindingVisualizer:
                 # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_i:
+
+                        # Resets entire graph to prevent any unintended behaviour
                         self.reset_graph(graph)
+
+                        # Draw maze instantly with no visualizations
                         self.draw_recursive_maze(graph, visualize=False)
+
+                        # Necessary for handling dragging over barriers if in maze
                         self.maze = True
+
+                        # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
                         mid = None
                         end = None
@@ -299,8 +371,14 @@ class PathfindingVisualizer:
                 # Redraw small maze with "S" key on keyboard if not currently small
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
+
+                        # If maze is currently small, no need to redraw
                         if self.rows != 22:
+
+                            # Changes graph size to small
                             graph = self.change_graph_size(22)
+
+                            # Reset ordinal nodes as it cannot be in reset_graph due to scope
                             start = None
                             mid = None
                             end = None
@@ -308,8 +386,14 @@ class PathfindingVisualizer:
                 # Redraw medium maze with "M" key on keyboard if not currently medium
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
+
+                        # If maze is already medium, no need to redraw
                         if self.rows != 46:
+
+                            # Changes graph size to medium
                             graph = self.change_graph_size(46)
+
+                            # Reset ordinal nodes as it cannot be in reset_graph due to scope
                             start = None
                             mid = None
                             end = None
@@ -317,39 +401,62 @@ class PathfindingVisualizer:
                 # Redraw large maze with "L" key on keyboard if not currently large
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_l:
+
+                        # If maze is already large, no need to redraw
                         if self.rows != 95:
+
+                            # Changes graph size to large
                             graph = self.change_graph_size(95)
+
+                            # Reset ordinal nodes as it cannot be in reset_graph due to scope
                             start = None
                             mid = None
                             end = None
 
+        # Only reached if while loop ends, which happens if window is closed. Program terminates.
         pygame.quit()
 
     def set_graph(self):
+        """Creates the graph object that stores the location of all the squares"""
         graph = []
         for i in range(self.rows):
             graph.append([])
             for j in range(self.rows):
+                # Uses Square class to create square object with necessary attributes
                 square = Square(i, j)
+
+                # Necessary for when changing graph size
                 square.update_values(self.rows, self.square_size)
+
                 graph[i].append(square)
 
         return graph
 
     def draw(self, graph, legend=False, display_update=True):
+        """Main function to update the window. Called by all operations that updates the window."""
+
+        # Sets background of graph to white and legend to grey
         self.WINDOW.fill(self.DEFAULT_COLOR)
         self.WINDOW.fill(self.LEGEND_AREA_COLOR, self.LEGEND_AREA)
+
+        # If colors of square were updated, reflected here
         for row in graph:
             for square in row:
                 square.draw_square(self.WINDOW)
 
+        # Draws the horizontal and vertical lines on the graph
         self._draw_lines()
+
+        # Legend is only shown if graph can be interacted with
         if legend:
             self._draw_legend()
+
+        # Display may not want to update display immediately before doing other operations
         if display_update:
             pygame.display.update()
 
     def _draw_lines(self):
+        """Helper function to define the properties of the horizontal and vertical graph lines"""
         for i in range(self.rows):
             pygame.draw.line(self.WINDOW, self.LINE_COLOR,
                              (0, i * self.square_size), (self.WIDTH, i * self.square_size))
@@ -357,6 +464,7 @@ class PathfindingVisualizer:
                              (i * self.square_size, 0), (i * self.square_size, self.WIDTH))
 
     def _draw_legend(self):
+        """Helper function to define the location of the legend"""
         # Left legend
         self.WINDOW.blit(self.legend_add_node, (2, 15*53.1 + 3))
         self.WINDOW.blit(self.legend_add_mid_node, (2, 15*54.1 + 3))
@@ -375,9 +483,13 @@ class PathfindingVisualizer:
 
     def draw_vis_text(self, dijkstra=False, a_star=False, bi_dijkstra=False,
                       best_path=False, recursive_maze=False, graph_size=False):
+        """Special text indicating some operation is being performed. No inputs are registered."""
 
+        # Defines the center of the graph and legend for text placement
         center_graph = self.HEIGHT//2
         center_legend_area = self.HEIGHT + (self.WINDOW_HEIGHT - self.HEIGHT)//2
+
+        # Text to be shown depending on operation
         if dijkstra:
             self.WINDOW.blit(self.vis_text_dijkstra,
                              (self.WIDTH//2 - self.vis_text_dijkstra.get_width()//2,
@@ -403,23 +515,33 @@ class PathfindingVisualizer:
                              (self.WIDTH//2 - self.vis_text_graph_size.get_width()//2,
                               center_graph - self.vis_text_graph_size.get_height()//2))
 
+        # Always called after draw. In that scenario draw won't update display so this will
         pygame.display.update()
 
     def reset_graph(self, graph):
+        """Resets entire graph removing every square"""
+
+        # Need to update these values
         self.dijkstra_finished = False
         self.a_star_finished = False
         self.bi_dijkstra_finished = False
         self.maze = False
+
+        # Resets each square
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
                 square.reset()
 
-    # Resets algo colors while keeping board obstacles
     def reset_algo(self, graph):
+        """Resets algo colors while keeping ordinal nodes and walls"""
+
+        # Need to update these values
         self.dijkstra_finished = False
         self.a_star_finished = False
         self.bi_dijkstra_finished = False
+
+        # Resets only certain colors
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
@@ -427,37 +549,55 @@ class PathfindingVisualizer:
                     square.reset()
 
     def change_graph_size(self, new_row_size):
+        """Changes graph size and updates squares and their locations as well.
+        Restricted to certain sizes as recursive maze breaks otherwise
+        """
+
+        # Displays text that size is changing
         self.draw_vis_text(graph_size=True)
 
+        # Updates rows and square size with new values
         self.rows = new_row_size
         self.square_size = self.WIDTH / self.rows
 
+        # Recreates graph with new values
         graph = self.set_graph()
         self.draw(graph)
 
         return graph
 
     def get_clicked_pos(self, pos):
+        """Turns the location data of the mouse into location of squares"""
         y, x = pos
         row = int(y / self.square_size)
         col = int(x / self.square_size)
         return row, col
 
     def dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+        """Code for the dijkstra algorithm"""
+
+        # Used to determine the order of squares to check. Order of args helper decide the priority.
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
         open_set_hash = {start}
 
+        # Determine what is the best square to check
         g_score = {square: float('inf') for row in graph for square in row}
         g_score[start] = 0
+
+        # Keeps track of start to end path for every node in graph. A linked list basically.
         came_from = {}
 
+        # Continues until every node has been checked or best path found
         while not open_set.empty():
+
+            # If uses closes window the program terminates
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
+            # Gets the square currently being checked
             curr_square = open_set.get()[2]
             open_set_hash.remove(curr_square)
 
@@ -491,6 +631,7 @@ class PathfindingVisualizer:
         return False
 
     def a_star(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+        """Code for the A* algorithm"""
         queue_pos = 0
         open_set = PriorityQueue()
         open_set.put((0, queue_pos, start))
@@ -547,6 +688,7 @@ class PathfindingVisualizer:
         return abs(x1 - x2) + abs(y1 - y2)
 
     def bi_dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+        """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
         queue_pos = 0
         open_set = PriorityQueue()
         open_set_hash = {start, end}
@@ -941,3 +1083,21 @@ class Square(PathfindingVisualizer):
         self.square_size = square_size
         self.x = self.row * self.square_size
         self.y = self.col * self.square_size
+
+
+'''
+New features for the future:
+
+Update only affect nodes rather than entire screen to improve performance (currently very good already)
+    Especially when drawing lines. Currently creating mid and large graphs is slow
+Instantly update algo when draw wall after completion, much like dragging nodes
+Add prim maze and sticky mud
+
+
+Bugs to fix:
+
+Bi-directional dijkstra only draws best_path when edges of swarms are touching. Only manifests with mid nodes
+Maze can change size if window loses focus for a few seconds. Mainly with the large maze.
+    pygame.event.set_grab prevents mouse from leaving window but also prevents exists
+    pygame.mouse.get_focused() potential elegant solution
+'''
