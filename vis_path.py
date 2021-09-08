@@ -71,6 +71,7 @@ class PathfindingVisualizer:
         self.a_star_finished = False
         self.maze = False   # Used to prevent drawing extra walls during maze
         self.start_or_end_clicked = []   # Used for dragging start and end once algos are finished
+        self.visited_nodes = set()  # Used to not visualize algo for visited nodes while searching mid to end
         self.wall_nodes = set()     # Used to reinstate walls after deletion for mazes and dragging
 
     def main(self):     # Put all game specific variables in here so it's easy to restart with main()
@@ -210,6 +211,7 @@ class PathfindingVisualizer:
                         self.draw_recursive_maze(graph)
                         self.maze = True
                         start = None
+                        mid = None
                         end = None
 
                 # Draw recursive maze with NO VISUALIZATIONS with "V" key on keyboard
@@ -219,6 +221,7 @@ class PathfindingVisualizer:
                         self.draw_recursive_maze(graph, visualize=False)
                         self.maze = True
                         start = None
+                        mid = None
                         end = None
 
                 # Redraw small maze with "S" key on keyboard if not currently small
@@ -227,6 +230,7 @@ class PathfindingVisualizer:
                         if self.rows != 22:
                             graph = self.change_graph_size(22)
                             start = None
+                            mid = None
                             end = None
 
                 # Redraw medium maze with "M" key on keyboard if not currently medium
@@ -235,6 +239,7 @@ class PathfindingVisualizer:
                         if self.rows != 46:
                             graph = self.change_graph_size(46)
                             start = None
+                            mid = None
                             end = None
 
                 # Redraw large maze with "L" key on keyboard if not currently large
@@ -243,6 +248,7 @@ class PathfindingVisualizer:
                         if self.rows != 95:
                             graph = self.change_graph_size(95)
                             start = None
+                            mid = None
                             end = None
 
         pygame.quit()
@@ -379,8 +385,10 @@ class PathfindingVisualizer:
             if curr_square == end:
                 if draw_best_path:
                     self.best_path(graph, came_from, end, visualize=visualize)
+                    self.visited_nodes.clear()
                     return True
 
+                self.visited_nodes.clear()
                 return came_from
 
             for nei in curr_square.neighbours:
@@ -393,11 +401,15 @@ class PathfindingVisualizer:
                         queue_pos += 1
                         open_set.put((g_score[nei], queue_pos, nei))
                         open_set_hash.add(nei)
-                        nei.set_open()
+                        if nei != end:
+                            nei.set_open()
 
-            if visualize:
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(dijkstra=True)
+            if curr_square not in self.visited_nodes:
+                self.visited_nodes.add(curr_square)
+
+                if visualize:
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(dijkstra=True)
 
             if curr_square != start:
                 curr_square.set_closed()
@@ -427,8 +439,10 @@ class PathfindingVisualizer:
             if curr_square == end:
                 if draw_best_path:
                     self.best_path(graph, came_from, end, visualize=visualize)
+                    self.visited_nodes.clear()
                     return True
 
+                self.visited_nodes.clear()
                 return came_from
 
             for nei in curr_square.neighbours:
@@ -442,11 +456,15 @@ class PathfindingVisualizer:
                         queue_pos += 1
                         open_set.put((f_score[nei], queue_pos, nei))
                         open_set_hash.add(nei)
-                        nei.set_open()
+                        if nei != end:
+                            nei.set_open()
 
-            if visualize:
-                self.draw(graph, display_update=False)
-                self.draw_vis_text(a_star=True)
+            if curr_square not in self.visited_nodes:
+                self.visited_nodes.add(curr_square)
+
+                if visualize:
+                    self.draw(graph, display_update=False)
+                    self.draw_vis_text(a_star=True)
 
             if curr_square != start:
                 curr_square.set_closed()
@@ -505,7 +523,7 @@ class PathfindingVisualizer:
             for square in path[len(path)-2::-1]:
                 square.set_path()
                 if visualize:
-                    time.sleep(0.001)
+                    time.sleep(0.0025)
                     self.draw(graph, display_update=False)
                     self.draw_vis_text(best_path=True)
 
