@@ -779,6 +779,7 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
 '''
 New features for the future:
 
+Refactor code. Split algos into a file. Remove unnecessary SortingVisualizer class
 Maybe use time.sleep instead of plt.pause
 
 '''

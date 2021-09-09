@@ -1165,6 +1165,8 @@ class Square(PathfindingVisualizer):
 '''
 New features for the future:
 
+Refactor code and put Square class in it's own file. Split algos into a file.
+Remove unnecessary PathfindingVisualizer class
 Update only affect nodes rather than entire screen to improve performance (currently very good already)
     Especially when drawing lines. Currently creating mid and large graphs is slow
 Instantly update algo when draw wall after completion, much like dragging nodes
