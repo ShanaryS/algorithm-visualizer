@@ -42,6 +42,7 @@ class PathfindingVisualizer:
         self.PURPLE = (128, 0, 128)
         self.TURQUOISE = (64, 224, 208)
         self.TURQUOISE_ALT = (64, 223, 208)
+        self.TURQUOISE_ALT_ = (64, 225, 208)
         self.GREY = (128, 128, 128)
 
         # Assigning colors to different conditions to allow easy updating and readability.
@@ -50,6 +51,7 @@ class PathfindingVisualizer:
         self.LINE_COLOR = self.GREY
         self.OPEN_COLOR = self.TURQUOISE
         self.OPEN_ALT_COLOR = self.TURQUOISE_ALT
+        self.OPEN_ALT_COLOR_ = self.TURQUOISE_ALT_
         self.CLOSED_COLOR = self.BLUE
         self.START_COLOR = self.GREEN
         self.MID_COLOR = self.ORANGE
@@ -547,7 +549,8 @@ class PathfindingVisualizer:
         for i in range(self.rows):
             for j in range(self.rows):
                 square = graph[i][j]
-                if square.is_open() or square.is_open_alt() or square.is_closed() or square.is_path():
+                if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
+                        or square.is_closed() or square.is_path():
                     square.reset()
 
     def change_graph_size(self, new_row_size):
@@ -707,7 +710,7 @@ class PathfindingVisualizer:
         x2, y2 = pos2
         return abs(x1 - x2) + abs(y1 - y2)
 
-    def bi_dijkstra(self, graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+    def bi_dijkstra(self, graph, start, end, alt_color=False, ignore_node=None, draw_best_path=True, visualize=True):
         """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
 
         # Used to determine the order of squares to check. Order of args helper decide the priority.
@@ -750,7 +753,23 @@ class PathfindingVisualizer:
 
                     return came_from_start, came_from_end, curr_square, nei
 
-                elif curr_square.is_open_alt() and nei.is_open():
+                elif curr_square.is_open_alt() and nei.is_open() and not alt_color:
+                    if draw_best_path:
+                        self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
+                                                   nei, curr_square, visualize=visualize)
+                        return True
+
+                    return came_from_start, came_from_end, nei, curr_square
+
+                elif curr_square.is_open_alt() and nei.is_open_alt_():
+                    if draw_best_path:
+                        self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
+                                                   curr_square, nei, visualize=visualize)
+                        return True
+
+                    return came_from_start, came_from_end, curr_square, nei
+
+                elif curr_square.is_open_alt_() and nei.is_open_alt():
                     if draw_best_path:
                         self.best_path_bi_dijkstra(graph, came_from_start, came_from_end,
                                                    nei, curr_square, visualize=visualize)
@@ -771,7 +790,10 @@ class PathfindingVisualizer:
                             open_set.put((g_score[nei], queue_pos, nei, 'start'))
                             open_set_hash.add(nei)
                             if nei != end and nei.color != self.CLOSED_COLOR and nei != ignore_node:
-                                nei.set_open()
+                                if alt_color:
+                                    nei.set_open_alt()
+                                else:
+                                    nei.set_open()
             elif temp[3] == 'end':
                 for nei in curr_square.neighbours:
                     temp_g_score = g_score[curr_square] + 1
@@ -784,7 +806,10 @@ class PathfindingVisualizer:
                             open_set.put((g_score[nei], queue_pos, nei, 'end'))
                             open_set_hash.add(nei)
                             if nei != start and nei.color != self.CLOSED_COLOR and nei != ignore_node:
-                                nei.set_open_alt()
+                                if alt_color:
+                                    nei.set_open_alt_()
+                                else:
+                                    nei.set_open_alt()
 
             # Only visualize if called. Checks if square is closed to not repeat when mid node included.
             if visualize and not curr_square.is_closed():
@@ -848,11 +873,11 @@ class PathfindingVisualizer:
         elif bi_dijkstra:
             if visualize:
                 start_to_mid = self.bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
-                mid_to_end = self.bi_dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
+                mid_to_end = self.bi_dijkstra(graph, mid, end, alt_color=True, ignore_node=start, draw_best_path=False)
             else:
                 start_to_mid = self.algo_no_vis(graph, start, mid, bi_dijkstra=True,
                                                 ignore_node=end, draw_best_path=False)
-                mid_to_end = self.algo_no_vis(graph, mid, end, bi_dijkstra=True, ignore_node=start,
+                mid_to_end = self.algo_no_vis(graph, mid, end, alt_color=True, bi_dijkstra=True, ignore_node=start,
                                               draw_best_path=False, reset=False)
                 start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
@@ -864,7 +889,7 @@ class PathfindingVisualizer:
                 self.best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
                                            mid_to_end[2], mid_to_end[3], visualize=visualize)
 
-    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False,
+    def algo_no_vis(self, graph, start, end, dijkstra=False, a_star=False, bi_dijkstra=False, alt_color=False,
                     ignore_node=None, draw_best_path=True, reset=True):
         """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
 
@@ -898,10 +923,10 @@ class PathfindingVisualizer:
 
             # Separates calling algo_no_vis with mid node or not
             if draw_best_path:
-                self.bi_dijkstra(graph, start, end, visualize=False)
+                self.bi_dijkstra(graph, start, end, alt_color=alt_color, visualize=False)
                 start.set_start()  # Fixes start disappearing when dragging
             else:
-                return self.bi_dijkstra(graph, start, end, ignore_node=ignore_node,
+                return self.bi_dijkstra(graph, start, end, alt_color=alt_color, ignore_node=ignore_node,
                                         draw_best_path=False, visualize=False)
 
     def best_path(self, graph, came_from, curr_square, reverse=False, visualize=True):
@@ -1090,6 +1115,10 @@ class Square(PathfindingVisualizer):
         """Checks if open node for second swarm of bi_dijkstra"""
         return self.color == self.OPEN_ALT_COLOR
 
+    def is_open_alt_(self):
+        """Checks if open node for end node when mid is included"""
+        return self.color == self.OPEN_ALT_COLOR_
+
     def is_closed(self):
         """Checks if closed node"""
         return self.color == self.CLOSED_COLOR
@@ -1125,6 +1154,12 @@ class Square(PathfindingVisualizer):
     def set_open_alt(self):
         """Sets node to open for second swarm of bi_dijkstra"""
         self.color = self.OPEN_ALT_COLOR
+
+    def set_open_alt_(self):
+        """Sets node to open for end node when mid is included.
+        Each swarms needs to be different colors for best path algo to work.
+        """
+        self.color = self.OPEN_ALT_COLOR_
 
     def set_closed(self):
         """Sets node to closed"""
