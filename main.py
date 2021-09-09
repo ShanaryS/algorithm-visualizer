@@ -11,4 +11,3 @@ if __name__ == '__main__':
 
     Path = PathfindingVisualizer()
     Path.main()
-    test
