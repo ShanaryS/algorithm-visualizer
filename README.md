@@ -18,6 +18,24 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 ***
 
-**Sorting Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Sorting-Visualizer?v=1)             |  **Searching Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
-:-------------------------:|:-------------------------:
-![Sorting Demo](https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif)  |  ![Searching Demo](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)
+<p align="center">
+  <strong>Sorting Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Sorting-Visualizer?v=1">Try it Online!</a>
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif" alt="animated" />
+</p>
+
+***
+
+<p align="center">
+  <strong>Searching Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Searching-Visualizer?v=1">Try it Online!</a>
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif" alt="animated" />
+</p>
+
+Searching Visualizer: [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
+
+![Searching Demo](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)
