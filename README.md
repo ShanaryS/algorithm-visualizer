@@ -35,7 +35,3 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 <p align="center">
   <img src="https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif" alt="animated" />
 </p>
-
-Searching Visualizer: [Try it Online!](https://replit.com/@ShanaryS/Searching-Visualizer?v=1)
-
-![Searching Demo](https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif)
