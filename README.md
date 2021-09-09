@@ -25,6 +25,10 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 </p>
 
 <p align="center">
+  Ability to change array size, generate new arrays, and select algorithms:
+</p>
+
+<p align="center">
   <img src="https://user-images.githubusercontent.com/86130442/131289060-9d2ca6a5-ad37-464c-bcdc-fbd57ab08cdd.gif" alt="animated" />
 </p>
 
@@ -32,6 +36,10 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 <p align="center">
   <strong>Searching Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Searching-Visualizer?v=1">Try it Online!</a>
+</p>
+
+<p align="center">
+  Ability to change array size, generate new arrays, sort arrays, change search term and of course, select algorithms:
 </p>
 
 <p align="center">
