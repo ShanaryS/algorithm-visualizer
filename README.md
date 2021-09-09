@@ -2,7 +2,9 @@
 This is a tool to visualize the operations of the most popular pathfinding, sort, and search algorithms. This is helpful to anyone trying to understand these algorithms or even to someone who has already grasped them. This was implemented fully using NumPy and Matplotlib for Search and Sort visualizations, and Pygame for pathfinding visualizations. All done in Python, fully interactive for all algorithms.
 ***
 
-**Pathfinding Visualizer:** [Try it Online!](https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1)
+<p align="center">
+  <strong>Pathfinding Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1">Try it Online!</a>
+</p>
 
 <p align="center">
   Ability to draw custom walls and drag nodes after algorithm completion:
