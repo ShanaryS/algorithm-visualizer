@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from math.colors import *
-from math.values import get_sqrt
+from calc.colors import *
+from calc.values import get_sqrt
 
 
 def visualize(vis, res, array_size):

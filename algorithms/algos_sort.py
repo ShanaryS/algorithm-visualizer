@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from math.colors import *
-from math.values import generate_array, get_factorial
+from calc.colors import *
+from calc.values import generate_array, get_factorial
 
 
 def selection(vis_, array, array_size, pause_short, pause_mid):

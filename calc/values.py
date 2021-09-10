@@ -1,4 +1,4 @@
-"""Functions for generating arrays, random values, and math operations"""
+"""Functions for generating arrays, random values, and calc operations"""
 
 import numpy as np
 from collections import OrderedDict
