@@ -1,4 +1,4 @@
-class Square():
+class Square:
     """Defines the properties needed for each node on graph"""
     def __init__(self, row, col):
         # Gains access to parent class methods and attributes
