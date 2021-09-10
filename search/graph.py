@@ -2,14 +2,14 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
 from search import algorithms as search
 from search.colors import *
-from search.values import generate_array
+from search.values import generate_array, KEY
 
 
 # Base variables
 array = generate_array(0, 150, 30)
 array_size = len(array)
 labels = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
-key = 44
+key = KEY
 
 vis = None                                              # Object that contains the graph
 pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.

@@ -2,6 +2,9 @@
 import numpy as np
 
 
+KEY = 44
+
+
 def generate_array(low, high, size=None):
     """Returns generated numbers to be used for search and sort visualizations"""
     return np.random.randint(low, high, size)
