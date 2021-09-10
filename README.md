@@ -7,7 +7,7 @@ This is a tool to visualize the operations of the most popular pathfinding, sort
 </p>
 
 <p align="center">
-  Ability to draw custom walls and drag nodes after algorithm completion:
+  Able to draw custom walls and drag nodes after algorithm completion:
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 </p>
 
 <p align="center">
-  Ability to change array size, generate new arrays, and select algorithms:
+  Able to change array size, generate new arrays, and select algorithms:
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 </p>
 
 <p align="center">
-  Ability to change array size, generate new arrays, sort arrays, change search term and of course, select algorithms:
+  Able to change array size, generate new arrays, sort arrays, change search term and of course, select algorithms:
 </p>
 
 <p align="center">
