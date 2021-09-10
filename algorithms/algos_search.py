@@ -6,6 +6,7 @@ from colors import *
 def visualize(vis, res, array_size):
     """Visualizes the final result of search"""
 
+    # res can either be int or list depending on which algorithm called it. Requires different handling
     if isinstance(res, int):
         if res > -1:
             for i in range(array_size):
