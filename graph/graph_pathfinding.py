@@ -1,3 +1,8 @@
+import pygame
+from node import Square
+from queue import PriorityQueue
+import random
+import time
 
 
 '''
@@ -17,3 +22,13 @@ Maze can change size if window loses focus for a few seconds. Mainly with the la
     pygame.event.set_grab prevents mouse from leaving window but also prevents exists
     pygame.mouse.get_focused() potential elegant solution
 '''
+
+
+
+
+# For use in draw() function
+square_color, square_pos = square.draw_square()
+
+
+def draw_square(square_color, square_pos):
+    pygame.draw.rect(WINDOW, square_color, square_pos)
