@@ -93,83 +93,74 @@ def buttons_sliders():
         is_sorted = False
 
     def sel_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.selection(vis, array, array_size, pause_short, pause_mid)
         sel.disconnect(sel_cid)
 
     def ins_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.insertion(vis, array, array_size, pause_short)
         ins.disconnect(ins_cid)
 
     def bub_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.bubble(vis, array, array_size, pause_short)
         bub.disconnect(bub_cid)
 
     def heap_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.heap(vis, array, array_size, pause_short, pause_long)
         heap.disconnect(heap_cid)
 
     def quick_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.quick(vis, array, array_size, pause_short)
         quick.disconnect(quick_cid)
 
     def merge_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.merge(vis, array, array_size, pause_short)
         merge.disconnect(merge_cid)
 
     def tim_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.tim(vis, array, array_size, pause_short)
         tim.disconnect(tim_cid)
 
     def radix_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         delete_duplicates()
         sort.radix(vis, array, array_size, pause_short, pause_long)
         radix.disconnect(radix_cid)
 
     def bogo_sort(_):
-        global array, is_sorted
+        global is_sorted
         if is_sorted:
-            array = generate_array(0, 150, array_size)
-            set_graph()
+            update_array()
         is_sorted = True
         sort.bogo(vis, array, array_size, pause_short)
         bogo.disconnect(bogo_cid)
