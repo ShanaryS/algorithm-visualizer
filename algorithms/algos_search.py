@@ -3,11 +3,6 @@ from values import get_sqrt
 from colors import *
 
 
-"""Visualizer for major searching algorithms such as Binary, Exponential, and Fibonacci.
-Implemented with matplotlib and numpy.
-"""
-
-
 def visualize(vis, res, array_size):
     """Visualizes the final result of search"""
 

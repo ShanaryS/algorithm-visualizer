@@ -4,10 +4,6 @@ from values import generate_array
 from colors import *
 from algorithms import algos_search as search
 
-'''
-Need to update buttons each time call set_graph? Maybe fixes dragging slider
-Maybe decouple updating slide from immediately updating graph (async?)
-'''
 
 # Base variables
 array = generate_array(0, 150, 30)
@@ -18,14 +14,17 @@ key = 44
 vis = None                                              # Object that contains the graph
 pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
 pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
-hesitate = 1                                            # Pause before starting animations
+HESITATE = 0.5                                          # Pause before starting animations
 
 
 def set_graph(initialize=False):
     """Creates graph. Gets called each time it updates"""
 
     # Clears previous graph for update
-    update_vis()
+    plt.clf()
+    global vis
+    vis = plt.bar(labels, array, color=MPL_DEFAULT)
+    plt.subplots_adjust(left=0.15, bottom=0.3)
 
     # Shows 'x', 'y' or 'xy' axis
     show_axis()
@@ -38,15 +37,6 @@ def set_graph(initialize=False):
         plt.show()
     else:
         plt.draw()
-
-
-def update_vis():
-    """Updates the graph with new visualizations"""
-
-    global vis
-    plt.clf()
-    vis = plt.bar(labels, array, color=MPL_DEFAULT)
-    plt.subplots_adjust(left=0.15, bottom=0.3)
 
 
 # noinspection PyUnboundLocalVariable
@@ -111,35 +101,35 @@ def buttons_sliders():
 
     def linear_search(_):
         set_graph()
-        plt.pause(hesitate)
+        plt.pause(HESITATE)
         search.linear(vis, key, array, array_size, pause_short)
         linear.disconnect(linear_cid)
 
     def binary_search(_):
         array.sort()
         set_graph()
-        plt.pause(hesitate)
+        plt.pause(HESITATE)
         search.binary(vis, key, array, array_size, pause_long)
         binary.disconnect(binary_cid)
 
     def jump_search(_):
         array.sort()
         set_graph()
-        plt.pause(hesitate)
+        plt.pause(HESITATE)
         search.jump(vis, key, array, array_size, pause_short, pause_long)
         jump.disconnect(jump_cid)
 
     def exp_search(_):
         array.sort()
         set_graph()
-        plt.pause(hesitate)
+        plt.pause(HESITATE)
         search.exponential(vis, key, array, array_size, pause_long)
         exp.disconnect(exp_cid)
 
     def fib_search(_):
         array.sort()
         set_graph()
-        plt.pause(hesitate)
+        plt.pause(HESITATE)
         search.fibonacci(vis, key, array, array_size, pause_long)
         fib.disconnect(fib_cid)
 
