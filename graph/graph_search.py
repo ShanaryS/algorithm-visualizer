@@ -67,7 +67,7 @@ def buttons_sliders():
     linear = Button(ax=linear_loc, label='Linear', color=MPL_GOLD)
 
     # These functions define the action on click
-    def generate_new_array(_):  # Argument is typically called event but using _ to suppress errors
+    def generate_new_array(_):
         global array
         array = generate_array(0, 150, array_size)
         set_graph()
