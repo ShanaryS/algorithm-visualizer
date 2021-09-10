@@ -1,3 +1,4 @@
+"""Contains sorting algorithms"""
 import matplotlib.pyplot as plt
 from sort.colors import *
 from sort.values import generate_array, get_factorial
