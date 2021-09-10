@@ -36,7 +36,7 @@ def set_graph():
 
 
 def buttons_sliders():
-    """Handles buttons and sliders on the displayed on the graph"""
+    """Handles buttons and sliders to display on the graph"""
 
     global array_size
 
