@@ -23,3 +23,6 @@ MPL_CYAN = 'cyan'          # Special value unique to that algorithm
 MPL_GREEN = 'green'        # Result
 MPL_RED = 'red'            # Checked but false
 MPL_BLACK = 'black'        # Misc
+MPL_ORANGE = 'orange'      # Used for buttons
+MPL_YELLOW = 'yellow'      # Used for buttons
+MPL_TOMATO = 'tomato'      # Used for buttons

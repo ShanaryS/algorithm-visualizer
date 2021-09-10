@@ -64,7 +64,7 @@ def buttons_sliders():
     fib_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
     fib = Button(ax=fib_loc, label='Fibonacci', color=MPL_GREEN)
     linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
-    linear = Button(ax=linear_loc, label='Linear', color=MPL_GOLD)
+    linear = Button(ax=linear_loc, label='Linear', color=MPL_YELLOW)
 
     # These functions define the action on click
     def generate_new_array(_):
