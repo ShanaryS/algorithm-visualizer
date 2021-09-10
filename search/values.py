@@ -2,6 +2,7 @@
 import numpy as np
 
 
+# Value to search for. Defaults to 44.
 KEY = 44
 
 
