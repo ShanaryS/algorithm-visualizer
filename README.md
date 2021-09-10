@@ -92,3 +92,6 @@ python run_sort_visualizer
 ```bash
 python run_search_visualizer
 ```
+
+## License
+[GPL-3.0](https://github.com/ShanaryS/algorithm-visualizer/blob/main/LICENSE)
