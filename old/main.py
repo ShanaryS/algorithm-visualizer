@@ -1,4 +1,3 @@
-# Need to copy from main.py
 from vis_search import SearchVisualizer
 from vis_sort import SortVisualizer
 from vis_path import PathfindingVisualizer

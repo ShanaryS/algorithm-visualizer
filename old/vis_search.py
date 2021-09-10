@@ -416,12 +416,3 @@ class SearchVisualizer:
             i = -1
 
         return self.visualize(i)
-
-
-'''
-New features for the future:
-
-Refactor code. Split algos into a file. Remove unnecessary SearchingVisualizer class
-Maybe use time.sleep instead of plt.pause
-
-'''
