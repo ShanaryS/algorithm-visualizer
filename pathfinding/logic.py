@@ -2,6 +2,14 @@ from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, start_mid_end,
 from pathfinding.graph import *
 
 
+# Extra variables
+dijkstra_finished = False
+a_star_finished = False
+bi_dijkstra_finished = False
+maze = False   # Used to prevent drawing extra walls during maze
+ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
+
+
 def get_clicked_pos(pos):
     """Turns the location data of the mouse into location of squares"""
     y, x = pos

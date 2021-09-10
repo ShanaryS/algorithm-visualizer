@@ -40,13 +40,9 @@ vis_text_best_path = font.render("Laying best path...", True, VIS_COLOR)
 vis_text_recursive_maze = font.render("Generating recursive maze...", True, VIS_COLOR)
 vis_text_graph_size = font.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
 
-# Extra variables
-dijkstra_finished = False
-a_star_finished = False
-bi_dijkstra_finished = False
-maze = False   # Used to prevent drawing extra walls during maze
-ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
-wall_nodes = set()     # Used to reinstate walls after deletion for mazes and dragging
+
+# Used to reinstate walls after deletion for mazes and dragging
+wall_nodes = set()
 
 
 def set_graph():
@@ -91,6 +87,10 @@ def draw(graph, legend=False, display_update=True):
         pygame.display.update()
 
 
+def _draw_square(square_color, square_pos):
+    pygame.draw.rect(WINDOW, square_color, square_pos)
+
+
 def _draw_lines():
     """Helper function to define the properties of the horizontal and vertical graph lines"""
     for i in range(rows):
@@ -98,10 +98,6 @@ def _draw_lines():
                          (0, i * square_size), (WIDTH, i * square_size))
         pygame.draw.line(WINDOW, LINE_COLOR,
                          (i * square_size, 0), (i * square_size, WIDTH))
-
-
-def _draw_square(square_color, square_pos):
-    pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
 def _draw_legend():
