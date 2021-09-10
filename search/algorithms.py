@@ -1,3 +1,4 @@
+"""Contains searching algorithms"""
 import matplotlib.pyplot as plt
 from search.colors import *
 from search.values import get_sqrt

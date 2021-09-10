@@ -1,4 +1,4 @@
-"""Functions for generating arrays, random values, and misc operations"""
+"""Functions and constants needed by multiple modules"""
 import numpy as np
 
 

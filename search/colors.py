@@ -1,4 +1,4 @@
-"""Colors used for visualizations"""
+"""Colors needed for visualizations"""
 
 
 # Matplotlib colors
