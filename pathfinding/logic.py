@@ -346,14 +346,14 @@ def main():
 '''
 New features for the future:
 
-Update only affect nodes rather than entire screen to improve performance (currently very good already)
-    Especially when drawing lines. Currently creating mid and large graphs is slow
 Instantly update algo when draw wall after completion, much like dragging nodes
 Add prim maze and sticky mud
 
 
 Bugs to fix:
 
+Instant algo even after clearing graph
+Crash when changing graph size sometimes
 When clicking to remove start/end node with mid node and reinstating it on completed algo, doesn't update properly
 Bi-directional dijkstra only draws best_path when edges of swarms are touching. Only manifests with mid nodes
 Maze can change size if window loses focus for a few seconds. Mainly with the large maze.
