@@ -1,7 +1,7 @@
 """Colors needed for visualization"""
 
 
-# Pygame colors (Pathfinding)
+# Pygame colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREY = (128, 128, 128)
