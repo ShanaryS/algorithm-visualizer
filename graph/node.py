@@ -1,18 +1,19 @@
 from calc.colors import *
+from calc.values import ROWS, SQUARE_SIZE
 
 
 class Square:
     """Defines the properties needed for each node on graph"""
 
     def __init__(self, row, col):
-        self.rows = self.rows
-        self.square_size = self.square_size
+        self.rows = ROWS
+        self.square_size = SQUARE_SIZE
         self.row = row
         self.col = col
         self.x = self.row * self.square_size
         self.y = self.col * self.square_size
         self.neighbours = []
-        self.color = MPL_DEFAULT
+        self.color = DEFAULT_COLOR
 
     def __lt__(self, other):
         """Allows comparison of squares"""

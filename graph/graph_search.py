@@ -34,9 +34,10 @@ def set_graph(initialize=False):
     buttons_sliders(initialize=initialize)
 
 
-# noinspection PyUnboundLocalVariable
 def buttons_sliders(initialize=False):
     """Handles buttons and sliders on the displayed on the graph"""
+
+    global array_size, key
 
     # Creates buttons with their locations, text, and color
     generate_loc = plt.axes([0.2, 0.2, 0.3, 0.05])  # left, bottom, width, height

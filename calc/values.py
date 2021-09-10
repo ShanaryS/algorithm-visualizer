@@ -4,6 +4,12 @@ import numpy as np
 from collections import OrderedDict
 import random
 
+# Default counts for pathfinding grpah. Defining here so that both graph_pathfinding.py and node.py has access.
+# Recursive division only works on certain row values. 22,23,46,47,94,95.
+ROWS = 46
+WIDTH_HEIGHT = 800
+SQUARE_SIZE = WIDTH_HEIGHT / ROWS
+
 
 def generate_array(low, high, size=None):
     """Returns generated numbers to be used for search and sort visualizations"""
