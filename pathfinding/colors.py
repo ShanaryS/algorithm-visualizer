@@ -1,3 +1,4 @@
+"""Colors needed for visualization"""
 
 
 # Pygame colors (Pathfinding)

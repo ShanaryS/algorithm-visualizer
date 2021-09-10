@@ -1,3 +1,4 @@
+"""Functions and constants needed by multiple modules"""
 import random
 
 

@@ -1,3 +1,4 @@
+"""Handles inputs from user"""
 from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze
 from pathfinding.graph import *
 
