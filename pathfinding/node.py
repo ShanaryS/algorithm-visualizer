@@ -1,5 +1,5 @@
-from calc.colors import *
-from calc.values import ROWS, SQUARE_SIZE
+from pathfinding.colors import *
+from pathfinding.values import ROWS, SQUARE_SIZE
 
 
 class Square:

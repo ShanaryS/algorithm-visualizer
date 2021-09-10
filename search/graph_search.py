@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-from algorithms import algos_search as search
-from calc.colors import *
-from calc.values import generate_array
+from search import algos_search as search
+from search.colors import *
+from search.values import generate_array
 
 
 # Base variables
