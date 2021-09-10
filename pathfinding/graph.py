@@ -89,6 +89,7 @@ def draw(graph, legend=False, display_update=True):
 
 
 def _draw_square(square_color, square_pos):
+    """Draws square with color and correct positioning"""
     pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
