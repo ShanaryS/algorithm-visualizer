@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
 from algorithms import algos_sort as sort
-from colors import *
-from values import generate_array, remove_duplicates
+from math.colors import *
+from math.values import generate_array, remove_duplicates
 
 
 # Base variables
