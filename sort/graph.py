@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
-from sort import algos_sort as sort
+from sort import algorithms as sort
 from sort.colors import *
 from sort.values import generate_array, remove_duplicates
 

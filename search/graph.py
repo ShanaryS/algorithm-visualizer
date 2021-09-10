@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-from search import algos_search as search
+from search import algorithms as search
 from search.colors import *
 from search.values import generate_array
 
