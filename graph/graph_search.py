@@ -8,7 +8,7 @@ from algorithms import algos_search as search
 # Base variables
 array = generate_array(0, 150, 30)
 array_size = len(array)
-labels = [label for label in range(array_size)]
+labels = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
 key = 44
 
 vis = None                                              # Object that contains the graph
@@ -146,6 +146,17 @@ def buttons_sliders():
     fib_cid = fib.on_clicked(fib_search)
 
 
+def update_array():
+    """Used for updating slider of array size"""
+
+    global array, array_size, labels, pause_short, pause_long
+    array = generate_array(0, 150, array_size)
+    labels = [label for label in range(array_size)]
+    pause_short = 150 / array_size * 0.01
+    pause_long = (pause_short * 3) + (array_size * 0.005)
+    set_graph()
+
+
 def show_axis(axis='None'):
     """Enable showing x and y axis"""
 
@@ -163,14 +174,3 @@ def show_axis(axis='None'):
         plt.axis('on')
         plt.gca().axes.xaxis.set_visible(True)
         plt.gca().axes.xaxis.set_visible(True)
-
-
-def update_array():
-    """Used for updating slider of array size"""
-
-    global array, array_size, labels, pause_short, pause_long
-    array = generate_array(0, 150, array_size)
-    labels = [label for label in range(array_size)]
-    pause_short = 150 / array_size * 0.01
-    pause_long = (pause_short * 3) + (array_size * 0.005)
-    set_graph()
