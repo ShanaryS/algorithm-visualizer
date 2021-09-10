@@ -1,7 +1,7 @@
 """Colors used for visualizations"""
 
 
-# Matplotlib colors (Search and Sort)
+# Matplotlib colors
 MPL_DEFAULT = 'blue'
 MPL_GOLD = 'gold'          # Checking
 MPL_MAGENTA = 'magenta'    # Pivot
