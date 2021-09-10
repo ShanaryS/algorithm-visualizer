@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-from values import generate_array
-from colors import *
 from algorithms import algos_search as search
+from colors import *
+from values import generate_array
 
 
 # Base variables
@@ -15,6 +15,7 @@ vis = None                                              # Object that contains t
 pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
 pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
 HESITATE = 0.5                                          # Pause before starting animations
+# Change update array if changing formula for pause
 
 
 def set_graph(initialize=False):

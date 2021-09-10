@@ -1,13 +1,8 @@
-'''
-Remove duplicates from all arrays?
-'''
-
-
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
+from algorithms import algos_sort as sort
 from colors import *
 from values import generate_array, remove_duplicates
-from algorithms import algos_sort as sort
 
 
 # Base variables
@@ -20,6 +15,7 @@ vis = None                                              # Object that contains t
 pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
 pause_mid = (pause_short * 3) + (array_size * 0.001)    # Needed for some algos
 pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
+# Change update_pause() function if changing formula for pause
 
 
 def set_graph(initialize=False):
@@ -199,9 +195,7 @@ def update_array():
     global array, array_size, labels, pause_short, pause_mid, pause_long
     array = generate_array(0, 150, array_size)
     labels = [label for label in range(array_size)]
-    pause_short = 150 / array_size * 0.01
-    pause_mid = (pause_short * 3) + (array_size * 0.001)
-    pause_long = (pause_short * 3) + (array_size * 0.005)
+    update_pause()
     set_graph()
 
 
@@ -212,10 +206,15 @@ def delete_duplicates():
     array = remove_duplicates(array)
     array_size = len(array)
     labels = [label for label in range(array_size)]
+    update_pause()
+    set_graph()
+
+
+def update_pause():
+    global array, array_size, pause_short, pause_mid, pause_long
     pause_short = 150 / array_size * 0.01
     pause_mid = (pause_short * 3) + (array_size * 0.001)
     pause_long = (pause_short * 3) + (array_size * 0.005)
-    set_graph()
 
 
 def show_axis(axis='None'):
