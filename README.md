@@ -1,4 +1,5 @@
 # Algorithm Visualizer
+
 This is a tool to visualize the operations of the most popular pathfinding, sort, and search algorithms. This is helpful to anyone trying to understand these algorithms or even to someone who has already grasped them. This was implemented fully using NumPy and Matplotlib for Search and Sort visualizations, and Pygame for pathfinding visualizations. All done in Python, fully interactive for all algorithms.
 ***
 
@@ -45,3 +46,49 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 <p align="center">
   <img src="https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif" alt="animated" />
 </p>
+
+## Installation
+
+Clone this repo and cd into it:
+
+```bash
+git clone https://github.com/ShanaryS/algorithm-visualizer.git
+cd algorithm-visualizer
+```
+
+Create and activate your virtual environment:
+
+* Windows:
+```bash
+virtualenv env
+.\env\Scripts\activate
+```
+
+* MacOS/Linux:
+```bash
+virtualenv --no-site-packages env
+source env/bin/activate
+```
+
+Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+# Usage
+
+* Pathfinding Visualizer:
+```bash
+python run_pathfinding_visualizer
+```
+
+* Sort Visualizer:
+```bash
+python run_sort_visualizer
+```
+
+* Search Visualizer:
+```bash
+python run_search_visualizer
+```
