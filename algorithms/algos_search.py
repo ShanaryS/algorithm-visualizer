@@ -257,12 +257,3 @@ def fibonacci(vis_, key, array, array_size, pause_long):
         i = -1
 
     return visualize(vis_, i, array_size)
-
-
-'''
-New features for the future:
-
-Refactor code. Split algos into a file. Remove unnecessary SearchingVisualizer class
-Maybe use time.sleep instead of plt.pause
-
-'''

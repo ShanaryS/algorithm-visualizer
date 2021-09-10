@@ -5,11 +5,6 @@ from colors import *
 from algorithms import algos_search as search
 
 '''
-Test circular imports with vis, else pass vis as arg
-Does algos need matplotlib for plt.pause?
-Replace plt.pause with time.sleep()
-Rename values to array
-Remove array size from buttons_sliders. Seems redundant
 Need to update buttons each time call set_graph? Maybe fixes dragging slider
 Maybe decouple updating slide from immediately updating graph (async?)
 '''
