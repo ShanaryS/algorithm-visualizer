@@ -199,6 +199,7 @@ def delete_duplicates():
 
 
 def update_pause():
+    """Updates pause values"""
     global pause_short, pause_mid, pause_long
     pause_short = 150 / array_size * 0.01
     pause_mid = (pause_short * 3) + (array_size * 0.001)
