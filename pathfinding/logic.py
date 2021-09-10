@@ -1,6 +1,8 @@
 """Handles inputs from user"""
+import pygame
 from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze
-from pathfinding.graph import *
+from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, HEIGHT
+from pathfinding.graph import change_graph_size, wall_nodes, square_size, rows
 
 
 # Extra variables
