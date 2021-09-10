@@ -26,6 +26,7 @@ class Square:
 
     def update_neighbours(self, graph):
         """Updates the neighbours in the four cardinal directions"""
+
         self.neighbours = []
         if self.row < self.rows-1 and not graph[self.row + 1][self.col].is_wall():  # Down
             self.neighbours.append(graph[self.row+1][self.col])
@@ -124,6 +125,7 @@ class Square:
 
     def update_values(self, rows, square_size):
         """Updates the attributes of node. Used when changing graph size"""
+
         self.rows = rows
         self.square_size = square_size
         self.x = self.row * self.square_size

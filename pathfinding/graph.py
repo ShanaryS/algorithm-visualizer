@@ -48,6 +48,7 @@ wall_nodes = set()
 
 def set_graph():
     """Creates the graph object that stores the location of all the squares"""
+
     graph = []
     for i in range(rows):
         graph.append([])
@@ -95,6 +96,7 @@ def _draw_square(square_color, square_pos):
 
 def _draw_lines():
     """Helper function to define the properties of the horizontal and vertical graph lines"""
+
     for i in range(rows):
         pygame.draw.line(WINDOW, LINE_COLOR,
                          (0, i * square_size), (WIDTH, i * square_size))
@@ -104,6 +106,7 @@ def _draw_lines():
 
 def _draw_legend():
     """Helper function to define the location of the legend"""
+
     # Left legend
     WINDOW.blit(legend_add_node, (2, 15*53.1 + 3))
     WINDOW.blit(legend_add_mid_node, (2, 15*54.1 + 3))

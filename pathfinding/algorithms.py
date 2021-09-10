@@ -139,6 +139,7 @@ def a_star(graph, start, end, ignore_node=None, draw_best_path=True, visualize=T
 
 def heuristic(pos1, pos2):
     """Used by A* to prioritize traveling towards next node"""
+
     x1, y1 = pos1
     x2, y2 = pos2
     return abs(x1 - x2) + abs(y1 - y2)
