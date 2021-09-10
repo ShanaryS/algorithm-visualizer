@@ -73,7 +73,7 @@ def buttons_sliders():
 
     # These functions define the action on click
     def generate_new_array(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         array = generate_array(0, 150, array_size)
         set_graph()
         is_sorted = False
@@ -93,7 +93,7 @@ def buttons_sliders():
         is_sorted = False
 
     def sel_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -102,7 +102,7 @@ def buttons_sliders():
         sel.disconnect(sel_cid)
 
     def ins_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -111,7 +111,7 @@ def buttons_sliders():
         ins.disconnect(ins_cid)
 
     def bub_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -120,7 +120,7 @@ def buttons_sliders():
         bub.disconnect(bub_cid)
 
     def heap_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -129,7 +129,7 @@ def buttons_sliders():
         heap.disconnect(heap_cid)
 
     def quick_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -138,7 +138,7 @@ def buttons_sliders():
         quick.disconnect(quick_cid)
 
     def merge_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -147,7 +147,7 @@ def buttons_sliders():
         merge.disconnect(merge_cid)
 
     def tim_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -156,7 +156,7 @@ def buttons_sliders():
         tim.disconnect(tim_cid)
 
     def radix_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -166,7 +166,7 @@ def buttons_sliders():
         radix.disconnect(radix_cid)
 
     def bogo_sort(_):
-        global array, array_size, is_sorted
+        global array, is_sorted
         if is_sorted:
             array = generate_array(0, 150, array_size)
             set_graph()
@@ -192,7 +192,7 @@ def buttons_sliders():
 def update_array():
     """Used for updating slider of array size"""
 
-    global array, array_size, labels, pause_short, pause_mid, pause_long
+    global array, labels
     array = generate_array(0, 150, array_size)
     labels = [label for label in range(array_size)]
     update_pause()
@@ -202,7 +202,7 @@ def update_array():
 def delete_duplicates():
     """Removes duplicates in array"""
 
-    global array, array_size, labels, pause_short, pause_mid, pause_long
+    global array, array_size, labels
     array = remove_duplicates(array)
     array_size = len(array)
     labels = [label for label in range(array_size)]
@@ -211,7 +211,7 @@ def delete_duplicates():
 
 
 def update_pause():
-    global array, array_size, pause_short, pause_mid, pause_long
+    global pause_short, pause_mid, pause_long
     pause_short = 150 / array_size * 0.01
     pause_mid = (pause_short * 3) + (array_size * 0.001)
     pause_long = (pause_short * 3) + (array_size * 0.005)

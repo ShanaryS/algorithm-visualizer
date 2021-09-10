@@ -150,7 +150,7 @@ def buttons_sliders():
 def update_array():
     """Used for updating slider of array size"""
 
-    global array, array_size, labels, pause_short, pause_long
+    global array, labels, pause_short, pause_long
     array = generate_array(0, 150, array_size)
     labels = [label for label in range(array_size)]
     pause_short = 150 / array_size * 0.01
