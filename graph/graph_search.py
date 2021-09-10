@@ -31,17 +31,11 @@ def set_graph(initialize=False):
     show_axis()
 
     # Creates buttons and sliders used for interacting with graph. Must be after done after axis.
-    buttons_sliders()
-
-    # Displays the graph. plt.show() should only be ran once with plt.draw() used for updates.
-    if initialize:
-        plt.show()
-    else:
-        plt.draw()
+    buttons_sliders(initialize=initialize)
 
 
 # noinspection PyUnboundLocalVariable
-def buttons_sliders():
+def buttons_sliders(initialize=False):
     """Handles buttons and sliders on the displayed on the graph"""
 
     # Creates buttons with their locations, text, and color
@@ -145,6 +139,12 @@ def buttons_sliders():
     jump_cid = jump.on_clicked(jump_search)
     exp_cid = exp.on_clicked(exp_search)
     fib_cid = fib.on_clicked(fib_search)
+
+    # Displays the graph. plt.show() should only be ran once with plt.draw() used for updates.
+    if initialize:
+        plt.show()
+    else:
+        plt.draw()
 
 
 def update_array():

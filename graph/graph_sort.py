@@ -18,7 +18,7 @@ pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is n
 # Change update_pause() function if changing formula for pause
 
 
-def set_graph(initialize=False):
+def set_graph():
     """Creates graph. Gets called each time it updates"""
 
     # Clears previous graph for update
@@ -32,12 +32,6 @@ def set_graph(initialize=False):
 
     # Creates buttons and sliders used for interacting with graph. Must be after done after axis.
     buttons_sliders()
-
-    # Displays the graph. plt.show() should only be ran once with plt.draw() used for updates.
-    if initialize:
-        plt.show()
-    else:
-        plt.draw()
 
 
 # noinspection PyUnboundLocalVariable
@@ -82,7 +76,7 @@ def buttons_sliders():
     def stop_graph(_):
         global is_sorted
         plt.close()
-        set_graph(initialize=True)
+        set_graph()
         is_sorted = True
         stop.disconnect(stop_cid)
 
@@ -178,6 +172,9 @@ def buttons_sliders():
     tim_cid = tim.on_clicked(tim_sort)
     radix_cid = radix.on_clicked(radix_sort)
     bogo_cid = bogo.on_clicked(bogo_sort)
+
+    # Displays the graph. plt.show() should only be ran once with plt.draw() used for updates. But doesn't work.
+    plt.show()
 
 
 def update_array():

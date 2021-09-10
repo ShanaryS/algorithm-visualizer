@@ -4,6 +4,6 @@ from graph.graph_sort import set_graph as run_sort
 
 
 if __name__ == '__main__':
-    # run_search(initialize=True)
-    run_sort(initialize=True)
+    run_search(initialize=True)
+    # run_sort()
     # run_pathfinding()
