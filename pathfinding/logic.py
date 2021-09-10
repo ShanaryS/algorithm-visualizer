@@ -15,6 +15,7 @@ ordinal_node_clicked = []   # Used for dragging start and end once algos are fin
 
 def get_clicked_pos(pos):
     """Turns the location data of the mouse into location of squares"""
+
     y, x = pos
     row = int(y / square_size)
     col = int(x / square_size)
