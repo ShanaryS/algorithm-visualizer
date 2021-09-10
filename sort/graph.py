@@ -31,7 +31,7 @@ def set_graph():
     # Shows 'x', 'y' or 'xy' axis
     show_axis()
 
-    # Creates buttons and sliders used for interacting with graph. Must be after done after axis.
+    # Creates buttons and sliders used for interacting with graph. Must be done after axis.
     buttons_sliders()
 
 
