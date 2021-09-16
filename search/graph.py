@@ -8,14 +8,14 @@ from search.values import generate_array, KEY
 
 # Base variables
 array = generate_array(0, 150, 30)
-array_size = len(array)
-labels = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
-key = KEY
+array_size: int = len(array)
+labels: list[int] = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
+key: int = KEY
 
-vis = None                                              # Object that contains the graph
-pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
-pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
-HESITATE = 0.5                                          # Pause before starting animations
+vis: plt.bar = None                                              # Object that contains the graph
+pause_short: float = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
+pause_long: float = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
+HESITATE: float = 0.5                                          # Pause before starting animations
 # Change update array if changing formula for pause
 
 
@@ -64,23 +64,23 @@ def buttons_sliders(initialize=False) -> None:
     linear = Button(ax=linear_loc, label='Linear', color=MPL_YELLOW)
 
     # These functions define the action on click
-    def generate_new_array(_):
+    def generate_new_array(_) -> None:
         global array
         array = generate_array(0, 150, array_size)
         set_graph()
         generate.disconnect(generate_cid)
 
-    def stop_graph(_):
+    def stop_graph(_) -> None:
         plt.close()
         set_graph(initialize=True)
         stop.disconnect(stop_cid)
 
-    def change_size(_):
+    def change_size(_) -> None:
         global array_size
         array_size = int(size.val)
         update_array()
 
-    def change_key(_):
+    def change_key(_) -> None:
         global key
         try:
             input_num = int(text.text)
@@ -91,39 +91,39 @@ def buttons_sliders(initialize=False) -> None:
         except ValueError:
             key = 44
 
-    def sort_array(_):
+    def sort_array(_) -> None:
         array.sort()
         set_graph()
         sort.disconnect(sort_cid)
 
-    def linear_search(_):
+    def linear_search(_) -> None:
         set_graph()
         plt.pause(HESITATE)
         search.linear(vis, key, array, array_size, pause_short)
         linear.disconnect(linear_cid)
 
-    def binary_search(_):
+    def binary_search(_) -> None:
         array.sort()
         set_graph()
         plt.pause(HESITATE)
         search.binary(vis, key, array, array_size, pause_long)
         binary.disconnect(binary_cid)
 
-    def jump_search(_):
+    def jump_search(_) -> None:
         array.sort()
         set_graph()
         plt.pause(HESITATE)
         search.jump(vis, key, array, array_size, pause_short, pause_long)
         jump.disconnect(jump_cid)
 
-    def exp_search(_):
+    def exp_search(_) -> None:
         array.sort()
         set_graph()
         plt.pause(HESITATE)
         search.exponential(vis, key, array, array_size, pause_long)
         exp.disconnect(exp_cid)
 
-    def fib_search(_):
+    def fib_search(_) -> None:
         array.sort()
         set_graph()
         plt.pause(HESITATE)
