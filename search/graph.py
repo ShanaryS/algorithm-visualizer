@@ -19,7 +19,7 @@ HESITATE = 0.5                                          # Pause before starting 
 # Change update array if changing formula for pause
 
 
-def set_graph(initialize=False):
+def set_graph(initialize=False) -> None:
     """Creates graph. Gets called each time it updates"""
 
     # Clears previous graph for update
@@ -35,7 +35,7 @@ def set_graph(initialize=False):
     buttons_sliders(initialize=initialize)
 
 
-def buttons_sliders(initialize=False):
+def buttons_sliders(initialize=False) -> None:
     """Handles buttons and sliders to display on the graph"""
 
     global array_size, key
@@ -149,7 +149,7 @@ def buttons_sliders(initialize=False):
         plt.draw()
 
 
-def update_array():
+def update_array() -> None:
     """Used for updating slider of array size"""
 
     global array, labels, pause_short, pause_long
@@ -160,7 +160,7 @@ def update_array():
     set_graph()
 
 
-def show_axis(axis='None'):
+def show_axis(axis='None') -> None:
     """Enable showing x and y axis"""
 
     if axis == 'None':

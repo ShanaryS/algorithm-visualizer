@@ -2,11 +2,11 @@
 
 
 # Matplotlib colors
-MPL_DEFAULT = 'blue'
-MPL_GOLD = 'gold'          # Checking
-MPL_MAGENTA = 'magenta'    # Pivot
-MPL_CYAN = 'cyan'          # Special value unique to that algorithm
-MPL_GREEN = 'green'        # Result
-MPL_RED = 'red'            # Checked but false
-MPL_BLACK = 'black'        # Misc
-MPL_YELLOW = 'yellow'      # Used for buttons
+MPL_DEFAULT: str = 'blue'
+MPL_GOLD: str = 'gold'          # Checking
+MPL_MAGENTA: str = 'magenta'    # Pivot
+MPL_CYAN: str = 'cyan'          # Special value unique to that algorithm
+MPL_GREEN: str = 'green'        # Result
+MPL_RED: str = 'red'            # Checked but false
+MPL_BLACK: str = 'black'        # Misc
+MPL_YELLOW: str = 'yellow'      # Used for buttons
