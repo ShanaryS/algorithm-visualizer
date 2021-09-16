@@ -216,7 +216,6 @@ def fibonacci(vis_: plt.bar,
     fib_minus_2: int = 0
     fib_minus_1: int = 1
     fib: int = fib_minus_1 + fib_minus_2
-    i: int = 1
 
     vis_[fib_minus_2].set_color(MPL_CYAN)
     plt.pause(pause_long)
@@ -233,7 +232,7 @@ def fibonacci(vis_: plt.bar,
     index: int = -1
 
     while fib > 1:
-        i = min(index + fib_minus_2, (array_size - 1))
+        i: int = min(index + fib_minus_2, (array_size - 1))
 
         vis_[i].set_color(MPL_MAGENTA)
         plt.pause(pause_long)
