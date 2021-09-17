@@ -1,4 +1,6 @@
 """Contains searching algorithms"""
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 from search.colors import *
