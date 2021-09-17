@@ -1,4 +1,6 @@
 """Contains pathfinding and maze generation algorithms"""
+
+
 import pygame
 from pathfinding.colors import *
 from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows

@@ -1,4 +1,6 @@
 """Draws and updates graph for visualization"""
+
+
 import pygame
 from pathfinding.colors import *
 from pathfinding.values import ROWS, WIDTH_HEIGHT, SQUARE_SIZE

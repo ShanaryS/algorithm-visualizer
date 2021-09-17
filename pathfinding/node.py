@@ -1,4 +1,6 @@
 """Creates square objects that drives the visualizations"""
+
+
 from pathfinding.colors import *
 from pathfinding.values import ROWS, SQUARE_SIZE
 
