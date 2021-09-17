@@ -1,10 +1,19 @@
 """Contains sorting algorithms"""
+
+
 import matplotlib.pyplot as plt
+import numpy as np
 from sort.colors import *
 from sort.values import generate_array, get_factorial
 
 
-def selection(vis_, array, array_size, pause_short, pause_mid):
+def selection(vis_: plt.bar,
+              array: np.ndarray,
+              array_size: int,
+              pause_short: float,
+              pause_mid: float) \
+              -> None:
+
     """Goes through list comparing values of the current number to all values after, swapping as needed.
     Complexity: Time - O(n^2), Space - O(1), Unstable
     """
@@ -44,7 +53,12 @@ def selection(vis_, array, array_size, pause_short, pause_mid):
     plt.draw()
 
 
-def insertion(vis_, array, array_size, pause_short):
+def insertion(vis_: plt.bar,
+              array: np.ndarray,
+              array_size: int,
+              pause_short: float) \
+              -> None:
+
     """Splits input into the sorted and unsorted parts. Places unsorted elements to the correct position.
     Complexity: Time - O(n^2), Space - O(1), Stable
     """
@@ -81,7 +95,12 @@ def insertion(vis_, array, array_size, pause_short):
     plt.draw()
 
 
-def bubble(vis_, array, array_size, pause_short):
+def bubble(vis_: plt.bar,
+           array: np.ndarray,
+           array_size: int,
+           pause_short: float) \
+           -> None:
+
     """Swaps adjacent elements if they are in the wrong order.
     Repeats n-1 times with max index to check decreasing by 1.
     Complexity: Time - O(n^2), Space - O(1), Stable
@@ -112,7 +131,13 @@ def bubble(vis_, array, array_size, pause_short):
     plt.draw()
 
 
-def heap(vis_, array, array_size, pause_short, pause_long):
+def heap(vis_: plt.bar,
+         array: np.ndarray,
+         array_size: int,
+         pause_short: float,
+         pause_long: float) \
+         -> None:
+
     """Converts input into a max heap data structure and pops values.
     Complexity: Time - O(nlog(n)), Space - O(1), Unstable
     """
@@ -149,7 +174,15 @@ def heap(vis_, array, array_size, pause_short, pause_long):
     plt.draw()
 
 
-def _heap(vis_, array, pause_short, length, i):
+def _heap(vis_: plt.bar,
+          array: np.ndarray,
+          pause_short: float,
+          length: int,
+          i: int) \
+          -> None:
+
+    """Helper function for heap"""
+
     largest = i
     left = 2 * i + 1
     right = 2 * i + 2
@@ -187,7 +220,14 @@ def _heap(vis_, array, pause_short, length, i):
         vis_[right].set_color(MPL_DEFAULT)
 
 
-def quick(vis_, array, array_size, pause_short, start=0, end=-1):
+def quick(vis_: plt.bar,
+          array: np.ndarray,
+          array_size: int,
+          pause_short: float,
+          start: int = 0,
+          end: int = -1) \
+          -> None:
+
     """Sets a pivot value and places every value below the pivot before and all values greater after.
     Repeats recursively until only single element partitions remains.
     Complexity: Time - O(nlog(n)), Space - O(log(n)), Unstable
@@ -211,7 +251,15 @@ def quick(vis_, array, array_size, pause_short, start=0, end=-1):
         plt.draw()
 
 
-def _quick(vis_, array, pause_short, start, end):
+def _quick(vis_: plt.bar,
+           array: np.ndarray,
+           pause_short: float,
+           start: int,
+           end: int) \
+           -> int:
+
+    """Helper function for quick"""
+
     mid = start + (end - start) // 2
     pivot = array[mid]
 
@@ -273,7 +321,14 @@ def _quick(vis_, array, pause_short, start, end):
     return high
 
 
-def merge(vis_, array, array_size, pause_short, i=0, key=-1):
+def merge(vis_: plt.bar,
+          array: np.ndarray,
+          array_size: int,
+          pause_short: float,
+          i: int = 0,
+          key: int = -1) \
+          -> None:
+
     """Recursively splits input in halves. Sorts each element at each level bottom up.
     Complexity: Time - O(nlog(n)), Space - O(n), Stable
     """
@@ -293,7 +348,17 @@ def merge(vis_, array, array_size, pause_short, i=0, key=-1):
         plt.draw()
 
 
-def _merge(vis_, array, array_size, pause_short, i, j, key):
+def _merge(vis_: plt.bar,
+           array: np.ndarray,
+           array_size: int,
+           pause_short: float,
+           i: int,
+           j: int,
+           key: int) \
+           -> None:
+
+    """Helper function for merge"""
+
     merged_size = key - i + 1
     merged_numbers = [0] * merged_size
     merge_pos = 0
@@ -387,7 +452,13 @@ def _merge(vis_, array, array_size, pause_short, i, j, key):
         array[i + merge_pos] = merged_numbers[merge_pos]
 
 
-def tim(vis_, array, array_size, pause_short):      # Seems to use insertion too much. Possibly a bug.
+# Seems to use insertion too much. Possibly a bug.
+def tim(vis_: plt.bar,
+        array: np.ndarray,
+        array_size: int,
+        pause_short: float) \
+        -> None:
+
     """Combination of merge sort and insertion sort.
     Divides input into blocks, sorts using insertion, combines using merge.
     Complexity: Time - O(nlog(n)), Space - O(1), Stable
@@ -409,10 +480,12 @@ def tim(vis_, array, array_size, pause_short):      # Seems to use insertion too
             if mid < right:
                 _merge(vis_, array, array_size, pause_short, left, mid, right)
 
-        size = 2 * size
+        size *= 2
 
 
-def _min_run(n):
+def _min_run(n: int) -> int:
+    """Minimum size needed for merge sort, else insertion sort"""
+
     MIN_MERGE = 51
 
     r = 0
@@ -422,7 +495,13 @@ def _min_run(n):
     return n + r
 
 
-def radix(vis_, array, array_size, pause_short, pause_long):
+def radix(vis_: plt.bar,
+          array: np.ndarray,
+          array_size: int,
+          pause_short: float,
+          pause_long: float) \
+          -> None:
+
     """Only for integers. Places values into buckets from the least to most significant digit. Sorts with buckets
     Complexity: Time - O(n*k), Space - O(n+k), Stable
     """
@@ -432,6 +511,7 @@ def radix(vis_, array, array_size, pause_short, pause_long):
         buckets.append([])
 
     max_digits = _radix_max(array)
+    array = list(array)
     pow_10 = 1
 
     for digit_index in range(max_digits):
@@ -495,7 +575,9 @@ def radix(vis_, array, array_size, pause_short, pause_long):
     # set_graph()    # To reset so other funcs can use. Causes reset after it's finished.
 
 
-def _radix_max(array):
+def _radix_max(array: np.ndarray) -> int:
+    """Finds the number with the maximum amount of digits"""
+
     max_digits = 0
     for num in array:
         digit_count = _radix_length(num)
@@ -505,7 +587,9 @@ def _radix_max(array):
     return max_digits
 
 
-def _radix_length(num):
+def _radix_length(num: int) -> int:
+    """Finds the number of digits for a number"""
+
     if num == 0:
         return 1
 
@@ -516,7 +600,12 @@ def _radix_length(num):
     return digits
 
 
-def bogo(vis_, array, array_size, pause_short):
+def bogo(vis_: plt.bar,
+         array: np.ndarray,
+         array_size: int,
+         pause_short: float) \
+         -> None:
+
     """Equivalent of throwing a deck of cards in the air, picking them up randomly hoping it's sorted
     Complexity: Time - O(n*n!), Space - O(1), Unstable
     """
@@ -561,14 +650,18 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
     plt.draw()
 
 
-def _is_sorted(array, array_size):
+def _is_sorted(array: np.ndarray, array_size: int) -> bool:
+    """Checks if array is sorted"""
+
     for b in range(0, array_size - 1):
         if array[b] > array[b + 1]:
             return False
     return True
 
 
-def _shuffle(array, array_size):
+def _shuffle(array: np.ndarray, array_size: int) -> None:
+    """Shuffles array"""
+
     for i in range(0, array_size):
         r = generate_array(0, array_size-1)
         array[i], array[r] = array[r], array[i]

@@ -1,4 +1,6 @@
 """Draws and updates graph for visualization"""
+
+
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
 from sort import algorithms as sort
