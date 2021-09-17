@@ -48,7 +48,7 @@ vis_text_graph_size = font.render("Changing graph size... May take up to 30 seco
 wall_nodes = set()
 
 
-def set_graph():
+def set_graph() -> list:
     """Creates the graph object that stores the location of all the squares"""
 
     graph = []
@@ -66,7 +66,7 @@ def set_graph():
     return graph
 
 
-def draw(graph, legend=False, display_update=True):
+def draw(graph, legend=False, display_update=True) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Sets background of graph to white and legend to grey
@@ -91,12 +91,12 @@ def draw(graph, legend=False, display_update=True):
         pygame.display.update()
 
 
-def _draw_square(square_color, square_pos):
+def _draw_square(square_color, square_pos) -> None:
     """Draws square with color and correct positioning"""
     pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
-def _draw_lines():
+def _draw_lines() -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
     for i in range(rows):
@@ -106,7 +106,7 @@ def _draw_lines():
                          (i * square_size, 0), (i * square_size, WIDTH))
 
 
-def _draw_legend():
+def _draw_legend() -> None:
     """Helper function to define the location of the legend"""
 
     # Left legend
@@ -125,7 +125,7 @@ def _draw_legend():
 
 
 def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
-                  is_best_path=False, is_recursive_maze=False, is_graph_size=False):
+                  is_best_path=False, is_recursive_maze=False, is_graph_size=False) -> None:
     """Special text indicating some operation is being performed. No inputs are registered."""
 
     # Defines the center of the graph and legend for text placement
@@ -162,7 +162,7 @@ def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
     pygame.display.update()
 
 
-def reset_graph(graph):
+def reset_graph(graph) -> None:
     """Resets entire graph removing every square"""
 
     # Need to update these values
@@ -179,7 +179,7 @@ def reset_graph(graph):
             square.reset()
 
 
-def reset_algo(graph):
+def reset_algo(graph) -> None:
     """Resets algo colors while keeping ordinal nodes and walls"""
 
     # Need to update these values
@@ -197,7 +197,7 @@ def reset_algo(graph):
                 square.reset()
 
 
-def change_graph_size(new_row_size):
+def change_graph_size(new_row_size) -> list:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
