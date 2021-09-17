@@ -11,11 +11,11 @@ WIDTH_HEIGHT = 800
 SQUARE_SIZE = WIDTH_HEIGHT / ROWS
 
 
-def get_random_sample(population, k):
+def get_random_sample(population, k) -> list:
     """Returns a k length list of unique elements from population"""
     return random.sample(population, k)
 
 
-def get_randrange(start, stop):
+def get_randrange(start, stop) -> int:
     """Return a random int within a range"""
     return random.randrange(start, stop)

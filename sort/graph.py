@@ -210,7 +210,7 @@ def update_pause() -> None:
     pause_long = (pause_short * 3) + (array_size * 0.005)
 
 
-def show_axis(axis='None') -> None:
+def show_axis(axis: str = 'None') -> None:
     """Enable showing x and y axis"""
 
     if axis == 'None':
