@@ -11,7 +11,7 @@ WIDTH_HEIGHT: int = 800
 SQUARE_SIZE: float = WIDTH_HEIGHT / ROWS
 
 
-def get_random_sample(population: list, k: int) -> list:
+def get_random_sample(population: tuple, k: int) -> list:
     """Returns a k length list of unique elements from population"""
     return random.sample(population, k)
 

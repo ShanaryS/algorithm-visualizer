@@ -22,7 +22,7 @@ class Square:
         """Allows comparison of squares"""
         return False
 
-    def get_pos(self) -> tuple:
+    def get_pos(self) -> tuple[int, int]:
         """Returns the square location"""
         return self.row, self.col
 

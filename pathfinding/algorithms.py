@@ -6,27 +6,35 @@ from pathfinding.colors import *
 from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows
 from pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
+from node import Square
 
 
 # Sleep time (ms) between each best_path node when visualizing
-BEST_PATH_SLEEP = 3
+BEST_PATH_SLEEP: int = 3
 
 
-def dijkstra(graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+def dijkstra(graph: list,
+             start: Square,
+             end: Square,
+             ignore_node: Square = None,
+             draw_best_path: bool = True,
+             visualize: bool = True) \
+             -> [dict, bool]:
+
     """Code for the dijkstra algorithm"""
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
+    queue_pos: int = 0
     open_set = PriorityQueue()
     open_set.put((0, queue_pos, start))
-    open_set_hash = {start}
+    open_set_hash: set = {start}
 
     # Determine what is the best square to check
-    g_score = {square: float('inf') for row in graph for square in row}
+    g_score: dict = {square: float('inf') for row in graph for square in row}
     g_score[start] = 0
 
     # Keeps track of next node for every node in graph. A linked list basically.
-    came_from = {}
+    came_from: dict = {}
 
     # Continues until every node has been checked or best path found
     while not open_set.empty():
@@ -37,7 +45,7 @@ def dijkstra(graph, start, end, ignore_node=None, draw_best_path=True, visualize
                 pygame.quit()
 
         # Gets the square currently being checked
-        curr_square = open_set.get()[2]
+        curr_square: Square = open_set.get()[2]
         open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
@@ -50,7 +58,7 @@ def dijkstra(graph, start, end, ignore_node=None, draw_best_path=True, visualize
 
         # Decides the order of neighbours to check
         for nei in curr_square.neighbours:
-            temp_g_score = g_score[curr_square] + 1
+            temp_g_score: int = g_score[curr_square] + 1
 
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
@@ -74,23 +82,30 @@ def dijkstra(graph, start, end, ignore_node=None, draw_best_path=True, visualize
     return False
 
 
-def a_star(graph, start, end, ignore_node=None, draw_best_path=True, visualize=True):
+def a_star(graph: list,
+           start: Square,
+           end: Square,
+           ignore_node: Square = None,
+           draw_best_path: bool = True,
+           visualize: bool = True) \
+           -> [dict, bool]:
+
     """Code for the A* algorithm"""
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
+    queue_pos: int = 0
     open_set = PriorityQueue()
     open_set.put((0, queue_pos, start))
-    open_set_hash = {start}
+    open_set_hash: set = {start}
 
     # Determine what is the best square to check
-    g_score = {square: float('inf') for row in graph for square in row}
+    g_score: dict = {square: float('inf') for row in graph for square in row}
     g_score[start] = 0
-    f_score = {square: float('inf') for row in graph for square in row}
+    f_score: dict = {square: float('inf') for row in graph for square in row}
     f_score[start] = heuristic(start.get_pos(), end.get_pos())
 
     # Keeps track of next node for every node in graph. A linked list basically.
-    came_from = {}
+    came_from: dict = {}
 
     # Continues until every node has been checked or best path found
     while not open_set.empty():
@@ -101,7 +116,7 @@ def a_star(graph, start, end, ignore_node=None, draw_best_path=True, visualize=T
                 pygame.quit()
 
         # Gets the square currently being checked
-        curr_square = open_set.get()[2]
+        curr_square: Square = open_set.get()[2]
         open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
@@ -114,7 +129,7 @@ def a_star(graph, start, end, ignore_node=None, draw_best_path=True, visualize=T
 
         # Decides the order of neighbours to check
         for nei in curr_square.neighbours:
-            temp_g_score = g_score[curr_square] + 1
+            temp_g_score: int = g_score[curr_square] + 1
 
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
@@ -139,7 +154,7 @@ def a_star(graph, start, end, ignore_node=None, draw_best_path=True, visualize=T
     return False
 
 
-def heuristic(pos1, pos2):
+def heuristic(pos1: tuple, pos2: tuple) -> int:
     """Used by A* to prioritize traveling towards next node"""
 
     x1, y1 = pos1
@@ -147,25 +162,33 @@ def heuristic(pos1, pos2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def bi_dijkstra(graph, start, end, alt_color=False, ignore_node=None, draw_best_path=True, visualize=True):
+def bi_dijkstra(graph: list,
+                start: Square,
+                end: Square,
+                alt_color: bool = False,
+                ignore_node: Square = None,
+                draw_best_path: bool = True,
+                visualize: bool = True) \
+                -> [dict, bool]:
+
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
+    queue_pos: int = 0
     open_set = PriorityQueue()
-    open_set_hash = {start, end}
+    open_set_hash: set = {start, end}
     open_set.put((0, queue_pos, start, 'start'))
     queue_pos += 1
     open_set.put((0, queue_pos, end, 'end'))
 
     # Determine what is the best square to check
-    g_score = {square: float('inf') for row in graph for square in row}
+    g_score: dict = {square: float('inf') for row in graph for square in row}
     g_score[start] = 0
     g_score[end] = 0
 
     # Keeps track of next node for every node in graph. A linked list basically.
-    came_from_start = {}
-    came_from_end = {}
+    came_from_start: dict = {}
+    came_from_end: dict = {}
 
     # Continues until every node has been checked or best path found
     while not open_set.empty():
@@ -176,8 +199,8 @@ def bi_dijkstra(graph, start, end, alt_color=False, ignore_node=None, draw_best_
                 pygame.quit()
 
         # Gets the square currently being checked
-        temp = open_set.get()
-        curr_square = temp[2]
+        temp: tuple = open_set.get()
+        curr_square: Square = temp[2]
         open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
@@ -215,6 +238,7 @@ def bi_dijkstra(graph, start, end, alt_color=False, ignore_node=None, draw_best_
                 return came_from_start, came_from_end, nei, curr_square
 
         # Decides the order of neighbours to check for both swarms.
+        temp_g_score: int
         if temp[3] == 'start':
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
@@ -260,8 +284,14 @@ def bi_dijkstra(graph, start, end, alt_color=False, ignore_node=None, draw_best_
     return False
 
 
-def best_path_bi_dijkstra(graph, came_from_start, came_from_end,
-                          first_meet_node, second_meet_node, visualize=True):
+def best_path_bi_dijkstra(graph: list,
+                          came_from_start: dict,
+                          came_from_end: dict,
+                          first_meet_node: Square,
+                          second_meet_node: Square,
+                          visualize: bool = True) \
+                          -> None:
+
     """Used by bi_dijkstra to draw best path from in two parts"""
 
     # Fixes bug when can't find a path
@@ -281,7 +311,13 @@ def best_path_bi_dijkstra(graph, came_from_start, came_from_end,
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
 
 
-def best_path(graph, came_from, curr_square, reverse=False, visualize=True):
+def best_path(graph: list,
+              came_from: dict,
+              curr_square: Square,
+              reverse: bool = False,
+              visualize: bool = True) \
+              -> None:
+
     """Main algo for reconstructing path"""
 
     # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
@@ -289,7 +325,7 @@ def best_path(graph, came_from, curr_square, reverse=False, visualize=True):
         return
 
     # Puts node path into list so it's easier to traverse in either direction and choose start and end points
-    path = []
+    path: list = []
     while curr_square in came_from:
         curr_square = came_from[curr_square]
         path.append(curr_square)
@@ -311,7 +347,16 @@ def best_path(graph, came_from, curr_square, reverse=False, visualize=True):
                 draw_vis_text(is_best_path=True)
 
 
-def start_mid_end(graph, start, mid, end, is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False, visualize=True):
+def start_mid_end(graph: list,
+                  start: Square,
+                  mid: Square,
+                  end: Square,
+                  is_dijkstra: bool = False,
+                  is_a_star: bool = False,
+                  is_bi_dijkstra: bool = False,
+                  visualize: bool = True) \
+                  -> None:
+
     """Used if algos need to reach mid node first"""
 
     # Selects the correct algo to use
@@ -358,8 +403,18 @@ def start_mid_end(graph, start, mid, end, is_dijkstra=False, is_a_star=False, is
                                   mid_to_end[2], mid_to_end[3], visualize=visualize)
 
 
-def algo_no_vis(graph, start, end, is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False, alt_color=False,
-                ignore_node=None, draw_best_path=True, reset=True):
+def algo_no_vis(graph: list,
+                start: Square,
+                end: Square,
+                is_dijkstra: bool = False,
+                is_a_star: bool = False,
+                is_bi_dijkstra: bool = False,
+                alt_color: bool = False,
+                ignore_node: Square = None,
+                draw_best_path: bool = True,
+                reset: bool = True) \
+                -> [dict, bool]:
+
     """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
 
     global dijkstra_finished, a_star_finished, bi_dijkstra_finished
@@ -401,7 +456,11 @@ def algo_no_vis(graph, start, end, is_dijkstra=False, is_a_star=False, is_bi_dij
                                draw_best_path=False, visualize=False)
 
 
-def draw_recursive_maze(graph, chamber=None, visualize=True):
+def draw_recursive_maze(graph: list,
+                        chamber: tuple = None,
+                        visualize: bool = True) \
+                        -> None:
+
     """Creates maze using recursive division.
     Implemented following wikipedia guidelines.
     https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
@@ -409,19 +468,19 @@ def draw_recursive_maze(graph, chamber=None, visualize=True):
     """
 
     # Sets min size for division
-    division_limit = 3
+    division_limit: int = 3
 
     # Creates chambers to divide into
     if chamber is None:
-        chamber_width = len(graph)
-        chamber_height = len(graph[1])
-        chamber_left = 0
-        chamber_top = 0
+        chamber_width: int = len(graph)
+        chamber_height: int = len(graph[1])
+        chamber_left: int = 0
+        chamber_top: int = 0
     else:
-        chamber_width = chamber[2]
-        chamber_height = chamber[3]
-        chamber_left = chamber[0]
-        chamber_top = chamber[1]
+        chamber_width: int = chamber[2]
+        chamber_height: int = chamber[3]
+        chamber_left: int = chamber[0]
+        chamber_top: int = chamber[1]
 
     # Helps with location of chambers
     x_divide = int(chamber_width/2)
@@ -450,29 +509,29 @@ def draw_recursive_maze(graph, chamber=None, visualize=True):
         return
 
     # Defining limits on where to draw walls
-    top_left = (chamber_left, chamber_top, x_divide, y_divide)
-    top_right = (chamber_left + x_divide+1, chamber_top, chamber_width - x_divide-1, y_divide)
-    bottom_left = (chamber_left, chamber_top + y_divide+1, x_divide, chamber_height - y_divide-1)
-    bottom_right = (chamber_left + x_divide+1, chamber_top + y_divide+1,
-                    chamber_width - x_divide-1, chamber_height - y_divide-1)
+    top_left: tuple = (chamber_left, chamber_top, x_divide, y_divide)
+    top_right: tuple = (chamber_left + x_divide+1, chamber_top, chamber_width - x_divide-1, y_divide)
+    bottom_left: tuple = (chamber_left, chamber_top + y_divide+1, x_divide, chamber_height - y_divide-1)
+    bottom_right: tuple = (chamber_left + x_divide+1, chamber_top + y_divide+1,
+                           chamber_width - x_divide-1, chamber_height - y_divide-1)
 
     # Combines all chambers into one object
-    chambers = (top_left, top_right, bottom_left, bottom_right)
+    chambers: tuple = (top_left, top_right, bottom_left, bottom_right)
 
     # Defines location of the walls
-    left = (chamber_left, chamber_top + y_divide, x_divide, 1)
-    right = (chamber_left + x_divide+1, chamber_top + y_divide, chamber_width - x_divide-1, 1)
-    top = (chamber_left + x_divide, chamber_top, 1, y_divide)
-    bottom = (chamber_left + x_divide, chamber_top + y_divide+1, 1, chamber_height - y_divide-1)
+    left: tuple = (chamber_left, chamber_top + y_divide, x_divide, 1)
+    right: tuple = (chamber_left + x_divide+1, chamber_top + y_divide, chamber_width - x_divide-1, 1)
+    top: tuple = (chamber_left + x_divide, chamber_top, 1, y_divide)
+    bottom: tuple = (chamber_left + x_divide, chamber_top + y_divide+1, 1, chamber_height - y_divide-1)
 
     # Combines walls into one object
-    walls = (left, right, top, bottom)
+    walls: tuple = (left, right, top, bottom)
 
     # Number of gaps to leave in walls after each division into four sub quadrants.
-    num_gaps = 3
+    num_gaps: int = 3
 
     # Prevents drawing wall over gaps
-    gaps_to_offset = [x for x in range(num_gaps - 1, rows, num_gaps)]
+    gaps_to_offset: list = [x for x in range(num_gaps - 1, rows, num_gaps)]
 
     # Draws the gaps into the walls
     for wall in get_random_sample(walls, num_gaps):
