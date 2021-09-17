@@ -22,7 +22,7 @@ def selection(vis_: plt.bar,
         vis_[i].set_color(MPL_BLACK)
         plt.pause(pause_mid)
 
-        index = i
+        index: int = i
         for j in range(i + 1, array_size):
             vis_[j].set_color(MPL_GOLD)
             plt.pause(pause_short)
@@ -64,7 +64,7 @@ def insertion(vis_: plt.bar,
     """
 
     for i in range(1, array_size):
-        a = i
+        a: int = i
 
         vis_[a].set_color(MPL_RED)
 
@@ -183,9 +183,9 @@ def _heap(vis_: plt.bar,
 
     """Helper function for heap"""
 
-    largest = i
-    left = 2 * i + 1
-    right = 2 * i + 2
+    largest: int = i
+    left: int = 2 * i + 1
+    right: int = 2 * i + 2
 
     vis_[i].set_color(MPL_GOLD)
 
@@ -260,16 +260,16 @@ def _quick(vis_: plt.bar,
 
     """Helper function for quick"""
 
-    mid = start + (end - start) // 2
-    pivot = array[mid]
+    mid: int = start + (end - start) // 2
+    pivot: int = array[mid]
 
     vis_[mid].set_color(MPL_MAGENTA)
     plt.pause(pause_short)
 
-    low = start
-    high = end
+    low: int = start
+    high: int = end
 
-    done = False
+    done: bool = False
     while not done:
         while array[low] < pivot:
             if low != mid:
@@ -337,7 +337,7 @@ def merge(vis_: plt.bar,
         key = array_size - 1
 
     if i < key:
-        j = (i + key) // 2
+        j: int = (i + key) // 2
 
         merge(vis_, array, array_size, pause_short, i, j)
         merge(vis_, array, array_size, pause_short, j + 1, key)
@@ -359,14 +359,14 @@ def _merge(vis_: plt.bar,
 
     """Helper function for merge"""
 
-    merged_size = key - i + 1
-    merged_numbers = [0] * merged_size
-    merge_pos = 0
-    left_pos = i
-    right_pos = j + 1
+    merged_size: int = key - i + 1
+    merged_numbers: list = [0] * merged_size
+    merge_pos: int = 0
+    left_pos: int = i
+    right_pos: int = j + 1
 
     left_bar, right_bar = left_pos, right_pos
-    temp = array.copy()
+    temp: np.ndarray = array.copy()
 
     # Compares left and right merge and places lowest of each first.
     while left_pos <= j and right_pos <= key:
@@ -469,13 +469,13 @@ def tim(vis_: plt.bar,
     for start in range(0, array_size, min_run):
         insertion(vis_, array, array_size, pause_short)
 
-    size = min_run
+    size: int = min_run
     while size < array_size:
 
         for left in range(0, array_size, 2 * size):
 
-            mid = min(array_size - 1, left + size - 1)
-            right = min((left + 2 * size - 1), (array_size - 1))
+            mid: int = min(array_size - 1, left + size - 1)
+            right: int = min((left + 2 * size - 1), (array_size - 1))
 
             if mid < right:
                 _merge(vis_, array, array_size, pause_short, left, mid, right)
@@ -486,9 +486,9 @@ def tim(vis_: plt.bar,
 def _min_run(n: int) -> int:
     """Minimum size needed for merge sort, else insertion sort"""
 
-    MIN_MERGE = 51
+    MIN_MERGE: int = 51
 
-    r = 0
+    r: int = 0
     while n >= MIN_MERGE:
         r |= n & 1
         n >>= 1
@@ -506,21 +506,21 @@ def radix(vis_: plt.bar,
     Complexity: Time - O(n*k), Space - O(n+k), Stable
     """
 
-    buckets = []
+    buckets: list = []
     for i in range(10):
         buckets.append([])
 
-    max_digits = _radix_max(array)
+    max_digits: int = _radix_max(array)
     array = list(array)
-    pow_10 = 1
+    pow_10: int = 1
 
     for digit_index in range(max_digits):
         for num in array:
-            bucket_index = (abs(num) // pow_10) % 10
+            bucket_index: int = (abs(num) // pow_10) % 10
             buckets[bucket_index].append(num)
 
-        color = ''  # Used so each digit gets it's own color.
-        temp = array.copy()
+        color: str = ''  # Used so each digit gets it's own color.
+        temp: list[np.ndarray] = array.copy()
 
         if pow_10 == 1:
             color = MPL_CYAN
@@ -538,12 +538,12 @@ def radix(vis_: plt.bar,
 
         # Main tool for visualizing. Needs to be complicated to push values to the right rather than just replace.
         for b in range(array_size):
-            index = temp.index(array[b])
+            index: int = temp.index(array[b])
             vis_[b].set_color(color)
             vis_[index].set_color(MPL_GOLD)
             plt.pause(pause_short)
 
-            t = temp.copy()
+            t: list[np.ndarray] = temp.copy()
             temp[b] = array[b]
             for i in range(b, index):
                 temp[i + 1] = t[i]
@@ -558,10 +558,10 @@ def radix(vis_: plt.bar,
 
         plt.pause(pause_long)
 
-        pow_10 = pow_10 * 10
+        pow_10 *= 10
 
-    negatives = []
-    non_negatives = []
+    negatives: list = []
+    non_negatives: list = []
     for num in array:
         if num < 0:
             negatives.append(num)
@@ -578,7 +578,7 @@ def radix(vis_: plt.bar,
 def _radix_max(array: np.ndarray) -> int:
     """Finds the number with the maximum amount of digits"""
 
-    max_digits = 0
+    max_digits: int = 0
     for num in array:
         digit_count = _radix_length(num)
         if digit_count > max_digits:
@@ -593,7 +593,7 @@ def _radix_length(num: int) -> int:
     if num == 0:
         return 1
 
-    digits = 0
+    digits: int = 0
     while num != 0:
         digits += 1
         num = int(num / 10)
@@ -610,7 +610,8 @@ def bogo(vis_: plt.bar,
     Complexity: Time - O(n*n!), Space - O(1), Unstable
     """
 
-    EXPECTED_RUN_TIME = ((get_factorial(array_size)) / 4)
+    EXPECTED_RUN_TIME: float = ((get_factorial(array_size)) / 4)
+    text: str
 
     if EXPECTED_RUN_TIME < 60:
         text = f"This should be solved in about {round(EXPECTED_RUN_TIME, 2)} SECONDS"
