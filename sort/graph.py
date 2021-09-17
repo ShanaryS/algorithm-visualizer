@@ -10,18 +10,18 @@ from sort.values import generate_array, remove_duplicates
 
 # Base variables
 array = generate_array(0, 150, 30)
-array_size = len(array)
-labels = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
-is_sorted = False
+array_size: int = len(array)
+labels: list[int] = [label for label in range(array_size)]         # Name of xaxis values. Setting to index of array.
+is_sorted: bool = False
 
-vis = None                                              # Object that contains the graph
-pause_short = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
-pause_mid = (pause_short * 3) + (array_size * 0.001)    # Needed for some algos
-pause_long = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
+vis: plt.bar = None                                              # Object that contains the graph
+pause_short: float = 150 / array_size * 0.01                   # Sets pause length for visualizations. Relative to size.
+pause_mid: float = (pause_short * 3) + (array_size * 0.001)    # Needed for some algos
+pause_long: float = (pause_short * 3) + (array_size * 0.005)   # Longer pause that is needed for certain visualizations
 # Change update_pause() function if changing formula for pause
 
 
-def set_graph():
+def set_graph() -> None:
     """Creates graph. Gets called each time it updates"""
 
     # Clears previous graph for update
@@ -37,7 +37,7 @@ def set_graph():
     buttons_sliders()
 
 
-def buttons_sliders():
+def buttons_sliders() -> None:
     """Handles buttons and sliders to display on the graph"""
 
     global array_size
@@ -70,27 +70,27 @@ def buttons_sliders():
     bogo = Button(ax=bogo_loc, label='Bogosort', color=MPL_TOMATO)
 
     # These functions define the action on click
-    def generate_new_array(_):
+    def generate_new_array(_) -> None:
         global array, is_sorted
         array = generate_array(0, 150, array_size)
         set_graph()
         is_sorted = False
         generate.disconnect(generate_cid)
 
-    def stop_graph(_):
+    def stop_graph(_) -> None:
         global is_sorted
         plt.close()
         set_graph()
         is_sorted = True
         stop.disconnect(stop_cid)
 
-    def change_size(_):
+    def change_size(_) -> None:
         global array_size, is_sorted
         array_size = int(size.val)
         update_array()
         is_sorted = False
 
-    def sel_sort(_):
+    def sel_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -98,7 +98,7 @@ def buttons_sliders():
         sort.selection(vis, array, array_size, pause_short, pause_mid)
         sel.disconnect(sel_cid)
 
-    def ins_sort(_):
+    def ins_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -106,7 +106,7 @@ def buttons_sliders():
         sort.insertion(vis, array, array_size, pause_short)
         ins.disconnect(ins_cid)
 
-    def bub_sort(_):
+    def bub_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -114,7 +114,7 @@ def buttons_sliders():
         sort.bubble(vis, array, array_size, pause_short)
         bub.disconnect(bub_cid)
 
-    def heap_sort(_):
+    def heap_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -122,7 +122,7 @@ def buttons_sliders():
         sort.heap(vis, array, array_size, pause_short, pause_long)
         heap.disconnect(heap_cid)
 
-    def quick_sort(_):
+    def quick_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -130,7 +130,7 @@ def buttons_sliders():
         sort.quick(vis, array, array_size, pause_short)
         quick.disconnect(quick_cid)
 
-    def merge_sort(_):
+    def merge_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -138,7 +138,7 @@ def buttons_sliders():
         sort.merge(vis, array, array_size, pause_short)
         merge.disconnect(merge_cid)
 
-    def tim_sort(_):
+    def tim_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -146,7 +146,7 @@ def buttons_sliders():
         sort.tim(vis, array, array_size, pause_short)
         tim.disconnect(tim_cid)
 
-    def radix_sort(_):
+    def radix_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -155,7 +155,7 @@ def buttons_sliders():
         sort.radix(vis, array, array_size, pause_short, pause_long)
         radix.disconnect(radix_cid)
 
-    def bogo_sort(_):
+    def bogo_sort(_) -> None:
         global is_sorted
         if is_sorted:
             update_array()
@@ -181,7 +181,7 @@ def buttons_sliders():
     plt.show()
 
 
-def update_array():
+def update_array() -> None:
     """Used for updating slider of array size"""
 
     global array, labels
@@ -191,7 +191,7 @@ def update_array():
     set_graph()
 
 
-def delete_duplicates():
+def delete_duplicates() -> None:
     """Removes duplicates in array"""
 
     global array, array_size, labels
@@ -202,7 +202,7 @@ def delete_duplicates():
     set_graph()
 
 
-def update_pause():
+def update_pause() -> None:
     """Updates pause values"""
     global pause_short, pause_mid, pause_long
     pause_short = 150 / array_size * 0.01
@@ -210,7 +210,7 @@ def update_pause():
     pause_long = (pause_short * 3) + (array_size * 0.005)
 
 
-def show_axis(axis='None'):
+def show_axis(axis='None') -> None:
     """Enable showing x and y axis"""
 
     if axis == 'None':

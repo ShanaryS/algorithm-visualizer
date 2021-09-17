@@ -10,7 +10,7 @@ def generate_array(low: int, high: int, size: int = None) -> np.ndarray:
     return np.random.randint(low, high, size)
 
 
-def remove_duplicates(array: np.ndarray) -> list[np.ndarray]:
+def remove_duplicates(array: list) -> list:
     """Return list of array with no duplicates. Preserves order. Used by radix sort."""
     return list(OrderedDict.fromkeys(array))
 
