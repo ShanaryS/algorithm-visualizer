@@ -15,7 +15,7 @@ maze = False   # Used to prevent drawing extra walls during maze
 ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
 
 
-def get_clicked_pos(pos):
+def get_clicked_pos(pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
 
     y, x = pos
@@ -25,7 +25,7 @@ def get_clicked_pos(pos):
 
 
 # Put all game specific variables in here so it's easy to restart with main()
-def main():
+def main() -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
 
     global dijkstra_finished, a_star_finished, bi_dijkstra_finished, maze
