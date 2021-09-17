@@ -357,6 +357,7 @@ Add prim maze and sticky mud
 
 Bugs to fix:
 
+Dragging node seems to default to dijkstra
 Instant algo even after clearing graph
 Crash when changing graph size sometimes
 When clicking to remove start/end node with mid node and reinstating it on completed algo, doesn't update properly

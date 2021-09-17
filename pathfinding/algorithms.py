@@ -6,7 +6,7 @@ from pathfinding.colors import *
 from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows
 from pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
-from node import Square
+from pathfinding.node import Square
 
 
 # Sleep time (ms) between each best_path node when visualizing
