@@ -16,7 +16,7 @@ This is a tool to visualize the operations of the most popular pathfinding, sort
   <img src="https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif" alt="animated" />
 </p>
 
-Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with recursive divison animations or instantly:
+Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with recursive division animations or instantly:
 :-------------------------:|:-------------------------:
 ![Pathfinding Demo #2](https://user-images.githubusercontent.com/86130442/132563386-554f632d-e1bf-41f8-9e5d-1f6e06487186.gif)  |  ![Pathfinding Demo #3](https://user-images.githubusercontent.com/86130442/132563681-c7387b5b-f8b3-4e7b-9578-34428a0f850c.gif)
 
