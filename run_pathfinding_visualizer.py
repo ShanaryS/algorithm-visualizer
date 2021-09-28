@@ -3,7 +3,6 @@
 from pathfinding.logic import LogicState, run_pathfinding
 from pathfinding.graph import GraphState
 from pathfinding.algorithms import AlgoState
-from pathfinding.values import ROWS, SQUARE_SIZE
 
 
 def main() -> None:
