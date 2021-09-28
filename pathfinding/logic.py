@@ -195,109 +195,31 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
                         elif algo.bi_dijkstra_finished and lgc.start and lgc.mid and lgc.end:
                             start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
 
-            # Reset graph with "SPACE" on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    reset_graph(gph, algo)
+            '''Button handling below...'''
 
-                    lgc.start = None
-                    lgc.mid = None
-                    lgc.end = None
+            # Reset graph with "SPACE" on keyboard
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                reset_graph_button(gph, algo, lgc)
 
             # Run Dijkstra with "D" key on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d and lgc.start and lgc.end:
-
-                    # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(gph, algo)
-
-                    # Updates neighbours in case anything has changed
-                    for row in gph.graph:
-                        for square in row:
-                            square.update_neighbours(gph)
-
-                    # Necessary to for dragging nodes on completion
-                    algo.dijkstra_finished = True
-
-                    # Handles whether or not mid exists
-                    if lgc.mid:
-                        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_dijkstra=True)
-                    else:
-                        dijkstra(gph, algo, lgc.start, lgc.end)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_d and lgc.start and lgc.end:
+                dijkstra_button(gph, algo, lgc)
 
             # Run A* with "A" key on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a and lgc.start and lgc.end:
-
-                    # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(gph, algo)
-
-                    # Updates neighbours in case anything has changed
-                    for row in gph.graph:
-                        for square in row:
-                            square.update_neighbours(gph)
-
-                    # Necessary to for dragging nodes on completion
-                    algo.a_star_finished = True
-
-                    # Handles whether or not mid exists
-                    if lgc.mid:
-                        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_a_star=True)
-                    else:
-                        a_star(gph, algo, lgc.start, lgc.end)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_a and lgc.start and lgc.end:
+                a_star_button(gph, algo, lgc)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_b and lgc.start and lgc.end:
-
-                    # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(gph, algo)
-
-                    # Updates neighbours in case anything has changed
-                    for row in gph.graph:
-                        for square in row:
-                            square.update_neighbours(gph)
-
-                    # Necessary to for dragging nodes on completion
-                    algo.bi_dijkstra_finished = True
-
-                    # Handles whether or not mid exists
-                    if lgc.mid:
-                        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True)
-                    else:
-                        bi_dijkstra(gph, algo, lgc.start, lgc.end)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_b and lgc.start and lgc.end:
+                bi_dijkstra_button(gph, algo, lgc)
 
             # Draw recursive maze with "G" key on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_g:
-                    # Resets entire graph to prevent any unintended behaviour
-                    reset_graph(gph, algo)
-
-                    # Draw maze
-                    draw_recursive_maze(gph)
-
-                    # Necessary for handling dragging over barriers if in maze
-                    algo.maze = True
-
-                    lgc.start = None
-                    lgc.mid = None
-                    lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                recursive_maze_buttons(gph, algo, lgc)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_i:
-                    # Resets entire graph to prevent any unintended behaviour
-                    reset_graph(gph, algo)
-
-                    # Draw maze instantly with no visualizations
-                    draw_recursive_maze(gph, visualize=False)
-
-                    # Necessary for handling dragging over barriers if in maze
-                    algo.maze = True
-
-                    lgc.start = None
-                    lgc.mid = None
-                    lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+                recursive_maze_buttons(gph, algo, lgc, visualize=False)
 
             # Redraw small maze with "S" key on keyboard if not currently small
             if event.type == pygame.KEYDOWN and event.key == pygame.K_s and gph.rows != lgc.GRAPH_SMALL:
@@ -312,28 +234,12 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
                 graph_size_buttons(gph, algo, lgc, lgc.GRAPH_LARGE, 3)
 
             # Redraw large maze with "X" key on keyboard if not currently x-large
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_x:
-
-                    # If maze is already large, no need to redraw
-                    if not gph.has_img:
-                        # Changes graph size to large
-                        gph.has_img = True
-                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
-                        change_graph_size(gph, algo, 400)
-
-                        lgc.start = None
-                        lgc.mid = None
-                        lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_x and not gph.has_img:
+                load_img_to_graph(gph, algo, lgc)
 
             # Convert map into grid with "C" key
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    if gph.has_img:
-                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
-                        draw(gph, legend=True)
-                        gph.has_img = False
-                        set_squares_to_roads(gph)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
+                convert_img_to_squares(gph)
 
         clock.tick(lgc.FPS)
 
@@ -350,16 +256,110 @@ def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     return row, col
 
 
+def reset_ordinal_nodes(lgc: LogicState) -> None:
+    """Resets the ordinal nodes"""
+    lgc.start = lgc.mid = lgc.end = None
+
+
+def reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Resets the graph"""
+    reset_graph(gph, algo)
+    reset_ordinal_nodes(lgc)
+
+
+def dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Run the dijkstra algorithm"""
+
+    # Resets algo visualizations without removing ordinal nodes or walls
+    reset_algo(gph, algo)
+
+    # Updates neighbours in case anything has changed
+    for row in gph.graph:
+        for square in row:
+            square.update_neighbours(gph)
+
+    # Necessary to for dragging nodes on completion
+    algo.dijkstra_finished = True
+
+    # Handles whether or not mid exists
+    if lgc.mid:
+        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_dijkstra=True)
+    else:
+        dijkstra(gph, algo, lgc.start, lgc.end)
+
+
+def a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Runs the A* algorithm"""
+
+    # Resets algo visualizations without removing ordinal nodes or walls
+    reset_algo(gph, algo)
+
+    # Updates neighbours in case anything has changed
+    for row in gph.graph:
+        for square in row:
+            square.update_neighbours(gph)
+
+    # Necessary to for dragging nodes on completion
+    algo.a_star_finished = True
+
+    # Handles whether or not mid exists
+    if lgc.mid:
+        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_a_star=True)
+    else:
+        a_star(gph, algo, lgc.start, lgc.end)
+
+
+def bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Runs the Bi-Directional Dijkstra algorithm"""
+
+    # Resets algo visualizations without removing ordinal nodes or walls
+    reset_algo(gph, algo)
+
+    # Updates neighbours in case anything has changed
+    for row in gph.graph:
+        for square in row:
+            square.update_neighbours(gph)
+
+    # Necessary to for dragging nodes on completion
+    algo.bi_dijkstra_finished = True
+
+    # Handles whether or not mid exists
+    if lgc.mid:
+        start_mid_end(gph, algo, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True)
+    else:
+        bi_dijkstra(gph, algo, lgc.start, lgc.end)
+
+
+def recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, visualize=True) -> None:
+    """Draws recursive maze"""
+    reset_graph(gph, algo)  # Resets entire graph to prevent any unintended behaviour
+    draw_recursive_maze(gph, visualize=visualize)  # Draw maze
+    algo.maze = True  # Necessary for handling dragging over barriers if in maze
+    reset_ordinal_nodes(lgc)
+
+
 def graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, new_graph_size, best_path_sleep) -> None:
     """Changes the size of the graph"""
-
     algo.best_path_sleep = best_path_sleep
     gph.has_img = False
     change_graph_size(gph, algo, new_graph_size)
+    reset_ordinal_nodes(lgc)
 
-    lgc.start = None
-    lgc.mid = None
-    lgc.end = None
+
+def load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Loads the image onto the graph"""
+    gph.has_img = True
+    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
+    change_graph_size(gph, algo, 400)
+    reset_ordinal_nodes(lgc)
+
+
+def convert_img_to_squares(gph: GraphState) -> None:
+    """Coverts the map data into nodes the algorithms can use"""
+    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
+    draw(gph, legend=True)
+    gph.has_img = False
+    set_squares_to_roads(gph)
 
 
 '''
