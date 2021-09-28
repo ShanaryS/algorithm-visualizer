@@ -303,6 +303,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is currently small, no need to redraw
                     if gph.rows != 22:
                         # Changes graph size to small
+                        algo.best_path_sleep = 3
                         gph.has_img = False
                         graph = change_graph_size(22, gph)
 
@@ -318,6 +319,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already medium, no need to redraw
                     if gph.rows != 46:
                         # Changes graph size to medium
+                        algo.best_path_sleep = 3
                         gph.has_img = False
                         graph = change_graph_size(46, gph)
 
@@ -333,6 +335,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already large, no need to redraw
                     if gph.rows != 95:
                         # Changes graph size to large
+                        algo.best_path_sleep = 3
                         gph.has_img = False
                         graph = change_graph_size(95, gph)
 
