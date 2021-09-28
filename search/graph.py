@@ -4,7 +4,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
 from search import algorithms as search
-from search.colors import *
+from search.colors import MatplotlibColors as PltC
 from search.values import generate_array, KEY
 
 
@@ -27,7 +27,7 @@ def set_graph(initialize=False) -> None:
     # Clears previous graph for update
     plt.clf()
     global vis
-    vis = plt.bar(labels, array, color=MPL_DEFAULT)
+    vis = plt.bar(labels, array, color=PltC.DEFAULT)
     plt.subplots_adjust(left=0.15, bottom=0.3)
 
     # Shows 'x', 'y' or 'xy' axis
@@ -44,26 +44,26 @@ def buttons_sliders(initialize=False) -> None:
 
     # Creates buttons with their locations, text, and color
     generate_loc = plt.axes([0.2, 0.2, 0.3, 0.05])  # left, bottom, width, height
-    generate = Button(ax=generate_loc, label='Generate New Array', color=MPL_CYAN)
+    generate = Button(ax=generate_loc, label='Generate New Array', color=PltC.CYAN)
     stop_loc = plt.axes([0.85, 0.01, 0.1, 0.05])  # left, bottom, width, height
-    stop = Button(ax=stop_loc, label='Stop', color=MPL_RED)
+    stop = Button(ax=stop_loc, label='Stop', color=PltC.RED)
     size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
     size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                   valinit=array_size, valstep=1, orientation='vertical')
     text_loc = plt.axes([0.475, 0.01, 0.3, 0.05])
     text = TextBox(ax=text_loc, label='Enter search value (1-150): ', initial=str(key))
     sort_loc = plt.axes([0.60, 0.2, 0.3, 0.05])
-    sort = Button(ax=sort_loc, label='Sort Array', color=MPL_CYAN)
+    sort = Button(ax=sort_loc, label='Sort Array', color=PltC.CYAN)
     binary_loc = plt.axes([0.025, 0.1, 0.15, 0.05])
-    binary = Button(ax=binary_loc, label='Binary', color=MPL_GREEN)
+    binary = Button(ax=binary_loc, label='Binary', color=PltC.GREEN)
     jump_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
-    jump = Button(ax=jump_loc, label='Jump', color=MPL_GREEN)
+    jump = Button(ax=jump_loc, label='Jump', color=PltC.GREEN)
     exp_loc = plt.axes([0.425, 0.1, 0.15, 0.05])
-    exp = Button(ax=exp_loc, label='Exponential', color=MPL_GREEN)
+    exp = Button(ax=exp_loc, label='Exponential', color=PltC.GREEN)
     fib_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
-    fib = Button(ax=fib_loc, label='Fibonacci', color=MPL_GREEN)
+    fib = Button(ax=fib_loc, label='Fibonacci', color=PltC.GREEN)
     linear_loc = plt.axes([0.825, 0.1, 0.15, 0.05])
-    linear = Button(ax=linear_loc, label='Linear', color=MPL_YELLOW)
+    linear = Button(ax=linear_loc, label='Linear', color=PltC.YELLOW)
 
     # These functions define the action on click
     def generate_new_array(_) -> None:

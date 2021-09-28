@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from search.colors import *
+from search.colors import MatplotlibColors as PltC
 from search.values import get_sqrt
 
 
@@ -23,16 +23,16 @@ def linear(vis_: plt.bar,
         high = array_size
 
     for i in range(low, high):
-        vis_[i].set_color(MPL_GOLD)
+        vis_[i].set_color(PltC.GOLD)
         plt.pause(pause_short)
 
         if array[i] != key:
-            vis_[i].set_color(MPL_RED)
+            vis_[i].set_color(PltC.RED)
             plt.pause(pause_short)
         elif array[i] == key:
-            vis_[i].set_color(MPL_GREEN)
+            vis_[i].set_color(PltC.GREEN)
             for bar in range(i+1, array_size):
-                vis_[bar].set_color(MPL_RED)
+                vis_[bar].set_color(PltC.RED)
 
             plt.draw()
             return
@@ -62,20 +62,20 @@ def binary(vis_: plt.bar,
             mid = array_size - 1
 
             if mid == key:
-                vis_[mid].set_color(MPL_GREEN)
+                vis_[mid].set_color(PltC.GREEN)
                 for bar in range(low - 1, mid):
-                    vis_[bar].set_color(MPL_RED)
+                    vis_[bar].set_color(PltC.RED)
 
                 plt.draw()
                 return
             else:
                 for bar in range(low - 1, array_size):
-                    vis_[bar].set_color(MPL_RED)
+                    vis_[bar].set_color(PltC.RED)
 
                 plt.draw()
                 return
 
-        vis_[mid].set_color(MPL_MAGENTA)
+        vis_[mid].set_color(PltC.MAGENTA)
         plt.pause(pause_long)
 
         if array[mid] > key:
@@ -85,7 +85,7 @@ def binary(vis_: plt.bar,
                 upper = high
 
             for i in range(mid, upper):
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
             high = mid - 1
         elif array[mid] < key:
             if low > 1:
@@ -94,20 +94,20 @@ def binary(vis_: plt.bar,
                 lower = low
 
             for i in range(lower, mid):
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
             low = mid + 1
         elif array[mid] == key:
-            vis_[mid].set_color(MPL_GREEN)
+            vis_[mid].set_color(PltC.GREEN)
             for i in range(lower, mid):
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
             for i in range(mid+1, upper):
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
 
             plt.draw()
             return
 
     for bar in range(lower, upper):
-        vis_[bar].set_color(MPL_RED)
+        vis_[bar].set_color(PltC.RED)
 
     plt.draw()
 
@@ -128,7 +128,7 @@ def jump(vis_: plt.bar,
 
     if array[left] > key:
         for bar in range(array_size):
-            vis_[bar].set_color(MPL_RED)
+            vis_[bar].set_color(PltC.RED)
 
         plt.draw()
         return
@@ -136,13 +136,13 @@ def jump(vis_: plt.bar,
     while left < array_size:
         right = min(array_size-1, left + step)
 
-        vis_[left].set_color(MPL_CYAN)
-        vis_[right].set_color(MPL_CYAN)
+        vis_[left].set_color(PltC.CYAN)
+        vis_[right].set_color(PltC.CYAN)
         plt.pause(pause_long)
 
         if array[left] <= key <= array[right]:
             for i in range(right+1, array_size):
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
             plt.pause(pause_long)
 
             linear(vis_, key, array, array_size, pause_short, left, right + 1)
@@ -150,7 +150,7 @@ def jump(vis_: plt.bar,
 
         for i in range(left, right+1):
             if i < array_size:
-                vis_[i].set_color(MPL_RED)
+                vis_[i].set_color(PltC.RED)
 
         left += step + 1
 
@@ -169,35 +169,35 @@ def exponential(vis_: plt.bar,
     Best when index is relatively close to the beginning of the array, such as with unbounded or infinite arrays
     """
 
-    vis_[0].set_color(MPL_GOLD)
+    vis_[0].set_color(PltC.GOLD)
     plt.pause(pause_long)
-    vis_[0].set_color(MPL_RED)
+    vis_[0].set_color(PltC.RED)
 
     if array[0] == key:
         for i in range(1, array_size):
-            vis_[i].set_color(MPL_RED)
-        vis_[0].set_color(MPL_GREEN)
+            vis_[i].set_color(PltC.RED)
+        vis_[0].set_color(PltC.GREEN)
 
     i: int = 1
     temp_low: int = 1
     temp: int = 1
 
-    vis_[0].set_color(MPL_RED)
-    vis_[i].set_color(MPL_GOLD)
+    vis_[0].set_color(PltC.RED)
+    vis_[i].set_color(PltC.GOLD)
 
     while i < array_size and array[i] <= key:
         i *= 2
         if i <= array_size:
             for j in range(temp_low, temp):
-                vis_[j].set_color(MPL_RED)
-            vis_[i].set_color(MPL_CYAN)
+                vis_[j].set_color(PltC.RED)
+            vis_[i].set_color(PltC.CYAN)
         plt.pause(pause_long)
         temp = i
         temp_low = int(temp / 2)
 
     if i <= array_size:
         for j in range(i+1, array_size):
-            vis_[j].set_color(MPL_RED)
+            vis_[j].set_color(PltC.RED)
 
     if i < array_size:
         return binary(vis_, key, array, array_size, pause_long, high=i)
@@ -219,7 +219,7 @@ def fibonacci(vis_: plt.bar,
     fib_minus_1: int = 1
     fib: int = fib_minus_1 + fib_minus_2
 
-    vis_[fib_minus_2].set_color(MPL_CYAN)
+    vis_[fib_minus_2].set_color(PltC.CYAN)
     plt.pause(pause_long)
 
     while fib < array_size:
@@ -228,7 +228,7 @@ def fibonacci(vis_: plt.bar,
         fib = fib_minus_1 + fib_minus_2
 
         if fib < array_size:
-            vis_[fib].set_color(MPL_CYAN)
+            vis_[fib].set_color(PltC.CYAN)
             plt.pause(pause_long)
 
     index: int = -1
@@ -236,12 +236,12 @@ def fibonacci(vis_: plt.bar,
     while fib > 1:
         i: int = min(index + fib_minus_2, (array_size - 1))
 
-        vis_[i].set_color(MPL_MAGENTA)
+        vis_[i].set_color(PltC.MAGENTA)
         plt.pause(pause_long)
 
         if array[i] < key:
             for j in range(i+1):
-                vis_[j].set_color(MPL_RED)
+                vis_[j].set_color(PltC.RED)
 
             fib = fib_minus_1
             fib_minus_1 = fib_minus_2
@@ -249,17 +249,17 @@ def fibonacci(vis_: plt.bar,
             index = i
         elif array[i] > key:
             for j in range(i, array_size):
-                vis_[j].set_color(MPL_RED)
+                vis_[j].set_color(PltC.RED)
 
             fib = fib_minus_2
             fib_minus_1 = fib_minus_1 - fib_minus_2
             fib_minus_2 = fib - fib_minus_1
         elif array[i] == key:
-            vis_[i].set_color(MPL_GREEN)
+            vis_[i].set_color(PltC.GREEN)
             for bar in range(i):
-                vis_[bar].set_color(MPL_RED)
+                vis_[bar].set_color(PltC.RED)
             for bar in range(i+1, array_size):
-                vis_[bar].set_color(MPL_RED)
+                vis_[bar].set_color(PltC.RED)
 
             plt.draw()
             return
