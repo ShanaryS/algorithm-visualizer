@@ -22,7 +22,8 @@ def main() -> None:
         a_star_finished=False,
         bi_dijkstra_finished=False,
         maze=False,
-        ordinal_node_clicked=[]
+        ordinal_node_clicked=[],
+        best_path_sleep=3
     )
 
     run_pathfinding(gph, algo)

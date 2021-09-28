@@ -218,7 +218,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     if mid:
                         start_mid_end(graph, start, mid, end, gph, algo, is_dijkstra=True)
                     else:
-                        dijkstra(graph, start, end, gph)
+                        dijkstra(graph, start, end, gph, algo)
 
             # Run A* with "A" key on keyboard
             if event.type == pygame.KEYDOWN:
@@ -239,7 +239,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     if mid:
                         start_mid_end(graph, start, mid, end, gph, algo, is_a_star=True)
                     else:
-                        a_star(graph, start, end, gph)
+                        a_star(graph, start, end, gph, algo)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
             if event.type == pygame.KEYDOWN:
@@ -260,7 +260,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     if mid:
                         start_mid_end(graph, start, mid, end, gph, algo, is_bi_dijkstra=True)
                     else:
-                        bi_dijkstra(graph, start, end, gph)
+                        bi_dijkstra(graph, start, end, gph, algo)
 
             # Draw recursive maze with "G" key on keyboard
             if event.type == pygame.KEYDOWN:
