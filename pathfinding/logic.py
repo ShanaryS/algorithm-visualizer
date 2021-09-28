@@ -348,6 +348,7 @@ Add prim maze and sticky mud
 
 Bugs to fix:
 
+Split main into multiple funcs
 Clearing graph doesn't work but calling another algo does, clear graph doesn't clear barriers and algo isn't false
 Dragging node seems to default to dijkstra
 Instant algo even after clearing graph

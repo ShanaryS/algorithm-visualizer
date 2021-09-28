@@ -16,7 +16,7 @@ BEST_PATH_SLEEP: int = 3
 
 @dataclass
 class AlgoState:
-    """Stores the state of the algorithms, whether they are finshed or not"""
+    """Stores the state of the algorithms, whether they are finished or not"""
 
     dijkstra_finished: bool
     a_star_finished: bool
@@ -402,7 +402,8 @@ def start_mid_end(graph: list,
             start_to_mid = bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
             mid_to_end = bi_dijkstra(graph, mid, end, alt_color=True, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, algo, is_bi_dijkstra=True, ignore_node=end, draw_best_path=False)
+            start_to_mid = algo_no_vis(graph, start, mid, algo,
+                                       is_bi_dijkstra=True, ignore_node=end, draw_best_path=False)
             mid_to_end = algo_no_vis(graph, mid, end, algo, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
