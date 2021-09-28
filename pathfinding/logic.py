@@ -91,20 +91,20 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                             # Runs the algo again instantly with no visualizations, handles whether mid exists
                             if algo.dijkstra_finished:
                                 if mid:
-                                    start_mid_end(start, mid, end, gph, algo, is_dijkstra=True, visualize=False)
+                                    start_mid_end(gph, algo, start, mid, end, is_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(start, end, gph, algo, is_dijkstra=True)
+                                    algo_no_vis(gph, algo, start, end, is_dijkstra=True)
                             elif algo.a_star_finished:
                                 if mid:
-                                    start_mid_end(start, mid, end, gph, algo, is_a_star=True, visualize=False)
+                                    start_mid_end(gph, algo, start, mid, end, is_a_star=True, visualize=False)
                                 else:
-                                    algo_no_vis(start, end, gph, algo, is_a_star=True)
+                                    algo_no_vis(gph, algo, start, end, is_a_star=True)
                             elif algo.bi_dijkstra_finished:
                                 if mid:
-                                    start_mid_end(start, mid, end, gph, algo,
+                                    start_mid_end(gph, algo, start, mid, end,
                                                   is_bi_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(start, end, gph, algo, is_bi_dijkstra=True)
+                                    algo_no_vis(gph, algo, start, end, is_bi_dijkstra=True)
 
                     # If ordinal node is not being dragged, prepare it to
                     elif square is start:
@@ -121,11 +121,11 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                     # Handles removing and adding start manually instead of dragging on algo completion.
                     if algo.dijkstra_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_dijkstra=True)
+                        algo_no_vis(gph, algo, start, end, is_dijkstra=True)
                     elif algo.a_star_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_a_star=True)
+                        algo_no_vis(gph, algo, start, end, is_a_star=True)
                     elif algo.bi_dijkstra_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_bi_dijkstra=True)
+                        algo_no_vis(gph, algo, start, end, is_bi_dijkstra=True)
 
                 # If end node does not exist, and start node does exist, create end node.
                 # If not currently ordinal node.
@@ -135,11 +135,11 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                     # Handles removing and adding end manually instead of dragging on algo completion.
                     if algo.dijkstra_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_dijkstra=True)
+                        algo_no_vis(gph, algo, start, end, is_dijkstra=True)
                     elif algo.a_star_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_a_star=True)
+                        algo_no_vis(gph, algo, start, end, is_a_star=True)
                     elif algo.bi_dijkstra_finished and start and end:
-                        algo_no_vis(start, end, gph, algo, is_bi_dijkstra=True)
+                        algo_no_vis(gph, algo, start, end, is_bi_dijkstra=True)
 
                 # If start and end node exists, create wall. If not currently ordinal node.
                 # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
@@ -184,11 +184,11 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                         # Handles removing and adding mid manually instead of dragging on algo completion.
                         if algo.dijkstra_finished and start and mid and end:
-                            start_mid_end(start, mid, end, gph, algo, is_dijkstra=True, visualize=False)
+                            start_mid_end(gph, algo, start, mid, end, is_dijkstra=True, visualize=False)
                         elif algo.a_star_finished and start and mid and end:
-                            start_mid_end(start, mid, end, gph, algo, is_a_star=True, visualize=False)
+                            start_mid_end(gph, algo, start, mid, end, is_a_star=True, visualize=False)
                         elif algo.bi_dijkstra_finished and start and mid and end:
-                            start_mid_end(start, mid, end, gph, algo, is_bi_dijkstra=True, visualize=False)
+                            start_mid_end(gph, algo, start, mid, end, is_bi_dijkstra=True, visualize=False)
 
             # Reset graph with "SPACE" on keyboard
             if event.type == pygame.KEYDOWN:
@@ -220,9 +220,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(start, mid, end, gph, algo, is_dijkstra=True)
+                        start_mid_end(gph, algo, start, mid, end, is_dijkstra=True)
                     else:
-                        dijkstra(start, end, gph, algo)
+                        dijkstra(gph, algo, start, end)
 
             # Run A* with "A" key on keyboard
             if event.type == pygame.KEYDOWN:
@@ -241,9 +241,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(start, mid, end, gph, algo, is_a_star=True)
+                        start_mid_end(gph, algo, start, mid, end, is_a_star=True)
                     else:
-                        a_star(start, end, gph, algo)
+                        a_star(gph, algo, start, end)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
             if event.type == pygame.KEYDOWN:
@@ -262,9 +262,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(start, mid, end, gph, algo, is_bi_dijkstra=True)
+                        start_mid_end(gph, algo, start, mid, end, is_bi_dijkstra=True)
                     else:
-                        bi_dijkstra(start, end, gph, algo)
+                        bi_dijkstra(gph, algo, start, end)
 
             # Draw recursive maze with "G" key on keyboard
             if event.type == pygame.KEYDOWN:
@@ -309,7 +309,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         # Changes graph size to small
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(22, gph, algo)
+                        change_graph_size(gph, algo, 22)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -325,7 +325,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         # Changes graph size to medium
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(46, gph, algo)
+                        change_graph_size(gph, algo, 46)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -341,7 +341,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         # Changes graph size to large
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(95, gph, algo)
+                        change_graph_size(gph, algo, 95)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -357,7 +357,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         # Changes graph size to large
                         gph.has_img = True
                         gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
-                        change_graph_size(400, gph, algo)
+                        change_graph_size(gph, algo, 400)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
