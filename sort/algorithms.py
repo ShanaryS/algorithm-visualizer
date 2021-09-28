@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from sort.colors import *
+from sort.colors import MatplotlibColors as PltC
 from sort.values import generate_array, get_factorial
 
 
@@ -19,36 +19,36 @@ def selection(vis_: plt.bar,
     """
 
     for i in range(array_size - 1):
-        vis_[i].set_color(MPL_BLACK)
+        vis_[i].set_color(PltC.BLACK)
         plt.pause(pause_mid)
 
         index: int = i
         for j in range(i + 1, array_size):
-            vis_[j].set_color(MPL_GOLD)
+            vis_[j].set_color(PltC.GOLD)
             plt.pause(pause_short)
 
             if array[j] < array[index]:
-                vis_[j].set_color(MPL_CYAN)
+                vis_[j].set_color(PltC.CYAN)
                 if index != i:
-                    vis_[index].set_color(MPL_GOLD)
+                    vis_[index].set_color(PltC.GOLD)
 
                 index = j
 
         # Swaps bars while maintaining color for each
         vis_[i].set_height(array[index])
-        vis_[i].set_color(MPL_CYAN)
+        vis_[i].set_color(PltC.CYAN)
         array[i], array[index] = array[index], array[i]
         vis_[index].set_height(array[index])
-        vis_[index].set_color(MPL_BLACK)
+        vis_[index].set_color(PltC.BLACK)
         plt.pause(pause_mid)
 
-        vis_[i].set_color(MPL_GREEN)
+        vis_[i].set_color(PltC.GREEN)
         for b in range(i+1, array_size):
-            vis_[b].set_color(MPL_DEFAULT)
+            vis_[b].set_color(PltC.DEFAULT)
 
         if i == array_size-2:
             for b in range(i, array_size):
-                vis_[b].set_color(MPL_GREEN)
+                vis_[b].set_color(PltC.GREEN)
 
     plt.draw()
 
@@ -66,15 +66,15 @@ def insertion(vis_: plt.bar,
     for i in range(1, array_size):
         a: int = i
 
-        vis_[a].set_color(MPL_RED)
+        vis_[a].set_color(PltC.RED)
 
         while a > 0 and array[a] < array[a - 1]:
             # Swaps bars while maintaining color for each
-            vis_[a].set_color(MPL_RED)
-            vis_[a-1].set_color(MPL_GOLD)
+            vis_[a].set_color(PltC.RED)
+            vis_[a-1].set_color(PltC.GOLD)
             plt.pause(pause_short)
-            vis_[a].set_color(MPL_DEFAULT)
-            vis_[a-1].set_color(MPL_DEFAULT)
+            vis_[a].set_color(PltC.DEFAULT)
+            vis_[a-1].set_color(PltC.DEFAULT)
 
             vis_[a].set_height(array[a-1])
             array[a], array[a-1] = array[a-1], array[a]
@@ -83,15 +83,15 @@ def insertion(vis_: plt.bar,
             a -= 1
         else:
             if a < array_size-1:
-                vis_[a+1].set_color(MPL_GOLD)
-            vis_[a].set_color(MPL_RED)
+                vis_[a+1].set_color(PltC.GOLD)
+            vis_[a].set_color(PltC.RED)
             plt.pause(pause_short)
             if a < array_size-1:
-                vis_[a+1].set_color(MPL_DEFAULT)
-            vis_[a].set_color(MPL_DEFAULT)
+                vis_[a+1].set_color(PltC.DEFAULT)
+            vis_[a].set_color(PltC.DEFAULT)
 
     for b in range(array_size):
-        vis_[b].set_color(MPL_GREEN)
+        vis_[b].set_color(PltC.GREEN)
     plt.draw()
 
 
@@ -108,26 +108,26 @@ def bubble(vis_: plt.bar,
 
     for i in range(array_size - 1):
         for j in range(0, array_size-i - 1):
-            vis_[j].set_color(MPL_RED)
-            vis_[j+1].set_color(MPL_GOLD)
+            vis_[j].set_color(PltC.RED)
+            vis_[j+1].set_color(PltC.GOLD)
             plt.pause(pause_short)
 
             if array[j] > array[j+1]:
                 # Swaps bars while maintaining color for each
                 vis_[j].set_height(array[j+1])
-                vis_[j].set_color(MPL_GOLD)
+                vis_[j].set_color(PltC.GOLD)
                 array[j], array[j+1] = array[j+1], array[j]
                 vis_[j+1].set_height(array[j+1])
-                vis_[j+1].set_color(MPL_RED)
+                vis_[j+1].set_color(PltC.RED)
                 plt.pause(pause_short)
 
-            vis_[j].set_color(MPL_DEFAULT)
-            vis_[j+1].set_color(MPL_DEFAULT)
+            vis_[j].set_color(PltC.DEFAULT)
+            vis_[j+1].set_color(PltC.DEFAULT)
 
             if j == array_size-i - 2:
-                vis_[j+1].set_color(MPL_GREEN)
+                vis_[j+1].set_color(PltC.GREEN)
 
-    vis_[0].set_color(MPL_GREEN)
+    vis_[0].set_color(PltC.GREEN)
     plt.draw()
 
 
@@ -148,29 +148,29 @@ def heap(vis_: plt.bar,
 
     # Show that values are now in heap
     for b in range(array_size):
-        vis_[b].set_color(MPL_BLACK)
+        vis_[b].set_color(PltC.BLACK)
     plt.pause(pause_long)
 
     # Sorts values from min to max, max first
     for i in range(array_size - 1, 0, -1):
-        vis_[i].set_color(MPL_GOLD)
-        vis_[0].set_color(MPL_GOLD)
+        vis_[i].set_color(PltC.GOLD)
+        vis_[0].set_color(PltC.GOLD)
         for b in range(i):
-            vis_[b].set_color(MPL_BLACK)
+            vis_[b].set_color(PltC.BLACK)
         plt.pause(pause_short)
         for b in range(i):
-            vis_[b].set_color(MPL_DEFAULT)
+            vis_[b].set_color(PltC.DEFAULT)
 
         vis_[i].set_height(array[0])
         array[i], array[0] = array[0], array[i]
         vis_[0].set_height(array[0])
-        vis_[i].set_color(MPL_GREEN)
+        vis_[i].set_color(PltC.GREEN)
         plt.pause(pause_short)
-        vis_[0].set_color(MPL_DEFAULT)
+        vis_[0].set_color(PltC.DEFAULT)
 
         _heap(vis_, array, pause_short, i, 0)
 
-    vis_[0].set_color(MPL_GREEN)
+    vis_[0].set_color(PltC.GREEN)
     plt.draw()
 
 
@@ -187,23 +187,23 @@ def _heap(vis_: plt.bar,
     left: int = 2 * i + 1
     right: int = 2 * i + 2
 
-    vis_[i].set_color(MPL_GOLD)
+    vis_[i].set_color(PltC.GOLD)
 
     if left < length:
-        vis_[left].set_color(MPL_GOLD)
+        vis_[left].set_color(PltC.GOLD)
         if array[largest] < array[left]:
             largest = left
 
     if right < length:
-        vis_[right].set_color(MPL_GOLD)
+        vis_[right].set_color(PltC.GOLD)
         if array[largest] < array[right]:
             largest = right
 
     plt.pause(pause_short)
 
     if largest != i:
-        vis_[i].set_color(MPL_RED)
-        vis_[largest].set_color(MPL_RED)
+        vis_[i].set_color(PltC.RED)
+        vis_[largest].set_color(PltC.RED)
         plt.pause(pause_short)
 
         vis_[i].set_height(array[largest])
@@ -213,11 +213,11 @@ def _heap(vis_: plt.bar,
 
         _heap(vis_, array, pause_short, length, largest)
 
-    vis_[i].set_color(MPL_DEFAULT)
+    vis_[i].set_color(PltC.DEFAULT)
     if left < length:
-        vis_[left].set_color(MPL_DEFAULT)
+        vis_[left].set_color(PltC.DEFAULT)
     if right < length:
-        vis_[right].set_color(MPL_DEFAULT)
+        vis_[right].set_color(PltC.DEFAULT)
 
 
 def quick(vis_: plt.bar,
@@ -246,8 +246,8 @@ def quick(vis_: plt.bar,
     quick(vis_, array, array_size, pause_short, high + 1, end)
 
     if end == array_size-1:
-        vis_[end].set_color(MPL_GREEN)
-        vis_[end-1].set_color(MPL_GREEN)  # Sometimes this one is colored.
+        vis_[end].set_color(PltC.GREEN)
+        vis_[end-1].set_color(PltC.GREEN)  # Sometimes this one is colored.
         plt.draw()
 
 
@@ -263,7 +263,7 @@ def _quick(vis_: plt.bar,
     mid: int = start + (end - start) // 2
     pivot: int = array[mid]
 
-    vis_[mid].set_color(MPL_MAGENTA)
+    vis_[mid].set_color(PltC.MAGENTA)
     plt.pause(pause_short)
 
     low: int = start
@@ -273,13 +273,13 @@ def _quick(vis_: plt.bar,
     while not done:
         while array[low] < pivot:
             if low != mid:
-                vis_[low].set_color(MPL_RED)
+                vis_[low].set_color(PltC.RED)
                 plt.pause(pause_short)
             low += 1
 
         while pivot < array[high]:
             if high != mid:
-                vis_[high].set_color(MPL_CYAN)
+                vis_[high].set_color(PltC.CYAN)
                 plt.pause(pause_short)
             high -= 1
 
@@ -287,21 +287,21 @@ def _quick(vis_: plt.bar,
             done = True
         else:
             if low != mid:
-                vis_[low].set_color(MPL_CYAN)
+                vis_[low].set_color(PltC.CYAN)
             if high != mid:
-                vis_[high].set_color(MPL_RED)
+                vis_[high].set_color(PltC.RED)
             plt.pause(pause_short)
             if low != mid and high != mid:
-                vis_[low].set_color(MPL_RED)
-                vis_[high].set_color(MPL_CYAN)
+                vis_[low].set_color(PltC.RED)
+                vis_[high].set_color(PltC.CYAN)
             elif low == mid and high == mid:
-                vis_[mid].set_color(MPL_MAGENTA)     # Does nothing. Avoiding using pass
+                vis_[mid].set_color(PltC.MAGENTA)     # Does nothing. Avoiding using pass
             elif low == mid:
-                vis_[low].set_color(MPL_RED)
-                vis_[high].set_color(MPL_MAGENTA)
+                vis_[low].set_color(PltC.RED)
+                vis_[high].set_color(PltC.MAGENTA)
             elif high == mid:
-                vis_[high].set_color(MPL_CYAN)
-                vis_[low].set_color(MPL_MAGENTA)
+                vis_[high].set_color(PltC.CYAN)
+                vis_[low].set_color(PltC.MAGENTA)
 
             vis_[low].set_height(array[high])
             array[low], array[high] = array[high], array[low]
@@ -312,11 +312,11 @@ def _quick(vis_: plt.bar,
             high -= 1
 
     for b in range(start, end+1):
-        vis_[b].set_color(MPL_DEFAULT)
+        vis_[b].set_color(PltC.DEFAULT)
 
     if end - start <= 1:
         for i in range(end+1):
-            vis_[i].set_color(MPL_GREEN)
+            vis_[i].set_color(PltC.GREEN)
 
     return high
 
@@ -370,17 +370,17 @@ def _merge(vis_: plt.bar,
 
     # Compares left and right merge and places lowest of each first.
     while left_pos <= j and right_pos <= key:
-        vis_[left_bar].set_color(MPL_RED)
-        vis_[right_bar].set_color(MPL_GOLD)
+        vis_[left_bar].set_color(PltC.RED)
+        vis_[right_bar].set_color(PltC.GOLD)
         plt.pause(pause_short)
 
         # If left bar less, it's already in place.
         if array[left_pos] <= array[right_pos]:
             if i != 0 or key != array_size-1:
-                vis_[left_bar].set_color(MPL_DEFAULT)
+                vis_[left_bar].set_color(PltC.DEFAULT)
             else:
-                vis_[left_bar].set_color(MPL_GREEN)
-            vis_[right_bar].set_color(MPL_DEFAULT)
+                vis_[left_bar].set_color(PltC.GREEN)
+            vis_[right_bar].set_color(PltC.DEFAULT)
             left_bar += 1
 
             merged_numbers[merge_pos] = array[left_pos]
@@ -395,16 +395,16 @@ def _merge(vis_: plt.bar,
                 temp[b + 1] = t[b]
                 vis_[b].set_height(temp[b])
             left_bar += 1
-            vis_[left_bar].set_color(MPL_RED)
+            vis_[left_bar].set_color(PltC.RED)
             vis_[right_bar].set_height(temp[right_bar])
-            vis_[right_bar].set_color(MPL_DEFAULT)
+            vis_[right_bar].set_color(PltC.DEFAULT)
             right_bar += 1
             plt.pause(pause_short)
             if i != 0 or key != array_size-1:
-                vis_[left_bar-1].set_color(MPL_DEFAULT)
+                vis_[left_bar-1].set_color(PltC.DEFAULT)
             else:
-                vis_[left_bar-1].set_color(MPL_GREEN)
-            vis_[left_bar].set_color(MPL_DEFAULT)
+                vis_[left_bar-1].set_color(PltC.GREEN)
+            vis_[left_bar].set_color(PltC.DEFAULT)
 
             merged_numbers[merge_pos] = array[right_pos]
             right_pos += 1
@@ -413,12 +413,12 @@ def _merge(vis_: plt.bar,
 
     # Runs when right merge ends before left merge. Rest of left's values are just added as it's already sorted.
     while left_pos <= j:
-        vis_[left_bar].set_color(MPL_MAGENTA)
+        vis_[left_bar].set_color(PltC.MAGENTA)
         plt.pause(pause_short)
         if i != 0 or key != array_size-1:
-            vis_[left_bar].set_color(MPL_DEFAULT)
+            vis_[left_bar].set_color(PltC.DEFAULT)
         else:
-            vis_[left_bar].set_color(MPL_GREEN)
+            vis_[left_bar].set_color(PltC.GREEN)
         left_bar += 1
 
         merged_numbers[merge_pos] = array[left_pos]
@@ -427,20 +427,20 @@ def _merge(vis_: plt.bar,
 
     # Runs when left merge ends before right merge. Rest of right's values are just added as it's already sorted.
     while right_pos <= key:
-        vis_[right_bar].set_color(MPL_MAGENTA)
+        vis_[right_bar].set_color(PltC.MAGENTA)
         plt.pause(pause_short)
 
         for b in range(left_bar, right_bar):  # Shifts bars between left and right-1 over by 1
             vis_[b + 1].set_height(array[b])
         left_bar += 1
         vis_[left_bar-1].set_height(array[right_pos])  # Moves right bar to left bar's original position
-        vis_[right_bar].set_color(MPL_DEFAULT)  # Removes right bar's original position's color
-        vis_[left_bar-1].set_color(MPL_MAGENTA)    # Adds color to current right bar
+        vis_[right_bar].set_color(PltC.DEFAULT)  # Removes right bar's original position's color
+        vis_[left_bar-1].set_color(PltC.MAGENTA)    # Adds color to current right bar
         plt.pause(pause_short)
         if i != 0 or key != array_size - 1:
-            vis_[left_bar-1].set_color(MPL_DEFAULT)  # Removes right bar's color
+            vis_[left_bar-1].set_color(PltC.DEFAULT)  # Removes right bar's color
         else:
-            vis_[left_bar-1].set_color(MPL_GREEN)
+            vis_[left_bar-1].set_color(PltC.GREEN)
         right_bar += 1
 
         merged_numbers[merge_pos] = array[right_pos]
@@ -523,13 +523,13 @@ def radix(vis_: plt.bar,
         temp: list[np.ndarray] = array.copy()
 
         if pow_10 == 1:
-            color = MPL_CYAN
+            color = PltC.CYAN
         elif pow_10 == 10:
-            color = MPL_MAGENTA
+            color = PltC.MAGENTA
         elif pow_10 == 100:
-            color = MPL_RED
+            color = PltC.RED
         elif pow_10 == 1000:
-            color = MPL_BLACK
+            color = PltC.BLACK
 
         array.clear()
         for bucket in buckets:
@@ -540,7 +540,7 @@ def radix(vis_: plt.bar,
         for b in range(array_size):
             index: int = temp.index(array[b])
             vis_[b].set_color(color)
-            vis_[index].set_color(MPL_GOLD)
+            vis_[index].set_color(PltC.GOLD)
             plt.pause(pause_short)
 
             t: list[np.ndarray] = temp.copy()
@@ -549,12 +549,12 @@ def radix(vis_: plt.bar,
                 temp[i + 1] = t[i]
                 vis_[i].set_height(temp[i])
             vis_[index].set_height(temp[index])
-            vis_[index].set_color(MPL_DEFAULT)
+            vis_[index].set_color(PltC.DEFAULT)
             plt.pause(pause_short)
             if digit_index != max_digits-1:
-                vis_[b].set_color(MPL_DEFAULT)
+                vis_[b].set_color(PltC.DEFAULT)
             else:
-                vis_[b].set_color(MPL_GREEN)
+                vis_[b].set_color(PltC.GREEN)
 
         plt.pause(pause_long)
 
@@ -647,7 +647,7 @@ measly {round((EXPECTED_RUN_TIME / 3.154 ** 7), 2)} YEARS to find out.
         plt.pause(pause_short)
 
     for i in range(array_size):
-        vis_[i].set_color(MPL_GREEN)
+        vis_[i].set_color(PltC.GREEN)
     plt.draw()
 
 
