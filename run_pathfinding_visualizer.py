@@ -32,7 +32,10 @@ def main() -> None:
         start=None,
         mid=None,
         end=None,
-        run=True
+        run=True,
+        graph_small=22,
+        graph_medium=46,
+        graph_large=95
     )
 
     run_pathfinding(gph, algo, lgc)

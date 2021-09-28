@@ -22,15 +22,9 @@ class LogicState:
     mid: Optional[Square]
     end: Optional[Square]
     run: bool
-
-
-def get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
-    """Turns the location data of the mouse into location of squares"""
-
-    y, x = pos
-    row = int(y / gph.square_size)
-    col = int(x / gph.square_size)
-    return row, col
+    graph_small: int
+    graph_medium: int
+    graph_large: int
 
 
 # Put all game specific variables in here so it's easy to restart with main()
@@ -60,7 +54,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(gph, pos)
+                row, col = _get_clicked_pos(gph, pos)
                 square = gph.graph[row][col]
 
                 # Checks if algo is completed, used for dragging algo
@@ -163,7 +157,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(gph, pos)
+                row, col = _get_clicked_pos(gph, pos)
                 square = gph.graph[row][col]
 
                 # If square to remove is wall, need to remove it from wall_node as well to retain accuracy
@@ -184,7 +178,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(gph, pos)
+                row, col = _get_clicked_pos(gph, pos)
                 square = gph.graph[row][col]
 
                 # Set square to mid if no square is already mid, and not currently ordinal node.
@@ -306,49 +300,16 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
                     lgc.end = None
 
             # Redraw small maze with "S" key on keyboard if not currently small
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-
-                    # If maze is currently small, no need to redraw
-                    if gph.rows != 22:
-                        # Changes graph size to small
-                        algo.best_path_sleep = 3
-                        gph.has_img = False
-                        change_graph_size(gph, algo, 22)
-
-                        lgc.start = None
-                        lgc.mid = None
-                        lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_s and gph.rows != lgc.graph_small:
+                graph_size_buttons(gph, algo, lgc, lgc.graph_small, 3)
 
             # Redraw medium maze with "M" key on keyboard if not currently medium
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
-
-                    # If maze is already medium, no need to redraw
-                    if gph.rows != 46:
-                        # Changes graph size to medium
-                        algo.best_path_sleep = 3
-                        gph.has_img = False
-                        change_graph_size(gph, algo, 46)
-
-                        lgc.start = None
-                        lgc.mid = None
-                        lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m and gph.rows != lgc.graph_medium:
+                graph_size_buttons(gph, algo, lgc, lgc.graph_medium, 3)
 
             # Redraw large maze with "L" key on keyboard if not currently large
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_l:
-
-                    # If maze is already large, no need to redraw
-                    if gph.rows != 95:
-                        # Changes graph size to large
-                        algo.best_path_sleep = 3
-                        gph.has_img = False
-                        change_graph_size(gph, algo, 95)
-
-                        lgc.start = None
-                        lgc.mid = None
-                        lgc.end = None
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_l and gph.rows != lgc.graph_large:
+                graph_size_buttons(gph, algo, lgc, lgc.graph_large, 3)
 
             # Redraw large maze with "X" key on keyboard if not currently x-large
             if event.type == pygame.KEYDOWN:
@@ -378,6 +339,27 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
     pygame.quit()
+
+
+def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
+    """Turns the location data of the mouse into location of squares"""
+
+    y, x = pos
+    row = int(y / gph.square_size)
+    col = int(x / gph.square_size)
+    return row, col
+
+
+def graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, new_graph_size, best_path_sleep) -> None:
+    """Changes the size of the graph"""
+
+    algo.best_path_sleep = best_path_sleep
+    gph.has_img = False
+    change_graph_size(gph, algo, new_graph_size)
+
+    lgc.start = None
+    lgc.mid = None
+    lgc.end = None
 
 
 '''
