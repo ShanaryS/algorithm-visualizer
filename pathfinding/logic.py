@@ -353,7 +353,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         # Changes graph size to large
                         algo.best_path_sleep = 0
                         gph.has_img = True
-                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg'))
+                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
                         graph = change_graph_size(400, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -365,7 +365,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
                     if gph.has_img:
-                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg'))
+                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
                         draw(graph, gph, legend=True)
                         gph.has_img = False
                         set_squares_to_roads(graph, gph)
