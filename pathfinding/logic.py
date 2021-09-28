@@ -302,7 +302,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is currently small, no need to redraw
                     if gph.rows != 22:
                         # Changes graph size to small
-                        gph.img = False
+                        gph.has_img = False
                         graph = change_graph_size(22, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -317,7 +317,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already medium, no need to redraw
                     if gph.rows != 46:
                         # Changes graph size to medium
-                        gph.img = False
+                        gph.has_img = False
                         graph = change_graph_size(46, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -332,7 +332,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already large, no need to redraw
                     if gph.rows != 95:
                         # Changes graph size to large
-                        gph.img = False
+                        gph.has_img = False
                         graph = change_graph_size(95, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -345,11 +345,11 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                 if event.key == pygame.K_x:
 
                     # If maze is already large, no need to redraw
-                    if not gph.img:
+                    if not gph.has_img:
                         # Changes graph size to large
-                        gph.img = True
-                        gph.img_file = pygame.image.load(os.path.join('pathfinding', 'img.jpg'))
-                        graph = change_graph_size(200, gph)
+                        gph.has_img = True
+                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg'))
+                        graph = change_graph_size(400, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -359,7 +359,8 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
-                    set_squares_to_roads(graph, gph)
+                    if gph.has_img:
+                        set_squares_to_roads(graph, gph)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
     pygame.quit()

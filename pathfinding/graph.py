@@ -1,6 +1,7 @@
 """Draws and updates graph for visualization"""
 
 
+import os.path
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
@@ -16,8 +17,8 @@ class GraphState:
     rows: int
     square_size: float
     wall_nodes: set
-    img: bool
-    img_file: Optional[bytes]
+    has_img: bool
+    img: Optional[bytes]
 
 
 # Defining window properties as well as graph size
@@ -85,9 +86,9 @@ def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
             _draw_square(square_color, square_pos)
 
     # Draws the horizontal and vertical lines on the graph
-    if gph.img:
-        _draw_img(gph)
     _draw_lines(gph)
+    if gph.has_img:
+        _draw_img(gph)
 
     # Legend is only shown if graph can be interacted with
     if legend:
@@ -115,30 +116,33 @@ def _draw_lines(gph: GraphState) -> None:
 
 def _draw_img(gph: GraphState) -> pygame.Rect:
     """Draws the maps image onto the graph"""
-    img = gph.img_file
+    img = gph.img
     return WINDOW.blit(img, (0, 0))
 
 
 def set_squares_to_roads(graph, gph: GraphState) -> None:
     """Gets the color of a single pixel"""
 
-    for a in range(len(graph)):
-        for b in range(len(graph[0])):
-            square = graph[a][b]
-            total = 0
+    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg'))
+    draw(graph, gph, legend=True)
+
+    for x in range(len(graph)):
+        for y in range(len(graph[0])):
+            square = graph[x][y]
+            tot = 0
             for i in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
-                    temp = WINDOW.get_at((i, j))
-                    total += temp[0] + temp[1] + temp[2] + temp[3]
-            avg = total / gph.square_size**2 / 4
-            print(avg)
+                    r, g, b, a = WINDOW.get_at((i, j))
+                    tot += r + g + b
+            avg_tot = tot / gph.square_size**2 / 3
+            cutoff = 1
 
-            if avg > 205:
+            if avg_tot > cutoff:
                 square.reset()
             else:
                 square.set_wall()
 
-    gph.img = False
+    gph.has_img = False
 
 
 def _draw_legend() -> None:

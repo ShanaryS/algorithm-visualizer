@@ -4,7 +4,7 @@ from pathfinding.logic import run_pathfinding as run_pathfinding
 from pathfinding.graph import GraphState
 from pathfinding.algorithms import AlgoState
 from pathfinding.values import ROWS, SQUARE_SIZE
-from pathfinding.maps import get_img, write_img
+from pathfinding.maps import get_img_clean, write_img_clean
 
 
 def main() -> None:
@@ -17,8 +17,8 @@ def main() -> None:
         rows=ROWS,
         square_size=SQUARE_SIZE,
         wall_nodes=set(),
-        img=False,
-        img_file=None
+        has_img=False,
+        img=None,
     )
 
     algo = AlgoState(
