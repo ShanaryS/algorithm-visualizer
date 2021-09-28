@@ -125,6 +125,7 @@ def set_squares_to_roads(graph, gph: GraphState) -> None:
 
     gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg'))
     draw(graph, gph, legend=True)
+    gph.has_img = False
 
     for x in range(len(graph)):
         for y in range(len(graph[0])):
@@ -134,15 +135,14 @@ def set_squares_to_roads(graph, gph: GraphState) -> None:
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
                     r, g, b, a = WINDOW.get_at((i, j))
                     tot += r + g + b
-            avg_tot = tot / gph.square_size**2 / 3
-            cutoff = 1
+            avg_tot = tot / gph.square_size**2 / 3  # Gets the average of each square
+            cutoff = 1  # Any color with value above this will be set as a viable path
 
+            # If the square's color is above cutoff, set it as path. Else wall node
             if avg_tot > cutoff:
                 square.reset()
             else:
                 square.set_wall()
-
-    gph.has_img = False
 
 
 def _draw_legend() -> None:
