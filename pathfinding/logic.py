@@ -30,6 +30,10 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
     mid = None
     end = None
 
+    # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
+    FPS = 60
+    clock = pygame.time.Clock()
+
     run = True
     while run:
         draw(graph, gph, legend=True)
@@ -369,6 +373,8 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                         draw(graph, gph, legend=True)
                         gph.has_img = False
                         set_squares_to_roads(graph, gph)
+
+        clock.tick(FPS)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
     pygame.quit()
