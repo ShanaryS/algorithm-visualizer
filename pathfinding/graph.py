@@ -2,7 +2,7 @@
 
 
 import pygame
-from pathfinding.colors import PygameColors as PygC
+from pathfinding.colors import *
 from pathfinding.values import ROWS, WIDTH_HEIGHT, SQUARE_SIZE
 from pathfinding.node import Square
 
@@ -25,23 +25,23 @@ square_size = SQUARE_SIZE
 pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 12)
 
-legend_add_node = font.render("Left Click - Add Node (Start -> End -> Walls)", True, PygC.LEGEND_COLOR)
-legend_add_mid_node = font.render("Middle Click - Add mid node", True, PygC.LEGEND_COLOR)
-legend_remove_node = font.render("Right Click - Remove Node", True, PygC.LEGEND_COLOR)
-legend_clear_graph = font.render("Press 'SPACE' - Clear graph", True, PygC.LEGEND_COLOR)
-legend_graph_size = font.render("Press 'S', 'M', 'L' - Change graph size", True, PygC.LEGEND_COLOR)
-legend_dijkstra = font.render("Dijkstra - Press 'D'", True, PygC.LEGEND_COLOR)
-legend_a_star = font.render("A* - Press 'A'", True, PygC.LEGEND_COLOR)
-legend_bi_dijkstra = font.render("Bi-directional Dijkstra - Press 'B'", True, PygC.LEGEND_COLOR)
-legend_recursive_maze = font.render("Generate maze - Press 'G'", True, PygC.LEGEND_COLOR)
-legend_instant_recursive_maze = font.render("Generate maze (Instantly) - Press 'I'", True, PygC.LEGEND_COLOR)
+legend_add_node = font.render("Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR)
+legend_add_mid_node = font.render("Middle Click - Add mid node", True, LEGEND_COLOR)
+legend_remove_node = font.render("Right Click - Remove Node", True, LEGEND_COLOR)
+legend_clear_graph = font.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
+legend_graph_size = font.render("Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR)
+legend_dijkstra = font.render("Dijkstra - Press 'D'", True, LEGEND_COLOR)
+legend_a_star = font.render("A* - Press 'A'", True, LEGEND_COLOR)
+legend_bi_dijkstra = font.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
+legend_recursive_maze = font.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
+legend_instant_recursive_maze = font.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
 
-vis_text_dijkstra = font.render("Visualizing Dijkstra...", True, PygC.VIS_COLOR)
-vis_text_a_star = font.render("Visualizing A*...", True, PygC.VIS_COLOR)
-vis_text_bi_dijkstra = font.render("Visualizing Bi-directional Dijkstra...", True, PygC.VIS_COLOR)
-vis_text_best_path = font.render("Laying best path...", True, PygC.VIS_COLOR)
-vis_text_recursive_maze = font.render("Generating recursive maze...", True, PygC.VIS_COLOR)
-vis_text_graph_size = font.render("Changing graph size... May take up to 30 seconds", True, PygC.VIS_COLOR)
+vis_text_dijkstra = font.render("Visualizing Dijkstra...", True, VIS_COLOR)
+vis_text_a_star = font.render("Visualizing A*...", True, VIS_COLOR)
+vis_text_bi_dijkstra = font.render("Visualizing Bi-directional Dijkstra...", True, VIS_COLOR)
+vis_text_best_path = font.render("Laying best path...", True, VIS_COLOR)
+vis_text_recursive_maze = font.render("Generating recursive maze...", True, VIS_COLOR)
+vis_text_graph_size = font.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
 
 
 # Used to reinstate walls after deletion for mazes and dragging
@@ -70,8 +70,8 @@ def draw(graph, legend=False, display_update=True) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Sets background of graph to white and legend to grey
-    WINDOW.fill(PygC.DEFAULT_COLOR)
-    WINDOW.fill(PygC.LEGEND_AREA_COLOR, LEGEND_AREA)
+    WINDOW.fill(DEFAULT_COLOR)
+    WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_AREA)
 
     # If colors of square were updated, reflected here
     for row in graph:
@@ -100,9 +100,9 @@ def _draw_lines() -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
     for i in range(rows):
-        pygame.draw.line(WINDOW, PygC.LINE_COLOR,
+        pygame.draw.line(WINDOW, LINE_COLOR,
                          (0, i * square_size), (WIDTH, i * square_size))
-        pygame.draw.line(WINDOW, PygC.LINE_COLOR,
+        pygame.draw.line(WINDOW, LINE_COLOR,
                          (i * square_size, 0), (i * square_size, WIDTH))
 
 

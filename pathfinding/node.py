@@ -1,7 +1,7 @@
 """Creates square objects that drives the visualizations"""
 
 
-from pathfinding.colors import PygameColors as PygC
+from pathfinding.colors import *
 from pathfinding.values import ROWS, SQUARE_SIZE
 
 
@@ -16,7 +16,7 @@ class Square:
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
         self.neighbours: list = []
-        self.color = PygC.DEFAULT_COLOR
+        self.color = DEFAULT_COLOR
 
     def __lt__(self, other) -> bool:
         """Allows comparison of squares"""
@@ -41,85 +41,85 @@ class Square:
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
-        return self.color == PygC.DEFAULT_COLOR
+        return self.color == DEFAULT_COLOR
 
     def is_open(self) -> bool:
         """Checks if open node"""
-        return self.color == PygC.OPEN_COLOR
+        return self.color == OPEN_COLOR
 
     def is_open_alt(self) -> bool:
         """Checks if open node for second swarm of bi_dijkstra"""
-        return self.color == PygC.OPEN_ALT_COLOR
+        return self.color == OPEN_ALT_COLOR
 
     def is_open_alt_(self) -> bool:
         """Checks if open node for end node when mid is included"""
-        return self.color == PygC.OPEN_ALT_COLOR_
+        return self.color == OPEN_ALT_COLOR_
 
     def is_closed(self) -> bool:
         """Checks if closed node"""
-        return self.color == PygC.CLOSED_COLOR
+        return self.color == CLOSED_COLOR
 
     def is_start(self) -> bool:
         """Checks if start node"""
-        return self.color == PygC.START_COLOR
+        return self.color == START_COLOR
 
     def is_mid(self) -> bool:
         """Checks if mid node"""
-        return self.color == PygC.MID_COLOR
+        return self.color == MID_COLOR
 
     def is_end(self) -> bool:
         """Checks if end node"""
-        return self.color == PygC.END_COLOR
+        return self.color == END_COLOR
 
     def is_wall(self) -> bool:
         """Checks if wall node"""
-        return self.color == PygC.WALL_COLOR
+        return self.color == WALL_COLOR
 
     def is_path(self) -> bool:
         """Checks if path node"""
-        return self.color == PygC.PATH_COLOR
+        return self.color == PATH_COLOR
 
     def reset(self) -> None:
         """Sets node to blank"""
-        self.color = PygC.DEFAULT_COLOR
+        self.color = DEFAULT_COLOR
 
     def set_open(self) -> None:
         """Sets node to open"""
-        self.color = PygC.OPEN_COLOR
+        self.color = OPEN_COLOR
 
     def set_open_alt(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
-        self.color = PygC.OPEN_ALT_COLOR
+        self.color = OPEN_ALT_COLOR
 
     def set_open_alt_(self) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
-        self.color = PygC.OPEN_ALT_COLOR_
+        self.color = OPEN_ALT_COLOR_
 
     def set_closed(self) -> None:
         """Sets node to closed"""
-        self.color = PygC.CLOSED_COLOR
+        self.color = CLOSED_COLOR
 
     def set_start(self) -> None:
         """Sets node to start"""
-        self.color = PygC.START_COLOR
+        self.color = START_COLOR
 
     def set_mid(self) -> None:
         """Sets node to mid"""
-        self.color = PygC.MID_COLOR
+        self.color = MID_COLOR
 
     def set_end(self) -> None:
         """Sets node to end"""
-        self.color = PygC.END_COLOR
+        self.color = END_COLOR
 
     def set_wall(self) -> None:
         """Sets node to wall"""
-        self.color = PygC.WALL_COLOR
+        self.color = WALL_COLOR
 
     def set_path(self) -> None:
         """Sets node to path"""
-        self.color = PygC.PATH_COLOR
+        self.color = PATH_COLOR
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""

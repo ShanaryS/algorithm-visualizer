@@ -2,7 +2,7 @@
 
 
 import pygame
-from pathfinding.colors import PygameColors as PygC
+from pathfinding.colors import *
 from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows
 from pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
@@ -67,7 +67,7 @@ def dijkstra(graph: list,
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
-                    if nei != end and nei.color != PygC.CLOSED_COLOR and nei != ignore_node:
+                    if nei != end and nei.color != CLOSED_COLOR and nei != ignore_node:
                         nei.set_open()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
@@ -139,7 +139,7 @@ def a_star(graph: list,
                     queue_pos += 1
                     open_set.put((f_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
-                    if nei != end and nei.color != PygC.CLOSED_COLOR and nei != ignore_node:
+                    if nei != end and nei.color != CLOSED_COLOR and nei != ignore_node:
                         nei.set_open()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
@@ -250,7 +250,7 @@ def bi_dijkstra(graph: list,
                         queue_pos += 1
                         open_set.put((g_score[nei], queue_pos, nei, 'start'))
                         open_set_hash.add(nei)
-                        if nei != end and nei.color != PygC.CLOSED_COLOR and nei != ignore_node:
+                        if nei != end and nei.color != CLOSED_COLOR and nei != ignore_node:
                             if alt_color:
                                 nei.set_open_alt()
                             else:
@@ -266,7 +266,7 @@ def bi_dijkstra(graph: list,
                         queue_pos += 1
                         open_set.put((g_score[nei], queue_pos, nei, 'end'))
                         open_set_hash.add(nei)
-                        if nei != start and nei.color != PygC.CLOSED_COLOR and nei != ignore_node:
+                        if nei != start and nei.color != CLOSED_COLOR and nei != ignore_node:
                             if alt_color:
                                 nei.set_open_alt_()
                             else:
