@@ -5,7 +5,7 @@ import numpy as np
 
 
 # Value to search for. Defaults to 44.
-KEY: int = 44
+KEY = 44
 
 
 def generate_array(low: int, high: int, size: int = None) -> np.ndarray:
