@@ -9,23 +9,9 @@ from pathfinding.values import ROWS, SQUARE_SIZE
 def main() -> None:
     """Main function"""
 
-    gph = GraphState(
-        rows=ROWS,
-        square_size=SQUARE_SIZE,
-        graph=[],
-        wall_nodes=set(),
-        has_img=False,
-        img=None
-    )
+    gph = GraphState(graph=[], wall_nodes=set())
 
-    algo = AlgoState(
-        dijkstra_finished=False,
-        a_star_finished=False,
-        bi_dijkstra_finished=False,
-        maze=False,
-        ordinal_node_clicked=[],
-        best_path_sleep=3
-    )
+    algo = AlgoState(ordinal_node_clicked=[])
 
     lgc = LogicState()
 

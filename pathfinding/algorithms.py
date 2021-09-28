@@ -14,12 +14,12 @@ from pathfinding.node import Square
 class AlgoState:
     """Stores the state of the algorithms, whether they are finished or not"""
 
-    dijkstra_finished: bool
-    a_star_finished: bool
-    bi_dijkstra_finished: bool
-    maze: bool
     ordinal_node_clicked: list
-    best_path_sleep: int
+    dijkstra_finished: bool = False
+    a_star_finished: bool = False
+    bi_dijkstra_finished: bool = False
+    maze: bool = False
+    best_path_sleep: int = 3
 
 
 def dijkstra(gph: GraphState,

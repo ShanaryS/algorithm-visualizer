@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
-from pathfinding.values import WIDTH_HEIGHT
+from pathfinding.values import ROWS, SQUARE_SIZE, WIDTH_HEIGHT
 from pathfinding.node import Square
 from typing import Optional
 
@@ -13,12 +13,12 @@ from typing import Optional
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
 
-    rows: int
-    square_size: float
     graph: list
     wall_nodes: set
-    has_img: bool
-    img: Optional[bytes]
+    rows: int = ROWS
+    square_size: float = SQUARE_SIZE
+    has_img: bool = False
+    img: Optional[bytes] = None
 
 
 # Defining window properties as well as graph size
