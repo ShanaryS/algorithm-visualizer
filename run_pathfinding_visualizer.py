@@ -17,7 +17,8 @@ def main() -> None:
         rows=ROWS,
         square_size=SQUARE_SIZE,
         wall_nodes=set(),
-        img=False
+        img=False,
+        img_file=None
     )
 
     algo = AlgoState(

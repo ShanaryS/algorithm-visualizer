@@ -1,10 +1,12 @@
 """Handles inputs from user"""
 
 
+import os.path
 import pygame
 from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
-from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, change_graph_size, GraphState, HEIGHT
+from pathfinding.graph import set_graph, draw, reset_graph, \
+    reset_algo, change_graph_size, GraphState, set_squares_to_roads, HEIGHT
 
 
 def get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
@@ -346,12 +348,18 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     if gph.rows != 200:
                         # Changes graph size to large
                         gph.img = True
+                        gph.img_file = pygame.image.load(os.path.join('pathfinding', 'img.jpg'))
                         graph = change_graph_size(200, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
                         mid = None
                         end = None
+
+            # Convert map into grid with "C" key
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    set_squares_to_roads(graph, gph)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
     pygame.quit()

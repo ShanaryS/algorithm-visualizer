@@ -1,12 +1,12 @@
 """Draws and updates graph for visualization"""
 
 
-import os.path
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
 from pathfinding.values import WIDTH_HEIGHT
 from pathfinding.node import Square
+from typing import Optional
 
 
 @dataclass
@@ -17,6 +17,7 @@ class GraphState:
     square_size: float
     wall_nodes: set
     img: bool
+    img_file: Optional[bytes]
 
 
 # Defining window properties as well as graph size
@@ -85,7 +86,7 @@ def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
 
     # Draws the horizontal and vertical lines on the graph
     if gph.img:
-        _draw_img()
+        _draw_img(gph)
     _draw_lines(gph)
 
     # Legend is only shown if graph can be interacted with
@@ -112,10 +113,31 @@ def _draw_lines(gph: GraphState) -> None:
                          (i * gph.square_size, 0), (i * gph.square_size, WIDTH))
 
 
-def _draw_img() -> None:
+def _draw_img(gph: GraphState) -> pygame.Rect:
     """Draws the maps image onto the graph"""
-    img = pygame.image.load(os.path.join('pathfinding', 'img.jpg'))
-    WINDOW.blit(img, (0, 0))
+    img = gph.img_file
+    return WINDOW.blit(img, (0, 0))
+
+
+def set_squares_to_roads(graph, gph: GraphState) -> None:
+    """Gets the color of a single pixel"""
+
+    for a in range(len(graph)):
+        for b in range(len(graph[0])):
+            square = graph[a][b]
+            total = 0
+            for i in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
+                for j in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
+                    total += WINDOW.get_at((i, j))[0] + WINDOW.get_at((i, j))[1] + WINDOW.get_at((i, j))[2]
+            avg = total / gph.square_size**2 / 3
+            print(avg)
+
+            if avg > 190:
+                square.reset()
+            else:
+                square.set_wall()
+
+    gph.img = False
 
 
 def _draw_legend() -> None:
