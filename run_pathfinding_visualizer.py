@@ -27,16 +27,7 @@ def main() -> None:
         best_path_sleep=3
     )
 
-    lgc = LogicState(
-        FPS=240,
-        start=None,
-        mid=None,
-        end=None,
-        run=True,
-        graph_small=22,
-        graph_medium=46,
-        graph_large=95
-    )
+    lgc = LogicState()
 
     run_pathfinding(gph, algo, lgc)
 

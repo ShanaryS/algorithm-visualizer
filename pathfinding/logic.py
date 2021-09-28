@@ -17,14 +17,14 @@ from pathfinding.maps import get_img_base, write_img_base, get_img_clean, write_
 class LogicState:
     """Stores the state of the logic"""
 
-    FPS: int
-    start: Optional[Square]
-    mid: Optional[Square]
-    end: Optional[Square]
-    run: bool
-    graph_small: int
-    graph_medium: int
-    graph_large: int
+    start: Optional[Square] = None
+    mid: Optional[Square] = None
+    end: Optional[Square] = None
+    run: bool = True
+    FPS: int = 240
+    GRAPH_SMALL: int = 22
+    GRAPH_MEDIUM: int = 46
+    GRAPH_LARGE: int = 95
 
 
 # Put all game specific variables in here so it's easy to restart with main()
@@ -300,16 +300,16 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
                     lgc.end = None
 
             # Redraw small maze with "S" key on keyboard if not currently small
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_s and gph.rows != lgc.graph_small:
-                graph_size_buttons(gph, algo, lgc, lgc.graph_small, 3)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_s and gph.rows != lgc.GRAPH_SMALL:
+                graph_size_buttons(gph, algo, lgc, lgc.GRAPH_SMALL, 3)
 
             # Redraw medium maze with "M" key on keyboard if not currently medium
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_m and gph.rows != lgc.graph_medium:
-                graph_size_buttons(gph, algo, lgc, lgc.graph_medium, 3)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m and gph.rows != lgc.GRAPH_MEDIUM:
+                graph_size_buttons(gph, algo, lgc, lgc.GRAPH_MEDIUM, 3)
 
             # Redraw large maze with "L" key on keyboard if not currently large
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_l and gph.rows != lgc.graph_large:
-                graph_size_buttons(gph, algo, lgc, lgc.graph_large, 3)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_l and gph.rows != lgc.GRAPH_LARGE:
+                graph_size_buttons(gph, algo, lgc, lgc.GRAPH_LARGE, 3)
 
             # Redraw large maze with "X" key on keyboard if not currently x-large
             if event.type == pygame.KEYDOWN:
