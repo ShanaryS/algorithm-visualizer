@@ -31,7 +31,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
     end = None
 
     # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
-    FPS = 60
+    FPS = 240
     clock = pygame.time.Clock()
 
     run = True
