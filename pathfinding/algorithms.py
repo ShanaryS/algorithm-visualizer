@@ -1,6 +1,7 @@
 """Contains pathfinding and maze generation algorithms"""
 
 
+from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
 from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows
@@ -11,6 +12,17 @@ from pathfinding.node import Square
 
 # Sleep time (ms) between each best_path node when visualizing
 BEST_PATH_SLEEP: int = 3
+
+
+@dataclass
+class AlgoState:
+    """Stores the state of the algorithms, whether they are finshed or not"""
+
+    dijkstra_finished: bool
+    a_star_finished: bool
+    bi_dijkstra_finished: bool
+    maze: bool
+    ordinal_node_clicked: list
 
 
 def dijkstra(graph: list,
@@ -351,6 +363,7 @@ def start_mid_end(graph: list,
                   start: Square,
                   mid: Square,
                   end: Square,
+                  algo: AlgoState,
                   is_dijkstra: bool = False,
                   is_a_star: bool = False,
                   is_bi_dijkstra: bool = False,
@@ -365,8 +378,8 @@ def start_mid_end(graph: list,
             start_to_mid = dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
             mid_to_end = dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, is_dijkstra=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, is_dijkstra=True, ignore_node=start,
+            start_to_mid = algo_no_vis(graph, start, mid, algo, is_dijkstra=True, ignore_node=end, draw_best_path=False)
+            mid_to_end = algo_no_vis(graph, mid, end, algo, is_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
@@ -377,8 +390,8 @@ def start_mid_end(graph: list,
             start_to_mid = a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
             mid_to_end = a_star(graph, mid, end, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, is_a_star=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, is_a_star=True, ignore_node=start,
+            start_to_mid = algo_no_vis(graph, start, mid, algo, is_a_star=True, ignore_node=end, draw_best_path=False)
+            mid_to_end = algo_no_vis(graph, mid, end, algo, is_a_star=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
@@ -389,8 +402,8 @@ def start_mid_end(graph: list,
             start_to_mid = bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
             mid_to_end = bi_dijkstra(graph, mid, end, alt_color=True, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, is_bi_dijkstra=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
+            start_to_mid = algo_no_vis(graph, start, mid, algo, is_bi_dijkstra=True, ignore_node=end, draw_best_path=False)
+            mid_to_end = algo_no_vis(graph, mid, end, algo, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
@@ -406,6 +419,7 @@ def start_mid_end(graph: list,
 def algo_no_vis(graph: list,
                 start: Square,
                 end: Square,
+                algo: AlgoState,
                 is_dijkstra: bool = False,
                 is_a_star: bool = False,
                 is_bi_dijkstra: bool = False,
@@ -417,13 +431,11 @@ def algo_no_vis(graph: list,
 
     """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
 
-    global dijkstra_finished, a_star_finished, bi_dijkstra_finished
-
     # Selects the correct algo to use
     if is_dijkstra:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
             reset_algo(graph)
-        dijkstra_finished = True
+        algo.dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
@@ -434,7 +446,7 @@ def algo_no_vis(graph: list,
     elif is_a_star:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
             reset_algo(graph)
-        a_star_finished = True
+        algo.a_star_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
@@ -445,7 +457,7 @@ def algo_no_vis(graph: list,
     elif is_bi_dijkstra:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
             reset_algo(graph)
-        bi_dijkstra_finished = True
+        algo.bi_dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:

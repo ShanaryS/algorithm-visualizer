@@ -2,17 +2,10 @@
 
 
 import pygame
-from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze
+from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
+    start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
 from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, HEIGHT
 from pathfinding.graph import change_graph_size, wall_nodes, square_size, rows
-
-
-# Extra variables
-dijkstra_finished = False
-a_star_finished = False
-bi_dijkstra_finished = False
-maze = False   # Used to prevent drawing extra walls during maze
-ordinal_node_clicked = []   # Used for dragging start and end once algos are finished. Length is 0 or 1.
 
 
 def get_clicked_pos(pos) -> tuple[int, int]:
@@ -25,10 +18,8 @@ def get_clicked_pos(pos) -> tuple[int, int]:
 
 
 # Put all game specific variables in here so it's easy to restart with main()
-def main() -> None:
+def run_pathfinding(algo: AlgoState) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
-
-    global dijkstra_finished, a_star_finished, bi_dijkstra_finished, maze
 
     graph = set_graph()
 
@@ -48,7 +39,7 @@ def main() -> None:
 
             # Used to know if no longer dragging ordinal node after algo completion
             if not pygame.mouse.get_pressed(3)[0]:
-                ordinal_node_clicked.clear()
+                algo.ordinal_node_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT:
@@ -59,14 +50,14 @@ def main() -> None:
                 square = graph[row][col]
 
                 # Checks if algo is completed, used for dragging algo
-                if (dijkstra_finished or a_star_finished or bi_dijkstra_finished) and start and end:
+                if (algo.dijkstra_finished or algo.a_star_finished or algo.bi_dijkstra_finished) and start and end:
 
                     # Checks if ordinal node is being dragged
-                    if ordinal_node_clicked:
+                    if algo.ordinal_node_clicked:
 
                         # Checks if the mouse is currently on an ordinal node, no need to update anything
                         if square != start and square != mid and square != end:
-                            last_square = ordinal_node_clicked[0]  # Used to move ordinal node to new pos
+                            last_square = algo.ordinal_node_clicked[0]  # Used to move ordinal node to new pos
 
                             # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                             if last_square == 'start':
@@ -92,29 +83,29 @@ def main() -> None:
                                 square.set_end()
 
                             # Runs the algo again instantly with no visualizations, handles whether mid exists
-                            if dijkstra_finished:
+                            if algo.dijkstra_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, is_dijkstra=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, algo, is_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, is_dijkstra=True)
-                            elif a_star_finished:
+                                    algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                            elif algo.a_star_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, is_a_star=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, algo, is_a_star=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, is_a_star=True)
-                            elif bi_dijkstra_finished:
+                                    algo_no_vis(graph, start, end, algo, is_a_star=True)
+                            elif algo.bi_dijkstra_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, is_bi_dijkstra=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, is_bi_dijkstra=True)
+                                    algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
 
                     # If ordinal node is not being dragged, prepare it to
                     elif square is start:
-                        ordinal_node_clicked.append('start')
+                        algo.ordinal_node_clicked.append('start')
                     elif square is mid:
-                        ordinal_node_clicked.append('mid')
+                        algo.ordinal_node_clicked.append('mid')
                     elif square is end:
-                        ordinal_node_clicked.append('end')
+                        algo.ordinal_node_clicked.append('end')
 
                 # If start node does not exist, create it. If not currently ordinal node.
                 elif not start and square != mid and square != end:
@@ -122,12 +113,12 @@ def main() -> None:
                     square.set_start()
 
                     # Handles removing and adding start manually instead of dragging on algo completion.
-                    if dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, is_dijkstra=True)
-                    elif a_star_finished and start and end:
-                        algo_no_vis(graph, start, end, is_a_star=True)
-                    elif bi_dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, is_bi_dijkstra=True)
+                    if algo.dijkstra_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                    elif algo.a_star_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_a_star=True)
+                    elif algo.bi_dijkstra_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
 
                 # If end node does not exist, and start node does exist, create end node.
                 # If not currently ordinal node.
@@ -136,16 +127,16 @@ def main() -> None:
                     square.set_end()
 
                     # Handles removing and adding end manually instead of dragging on algo completion.
-                    if dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, is_dijkstra=True)
-                    elif a_star_finished and start and end:
-                        algo_no_vis(graph, start, end, is_a_star=True)
-                    elif bi_dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, is_bi_dijkstra=True)
+                    if algo.dijkstra_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                    elif algo.a_star_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_a_star=True)
+                    elif algo.bi_dijkstra_finished and start and end:
+                        algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
 
                 # If start and end node exists, create wall. If not currently ordinal node.
                 # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
-                elif square != start and square != mid and square != end and maze is False:
+                elif square != start and square != mid and square != end and algo.maze is False:
                     square.set_wall()
                     wall_nodes.add(square)
 
@@ -185,12 +176,12 @@ def main() -> None:
                         square.set_mid()
 
                         # Handles removing and adding mid manually instead of dragging on algo completion.
-                        if dijkstra_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, is_dijkstra=True, visualize=False)
-                        elif a_star_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, is_a_star=True, visualize=False)
-                        elif bi_dijkstra_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, is_bi_dijkstra=True, visualize=False)
+                        if algo.dijkstra_finished and start and mid and end:
+                            start_mid_end(graph, start, mid, end, algo, is_dijkstra=True, visualize=False)
+                        elif algo.a_star_finished and start and mid and end:
+                            start_mid_end(graph, start, mid, end, algo, is_a_star=True, visualize=False)
+                        elif algo.bi_dijkstra_finished and start and mid and end:
+                            start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True, visualize=False)
 
             # Reset graph with "SPACE" on keyboard
             if event.type == pygame.KEYDOWN:
@@ -218,11 +209,11 @@ def main() -> None:
                             square.update_neighbours(graph)
 
                     # Necessary to for dragging nodes on completion
-                    dijkstra_finished = True
+                    algo.dijkstra_finished = True
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, is_dijkstra=True)
+                        start_mid_end(graph, start, mid, end, algo, is_dijkstra=True)
                     else:
                         dijkstra(graph, start, end)
 
@@ -239,11 +230,11 @@ def main() -> None:
                             square.update_neighbours(graph)
 
                     # Necessary to for dragging nodes on completion
-                    a_star_finished = True
+                    algo.a_star_finished = True
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, is_a_star=True)
+                        start_mid_end(graph, start, mid, end, algo, is_a_star=True)
                     else:
                         a_star(graph, start, end)
 
@@ -260,11 +251,11 @@ def main() -> None:
                             square.update_neighbours(graph)
 
                     # Necessary to for dragging nodes on completion
-                    bi_dijkstra_finished = True
+                    algo.bi_dijkstra_finished = True
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, is_bi_dijkstra=True)
+                        start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True)
                     else:
                         bi_dijkstra(graph, start, end)
 
@@ -278,7 +269,7 @@ def main() -> None:
                     draw_recursive_maze(graph)
 
                     # Necessary for handling dragging over barriers if in maze
-                    maze = True
+                    algo.maze = True
 
                     # Reset ordinal nodes as it cannot be in reset_graph due to scope
                     start = None
@@ -295,7 +286,7 @@ def main() -> None:
                     draw_recursive_maze(graph, visualize=False)
 
                     # Necessary for handling dragging over barriers if in maze
-                    maze = True
+                    algo.maze = True
 
                     # Reset ordinal nodes as it cannot be in reset_graph due to scope
                     start = None
@@ -357,6 +348,7 @@ Add prim maze and sticky mud
 
 Bugs to fix:
 
+Clearing graph doesn't work but calling another algo does, clear graph doesn't clear barriers and algo isn't false
 Dragging node seems to default to dijkstra
 Instant algo even after clearing graph
 Crash when changing graph size sometimes
