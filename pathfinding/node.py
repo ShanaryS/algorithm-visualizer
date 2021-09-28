@@ -26,18 +26,18 @@ class Square:
         """Returns the square location"""
         return self.row, self.col
 
-    def update_neighbours(self, graph: list) -> None:
+    def update_neighbours(self, gph) -> None:
         """Updates the neighbours in the four cardinal directions"""
 
         self.neighbours = []
-        if self.row < self.rows-1 and not graph[self.row + 1][self.col].is_wall():  # Down
-            self.neighbours.append(graph[self.row+1][self.col])
-        if self.row > 0 and not graph[self.row-1][self.col].is_wall():  # UP
-            self.neighbours.append(graph[self.row-1][self.col])
-        if self.col < self.rows-1 and not graph[self.row][self.col + 1].is_wall():  # RIGHT
-            self.neighbours.append(graph[self.row][self.col+1])
-        if self.col > 0 and not graph[self.row][self.col-1].is_wall():  # LEFT
-            self.neighbours.append(graph[self.row][self.col-1])
+        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():  # Down
+            self.neighbours.append(gph.graph[self.row+1][self.col])
+        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():  # UP
+            self.neighbours.append(gph.graph[self.row-1][self.col])
+        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():  # RIGHT
+            self.neighbours.append(gph.graph[self.row][self.col+1])
+        if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():  # LEFT
+            self.neighbours.append(gph.graph[self.row][self.col-1])
 
     def is_empty(self) -> bool:
         """Checks if blank node"""

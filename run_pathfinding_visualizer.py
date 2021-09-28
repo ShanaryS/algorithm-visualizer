@@ -12,6 +12,7 @@ def main() -> None:
     gph = GraphState(
         rows=ROWS,
         square_size=SQUARE_SIZE,
+        graph=[],
         wall_nodes=set(),
         has_img=False,
         img=None

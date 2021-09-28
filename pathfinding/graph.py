@@ -15,6 +15,7 @@ class GraphState:
 
     rows: int
     square_size: float
+    graph: list
     wall_nodes: set
     has_img: bool
     img: Optional[bytes]
@@ -53,12 +54,12 @@ vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_
 vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
 
 
-def set_graph(gph: GraphState) -> list:
+def set_graph(gph: GraphState) -> None:
     """Creates the graph object that stores the location of all the squares"""
 
-    graph = []
+    gph.graph = []
     for i in range(gph.rows):
-        graph.append([])
+        gph.graph.append([])
         for j in range(gph.rows):
             # Uses Square class to create square object with necessary attributes
             square = Square(i, j)
@@ -66,12 +67,10 @@ def set_graph(gph: GraphState) -> list:
             # Necessary for when changing graph size
             square.update_values(gph.rows, gph.square_size)
 
-            graph[i].append(square)
-
-    return graph
+            gph.graph[i].append(square)
 
 
-def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
+def draw(gph: GraphState, legend=False, display_update=True) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Sets background of graph to white and legend to grey
@@ -79,7 +78,7 @@ def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
     WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_AREA)
 
     # If colors of square were updated, reflected here
-    for row in graph:
+    for row in gph.graph:
         for square in row:
             square_color, square_pos = square.draw_square()
             _draw_square(square_color, square_pos)
@@ -119,12 +118,12 @@ def _draw_img(gph: GraphState) -> pygame.Rect:
     return WINDOW.blit(img, (0, 0))
 
 
-def set_squares_to_roads(graph, gph: GraphState) -> None:
+def set_squares_to_roads(gph: GraphState) -> None:
     """Gets the color of a single pixel"""
 
-    for x in range(len(graph)):
-        for y in range(len(graph[0])):
-            square = graph[x][y]
+    for x in range(len(gph.graph)):
+        for y in range(len(gph.graph[0])):
+            square = gph.graph[x][y]
             tot = 0
             for i in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
@@ -196,7 +195,7 @@ def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
     pygame.display.update()
 
 
-def reset_graph(graph, gph: GraphState, algo) -> None:
+def reset_graph(gph: GraphState, algo) -> None:
     """Resets entire graph removing every square"""
 
     # Need to update these values
@@ -208,11 +207,11 @@ def reset_graph(graph, gph: GraphState, algo) -> None:
     # Resets each square
     for i in range(gph.rows):
         for j in range(gph.rows):
-            square = graph[i][j]
+            square = gph.graph[i][j]
             square.reset()
 
 
-def reset_algo(graph, gph: GraphState, algo) -> None:
+def reset_algo(gph: GraphState, algo) -> None:
     """Resets algo colors while keeping ordinal nodes and walls"""
 
     # Need to update these values
@@ -223,13 +222,13 @@ def reset_algo(graph, gph: GraphState, algo) -> None:
     # Resets only certain colors
     for i in range(gph.rows):
         for j in range(gph.rows):
-            square = graph[i][j]
+            square = gph.graph[i][j]
             if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
                     or square.is_closed() or square.is_path():
                 square.reset()
 
 
-def change_graph_size(new_row_size, gph: GraphState) -> list:
+def change_graph_size(new_row_size, gph: GraphState) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
@@ -242,7 +241,5 @@ def change_graph_size(new_row_size, gph: GraphState) -> list:
     gph.square_size = WIDTH / gph.rows
 
     # Recreates graph with new values
-    graph = set_graph(gph)
-    draw(graph, gph)
-
-    return graph
+    set_graph(gph)
+    draw(gph)
