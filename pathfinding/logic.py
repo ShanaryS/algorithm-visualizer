@@ -345,7 +345,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                 if event.key == pygame.K_x:
 
                     # If maze is already large, no need to redraw
-                    if gph.rows != 200:
+                    if not gph.img:
                         # Changes graph size to large
                         gph.img = True
                         gph.img_file = pygame.image.load(os.path.join('pathfinding', 'img.jpg'))

@@ -128,11 +128,12 @@ def set_squares_to_roads(graph, gph: GraphState) -> None:
             total = 0
             for i in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
                 for j in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
-                    total += WINDOW.get_at((i, j))[0] + WINDOW.get_at((i, j))[1] + WINDOW.get_at((i, j))[2]
-            avg = total / gph.square_size**2 / 3
+                    temp = WINDOW.get_at((i, j))
+                    total += temp[0] + temp[1] + temp[2] + temp[3]
+            avg = total / gph.square_size**2 / 4
             print(avg)
 
-            if avg > 190:
+            if avg > 210:
                 square.reset()
             else:
                 square.set_wall()
