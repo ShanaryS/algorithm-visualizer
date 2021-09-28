@@ -1,14 +1,31 @@
 """Colors needed for visualizations"""
 
+from enum import Enum, unique
 
-# Matplotlib colors
-MPL_DEFAULT: str = 'blue'
-MPL_GOLD: str = 'gold'          # Checking
-MPL_MAGENTA: str = 'magenta'    # Pivot
-MPL_CYAN: str = 'cyan'          # Special value unique to that algorithm
-MPL_GREEN: str = 'green'        # Result
-MPL_BLACK: str = 'black'        # To swap
-MPL_RED: str = 'red'            # Moving
-MPL_ORANGE: str = 'orange'      # Used for buttons
-MPL_YELLOW: str = 'yellow'      # Used for buttons
-MPL_TOMATO: str = 'tomato'      # Used for buttons
+
+@unique
+class MatplotlibColors(Enum):
+    """Colors for matplotlib"""
+
+    BLUE = 'blue'
+    GOLD = 'gold'
+    MAGENTA = 'magenta'
+    CYAN = 'cyan'
+    GREEN = 'green'
+    BLACK = 'black'
+    RED = 'red'
+    ORANGE = 'orange'
+    YELLOW = 'yellow'
+    TOMATO = 'tomato'
+
+
+MPL_DEFAULT = MatplotlibColors.BLUE
+MPL_GOLD = MatplotlibColors.GOLD          # Checking
+MPL_MAGENTA = MatplotlibColors.MAGENTA    # Pivot
+MPL_CYAN = MatplotlibColors.CYAN          # Special value unique to that algorithm
+MPL_GREEN = MatplotlibColors.GREEN        # Result
+MPL_BLACK = MatplotlibColors.BLACK        # To swap
+MPL_RED = MatplotlibColors.RED            # Moving
+MPL_ORANGE = MatplotlibColors.ORANGE      # Used for buttons
+MPL_YELLOW = MatplotlibColors.YELLOW      # Used for buttons
+MPL_TOMATO = MatplotlibColors.TOMATO      # Used for buttons

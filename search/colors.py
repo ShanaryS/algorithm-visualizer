@@ -7,14 +7,14 @@ from enum import Enum, unique
 class MatplotlibColors(Enum):
     """Colors for matplotlib"""
 
-    BLUE: str = 'blue'
-    GOLD: str = 'gold'
-    MAGENTA: str = 'magenta'
-    CYAN: str = 'cyan'
-    GREEN: str = 'green'
-    RED: str = 'red'
-    BLACK: str = 'black'
-    YELLOW: str = 'yellow'
+    BLUE = 'blue'
+    GOLD = 'gold'
+    MAGENTA = 'magenta'
+    CYAN = 'cyan'
+    GREEN = 'green'
+    RED = 'red'
+    BLACK = 'black'
+    YELLOW = 'yellow'
 
 
 MPL_DEFAULT = MatplotlibColors.BLUE
