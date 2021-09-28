@@ -120,20 +120,24 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
 
 def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
-
     y, x = pos
     row = int(y / gph.square_size)
     col = int(x / gph.square_size)
     return row, col
 
 
-def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
-    """Handles mouse left click"""
-
-    # Get square clicked
+def _get_square_clicked(gph: GraphState) -> tuple[tuple[int, int], int, int, Square]:
+    """Gets the the square that was clicked"""
     pos = pygame.mouse.get_pos()
     row, col = _get_clicked_pos(gph, pos)
     square = gph.graph[row][col]
+    return pos, row, col, square
+
+
+def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+    """Handles mouse left click"""
+
+    pos, row, col, square = _get_square_clicked(gph)
 
     # Checks if algo is completed, used for dragging algo
     if (algo.dijkstra_finished or algo.a_star_finished or
@@ -234,10 +238,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> Non
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     """Handles mouse left click"""
 
-    # Get square clicked
-    pos = pygame.mouse.get_pos()
-    row, col = _get_clicked_pos(gph, pos)
-    square = gph.graph[row][col]
+    pos, row, col, square = _get_square_clicked(gph)
 
     # If square to remove is wall, need to remove it from wall_node as well to retain accuracy
     if square.is_wall():
@@ -256,10 +257,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
 def _middle_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
     """Handles mouse left click"""
 
-    # Get square clicked
-    pos = pygame.mouse.get_pos()
-    row, col = _get_clicked_pos(gph, pos)
-    square = gph.graph[row][col]
+    pos, row, col, square = _get_square_clicked(gph)
 
     # Set square to mid if no square is already mid, and not currently ordinal node.
     if not lgc.mid:
