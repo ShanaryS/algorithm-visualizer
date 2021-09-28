@@ -307,10 +307,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is currently small, no need to redraw
                     if gph.rows != 22:
                         # Changes graph size to small
-                        reset_graph(gph, algo)
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(22, gph)
+                        change_graph_size(22, gph, algo)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -324,10 +323,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already medium, no need to redraw
                     if gph.rows != 46:
                         # Changes graph size to medium
-                        reset_graph(gph, algo)
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(46, gph)
+                        change_graph_size(46, gph, algo)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -341,10 +339,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already large, no need to redraw
                     if gph.rows != 95:
                         # Changes graph size to large
-                        reset_graph(gph, algo)
                         algo.best_path_sleep = 3
                         gph.has_img = False
-                        change_graph_size(95, gph)
+                        change_graph_size(95, gph, algo)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -358,10 +355,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already large, no need to redraw
                     if not gph.has_img:
                         # Changes graph size to large
-                        algo.best_path_sleep = 0
                         gph.has_img = True
                         gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
-                        change_graph_size(400, gph)
+                        change_graph_size(400, gph, algo)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None

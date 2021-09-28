@@ -228,7 +228,7 @@ def reset_algo(gph: GraphState, algo) -> None:
                 square.reset()
 
 
-def change_graph_size(new_row_size, gph: GraphState) -> None:
+def change_graph_size(new_row_size, gph: GraphState, algo) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
@@ -237,6 +237,7 @@ def change_graph_size(new_row_size, gph: GraphState) -> None:
     draw_vis_text(is_graph_size=True)
 
     # Updates rows and square size with new values
+    reset_graph(gph, algo)
     gph.rows = new_row_size
     gph.square_size = WIDTH / gph.rows
 
