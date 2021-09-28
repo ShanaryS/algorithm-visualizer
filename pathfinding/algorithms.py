@@ -404,7 +404,7 @@ def start_mid_end(gph: GraphState,
     elif is_bi_dijkstra:
         if visualize:
             start_to_mid = bi_dijkstra(gph, algo, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = bi_dijkstra(gph, algo,mid, end,
+            mid_to_end = bi_dijkstra(gph, algo, mid, end,
                                      alt_color=True, ignore_node=start, draw_best_path=False)
         else:
             start_to_mid = algo_no_vis(gph, algo, start, mid,

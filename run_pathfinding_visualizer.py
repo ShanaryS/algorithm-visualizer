@@ -1,6 +1,6 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
-from pathfinding.logic import run_pathfinding as run_pathfinding
+from pathfinding.logic import LogicState, run_pathfinding
 from pathfinding.graph import GraphState
 from pathfinding.algorithms import AlgoState
 from pathfinding.values import ROWS, SQUARE_SIZE
@@ -27,7 +27,15 @@ def main() -> None:
         best_path_sleep=3
     )
 
-    run_pathfinding(gph, algo)
+    lgc = LogicState(
+        FPS=240,
+        start=None,
+        mid=None,
+        end=None,
+        run=True
+    )
+
+    run_pathfinding(gph, algo, lgc)
 
 
 if __name__ == '__main__':
