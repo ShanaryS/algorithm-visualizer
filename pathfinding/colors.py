@@ -24,17 +24,17 @@ class Colors(Enum):
 class PygameColors(Enum):
     """Pygame colors"""
 
-    DEFAULT_COLOR = Colors.WHITE
-    LEGEND_AREA_COLOR = Colors.GREY
-    LINE_COLOR = Colors.GREY
-    OPEN_COLOR = Colors.TURQUOISE
-    OPEN_ALT_COLOR = Colors.TURQUOISE_ALT
-    OPEN_ALT_COLOR_ = Colors.TURQUOISE_ALT_
-    CLOSED_COLOR = Colors.BLUE
-    START_COLOR = Colors.GREEN
-    MID_COLOR = Colors.ORANGE
-    END_COLOR = Colors.RED
-    WALL_COLOR = Colors.BLACK
-    PATH_COLOR = Colors.YELLOW
-    LEGEND_COLOR = Colors.BLACK
-    VIS_COLOR = Colors.RED
+    DEFAULT_COLOR: tuple[int, int, int] = Colors.WHITE
+    LEGEND_AREA_COLOR: tuple[int, int, int] = Colors.GREY
+    LINE_COLOR: tuple[int, int, int] = Colors.GREY
+    OPEN_COLOR: tuple[int, int, int] = Colors.TURQUOISE
+    OPEN_ALT_COLOR: tuple[int, int, int] = Colors.TURQUOISE_ALT
+    OPEN_ALT_COLOR_: tuple[int, int, int] = Colors.TURQUOISE_ALT_
+    CLOSED_COLOR: tuple[int, int, int] = Colors.BLUE
+    START_COLOR: tuple[int, int, int] = Colors.GREEN
+    MID_COLOR: tuple[int, int, int] = Colors.ORANGE
+    END_COLOR: tuple[int, int, int] = Colors.RED
+    WALL_COLOR: tuple[int, int, int] = Colors.BLACK
+    PATH_COLOR: tuple[int, int, int] = Colors.YELLOW
+    LEGEND_COLOR: tuple[int, int, int] = Colors.BLACK
+    VIS_COLOR: tuple[int, int, int] = Colors.RED
