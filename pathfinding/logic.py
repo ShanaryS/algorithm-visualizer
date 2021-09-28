@@ -7,6 +7,7 @@ from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
 from pathfinding.graph import set_graph, draw, reset_graph, \
     reset_algo, change_graph_size, GraphState, set_squares_to_roads, HEIGHT
+from pathfinding.maps import get_img_base, write_img_base, get_img_clean, write_img_clean
 
 
 def get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
@@ -360,6 +361,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
                     if gph.has_img:
+                        gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg'))
+                        draw(graph, gph, legend=True)
+                        gph.has_img = False
                         set_squares_to_roads(graph, gph)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.

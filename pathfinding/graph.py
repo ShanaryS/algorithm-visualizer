@@ -1,7 +1,6 @@
 """Draws and updates graph for visualization"""
 
 
-import os.path
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
@@ -122,10 +121,6 @@ def _draw_img(gph: GraphState) -> pygame.Rect:
 
 def set_squares_to_roads(graph, gph: GraphState) -> None:
     """Gets the color of a single pixel"""
-
-    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg'))
-    draw(graph, gph, legend=True)
-    gph.has_img = False
 
     for x in range(len(graph)):
         for y in range(len(graph[0])):
