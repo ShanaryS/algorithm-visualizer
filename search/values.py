@@ -4,8 +4,8 @@
 import numpy as np
 
 
-# Value to search for. Defaults to 44.
-KEY = 44
+KEY = 44  # Value to search for. Defaults to 44.
+HESITATE = 0.5  # Delay between starting new algo after sorting
 
 
 def generate_array(low: int, high: int, size: int = None) -> np.ndarray:

@@ -17,14 +17,16 @@ def main() -> None:
     pause_mid = (pause_short * 3) + (array_size * 0.001)
     pause_long = (pause_short * 3) + (array_size * 0.005)
 
-    g = Graph(array=array,
-              array_size=array_size,
-              labels=labels,
-              is_sorted=is_sorted,
-              vis=vis,
-              pause_short=pause_short,
-              pause_mid=pause_mid,
-              pause_long=pause_long)
+    g = Graph(
+        array=array,
+        array_size=array_size,
+        labels=labels,
+        is_sorted=is_sorted,
+        vis=vis,
+        pause_short=pause_short,
+        pause_mid=pause_mid,
+        pause_long=pause_long
+    )
 
     set_graph(g)
 
