@@ -1,11 +1,19 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
 from pathfinding.logic import run_pathfinding as run_pathfinding
+from pathfinding.graph import GraphState
 from pathfinding.algorithms import AlgoState
+from pathfinding.values import ROWS, SQUARE_SIZE
 
 
 def main() -> None:
     """Main function"""
+
+    gph = GraphState(
+        rows=ROWS,
+        square_size=SQUARE_SIZE,
+        wall_nodes=set()
+    )
 
     algo = AlgoState(
         dijkstra_finished=False,
@@ -15,7 +23,7 @@ def main() -> None:
         ordinal_node_clicked=[]
     )
 
-    run_pathfinding(algo)
+    run_pathfinding(gph, algo)
 
 
 if __name__ == '__main__':

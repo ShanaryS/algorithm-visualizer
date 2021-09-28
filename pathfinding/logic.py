@@ -5,23 +5,23 @@ import pygame
 from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
 from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, HEIGHT
-from pathfinding.graph import change_graph_size, wall_nodes, square_size, rows
+from pathfinding.graph import change_graph_size, GraphState
 
 
-def get_clicked_pos(pos) -> tuple[int, int]:
+def get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
 
     y, x = pos
-    row = int(y / square_size)
-    col = int(x / square_size)
+    row = int(y / gph.square_size)
+    col = int(x / gph.square_size)
     return row, col
 
 
 # Put all game specific variables in here so it's easy to restart with main()
-def run_pathfinding(algo: AlgoState) -> None:
+def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
 
-    graph = set_graph()
+    graph = set_graph(gph)
 
     # Defining ordinal nodes to be used within the loop in various places
     start = None
@@ -30,7 +30,7 @@ def run_pathfinding(algo: AlgoState) -> None:
 
     run = True
     while run:
-        draw(graph, legend=True)
+        draw(graph, gph, legend=True)
 
         # Allow clicking the "X" on the pygame window to end the program
         for event in pygame.event.get():
@@ -46,7 +46,7 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(pos)
+                row, col = get_clicked_pos(gph, pos)
                 square = graph[row][col]
 
                 # Checks if algo is completed, used for dragging algo
@@ -61,21 +61,21 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                             # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                             if last_square == 'start':
-                                if start in wall_nodes:
+                                if start in gph.wall_nodes:
                                     start.set_wall()
                                 else:
                                     start.reset()
                                 start = square
                                 square.set_start()
                             elif last_square == 'mid':
-                                if mid in wall_nodes:
+                                if mid in gph.wall_nodes:
                                     mid.set_wall()
                                 else:
                                     mid.reset()
                                 mid = square
                                 square.set_mid()
                             elif last_square == 'end':
-                                if end in wall_nodes:
+                                if end in gph.wall_nodes:
                                     end.set_wall()
                                 else:
                                     end.reset()
@@ -85,19 +85,20 @@ def run_pathfinding(algo: AlgoState) -> None:
                             # Runs the algo again instantly with no visualizations, handles whether mid exists
                             if algo.dijkstra_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, algo, is_dijkstra=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, gph, algo, is_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                                    algo_no_vis(graph, start, end, gph, algo, is_dijkstra=True)
                             elif algo.a_star_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, algo, is_a_star=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, gph, algo, is_a_star=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, algo, is_a_star=True)
+                                    algo_no_vis(graph, start, end, gph, algo, is_a_star=True)
                             elif algo.bi_dijkstra_finished:
                                 if mid:
-                                    start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True, visualize=False)
+                                    start_mid_end(graph, start, mid, end, gph, algo,
+                                                  is_bi_dijkstra=True, visualize=False)
                                 else:
-                                    algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
+                                    algo_no_vis(graph, start, end, gph, algo, is_bi_dijkstra=True)
 
                     # If ordinal node is not being dragged, prepare it to
                     elif square is start:
@@ -114,11 +115,11 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                     # Handles removing and adding start manually instead of dragging on algo completion.
                     if algo.dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_dijkstra=True)
                     elif algo.a_star_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_a_star=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_a_star=True)
                     elif algo.bi_dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_bi_dijkstra=True)
 
                 # If end node does not exist, and start node does exist, create end node.
                 # If not currently ordinal node.
@@ -128,29 +129,29 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                     # Handles removing and adding end manually instead of dragging on algo completion.
                     if algo.dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_dijkstra=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_dijkstra=True)
                     elif algo.a_star_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_a_star=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_a_star=True)
                     elif algo.bi_dijkstra_finished and start and end:
-                        algo_no_vis(graph, start, end, algo, is_bi_dijkstra=True)
+                        algo_no_vis(graph, start, end, gph, algo, is_bi_dijkstra=True)
 
                 # If start and end node exists, create wall. If not currently ordinal node.
                 # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
                 elif square != start and square != mid and square != end and algo.maze is False:
                     square.set_wall()
-                    wall_nodes.add(square)
+                    gph.wall_nodes.add(square)
 
             # RIGHT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(pos)
+                row, col = get_clicked_pos(gph, pos)
                 square = graph[row][col]
 
                 # If square to remove is wall, need to remove it from wall_node as well to retain accuracy
                 if square.is_wall():
-                    wall_nodes.discard(square)
+                    gph.wall_nodes.discard(square)
 
                 # Reset square and ordinal node if it was any
                 square.reset()
@@ -166,7 +167,7 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                 # Get square clicked
                 pos = pygame.mouse.get_pos()
-                row, col = get_clicked_pos(pos)
+                row, col = get_clicked_pos(gph, pos)
                 square = graph[row][col]
 
                 # Set square to mid if no square is already mid, and not currently ordinal node.
@@ -177,16 +178,16 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                         # Handles removing and adding mid manually instead of dragging on algo completion.
                         if algo.dijkstra_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, algo, is_dijkstra=True, visualize=False)
+                            start_mid_end(graph, start, mid, end, gph, algo, is_dijkstra=True, visualize=False)
                         elif algo.a_star_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, algo, is_a_star=True, visualize=False)
+                            start_mid_end(graph, start, mid, end, gph, algo, is_a_star=True, visualize=False)
                         elif algo.bi_dijkstra_finished and start and mid and end:
-                            start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True, visualize=False)
+                            start_mid_end(graph, start, mid, end, gph, algo, is_bi_dijkstra=True, visualize=False)
 
             # Reset graph with "SPACE" on keyboard
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    reset_graph(graph)
+                    reset_graph(graph, gph, algo)
 
                     # Reset ordinal nodes as it cannot be in reset_graph due to scope
                     if start:
@@ -201,7 +202,7 @@ def run_pathfinding(algo: AlgoState) -> None:
                 if event.key == pygame.K_d and start and end:
 
                     # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(graph)
+                    reset_algo(graph, gph, algo)
 
                     # Updates neighbours in case anything has changed
                     for row in graph:
@@ -213,16 +214,16 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, algo, is_dijkstra=True)
+                        start_mid_end(graph, start, mid, end, gph, algo, is_dijkstra=True)
                     else:
-                        dijkstra(graph, start, end)
+                        dijkstra(graph, start, end, gph)
 
             # Run A* with "A" key on keyboard
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a and start and end:
 
                     # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(graph)
+                    reset_algo(graph, gph, algo)
 
                     # Updates neighbours in case anything has changed
                     for row in graph:
@@ -234,16 +235,16 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, algo, is_a_star=True)
+                        start_mid_end(graph, start, mid, end, gph, algo, is_a_star=True)
                     else:
-                        a_star(graph, start, end)
+                        a_star(graph, start, end, gph)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_b and start and end:
 
                     # Resets algo visualizations without removing ordinal nodes or walls
-                    reset_algo(graph)
+                    reset_algo(graph, gph, algo)
 
                     # Updates neighbours in case anything has changed
                     for row in graph:
@@ -255,18 +256,18 @@ def run_pathfinding(algo: AlgoState) -> None:
 
                     # Handles whether or not mid exists
                     if mid:
-                        start_mid_end(graph, start, mid, end, algo, is_bi_dijkstra=True)
+                        start_mid_end(graph, start, mid, end, gph, algo, is_bi_dijkstra=True)
                     else:
-                        bi_dijkstra(graph, start, end)
+                        bi_dijkstra(graph, start, end, gph)
 
             # Draw recursive maze with "G" key on keyboard
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_g:
                     # Resets entire graph to prevent any unintended behaviour
-                    reset_graph(graph)
+                    reset_graph(graph, gph, algo)
 
                     # Draw maze
-                    draw_recursive_maze(graph)
+                    draw_recursive_maze(graph, gph)
 
                     # Necessary for handling dragging over barriers if in maze
                     algo.maze = True
@@ -280,10 +281,10 @@ def run_pathfinding(algo: AlgoState) -> None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_i:
                     # Resets entire graph to prevent any unintended behaviour
-                    reset_graph(graph)
+                    reset_graph(graph, gph, algo)
 
                     # Draw maze instantly with no visualizations
-                    draw_recursive_maze(graph, visualize=False)
+                    draw_recursive_maze(graph, gph, visualize=False)
 
                     # Necessary for handling dragging over barriers if in maze
                     algo.maze = True
@@ -298,9 +299,9 @@ def run_pathfinding(algo: AlgoState) -> None:
                 if event.key == pygame.K_s:
 
                     # If maze is currently small, no need to redraw
-                    if rows != 22:
+                    if gph.rows != 22:
                         # Changes graph size to small
-                        graph = change_graph_size(22)
+                        graph = change_graph_size(22, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -312,9 +313,9 @@ def run_pathfinding(algo: AlgoState) -> None:
                 if event.key == pygame.K_m:
 
                     # If maze is already medium, no need to redraw
-                    if rows != 46:
+                    if gph.rows != 46:
                         # Changes graph size to medium
-                        graph = change_graph_size(46)
+                        graph = change_graph_size(46, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None
@@ -326,9 +327,9 @@ def run_pathfinding(algo: AlgoState) -> None:
                 if event.key == pygame.K_l:
 
                     # If maze is already large, no need to redraw
-                    if rows != 95:
+                    if gph.rows != 95:
                         # Changes graph size to large
-                        graph = change_graph_size(95)
+                        graph = change_graph_size(95, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None

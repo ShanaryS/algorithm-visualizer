@@ -1,9 +1,10 @@
 """Draws and updates graph for visualization"""
 
 
+from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
-from pathfinding.values import ROWS, WIDTH_HEIGHT, SQUARE_SIZE
+from pathfinding.values import WIDTH_HEIGHT
 from pathfinding.node import Square
 
 
@@ -16,57 +17,58 @@ WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 LEGEND_AREA = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
 pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
 
-# Defining the size of the squares. Changes with change_graph_size
-rows = ROWS
-square_size = SQUARE_SIZE
-# Recursive division only works on certain row values. 22,23,46,47,94,95.
+
+@dataclass
+class GraphState:
+    """Stores the state of the graph. Changes with graph size."""
+
+    rows: int
+    square_size: float
+    wall_nodes: set
+
 
 # Creates the text needed for legend and when visualizing
 pygame.font.init()
-font = pygame.font.SysFont('Comic Sans MS', 12)
+FONT = pygame.font.SysFont('Comic Sans MS', 12)
 
-legend_add_node = font.render("Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR)
-legend_add_mid_node = font.render("Middle Click - Add mid node", True, LEGEND_COLOR)
-legend_remove_node = font.render("Right Click - Remove Node", True, LEGEND_COLOR)
-legend_clear_graph = font.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
-legend_graph_size = font.render("Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR)
-legend_dijkstra = font.render("Dijkstra - Press 'D'", True, LEGEND_COLOR)
-legend_a_star = font.render("A* - Press 'A'", True, LEGEND_COLOR)
-legend_bi_dijkstra = font.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
-legend_recursive_maze = font.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
-legend_instant_recursive_maze = font.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
+legend_add_node = FONT.render("Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR)
+legend_add_mid_node = FONT.render("Middle Click - Add mid node", True, LEGEND_COLOR)
+legend_remove_node = FONT.render("Right Click - Remove Node", True, LEGEND_COLOR)
+legend_clear_graph = FONT.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
+legend_graph_size = FONT.render("Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR)
+legend_dijkstra = FONT.render("Dijkstra - Press 'D'", True, LEGEND_COLOR)
+legend_a_star = FONT.render("A* - Press 'A'", True, LEGEND_COLOR)
+legend_bi_dijkstra = FONT.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
+legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
+legend_instant_recursive_maze = FONT.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
 
-vis_text_dijkstra = font.render("Visualizing Dijkstra...", True, VIS_COLOR)
-vis_text_a_star = font.render("Visualizing A*...", True, VIS_COLOR)
-vis_text_bi_dijkstra = font.render("Visualizing Bi-directional Dijkstra...", True, VIS_COLOR)
-vis_text_best_path = font.render("Laying best path...", True, VIS_COLOR)
-vis_text_recursive_maze = font.render("Generating recursive maze...", True, VIS_COLOR)
-vis_text_graph_size = font.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
-
-
-# Used to reinstate walls after deletion for mazes and dragging
-wall_nodes = set()
+vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
+vis_text_a_star = FONT.render("Visualizing A*...", True, VIS_COLOR)
+vis_text_bi_dijkstra = FONT.render("Visualizing Bi-directional Dijkstra...", True, VIS_COLOR)
+vis_text_best_path = FONT.render("Laying best path...", True, VIS_COLOR)
+vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_COLOR)
+vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
 
 
-def set_graph() -> list:
+def set_graph(gph: GraphState) -> list:
     """Creates the graph object that stores the location of all the squares"""
 
     graph = []
-    for i in range(rows):
+    for i in range(gph.rows):
         graph.append([])
-        for j in range(rows):
+        for j in range(gph.rows):
             # Uses Square class to create square object with necessary attributes
             square = Square(i, j)
 
             # Necessary for when changing graph size
-            square.update_values(rows, square_size)
+            square.update_values(gph.rows, gph.square_size)
 
             graph[i].append(square)
 
     return graph
 
 
-def draw(graph, legend=False, display_update=True) -> None:
+def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Sets background of graph to white and legend to grey
@@ -80,7 +82,7 @@ def draw(graph, legend=False, display_update=True) -> None:
             _draw_square(square_color, square_pos)
 
     # Draws the horizontal and vertical lines on the graph
-    _draw_lines()
+    _draw_lines(gph)
 
     # Legend is only shown if graph can be interacted with
     if legend:
@@ -96,14 +98,14 @@ def _draw_square(square_color, square_pos) -> None:
     pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
-def _draw_lines() -> None:
+def _draw_lines(gph: GraphState) -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
-    for i in range(rows):
+    for i in range(gph.rows):
         pygame.draw.line(WINDOW, LINE_COLOR,
-                         (0, i * square_size), (WIDTH, i * square_size))
+                         (0, i * gph.square_size), (WIDTH, i * gph.square_size))
         pygame.draw.line(WINDOW, LINE_COLOR,
-                         (i * square_size, 0), (i * square_size, WIDTH))
+                         (i * gph.square_size, 0), (i * gph.square_size, WIDTH))
 
 
 def _draw_legend() -> None:
@@ -162,42 +164,40 @@ def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
     pygame.display.update()
 
 
-def reset_graph(graph) -> None:
+def reset_graph(graph, gph: GraphState, algo) -> None:
     """Resets entire graph removing every square"""
 
     # Need to update these values
-    global dijkstra_finished, a_star_finished, bi_dijkstra_finished, maze
-    dijkstra_finished = False
-    a_star_finished = False
-    bi_dijkstra_finished = False
-    maze = False
+    algo.dijkstra_finished = False
+    algo.a_star_finished = False
+    algo.bi_dijkstra_finished = False
+    algo.maze = False
 
     # Resets each square
-    for i in range(rows):
-        for j in range(rows):
+    for i in range(gph.rows):
+        for j in range(gph.rows):
             square = graph[i][j]
             square.reset()
 
 
-def reset_algo(graph) -> None:
+def reset_algo(graph, gph: GraphState, algo) -> None:
     """Resets algo colors while keeping ordinal nodes and walls"""
 
     # Need to update these values
-    global dijkstra_finished, a_star_finished, bi_dijkstra_finished
-    dijkstra_finished = False
-    a_star_finished = False
-    bi_dijkstra_finished = False
+    algo.dijkstra_finished = False
+    algo.a_star_finished = False
+    algo.bi_dijkstra_finished = False
 
     # Resets only certain colors
-    for i in range(rows):
-        for j in range(rows):
+    for i in range(gph.rows):
+        for j in range(gph.rows):
             square = graph[i][j]
             if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
                     or square.is_closed() or square.is_path():
                 square.reset()
 
 
-def change_graph_size(new_row_size) -> list:
+def change_graph_size(new_row_size, gph: GraphState) -> list:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
@@ -206,12 +206,11 @@ def change_graph_size(new_row_size) -> list:
     draw_vis_text(is_graph_size=True)
 
     # Updates rows and square size with new values
-    global rows, square_size
-    rows = new_row_size
-    square_size = WIDTH / rows
+    gph.rows = new_row_size
+    gph.square_size = WIDTH / gph.rows
 
     # Recreates graph with new values
-    graph = set_graph()
-    draw(graph)
+    graph = set_graph(gph)
+    draw(graph, gph)
 
     return graph

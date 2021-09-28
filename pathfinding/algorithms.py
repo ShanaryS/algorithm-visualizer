@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
-from pathfinding.graph import draw, draw_vis_text, reset_algo, wall_nodes, rows
+from pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState
 from pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
 from pathfinding.node import Square
@@ -28,6 +28,7 @@ class AlgoState:
 def dijkstra(graph: list,
              start: Square,
              end: Square,
+             gph: GraphState,
              ignore_node: Square = None,
              draw_best_path: bool = True,
              visualize: bool = True) \
@@ -63,7 +64,7 @@ def dijkstra(graph: list,
         # Terminates if found the best path
         if curr_square == end:
             if draw_best_path:
-                best_path(graph, came_from, end, visualize=visualize)
+                best_path(graph, came_from, end, gph, visualize=visualize)
                 return True
 
             return came_from
@@ -84,7 +85,7 @@ def dijkstra(graph: list,
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not curr_square.is_closed():
-            draw(graph, display_update=False)
+            draw(graph, gph, display_update=False)
             draw_vis_text(is_dijkstra=True)
 
         # Sets square to closed after finished checking
@@ -97,6 +98,7 @@ def dijkstra(graph: list,
 def a_star(graph: list,
            start: Square,
            end: Square,
+           gph: GraphState,
            ignore_node: Square = None,
            draw_best_path: bool = True,
            visualize: bool = True) \
@@ -134,7 +136,7 @@ def a_star(graph: list,
         # Terminates if found the best path
         if curr_square == end:
             if draw_best_path:
-                best_path(graph, came_from, end, visualize=visualize)
+                best_path(graph, came_from, end, gph, visualize=visualize)
                 return True
 
             return came_from
@@ -156,7 +158,7 @@ def a_star(graph: list,
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not curr_square.is_closed():
-            draw(graph, display_update=False)
+            draw(graph, gph, display_update=False)
             draw_vis_text(is_a_star=True)
 
         # Sets square to closed after finished checking
@@ -177,6 +179,7 @@ def heuristic(pos1: tuple, pos2: tuple) -> int:
 def bi_dijkstra(graph: list,
                 start: Square,
                 end: Square,
+                gph: GraphState,
                 alt_color: bool = False,
                 ignore_node: Square = None,
                 draw_best_path: bool = True,
@@ -220,7 +223,7 @@ def bi_dijkstra(graph: list,
             if curr_square.is_open() and nei.is_open_alt():
                 if draw_best_path:
                     best_path_bi_dijkstra(graph, came_from_start, came_from_end,
-                                          curr_square, nei, visualize=visualize)
+                                          curr_square, nei, gph, visualize=visualize)
                     return True
 
                 return came_from_start, came_from_end, curr_square, nei
@@ -228,7 +231,7 @@ def bi_dijkstra(graph: list,
             elif curr_square.is_open_alt() and nei.is_open() and not alt_color:
                 if draw_best_path:
                     best_path_bi_dijkstra(graph, came_from_start, came_from_end,
-                                          nei, curr_square, visualize=visualize)
+                                          nei, curr_square, gph, visualize=visualize)
                     return True
 
                 return came_from_start, came_from_end, nei, curr_square
@@ -236,7 +239,7 @@ def bi_dijkstra(graph: list,
             elif curr_square.is_open_alt() and nei.is_open_alt_():
                 if draw_best_path:
                     best_path_bi_dijkstra(graph, came_from_start, came_from_end,
-                                          curr_square, nei, visualize=visualize)
+                                          curr_square, nei, gph, visualize=visualize)
                     return True
 
                 return came_from_start, came_from_end, curr_square, nei
@@ -244,7 +247,7 @@ def bi_dijkstra(graph: list,
             elif curr_square.is_open_alt_() and nei.is_open_alt():
                 if draw_best_path:
                     best_path_bi_dijkstra(graph, came_from_start, came_from_end,
-                                          nei, curr_square, visualize=visualize)
+                                          nei, curr_square, gph, visualize=visualize)
                     return True
 
                 return came_from_start, came_from_end, nei, curr_square
@@ -286,7 +289,7 @@ def bi_dijkstra(graph: list,
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not curr_square.is_closed():
-            draw(graph, display_update=False)
+            draw(graph, gph, display_update=False)
             draw_vis_text(is_bi_dijkstra=True)
 
         # Sets square to closed after finished checking
@@ -301,6 +304,7 @@ def best_path_bi_dijkstra(graph: list,
                           came_from_end: dict,
                           first_meet_node: Square,
                           second_meet_node: Square,
+                          gph: GraphState,
                           visualize: bool = True) \
                           -> None:
 
@@ -311,7 +315,7 @@ def best_path_bi_dijkstra(graph: list,
         return
 
     # Draws best path for first swarm
-    best_path(graph, came_from_start, first_meet_node, visualize=visualize)
+    best_path(graph, came_from_start, first_meet_node, gph, visualize=visualize)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
     first_meet_node.set_path()
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
@@ -319,13 +323,14 @@ def best_path_bi_dijkstra(graph: list,
     # Draws best path for second swarm
     second_meet_node.set_path()
     # To not skip the last two at once, need a draw and draw_vis_text here
-    best_path(graph, came_from_end, second_meet_node, reverse=True, visualize=visualize)
+    best_path(graph, came_from_end, second_meet_node, gph, reverse=True, visualize=visualize)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
 
 
 def best_path(graph: list,
               came_from: dict,
               curr_square: Square,
+              gph: GraphState,
               reverse: bool = False,
               visualize: bool = True) \
               -> None:
@@ -348,14 +353,14 @@ def best_path(graph: list,
             square.set_path()
             if visualize:
                 pygame.time.delay(BEST_PATH_SLEEP)
-                draw(graph, display_update=False)
+                draw(graph, gph, display_update=False)
                 draw_vis_text(is_best_path=True)
     else:
         for square in path[len(path)-2::-1]:
             square.set_path()
             if visualize:
                 pygame.time.delay(BEST_PATH_SLEEP)
-                draw(graph, display_update=False)
+                draw(graph,  gph, display_update=False)
                 draw_vis_text(is_best_path=True)
 
 
@@ -363,6 +368,7 @@ def start_mid_end(graph: list,
                   start: Square,
                   mid: Square,
                   end: Square,
+                  gph: GraphState,
                   algo: AlgoState,
                   is_dijkstra: bool = False,
                   is_a_star: bool = False,
@@ -375,51 +381,54 @@ def start_mid_end(graph: list,
     # Selects the correct algo to use
     if is_dijkstra:
         if visualize:
-            start_to_mid = dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = dijkstra(graph, mid, end, ignore_node=start, draw_best_path=False)
+            start_to_mid = dijkstra(graph, start, mid, gph, ignore_node=end, draw_best_path=False)
+            mid_to_end = dijkstra(graph, mid, end, gph, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, algo, is_dijkstra=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, algo, is_dijkstra=True, ignore_node=start,
+            start_to_mid = algo_no_vis(graph, start, mid, gph, algo,
+                                       is_dijkstra=True, ignore_node=end, draw_best_path=False)
+            mid_to_end = algo_no_vis(graph, mid, end, gph, algo, is_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
-        best_path(graph, start_to_mid, mid, visualize=visualize)
-        best_path(graph, mid_to_end, end, visualize=visualize)
+        best_path(graph, start_to_mid, mid, gph, visualize=visualize)
+        best_path(graph, mid_to_end, end, gph, visualize=visualize)
     elif is_a_star:
         if visualize:
-            start_to_mid = a_star(graph, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = a_star(graph, mid, end, ignore_node=start, draw_best_path=False)
+            start_to_mid = a_star(graph, start, mid, gph, ignore_node=end, draw_best_path=False)
+            mid_to_end = a_star(graph, mid, end, gph, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, algo, is_a_star=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, algo, is_a_star=True, ignore_node=start,
+            start_to_mid = algo_no_vis(graph, start, mid, gph, algo,
+                                       is_a_star=True, ignore_node=end, draw_best_path=False)
+            mid_to_end = algo_no_vis(graph, mid, end, gph, algo, is_a_star=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
-        best_path(graph, start_to_mid, mid, visualize=visualize)
-        best_path(graph, mid_to_end, end, visualize=visualize)
+        best_path(graph, start_to_mid, mid, gph, visualize=visualize)
+        best_path(graph, mid_to_end, end, gph, visualize=visualize)
     elif is_bi_dijkstra:
         if visualize:
-            start_to_mid = bi_dijkstra(graph, start, mid, ignore_node=end, draw_best_path=False)
-            mid_to_end = bi_dijkstra(graph, mid, end, alt_color=True, ignore_node=start, draw_best_path=False)
+            start_to_mid = bi_dijkstra(graph, start, mid, gph, ignore_node=end, draw_best_path=False)
+            mid_to_end = bi_dijkstra(graph, mid, end, gph, alt_color=True, ignore_node=start, draw_best_path=False)
         else:
-            start_to_mid = algo_no_vis(graph, start, mid, algo,
+            start_to_mid = algo_no_vis(graph, start, mid, gph, algo,
                                        is_bi_dijkstra=True, ignore_node=end, draw_best_path=False)
-            mid_to_end = algo_no_vis(graph, mid, end, algo, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
+            mid_to_end = algo_no_vis(graph, mid, end, gph, algo, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
 
         # Fixes bug when can't find a path
         if not isinstance(start_to_mid, bool):
             best_path_bi_dijkstra(graph, start_to_mid[0], start_to_mid[1],
-                                  start_to_mid[2], start_to_mid[3], visualize=visualize)
+                                  start_to_mid[2], start_to_mid[3], gph, visualize=visualize)
         if not isinstance(mid_to_end, bool):
             best_path_bi_dijkstra(graph, mid_to_end[0], mid_to_end[1],
-                                  mid_to_end[2], mid_to_end[3], visualize=visualize)
+                                  mid_to_end[2], mid_to_end[3], gph, visualize=visualize)
 
 
 def algo_no_vis(graph: list,
                 start: Square,
                 end: Square,
+                gph: GraphState,
                 algo: AlgoState,
                 is_dijkstra: bool = False,
                 is_a_star: bool = False,
@@ -435,41 +444,42 @@ def algo_no_vis(graph: list,
     # Selects the correct algo to use
     if is_dijkstra:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(graph)
+            reset_algo(graph, gph, algo)
         algo.dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
-            dijkstra(graph, start, end, visualize=False)
+            dijkstra(graph, start, end, gph, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
         else:
-            return dijkstra(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
+            return dijkstra(graph, start, end, gph, ignore_node=ignore_node, draw_best_path=False, visualize=False)
     elif is_a_star:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(graph)
+            reset_algo(graph, gph, algo)
         algo.a_star_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
-            a_star(graph, start, end, visualize=False)
+            a_star(graph, start, end, gph, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
         else:
-            return a_star(graph, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
+            return a_star(graph, start, end, gph, ignore_node=ignore_node, draw_best_path=False, visualize=False)
     elif is_bi_dijkstra:
         if reset:   # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(graph)
+            reset_algo(graph, gph, algo)
         algo.bi_dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
-            bi_dijkstra(graph, start, end, alt_color=alt_color, visualize=False)
+            bi_dijkstra(graph, start, end, gph, alt_color=alt_color, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
         else:
-            return bi_dijkstra(graph, start, end, alt_color=alt_color, ignore_node=ignore_node,
+            return bi_dijkstra(graph, start, end, gph, alt_color=alt_color, ignore_node=ignore_node,
                                draw_best_path=False, visualize=False)
 
 
 def draw_recursive_maze(graph: list,
+                        gph: GraphState,
                         chamber: tuple = None,
                         visualize: bool = True) \
                         -> None:
@@ -503,18 +513,18 @@ def draw_recursive_maze(graph: list,
     if chamber_width >= division_limit:
         for y in range(chamber_height):
             graph[chamber_left + x_divide][chamber_top + y].set_wall()
-            wall_nodes.add(graph[chamber_left + x_divide][chamber_top + y])
+            gph.wall_nodes.add(graph[chamber_left + x_divide][chamber_top + y])
             if visualize:
-                draw(graph, display_update=False)
+                draw(graph, gph, display_update=False)
                 draw_vis_text(is_recursive_maze=True)
 
     # Draws horizontal maze line within chamber
     if chamber_height >= division_limit:
         for x in range(chamber_width):
             graph[chamber_left + x][chamber_top + y_divide].set_wall()
-            wall_nodes.add(graph[chamber_left + x][chamber_top + y_divide])
+            gph.wall_nodes.add(graph[chamber_left + x][chamber_top + y_divide])
             if visualize:
-                draw(graph, display_update=False)
+                draw(graph, gph, display_update=False)
                 draw_vis_text(is_recursive_maze=True)
 
     # Terminates if below division limit
@@ -544,7 +554,7 @@ def draw_recursive_maze(graph: list,
     num_gaps: int = 3
 
     # Prevents drawing wall over gaps
-    gaps_to_offset: list = [x for x in range(num_gaps - 1, rows, num_gaps)]
+    gaps_to_offset: list = [x for x in range(num_gaps - 1, gph.rows, num_gaps)]
 
     # Draws the gaps into the walls
     for wall in get_random_sample(walls, num_gaps):
@@ -556,8 +566,8 @@ def draw_recursive_maze(graph: list,
                     x -= 1
                 else:
                     x += 1
-            if x >= rows:
-                x = rows - 1
+            if x >= gph.rows:
+                x = gph.rows - 1
         else:
             x = wall[0]
             y = get_randrange(wall[1], wall[1] + wall[3])
@@ -566,12 +576,12 @@ def draw_recursive_maze(graph: list,
                     y -= 1
                 else:
                     y += 1
-            if y >= rows:
-                y = rows - 1
+            if y >= gph.rows:
+                y = gph.rows - 1
         graph[x][y].reset()
-        wall_nodes.discard(graph[x][y])
+        gph.wall_nodes.discard(graph[x][y])
         if visualize:
-            draw(graph, display_update=False)
+            draw(graph, gph, display_update=False)
             draw_vis_text(is_recursive_maze=True)
 
     # Recursively divides chambers
