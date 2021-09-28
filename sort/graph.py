@@ -4,7 +4,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
 from sort import algorithms as sort
-from sort.colors import *
+from sort.colors import MatplotlibColors as PltC
 from sort.values import generate_array, remove_duplicates
 
 
@@ -27,7 +27,7 @@ def set_graph() -> None:
     # Clears previous graph for update
     plt.clf()
     global vis
-    vis = plt.bar(labels, array, color=MPL_DEFAULT)
+    vis = plt.bar(labels, array, color=PltC.DEFAULT)
     plt.subplots_adjust(left=0.15, bottom=0.3)
 
     # Shows 'x', 'y' or 'xy' axis
@@ -44,30 +44,30 @@ def buttons_sliders() -> None:
 
     # Creates buttons with their locations, text, and color
     generate_loc = plt.axes([0.35, 0.235, 0.3, 0.05])  # left, bottom, width, height
-    generate = Button(ax=generate_loc, label='Generate New Array', color=MPL_CYAN)
+    generate = Button(ax=generate_loc, label='Generate New Array', color=PltC.CYAN)
     stop_loc = plt.axes([0.85, 0.03, 0.1, 0.05])  # left, bottom, width, height
-    stop = Button(ax=stop_loc, label='Stop', color=MPL_RED)
+    stop = Button(ax=stop_loc, label='Stop', color=PltC.RED)
     size_loc = plt.axes([0.05, 0.235, 0.05, 0.5])
     size = Slider(ax=size_loc, label='Size & Speed', valmin=5, valmax=100,
                   valinit=array_size, valstep=1, orientation='vertical')
     sel_loc = plt.axes([0.225, 0.03, 0.15, 0.05])
-    sel = Button(ax=sel_loc, label='Selection', color=MPL_ORANGE)
+    sel = Button(ax=sel_loc, label='Selection', color=PltC.ORANGE)
     ins_loc = plt.axes([0.625, 0.1, 0.15, 0.05])
-    ins = Button(ax=ins_loc, label='Insertion', color=MPL_ORANGE)
+    ins = Button(ax=ins_loc, label='Insertion', color=PltC.ORANGE)
     bub_loc = plt.axes([0.425, 0.03, 0.15, 0.05])
-    bub = Button(ax=bub_loc, label='Bubble', color=MPL_ORANGE)
+    bub = Button(ax=bub_loc, label='Bubble', color=PltC.ORANGE)
     heap_loc = plt.axes([0.225, 0.1, 0.15, 0.05])
-    heap = Button(ax=heap_loc, label='Heapsort', color=MPL_YELLOW)
+    heap = Button(ax=heap_loc, label='Heapsort', color=PltC.YELLOW)
     quick_loc = plt.axes([0.625, 0.17, 0.15, 0.05])
-    quick = Button(ax=quick_loc, label='Quicksort', color=MPL_GREEN)
+    quick = Button(ax=quick_loc, label='Quicksort', color=PltC.GREEN)
     merge_loc = plt.axes([0.225, 0.17, 0.15, 0.05])
-    merge = Button(ax=merge_loc, label='Mergesort', color=MPL_GREEN)
+    merge = Button(ax=merge_loc, label='Mergesort', color=PltC.GREEN)
     tim_loc = plt.axes([0.425, 0.1, 0.15, 0.05])
-    tim = Button(ax=tim_loc, label='Timsort', color=MPL_GREEN)
+    tim = Button(ax=tim_loc, label='Timsort', color=PltC.GREEN)
     radix_loc = plt.axes([0.425, 0.17, 0.15, 0.05])
-    radix = Button(ax=radix_loc, label='Radix', color=MPL_GREEN)
+    radix = Button(ax=radix_loc, label='Radix', color=PltC.GREEN)
     bogo_loc = plt.axes([0.625, 0.03, 0.15, 0.05])
-    bogo = Button(ax=bogo_loc, label='Bogosort', color=MPL_TOMATO)
+    bogo = Button(ax=bogo_loc, label='Bogosort', color=PltC.TOMATO)
 
     # These functions define the action on click
     def generate_new_array(_) -> None:
