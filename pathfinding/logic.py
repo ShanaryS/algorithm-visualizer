@@ -349,11 +349,6 @@ Add prim maze and sticky mud
 
 Bugs to fix:
 
-Split main into multiple funcs
-Clearing graph doesn't work but calling another algo does, clear graph doesn't clear barriers and algo isn't false
-Dragging node seems to default to dijkstra
-Instant algo even after clearing graph
-Crash when changing graph size sometimes
 When clicking to remove start/end node with mid node and reinstating it on completed algo, doesn't update properly
 Bi-directional dijkstra only draws best_path when edges of swarms are touching. Only manifests with mid nodes
 Maze can change size if window loses focus for a few seconds. Mainly with the large maze.
