@@ -16,7 +16,8 @@ def main() -> None:
     gph = GraphState(
         rows=ROWS,
         square_size=SQUARE_SIZE,
-        wall_nodes=set()
+        wall_nodes=set(),
+        img=False
     )
 
     algo = AlgoState(

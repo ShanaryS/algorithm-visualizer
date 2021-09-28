@@ -4,8 +4,7 @@
 import pygame
 from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
-from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, HEIGHT
-from pathfinding.graph import change_graph_size, GraphState
+from pathfinding.graph import set_graph, draw, reset_graph, reset_algo, change_graph_size, GraphState, HEIGHT
 
 
 def get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
@@ -301,6 +300,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is currently small, no need to redraw
                     if gph.rows != 22:
                         # Changes graph size to small
+                        gph.img = False
                         graph = change_graph_size(22, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -315,6 +315,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already medium, no need to redraw
                     if gph.rows != 46:
                         # Changes graph size to medium
+                        gph.img = False
                         graph = change_graph_size(46, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
@@ -329,7 +330,23 @@ def run_pathfinding(gph: GraphState, algo: AlgoState) -> None:
                     # If maze is already large, no need to redraw
                     if gph.rows != 95:
                         # Changes graph size to large
+                        gph.img = False
                         graph = change_graph_size(95, gph)
+
+                        # Reset ordinal nodes as it cannot be in reset_graph due to scope
+                        start = None
+                        mid = None
+                        end = None
+
+            # Redraw large maze with "X" key on keyboard if not currently x-large
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_x:
+
+                    # If maze is already large, no need to redraw
+                    if gph.rows != 200:
+                        # Changes graph size to large
+                        gph.img = True
+                        graph = change_graph_size(200, gph)
 
                         # Reset ordinal nodes as it cannot be in reset_graph due to scope
                         start = None

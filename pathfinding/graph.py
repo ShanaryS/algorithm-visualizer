@@ -16,6 +16,7 @@ class GraphState:
     rows: int
     square_size: float
     wall_nodes: set
+    img: bool
 
 
 # Defining window properties as well as graph size
@@ -83,8 +84,9 @@ def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
             _draw_square(square_color, square_pos)
 
     # Draws the horizontal and vertical lines on the graph
+    if gph.img:
+        _draw_img()
     _draw_lines(gph)
-    _draw_img()
 
     # Legend is only shown if graph can be interacted with
     if legend:

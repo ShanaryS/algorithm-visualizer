@@ -1,5 +1,6 @@
 import os
 import requests
+from urllib.parse import quote as url_encode
 from dotenv import load_dotenv
 
 
@@ -15,8 +16,9 @@ def get_img() -> bytes:
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
     params = 'center=Berkeley,CA&zoom=13&size=400x400&scale=2'
+    style = ''  # '&style=feature:all|color:#000000'
     KEY = get_api_key()
-    url = base_url + params + KEY
+    url = base_url + params + url_encode(style, safe=':&=') + KEY
 
     img = requests.get(url).content
 
