@@ -1,6 +1,7 @@
 """Draws and updates graph for visualization"""
 
 
+import os.path
 from dataclasses import dataclass
 import pygame
 from pathfinding.colors import *
@@ -83,6 +84,7 @@ def draw(graph, gph: GraphState, legend=False, display_update=True) -> None:
 
     # Draws the horizontal and vertical lines on the graph
     _draw_lines(gph)
+    _draw_img()
 
     # Legend is only shown if graph can be interacted with
     if legend:
@@ -106,6 +108,12 @@ def _draw_lines(gph: GraphState) -> None:
                          (0, i * gph.square_size), (WIDTH, i * gph.square_size))
         pygame.draw.line(WINDOW, LINE_COLOR,
                          (i * gph.square_size, 0), (i * gph.square_size, WIDTH))
+
+
+def _draw_img() -> None:
+    """Draws the maps image onto the graph"""
+    img = pygame.image.load(os.path.join('pathfinding', 'img.jpg'))
+    WINDOW.blit(img, (0, 0))
 
 
 def _draw_legend() -> None:

@@ -14,7 +14,7 @@ def get_img() -> bytes:
     """Gets the images from the specified url"""
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
-    params = 'center=Berkeley,CA&zoom=14&size=400x400'
+    params = 'center=Berkeley,CA&zoom=13&size=400x400&scale=2'
     KEY = get_api_key()
     url = base_url + params + KEY
 
@@ -26,5 +26,5 @@ def get_img() -> bytes:
 def write_img(img) -> None:
     """Saves image as file"""
 
-    with open('img.jpg', 'wb') as img_file:
+    with open(os.path.join('pathfinding', 'img.jpg'), 'wb') as img_file:
         img_file.write(img)
