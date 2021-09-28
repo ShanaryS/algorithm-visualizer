@@ -8,6 +8,15 @@ from pathfinding.values import WIDTH_HEIGHT
 from pathfinding.node import Square
 
 
+@dataclass
+class GraphState:
+    """Stores the state of the graph. Changes with graph size."""
+
+    rows: int
+    square_size: float
+    wall_nodes: set
+
+
 # Defining window properties as well as graph size
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 879
@@ -16,15 +25,6 @@ HEIGHT = WIDTH_HEIGHT
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 LEGEND_AREA = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
 pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
-
-
-@dataclass
-class GraphState:
-    """Stores the state of the graph. Changes with graph size."""
-
-    rows: int
-    square_size: float
-    wall_nodes: set
 
 
 # Creates the text needed for legend and when visualizing
