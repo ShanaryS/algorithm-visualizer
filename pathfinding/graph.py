@@ -20,6 +20,11 @@ class GraphState:
     has_img: bool = False
     img: Optional[bytes] = None
 
+    # These control the speed of the program. The last is used for speeding up certain parts when necessary.
+    FPS: int = 240
+    speed_multiplier: int = 1
+    frame_count: int = 0
+
 
 # Defining window properties as well as graph size
 WINDOW_WIDTH = 800
