@@ -162,7 +162,8 @@ def set_squares_to_roads(gph: GraphState) -> None:
                 if avg_b > 225:
                     square.reset()
                 else:
-                    square.set_highway()
+                    square.reset()
+                    square.is_highway = True
             else:
                 square.set_wall()
                 gph.wall_nodes.add(square)

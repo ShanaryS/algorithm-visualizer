@@ -20,6 +20,7 @@ class AlgoState:
     bi_dijkstra_finished: bool = False
     maze: bool = False
     best_path_sleep: int = 3
+    highway_multiplier = 3
 
 
 def dijkstra(gph: GraphState,

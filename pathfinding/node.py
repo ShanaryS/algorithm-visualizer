@@ -18,6 +18,7 @@ class Square:
         self.neighbours: list = []
         self.color = DEFAULT_COLOR
         self.wall_color = WALL_COLOR
+        self.is_highway = False
 
     def __lt__(self, other) -> bool:
         """Allows comparison of squares"""
@@ -82,7 +83,7 @@ class Square:
 
     def reset(self) -> None:
         """Sets node to blank"""
-        self.color = DEFAULT_COLOR
+        self.color, self.is_highway = DEFAULT_COLOR, False
 
     def set_open(self) -> None:
         """Sets node to open"""
