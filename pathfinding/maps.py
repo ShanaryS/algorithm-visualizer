@@ -16,7 +16,6 @@ def get_img_base(loc) -> bytes:
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
     center = 'center='
-    # loc = 'Berkeley,CA'
     params = '&zoom=13&size=400x400&scale=2'
     KEY = get_api_key()
     url = base_url + center + loc + params + KEY
@@ -37,7 +36,6 @@ def get_img_clean(loc) -> bytes:
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
     center = 'center='
-    # loc = 'Berkeley,CA'
     params = '&zoom=13&size=400x400&scale=2'
     style = '&style=feature:landscape|color:0x000000' \
             '&style=feature:poi|visibility:off' \
@@ -60,8 +58,8 @@ def write_img_clean(img) -> None:
 
 
 if __name__ == '__main__':
-    b = get_img_base()
+    b = get_img_base('Berkeley,CA')
     write_img_base(b)
 
-    c = get_img_clean()
+    c = get_img_clean('Berkeley,CA')
     write_img_clean(c)
