@@ -16,6 +16,16 @@ This is a tool to visualize the operations of the most popular pathfinding, sort
   <img src="https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif" alt="animated" />
 </p>
 
+***
+
+<p align="center">
+  Visit the streets of anywhere in the world! Powered by google maps API:
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86130442/135221074-589c281d-7a79-4fe2-85c0-a1c6f97d1ad2.gif" alt="animated" />
+</p>
+
 Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with recursive division animations or instantly:
 :-------------------------:|:-------------------------:
 ![Pathfinding Demo #2](https://user-images.githubusercontent.com/86130442/132563386-554f632d-e1bf-41f8-9e5d-1f6e06487186.gif)  |  ![Pathfinding Demo #3](https://user-images.githubusercontent.com/86130442/132563681-c7387b5b-f8b3-4e7b-9578-34428a0f850c.gif)
