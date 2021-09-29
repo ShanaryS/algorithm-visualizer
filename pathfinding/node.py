@@ -18,6 +18,7 @@ class Square:
         self.neighbours: list = []
         self.color = DEFAULT_COLOR
         self.wall_color = WALL_COLOR
+        self.path_color = PATH_COLOR
 
     def __lt__(self, other) -> bool:
         """Allows comparison of squares"""
@@ -78,7 +79,7 @@ class Square:
 
     def is_path(self) -> bool:
         """Checks if path node"""
-        return self.color == PATH_COLOR
+        return self.color == self.path_color
 
     def reset(self) -> None:
         """Sets node to blank"""
@@ -120,7 +121,7 @@ class Square:
 
     def set_path(self) -> None:
         """Sets node to path"""
-        self.color = PATH_COLOR
+        self.color = self.path_color
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
