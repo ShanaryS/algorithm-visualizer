@@ -9,6 +9,17 @@ from pathfinding.node import Square
 from typing import Optional
 
 
+# Defining window properties as well as graph size
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 879
+WIDTH = WIDTH_HEIGHT
+HEIGHT = WIDTH_HEIGHT
+WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+LEGEND_AREA = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
+pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
+pygame.font.init()
+
+
 @dataclass
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
@@ -25,37 +36,37 @@ class GraphState:
     speed_multiplier: int = 1
 
 
-# Defining window properties as well as graph size
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 879
-WIDTH = WIDTH_HEIGHT
-HEIGHT = WIDTH_HEIGHT
-WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-LEGEND_AREA = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
-pygame.display.set_caption("Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer")
+@dataclass
+class VisText:
+    """Creates the text needed for legend and when visualizing"""
 
+    input_text: str = ""
 
-# Creates the text needed for legend and when visualizing
-pygame.font.init()
-FONT = pygame.font.SysFont('Comic Sans MS', 12)
+    FONT = pygame.font.SysFont('Comic Sans MS', 12)
 
-legend_add_node = FONT.render("Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR)
-legend_add_mid_node = FONT.render("Middle Click - Add mid node", True, LEGEND_COLOR)
-legend_remove_node = FONT.render("Right Click - Remove Node", True, LEGEND_COLOR)
-legend_clear_graph = FONT.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
-legend_graph_size = FONT.render("Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR)
-legend_dijkstra = FONT.render("Dijkstra - Press 'D'", True, LEGEND_COLOR)
-legend_a_star = FONT.render("A* - Press 'A'", True, LEGEND_COLOR)
-legend_bi_dijkstra = FONT.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
-legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
-legend_instant_recursive_maze = FONT.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
+    legend_add_node = FONT.render("Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR)
+    legend_add_mid_node = FONT.render("Middle Click - Add mid node", True, LEGEND_COLOR)
+    legend_remove_node = FONT.render("Right Click - Remove Node", True, LEGEND_COLOR)
+    legend_clear_graph = FONT.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
+    legend_graph_size = FONT.render("Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR)
+    legend_dijkstra = FONT.render("Dijkstra - Press 'D'", True, LEGEND_COLOR)
+    legend_a_star = FONT.render("A* - Press 'A'", True, LEGEND_COLOR)
+    legend_bi_dijkstra = FONT.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
+    legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
+    legend_instant_recursive_maze = FONT.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
 
-vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
-vis_text_a_star = FONT.render("Visualizing A*...", True, VIS_COLOR)
-vis_text_bi_dijkstra = FONT.render("Visualizing Bi-directional Dijkstra...", True, VIS_COLOR)
-vis_text_best_path = FONT.render("Laying best path...", True, VIS_COLOR)
-vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_COLOR)
-vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
+    vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
+    vis_text_a_star = FONT.render("Visualizing A*...", True, VIS_COLOR)
+    vis_text_bi_dijkstra = FONT.render("Visualizing Bi-directional Dijkstra...", True, VIS_COLOR)
+    vis_text_best_path = FONT.render("Laying best path...", True, VIS_COLOR)
+    vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_COLOR)
+    vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
+    vis_text_input_ask = FONT.render("Enter an address (NO COMMAS):", True, VIS_COLOR)
+    vis_text_input = FONT.render(f"{input_text}", True, VIS_COLOR)
+
+    def update_vis_text_input(self) -> None:
+        """Updates vis_text_input with new input_text"""
+        self.vis_text_input = self.FONT.render(f"{self.input_text}", True, VIS_COLOR)
 
 
 def set_graph(gph: GraphState) -> None:
@@ -74,7 +85,7 @@ def set_graph(gph: GraphState) -> None:
             gph.graph[i].append(square)
 
 
-def draw(gph: GraphState, legend=False, display_update=True) -> None:
+def draw(gph: GraphState, txt: VisText, legend=False, display_update=True) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Sets background of graph to white and legend to grey
@@ -94,7 +105,7 @@ def draw(gph: GraphState, legend=False, display_update=True) -> None:
 
     # Legend is only shown if graph can be interacted with
     if legend:
-        _draw_legend()
+        _draw_legend(txt)
 
     # Display may not want to update display immediately before doing other operations
     if display_update:
@@ -145,26 +156,27 @@ def set_squares_to_roads(gph: GraphState) -> None:
                 gph.wall_nodes.add(square)
 
 
-def _draw_legend() -> None:
+def _draw_legend(txt: VisText) -> None:
     """Helper function to define the location of the legend"""
 
     # Left legend
-    WINDOW.blit(legend_add_node, (2, 15*53.1 + 3))
-    WINDOW.blit(legend_add_mid_node, (2, 15*54.1 + 3))
-    WINDOW.blit(legend_remove_node, (2, 15*55.1 + 3))
-    WINDOW.blit(legend_clear_graph, (2, 15*56.1 + 3))
-    WINDOW.blit(legend_graph_size, (2, 15*57.1 + 3))
+    WINDOW.blit(txt.legend_add_node, (2, 15*53.1 + 3))
+    WINDOW.blit(txt.legend_add_mid_node, (2, 15*54.1 + 3))
+    WINDOW.blit(txt.legend_remove_node, (2, 15*55.1 + 3))
+    WINDOW.blit(txt.legend_clear_graph, (2, 15*56.1 + 3))
+    WINDOW.blit(txt.legend_graph_size, (2, 15*57.1 + 3))
 
     # Right legend
-    WINDOW.blit(legend_dijkstra, (WIDTH - legend_dijkstra.get_width()-2, 15*53.1 + 3))
-    WINDOW.blit(legend_a_star, (WIDTH - legend_a_star.get_width()-2, 15*54.1 + 3))
-    WINDOW.blit(legend_bi_dijkstra, (WIDTH - legend_bi_dijkstra.get_width()-2, 15*55.1 + 3))
-    WINDOW.blit(legend_recursive_maze, (WIDTH - legend_recursive_maze.get_width()-2, 15*56.1 + 3))
-    WINDOW.blit(legend_instant_recursive_maze, (WIDTH - legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
+    WINDOW.blit(txt.legend_dijkstra, (WIDTH - txt.legend_dijkstra.get_width()-2, 15*53.1 + 3))
+    WINDOW.blit(txt.legend_a_star, (WIDTH - txt.legend_a_star.get_width()-2, 15*54.1 + 3))
+    WINDOW.blit(txt.legend_bi_dijkstra, (WIDTH - txt.legend_bi_dijkstra.get_width()-2, 15*55.1 + 3))
+    WINDOW.blit(txt.legend_recursive_maze, (WIDTH - txt.legend_recursive_maze.get_width()-2, 15*56.1 + 3))
+    WINDOW.blit(txt.legend_instant_recursive_maze,
+                (WIDTH - txt.legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
 
 
-def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
-                  is_best_path=False, is_recursive_maze=False, is_graph_size=False) -> None:
+def draw_vis_text(txt: VisText, is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False, is_best_path=False,
+                  is_recursive_maze=False, is_graph_size=False, is_input=False) -> None:
     """Special text indicating some operation is being performed. No inputs are registered."""
 
     # Defines the center of the graph and legend for text placement
@@ -173,29 +185,37 @@ def draw_vis_text(is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False,
 
     # Text to be shown depending on operation
     if is_dijkstra:
-        WINDOW.blit(vis_text_dijkstra,
-                    (WIDTH//2 - vis_text_dijkstra.get_width()//2,
-                     center_legend_area - vis_text_dijkstra.get_height()//2))
+        WINDOW.blit(txt.vis_text_dijkstra,
+                    (WIDTH//2 - txt.vis_text_dijkstra.get_width()//2,
+                     center_legend_area - txt.vis_text_dijkstra.get_height()//2))
     elif is_a_star:
-        WINDOW.blit(vis_text_a_star,
-                    (WIDTH//2 - vis_text_a_star.get_width()//2,
-                     center_legend_area - vis_text_a_star.get_height()//2))
+        WINDOW.blit(txt.vis_text_a_star,
+                    (WIDTH//2 - txt.vis_text_a_star.get_width()//2,
+                     center_legend_area - txt.vis_text_a_star.get_height()//2))
     elif is_bi_dijkstra:
-        WINDOW.blit(vis_text_bi_dijkstra,
-                    (WIDTH//2 - vis_text_bi_dijkstra.get_width()//2,
-                     center_legend_area - vis_text_bi_dijkstra.get_height()//2))
+        WINDOW.blit(txt.vis_text_bi_dijkstra,
+                    (WIDTH//2 - txt.vis_text_bi_dijkstra.get_width()//2,
+                     center_legend_area - txt.vis_text_bi_dijkstra.get_height()//2))
     elif is_best_path:
-        WINDOW.blit(vis_text_best_path,
-                    (WIDTH // 2 - vis_text_best_path.get_width() // 2,
-                     center_legend_area - vis_text_best_path.get_height() // 2))
+        WINDOW.blit(txt.vis_text_best_path,
+                    (WIDTH // 2 - txt.vis_text_best_path.get_width() // 2,
+                     center_legend_area - txt.vis_text_best_path.get_height() // 2))
     elif is_recursive_maze:
-        WINDOW.blit(vis_text_recursive_maze,
-                    (WIDTH//2 - vis_text_recursive_maze.get_width()//2,
-                     center_legend_area - vis_text_recursive_maze.get_height()//2))
+        WINDOW.blit(txt.vis_text_recursive_maze,
+                    (WIDTH//2 - txt.vis_text_recursive_maze.get_width()//2,
+                     center_legend_area - txt.vis_text_recursive_maze.get_height()//2))
     elif is_graph_size:
-        WINDOW.blit(vis_text_graph_size,
-                    (WIDTH//2 - vis_text_graph_size.get_width()//2,
-                     center_graph - vis_text_graph_size.get_height()//2))
+        WINDOW.blit(txt.vis_text_graph_size,
+                    (WIDTH//2 - txt.vis_text_graph_size.get_width()//2,
+                     center_graph - txt.vis_text_graph_size.get_height()//2))
+    elif is_input:
+        WINDOW.blit(txt.vis_text_input_ask,
+                    (WIDTH // 2 - txt.vis_text_input_ask.get_width() // 2,
+                     center_legend_area - txt.vis_text_input_ask.get_height() // 2 - 15))
+        txt.update_vis_text_input()
+        WINDOW.blit(txt.vis_text_input,
+                    (WIDTH//2 - txt.vis_text_input.get_width()//2,
+                     center_legend_area - txt.vis_text_input.get_height()//2))
 
     # Always called after draw. In that scenario draw won't update display so this will
     pygame.display.update()
@@ -236,13 +256,13 @@ def reset_algo(gph: GraphState, algo) -> None:
                 square.reset()
 
 
-def change_graph_size(gph: GraphState, algo, new_row_size) -> None:
+def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
 
     # Displays text that size is changing
-    draw_vis_text(is_graph_size=True)
+    draw_vis_text(txt, is_graph_size=True)
 
     # Updates rows and square size with new values
     reset_graph(gph, algo)
@@ -251,4 +271,4 @@ def change_graph_size(gph: GraphState, algo, new_row_size) -> None:
 
     # Recreates graph with new values
     set_graph(gph)
-    draw(gph)
+    draw(gph, txt)
