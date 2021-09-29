@@ -390,8 +390,11 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
 
     txt.address = txt.address.replace(',', '')  # Used to get rid of commas inserted by url encoding.
 
-    while True:
+    while lgc.run:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                lgc.run = False
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     txt.address += event.unicode
@@ -406,6 +409,8 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
 
         draw(gph, txt, display_update=False)
         draw_vis_text(txt, is_input=True)
+
+    pygame.quit()
 
 
 '''
