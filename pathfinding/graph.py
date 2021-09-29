@@ -129,6 +129,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
         for y in range(len(gph.graph[0])):
             square = gph.graph[x][y]
             square.wall_color = WALL_COLOR_MAP
+            square.path_color = END_COLOR
             tot = 0
             for i in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
@@ -209,12 +210,14 @@ def reset_graph(gph: GraphState, algo) -> None:
     algo.a_star_finished = False
     algo.bi_dijkstra_finished = False
     algo.maze = False
+    gph.speed_multiplier = 1
 
     # Resets each square
     for i in range(gph.rows):
         for j in range(gph.rows):
             square = gph.graph[i][j]
             square.wall_color = WALL_COLOR
+            square.path_color = PATH_COLOR
             square.reset()
 
 
