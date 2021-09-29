@@ -85,10 +85,14 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
 
             # Draw recursive maze with "G" key on keyboard
             if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
             if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+                if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
                 _recursive_maze_buttons(gph, algo, lgc, txt, visualize=False)
 
             # Redraw small maze with "S" key on keyboard if not currently small
