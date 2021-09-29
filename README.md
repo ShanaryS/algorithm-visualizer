@@ -23,7 +23,7 @@ This tool visualizes the operations of the most popular pathfinding, sorting, an
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/86130442/135221074-589c281d-7a79-4fe2-85c0-a1c6f97d1ad2.gif" alt="animated" />
+  <img src="https://user-images.githubusercontent.com/86130442/135311945-822a86b2-e09a-480d-bd98-c21d604a2f8f.gif" alt="animated" />
 </p>
 
 Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with recursive division animations or instantly:
