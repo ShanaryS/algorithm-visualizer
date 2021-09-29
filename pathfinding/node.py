@@ -17,6 +17,7 @@ class Square:
         self.y: float = self.col * self.square_size
         self.neighbours: list = []
         self.color = DEFAULT_COLOR
+        self.wall_color = WALL_COLOR
 
     def __lt__(self, other) -> bool:
         """Allows comparison of squares"""
@@ -73,7 +74,7 @@ class Square:
 
     def is_wall(self) -> bool:
         """Checks if wall node"""
-        return self.color == WALL_COLOR
+        return self.color == self.wall_color
 
     def is_path(self) -> bool:
         """Checks if path node"""
@@ -115,7 +116,7 @@ class Square:
 
     def set_wall(self) -> None:
         """Sets node to wall"""
-        self.color = WALL_COLOR
+        self.color = self.wall_color
 
     def set_path(self) -> None:
         """Sets node to path"""

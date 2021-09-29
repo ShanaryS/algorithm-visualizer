@@ -140,7 +140,9 @@ def set_squares_to_roads(gph: GraphState) -> None:
             if avg_tot > cutoff:
                 square.reset()
             else:
+                square.wall_color = WALL_COLOR_MAP
                 square.set_wall()
+                gph.wall_nodes.add(square)
 
 
 def _draw_legend() -> None:
