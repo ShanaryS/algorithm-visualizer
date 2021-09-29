@@ -54,6 +54,8 @@ class VisText:
     legend_bi_dijkstra = FONT.render("Bi-directional Dijkstra - Press 'B'", True, LEGEND_COLOR)
     legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
     legend_instant_recursive_maze = FONT.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
+    legend_address = FONT.render("Press 'Enter' to visit anywhere in the world!", True, LEGEND_COLOR)
+    legend_convert_map = FONT.render("Press 'C' to convert a location to graph", True, LEGEND_COLOR)
 
     vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
     vis_text_a_star = FONT.render("Visualizing A*...", True, VIS_COLOR)
@@ -61,12 +63,12 @@ class VisText:
     vis_text_best_path = FONT.render("Laying best path...", True, VIS_COLOR)
     vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_COLOR)
     vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
-    vis_text_input = FONT.render("Enter an address (NO COMMAS):", True, VIS_COLOR)
-    vis_text_address = FONT.render(f"{address}", True, VIS_COLOR)
+    vis_text_input = FONT.render("Enter an address (NO COMMAS, ONLY SPACES):", True, LEGEND_COLOR)
+    vis_text_address = FONT.render(f"{address}", True, LEGEND_COLOR)
 
     def update_vis_text_input(self) -> None:
         """Updates vis_text_input with new input_text"""
-        self.vis_text_address = self.FONT.render(f"{self.address}", True, VIS_COLOR)
+        self.vis_text_address = self.FONT.render(f"{self.address}", True, LEGEND_COLOR)
 
 
 def set_graph(gph: GraphState) -> None:
@@ -105,7 +107,7 @@ def draw(gph: GraphState, txt: VisText, legend=False, display_update=True) -> No
 
     # Legend is only shown if graph can be interacted with
     if legend:
-        _draw_legend(txt)
+        _draw_legend(gph, txt)
 
     # Display may not want to update display immediately before doing other operations
     if display_update:
@@ -156,8 +158,12 @@ def set_squares_to_roads(gph: GraphState) -> None:
                 gph.wall_nodes.add(square)
 
 
-def _draw_legend(txt: VisText) -> None:
+def _draw_legend(gph: GraphState, txt: VisText) -> None:
     """Helper function to define the location of the legend"""
+
+    center_graph = HEIGHT//2
+    center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT)//2
+
 
     # Left legend
     WINDOW.blit(txt.legend_add_node, (2, 15*53.1 + 3))
@@ -173,6 +179,15 @@ def _draw_legend(txt: VisText) -> None:
     WINDOW.blit(txt.legend_recursive_maze, (WIDTH - txt.legend_recursive_maze.get_width()-2, 15*56.1 + 3))
     WINDOW.blit(txt.legend_instant_recursive_maze,
                 (WIDTH - txt.legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
+
+    # Center Legend
+    WINDOW.blit(txt.legend_address,
+                (WIDTH // 2 - txt.legend_address.get_width() // 2,
+                 center_legend_area - txt.legend_address.get_height() // 2))
+    if gph.has_img:
+        WINDOW.blit(txt.legend_convert_map,
+                    (WIDTH // 2 - txt.legend_convert_map.get_width() // 2,
+                     center_legend_area - txt.legend_convert_map.get_height() // 2 + 15))
 
 
 def draw_vis_text(txt: VisText, is_dijkstra=False, is_a_star=False, is_bi_dijkstra=False, is_best_path=False,
