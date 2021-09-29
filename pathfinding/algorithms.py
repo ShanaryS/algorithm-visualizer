@@ -47,6 +47,7 @@ def dijkstra(gph: GraphState,
     came_from: dict = {}
 
     # Continues until every node has been checked or best path found
+    i = 0
     while not open_set.empty():
 
         # If uses closes window the program terminates
@@ -81,9 +82,12 @@ def dijkstra(gph: GraphState,
                         nei.set_open()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        i += 1
         if visualize and not curr_square.is_closed():
-            draw(gph, display_update=False)
-            draw_vis_text(is_dijkstra=True)
+            if i % gph.speed_multiplier == 0:
+                i = 0
+                draw(gph, display_update=False)
+                draw_vis_text(is_dijkstra=True)
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != ignore_node:
@@ -119,6 +123,7 @@ def a_star(gph: GraphState,
     came_from: dict = {}
 
     # Continues until every node has been checked or best path found
+    i = 0  # Used to speed up graph if using map
     while not open_set.empty():
 
         # If uses closes window the program terminates
@@ -154,9 +159,12 @@ def a_star(gph: GraphState,
                         nei.set_open()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        i += 1
         if visualize and not curr_square.is_closed():
-            draw(gph, display_update=False)
-            draw_vis_text(is_a_star=True)
+            if i % gph.speed_multiplier == 0:
+                i = 0
+                draw(gph, display_update=False)
+                draw_vis_text(is_a_star=True)
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != ignore_node:
@@ -203,6 +211,7 @@ def bi_dijkstra(gph: GraphState,
     came_from_end: dict = {}
 
     # Continues until every node has been checked or best path found
+    i = 0
     while not open_set.empty():
 
         # If uses closes window the program terminates
@@ -285,9 +294,12 @@ def bi_dijkstra(gph: GraphState,
                                 nei.set_open_alt()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        i += 1
         if visualize and not curr_square.is_closed():
-            draw(gph, display_update=False)
-            draw_vis_text(is_bi_dijkstra=True)
+            if i % gph.speed_multiplier == 0:
+                i = 0
+                draw(gph, display_update=False)
+                draw_vis_text(is_bi_dijkstra=True)
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_node:
@@ -345,20 +357,27 @@ def best_path(gph: GraphState,
         path.append(curr_square)
 
     # Need to traverse in reverse depending on what part of algo
+    i = 0
     if reverse:
         for square in path[:-1]:
             square.set_path()
+            i += 1
             if visualize:
-                pygame.time.delay(algo.best_path_sleep)
-                draw(gph, display_update=False)
-                draw_vis_text(is_best_path=True)
+                if i % gph.speed_multiplier == 0:
+                    i = 0
+                    pygame.time.delay(algo.best_path_sleep)
+                    draw(gph, display_update=False)
+                    draw_vis_text(is_best_path=True)
     else:
         for square in path[len(path)-2::-1]:
             square.set_path()
+            i += 1
             if visualize:
-                pygame.time.delay(algo.best_path_sleep)
-                draw(gph, display_update=False)
-                draw_vis_text(is_best_path=True)
+                if i % gph.speed_multiplier == 0:
+                    i = 0
+                    pygame.time.delay(algo.best_path_sleep)
+                    draw(gph, display_update=False)
+                    draw_vis_text(is_best_path=True)
 
 
 def start_mid_end(gph: GraphState,
