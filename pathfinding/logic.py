@@ -391,7 +391,9 @@ def _get_address_from_user(gph: GraphState, txt: VisText) -> None:
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.unicode.isalnum():
+                if event.key == pygame.K_SPACE:
+                    txt.input_text += event.unicode
+                elif event.unicode.isalnum():
                     txt.input_text += event.unicode
                 elif event.key == pygame.K_BACKSPACE:
                     txt.input_text = txt.input_text[:-1]
