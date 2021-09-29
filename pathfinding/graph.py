@@ -138,21 +138,31 @@ def _draw_img(gph: GraphState) -> pygame.Rect:
 def set_squares_to_roads(gph: GraphState) -> None:
     """Gets the color of a single pixel"""
 
+    # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square = gph.graph[x][y]
             square.wall_color = WALL_COLOR_MAP
             tot = 0
+            tot_b = 0  # Used to check if highway since they are yellow.
+
+            # These two loops i,j get each pixel in each square. Time Complexity is O(n) in regards to pixels.
             for i in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
                     r, g, b, a = WINDOW.get_at((i, j))
                     tot += r + g + b
+                    tot_b += b
             avg_tot = tot / gph.square_size**2 / 3  # Gets the average of each square
+            avg_b = tot_b / gph.square_size**2
             cutoff = 1  # Any color with value above this will be set as a viable path
 
             # If the square's color is above cutoff, set it as path. Else wall node
             if avg_tot > cutoff:
-                square.reset()
+                # If b is greater, then it is white.
+                if avg_b > 225:
+                    square.reset()
+                else:
+                    square.set_highway()
             else:
                 square.set_wall()
                 gph.wall_nodes.add(square)
