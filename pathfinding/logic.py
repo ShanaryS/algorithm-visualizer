@@ -21,7 +21,6 @@ class LogicState:
     mid: Optional[Square] = None
     end: Optional[Square] = None
     run: bool = True
-    FPS: int = 240
     GRAPH_SMALL: int = 22
     GRAPH_MEDIUM: int = 46
     GRAPH_LARGE: int = 95
@@ -112,7 +111,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
                 _convert_img_to_squares(gph)
 
-        clock.tick(lgc.FPS)
+        clock.tick(gph.FPS)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
     pygame.quit()
@@ -377,6 +376,7 @@ def _convert_img_to_squares(gph: GraphState) -> None:
     gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
     draw(gph, legend=True)
     gph.has_img = False
+    gph.speed_multiplier = 300
     set_squares_to_roads(gph)
 
 
