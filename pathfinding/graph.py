@@ -230,7 +230,6 @@ def reset_algo(gph: GraphState, algo) -> None:
     for i in range(gph.rows):
         for j in range(gph.rows):
             square = gph.graph[i][j]
-            square.wall_color = WALL_COLOR
             if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
                     or square.is_closed() or square.is_path():
                 square.reset()
