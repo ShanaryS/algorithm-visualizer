@@ -398,6 +398,7 @@ def _get_address_from_user(gph: GraphState, txt: VisText) -> None:
                 elif event.key == pygame.K_BACKSPACE:
                     txt.input_text = txt.input_text[:-1]
                 elif event.key == pygame.K_RETURN:
+                    txt.input_text = ', '.join(txt.input_text.split())
                     return
 
         draw(gph, txt, display_update=False)

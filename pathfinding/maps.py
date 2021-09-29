@@ -11,14 +11,6 @@ def get_api_key() -> str:
     return f'&key={API_KEY}'
 
 
-def get_address_from_user() -> str:
-    """Sets the address from user input"""
-    address = input().strip()
-    address = ', '.join(address.split())
-
-    return address
-
-
 def get_img_base() -> bytes:
     """Gets the img with all the labels and markets to initially show"""
 
