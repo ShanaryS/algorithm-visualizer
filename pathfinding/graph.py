@@ -128,6 +128,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square = gph.graph[x][y]
+            square.wall_color = WALL_COLOR_MAP
             tot = 0
             for i in range(square.row * int(gph.square_size), (square.row+1) * int(gph.square_size)):
                 for j in range(square.col * int(gph.square_size), (square.col+1) * int(gph.square_size)):
@@ -140,7 +141,6 @@ def set_squares_to_roads(gph: GraphState) -> None:
             if avg_tot > cutoff:
                 square.reset()
             else:
-                square.wall_color = WALL_COLOR_MAP
                 square.set_wall()
                 gph.wall_nodes.add(square)
 
@@ -214,6 +214,7 @@ def reset_graph(gph: GraphState, algo) -> None:
     for i in range(gph.rows):
         for j in range(gph.rows):
             square = gph.graph[i][j]
+            square.wall_color = WALL_COLOR
             square.reset()
 
 
@@ -229,6 +230,7 @@ def reset_algo(gph: GraphState, algo) -> None:
     for i in range(gph.rows):
         for j in range(gph.rows):
             square = gph.graph[i][j]
+            square.wall_color = WALL_COLOR
             if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
                     or square.is_closed() or square.is_path():
                 square.reset()
