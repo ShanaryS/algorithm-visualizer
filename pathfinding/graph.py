@@ -55,7 +55,7 @@ class VisText:
     legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
     legend_instant_recursive_maze = FONT.render("Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR)
     legend_address = FONT.render("Press 'Enter' to visit anywhere in the world!", True, LEGEND_COLOR)
-    legend_convert_map = FONT.render("Press 'C' to convert a location to graph", True, LEGEND_COLOR)
+    legend_convert_map = FONT.render("Press 'C' to convert location into the graph", True, LEGEND_COLOR)
 
     vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
     vis_text_a_star = FONT.render("Visualizing A*...", True, VIS_COLOR)
