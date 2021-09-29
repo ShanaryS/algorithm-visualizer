@@ -161,24 +161,24 @@ def set_squares_to_roads(gph: GraphState) -> None:
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
     """Helper function to define the location of the legend"""
 
-    center_graph = HEIGHT//2
+    # center_graph = HEIGHT//2
     center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT)//2
 
+    if not gph.has_img:
+        # Left legend
+        WINDOW.blit(txt.legend_add_node, (2, 15*53.1 + 3))
+        WINDOW.blit(txt.legend_add_mid_node, (2, 15*54.1 + 3))
+        WINDOW.blit(txt.legend_remove_node, (2, 15*55.1 + 3))
+        WINDOW.blit(txt.legend_clear_graph, (2, 15*56.1 + 3))
+        WINDOW.blit(txt.legend_graph_size, (2, 15*57.1 + 3))
 
-    # Left legend
-    WINDOW.blit(txt.legend_add_node, (2, 15*53.1 + 3))
-    WINDOW.blit(txt.legend_add_mid_node, (2, 15*54.1 + 3))
-    WINDOW.blit(txt.legend_remove_node, (2, 15*55.1 + 3))
-    WINDOW.blit(txt.legend_clear_graph, (2, 15*56.1 + 3))
-    WINDOW.blit(txt.legend_graph_size, (2, 15*57.1 + 3))
-
-    # Right legend
-    WINDOW.blit(txt.legend_dijkstra, (WIDTH - txt.legend_dijkstra.get_width()-2, 15*53.1 + 3))
-    WINDOW.blit(txt.legend_a_star, (WIDTH - txt.legend_a_star.get_width()-2, 15*54.1 + 3))
-    WINDOW.blit(txt.legend_bi_dijkstra, (WIDTH - txt.legend_bi_dijkstra.get_width()-2, 15*55.1 + 3))
-    WINDOW.blit(txt.legend_recursive_maze, (WIDTH - txt.legend_recursive_maze.get_width()-2, 15*56.1 + 3))
-    WINDOW.blit(txt.legend_instant_recursive_maze,
-                (WIDTH - txt.legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
+        # Right legend
+        WINDOW.blit(txt.legend_dijkstra, (WIDTH - txt.legend_dijkstra.get_width()-2, 15*53.1 + 3))
+        WINDOW.blit(txt.legend_a_star, (WIDTH - txt.legend_a_star.get_width()-2, 15*54.1 + 3))
+        WINDOW.blit(txt.legend_bi_dijkstra, (WIDTH - txt.legend_bi_dijkstra.get_width()-2, 15*55.1 + 3))
+        WINDOW.blit(txt.legend_recursive_maze, (WIDTH - txt.legend_recursive_maze.get_width()-2, 15*56.1 + 3))
+        WINDOW.blit(txt.legend_instant_recursive_maze,
+                    (WIDTH - txt.legend_instant_recursive_maze.get_width()-2, 15*57.1 + 3))
 
     # Center Legend
     WINDOW.blit(txt.legend_address,
