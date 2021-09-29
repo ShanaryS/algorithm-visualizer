@@ -376,7 +376,7 @@ def _convert_img_to_squares(gph: GraphState) -> None:
     gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
     draw(gph, legend=True)
     gph.has_img = False
-    gph.speed_multiplier = 300
+    gph.speed_multiplier = 500
     set_squares_to_roads(gph)
 
 
