@@ -11,14 +11,15 @@ def get_api_key() -> str:
     return f'&key={API_KEY}'
 
 
-def get_img_base() -> bytes:
+def get_img_base(loc) -> bytes:
     """Gets the img with all the labels and markets to initially show"""
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
-    loc = 'center=Berkeley,CA'
+    center = 'center='
+    # loc = 'Berkeley,CA'
     params = '&zoom=13&size=400x400&scale=2'
     KEY = get_api_key()
-    url = base_url + loc + params + KEY
+    url = base_url + center + loc + params + KEY
     img = requests.get(url).content
 
     return img
@@ -27,15 +28,16 @@ def get_img_base() -> bytes:
 def write_img_base(img) -> None:
     """Saves image as file"""
 
-    with open('img_base.jpg', 'wb') as img_file:
+    with open(os.path.join('pathfinding', 'img_base.jpg'), 'wb') as img_file:
         img_file.write(img)
 
 
-def get_img_clean() -> bytes:
+def get_img_clean(loc) -> bytes:
     """Gets the cleaned up image for pygame insertion from the specified url"""
 
     base_url = 'https://maps.googleapis.com/maps/api/staticmap?'
-    loc = 'center=Berkeley,CA'
+    center = 'center='
+    # loc = 'Berkeley,CA'
     params = '&zoom=13&size=400x400&scale=2'
     style = '&style=feature:landscape|color:0x000000' \
             '&style=feature:poi|visibility:off' \
@@ -44,7 +46,7 @@ def get_img_clean() -> bytes:
             '&style=feature:transit|visibility:off' \
             '&style=feature:road|element:labels|visibility:off'
     KEY = get_api_key()
-    url = base_url + loc + params + url_encode(style, safe='/:&=') + KEY
+    url = base_url + center + loc + params + url_encode(style, safe='/:&=') + KEY
     img = requests.get(url).content
 
     return img
@@ -53,7 +55,7 @@ def get_img_clean() -> bytes:
 def write_img_clean(img) -> None:
     """Saves image as file"""
 
-    with open('img_clean.jpg', 'wb') as img_file:
+    with open(os.path.join('pathfinding', 'img_clean.jpg'), 'wb') as img_file:
         img_file.write(img)
 
 

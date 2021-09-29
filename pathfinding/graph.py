@@ -40,7 +40,7 @@ class GraphState:
 class VisText:
     """Creates the text needed for legend and when visualizing"""
 
-    input_text: str = ""
+    address: str = ""
 
     FONT = pygame.font.SysFont('Comic Sans MS', 12)
 
@@ -61,12 +61,12 @@ class VisText:
     vis_text_best_path = FONT.render("Laying best path...", True, VIS_COLOR)
     vis_text_recursive_maze = FONT.render("Generating recursive maze...", True, VIS_COLOR)
     vis_text_graph_size = FONT.render("Changing graph size... May take up to 30 seconds", True, VIS_COLOR)
-    vis_text_input_ask = FONT.render("Enter an address (NO COMMAS):", True, VIS_COLOR)
-    vis_text_input = FONT.render(f"{input_text}", True, VIS_COLOR)
+    vis_text_input = FONT.render("Enter an address (NO COMMAS):", True, VIS_COLOR)
+    vis_text_address = FONT.render(f"{address}", True, VIS_COLOR)
 
     def update_vis_text_input(self) -> None:
         """Updates vis_text_input with new input_text"""
-        self.vis_text_input = self.FONT.render(f"{self.input_text}", True, VIS_COLOR)
+        self.vis_text_address = self.FONT.render(f"{self.address}", True, VIS_COLOR)
 
 
 def set_graph(gph: GraphState) -> None:
@@ -209,13 +209,13 @@ def draw_vis_text(txt: VisText, is_dijkstra=False, is_a_star=False, is_bi_dijkst
                     (WIDTH//2 - txt.vis_text_graph_size.get_width()//2,
                      center_graph - txt.vis_text_graph_size.get_height()//2))
     elif is_input:
-        WINDOW.blit(txt.vis_text_input_ask,
-                    (WIDTH // 2 - txt.vis_text_input_ask.get_width() // 2,
-                     center_legend_area - txt.vis_text_input_ask.get_height() // 2 - 15))
-        txt.update_vis_text_input()
         WINDOW.blit(txt.vis_text_input,
-                    (WIDTH//2 - txt.vis_text_input.get_width()//2,
-                     center_legend_area - txt.vis_text_input.get_height()//2))
+                    (WIDTH // 2 - txt.vis_text_input.get_width() // 2,
+                     center_legend_area - txt.vis_text_input.get_height() // 2 - 15))
+        txt.update_vis_text_input()
+        WINDOW.blit(txt.vis_text_address,
+                    (WIDTH // 2 - txt.vis_text_address.get_width() // 2,
+                     center_legend_area - txt.vis_text_address.get_height() // 2))
 
     # Always called after draw. In that scenario draw won't update display so this will
     pygame.display.update()

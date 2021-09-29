@@ -103,17 +103,13 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l and gph.rows != lgc.GRAPH_LARGE:
                 _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
 
-            # Redraw large maze with "X" key on keyboard if not currently x-large
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_x and not gph.has_img:
-                _load_img_to_graph(gph, algo, lgc, txt)
-
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
                 _convert_img_to_squares(gph, txt)
 
             # Enter an address with the "ENTER" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                _get_address_from_user(gph, txt)
+                _get_address_from_user(gph, algo, lgc, txt)
 
         clock.tick(gph.FPS)
 
@@ -370,6 +366,8 @@ def _graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
 
 def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Loads the image onto the graph"""
+    write_img_base(get_img_base(txt.address))
+
     gph.has_img = True
     gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
     change_graph_size(gph, algo, txt, 400)
@@ -378,6 +376,8 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
 def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
+    write_img_clean(get_img_clean(txt.address))
+
     gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
     draw(gph, txt, legend=True)
     gph.has_img = False
@@ -385,20 +385,21 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     set_squares_to_roads(gph)
 
 
-def _get_address_from_user(gph: GraphState, txt: VisText) -> None:
+def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Gets the address from the user"""
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    txt.input_text += event.unicode
+                    txt.address += event.unicode
                 elif event.unicode.isalnum():
-                    txt.input_text += event.unicode
+                    txt.address += event.unicode
                 elif event.key == pygame.K_BACKSPACE:
-                    txt.input_text = txt.input_text[:-1]
+                    txt.address = txt.address[:-1]
                 elif event.key == pygame.K_RETURN:
-                    txt.input_text = ', '.join(txt.input_text.split())
+                    txt.address = ', '.join(txt.address.split())
+                    _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
         draw(gph, txt, display_update=False)
