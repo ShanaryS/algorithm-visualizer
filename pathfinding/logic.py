@@ -26,7 +26,6 @@ class LogicState:
     GRAPH_LARGE: int = 95
 
 
-# Put all game specific variables in here so it's easy to restart with main()
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
 
