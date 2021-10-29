@@ -1,11 +1,11 @@
 """Draws and updates graph for visualization"""
 
 
+from src.pathfinding.colors import *
 from dataclasses import dataclass
 import pygame
-from pathfinding.colors import *
-from pathfinding.values import ROWS, SQUARE_SIZE, WIDTH_HEIGHT
-from pathfinding.node import Square
+from src.pathfinding.values import ROWS, SQUARE_SIZE, WIDTH_HEIGHT
+from src.pathfinding.node import Square
 from typing import Optional
 
 

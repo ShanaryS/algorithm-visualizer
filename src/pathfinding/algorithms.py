@@ -1,13 +1,13 @@
 """Contains pathfinding and maze generation algorithms"""
 
 
+from src.pathfinding.colors import *
 from dataclasses import dataclass
 import pygame
-from pathfinding.colors import *
-from pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
-from pathfinding.values import get_random_sample, get_randrange
+from src.pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
+from src.pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
-from pathfinding.node import Square
+from src.pathfinding.node import Square
 
 
 @dataclass

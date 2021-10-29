@@ -1,6 +1,6 @@
 """Old code for visualizers. Still works and almost feature complete.
 Run visualizers by uncommenting code. Must be '__main__'.
-Pygame is slow to load and change size. Only exists for this old version. Fixed in the current version.
+Pygame is slow to load and change size. Only exists for this old (deprecated) version. Fixed in the current version.
 """
 
 
