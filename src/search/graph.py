@@ -1,12 +1,12 @@
 """Draws and updates graph for visualization"""
 
 
+from src.sort.colors import *
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider, TextBox
-from search import algorithms as search
-from search.colors import *
-from search.values import generate_array
+from src.search import algorithms as search
+from src.search.values import generate_array
 
 
 @dataclass

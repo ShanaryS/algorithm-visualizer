@@ -4,13 +4,13 @@
 import os.path
 from dataclasses import dataclass
 import pygame
-from pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
+from src.pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
-from pathfinding.graph import GraphState, VisText, set_graph, draw, reset_graph, \
+from src.pathfinding.graph import GraphState, VisText, set_graph, draw, reset_graph, \
     reset_algo, change_graph_size, set_squares_to_roads, draw_vis_text, HEIGHT
-from pathfinding.node import Square
+from src.pathfinding.node import Square
 from typing import Optional
-from pathfinding.maps import get_img_base, write_img_base, get_img_clean, write_img_clean
+from src.pathfinding.maps import get_img_base, write_img_base, get_img_clean, write_img_clean
 
 
 @dataclass
@@ -372,7 +372,8 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     write_img_base(get_img_base(txt.address))
 
     gph.has_img = True
-    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_base.jpg')).convert()
+    gph.img = pygame.image.load(
+        os.path.join('src', 'pathfinding', 'img_base.jpg')).convert()
     change_graph_size(gph, algo, txt, 400)
     _reset_ordinal_nodes(lgc)
 
@@ -381,7 +382,8 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
     write_img_clean(get_img_clean(txt.address))
 
-    gph.img = pygame.image.load(os.path.join('pathfinding', 'img_clean.jpg')).convert()
+    gph.img = pygame.image.load(
+        os.path.join('src', 'pathfinding', 'img_clean.jpg')).convert()
     draw(gph, txt, legend=True)
     gph.has_img = False
     gph.speed_multiplier = 500

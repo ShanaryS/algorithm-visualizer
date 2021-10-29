@@ -1,7 +1,7 @@
 """Run search visualizer. Must be '__main__'."""
 
-from search.graph import Graph, set_graph
-from search.values import generate_array, KEY, HESITATE
+from src.search.graph import Graph, set_graph
+from src.search.values import generate_array, KEY, HESITATE
 
 
 def main() -> None:

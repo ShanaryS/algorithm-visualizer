@@ -27,7 +27,8 @@ def get_img_base(loc) -> bytes:
 def write_img_base(img) -> None:
     """Saves image as file"""
 
-    with open(os.path.join('pathfinding', 'img_base.jpg'), 'wb') as img_file:
+    with open(os.path.join('src', 'pathfinding', 'img_base.jpg'), 'wb') as \
+            img_file:
         img_file.write(img)
 
 
@@ -53,7 +54,8 @@ def get_img_clean(loc) -> bytes:
 def write_img_clean(img) -> None:
     """Saves image as file"""
 
-    with open(os.path.join('pathfinding', 'img_clean.jpg'), 'wb') as img_file:
+    with open(os.path.join(
+            'src', 'pathfinding', 'img_clean.jpg'), 'wb') as img_file:
         img_file.write(img)
 
 

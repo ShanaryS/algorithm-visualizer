@@ -1,8 +1,8 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
-from pathfinding.logic import LogicState, run_pathfinding
-from pathfinding.graph import GraphState, VisText
-from pathfinding.algorithms import AlgoState
+from src.pathfinding.logic import LogicState, run_pathfinding
+from src.pathfinding.graph import GraphState, VisText
+from src.pathfinding.algorithms import AlgoState
 
 
 def main() -> None:

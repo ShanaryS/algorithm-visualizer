@@ -1,8 +1,8 @@
 """Creates square objects that drives the visualizations"""
 
 
-from pathfinding.colors import *
-from pathfinding.values import ROWS, SQUARE_SIZE
+from src.pathfinding.colors import *
+from src.pathfinding.values import ROWS, SQUARE_SIZE
 
 
 class Square:
