@@ -71,7 +71,7 @@ Create and activate your virtual environment:
 
 * Windows:
 ```bash
-virtualenv venv
+python -m venv venv
 venv\Scripts\activate
 ```
 
