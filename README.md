@@ -71,14 +71,14 @@ Create and activate your virtual environment:
 
 * Windows:
 ```bash
-virtualenv env
-.\env\Scripts\activate
+virtualenv venv
+venv\Scripts\activate
 ```
 
 * MacOS/Linux:
 ```bash
-virtualenv --no-site-packages env
-source env/bin/activate
+virtualenv --no-site-packages venv
+source venv/bin/activate
 ```
 
 Install the required packages:
