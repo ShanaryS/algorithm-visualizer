@@ -7,6 +7,7 @@ venv\Scripts\pyinstaller.exe -F -n %name% -p "venv\Lib\site-packages" --noconsol
 
 del %name%".spec"
 rmdir /s /q "__pycache__" "build"
+copy ".env" "bin"
 
 
 set name="Sorting Visualizer"
