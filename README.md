@@ -81,13 +81,16 @@ virtualenv --no-site-packages venv
 source venv/bin/activate
 ```
 
-Install the required packages:
+Install the required packages (While inside the virtual environment):
 
 ```bash
 pip install -r requirements.txt
 ```
 
 # Usage
+
+To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt
+Then simply run the 'create_exe.bat' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
 
 * Pathfinding Visualizer:
 ```bash
