@@ -58,7 +58,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
   <img src="https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif" alt="animated" />
 </p>
 
-## Installation
+## Installation (Python 3.9.9)
 
 Clone this repo and cd into it:
 
@@ -89,7 +89,7 @@ pip install -r requirements.txt
 
 # Usage
 
-To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt
+To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.bat').
 Then simply run the 'create_exe.bat' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
 
 Or run each visualizer directly using:
