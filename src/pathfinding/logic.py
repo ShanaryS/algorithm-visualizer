@@ -373,7 +373,7 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
     gph.has_img = True
     gph.img = pygame.image.load(
-        os.path.join('src', 'pathfinding', 'img_base.jpg')).convert()
+        os.path.join('img_base.jpg')).convert()
     change_graph_size(gph, algo, txt, 400)
     _reset_ordinal_nodes(lgc)
 
@@ -383,7 +383,7 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     write_img_clean(get_img_clean(txt.address))
 
     gph.img = pygame.image.load(
-        os.path.join('src', 'pathfinding', 'img_clean.jpg')).convert()
+        os.path.join('img_clean.jpg')).convert()
     draw(gph, txt, legend=True)
     gph.has_img = False
     gph.speed_multiplier = 500
