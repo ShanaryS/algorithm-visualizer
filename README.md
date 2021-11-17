@@ -92,6 +92,8 @@ pip install -r requirements.txt
 To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt
 Then simply run the 'create_exe.bat' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
 
+Or run each visualizer directly using:
+
 * Pathfinding Visualizer:
 ```bash
 python run_pathfinding_visualizer
