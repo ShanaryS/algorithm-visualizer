@@ -1,14 +1,30 @@
 import os
+import sys
 import requests
 from urllib.parse import quote as url_encode
 from dotenv import load_dotenv
+import tkinter as tk
+import tkinter.messagebox
 
 
 def get_api_key() -> str:
     """Gets api key from local environmental variables"""
     load_dotenv()
     API_KEY = os.getenv('API_KEY')
+    if not API_KEY:
+        _invalid_api_key()
     return f'&key={API_KEY}'
+
+
+def _invalid_api_key() -> None:
+    """Handles invalid api key."""
+    root = tk.Tk()
+    root.withdraw()
+    tkinter.messagebox.showerror(
+        title="API Key NOT FOUND!",
+        message="Cannot use google maps functionality. Follow instructions on github for using dotenv."
+    )
+    sys.exit()
 
 
 def get_img_base(loc) -> bytes:
