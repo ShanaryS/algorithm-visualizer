@@ -7,8 +7,16 @@ import sys
 import os
 
 
-def override_where():
-    """Overrides certifi.core.where to return actual location of cacert.pem"""
+def _override_where():
+    """Helper function"""
+    # change this to match the location of cacert.pem
+    return os.path.abspath(
+        os.path.join('venv', 'Lib', 'site-packages', 'certifi', 'cacert.pem'))
+
+
+def main() -> None:
+    """Main function"""
+
     # Fixes error when compiling program to exe.
     if hasattr(sys, "frozen"):
         import certifi.core
@@ -23,19 +31,6 @@ def override_where():
         # imported before we replaced certifi.core.where
         requests.utils.DEFAULT_CA_BUNDLE_PATH = _override_where()
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = _override_where()
-
-
-def _override_where():
-    """Helper function"""
-    # change this to match the location of cacert.pem
-    return os.path.abspath(
-        os.path.join('venv', 'Lib', 'site-packages', 'certifi', 'cacert.pem'))
-
-
-def main() -> None:
-    """Main function"""
-
-    override_where()
 
     gph = GraphState(graph=[], wall_nodes=set())
 
