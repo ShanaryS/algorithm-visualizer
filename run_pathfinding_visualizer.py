@@ -7,17 +7,9 @@ import sys
 import os
 
 
-def _override_where():
-    """Helper function"""
-    # change this to match the location of cacert.pem
-    return os.path.abspath(
-        os.path.join('venv', 'Lib', 'site-packages', 'certifi', 'cacert.pem'))
+def overide_where():
+    """Fixes error when compiling program to exe."""
 
-
-def main() -> None:
-    """Main function"""
-
-    # Fixes error when compiling program to exe.
     if hasattr(sys, "frozen"):
         import certifi.core
 
@@ -27,10 +19,23 @@ def main() -> None:
         # delay importing until after where() has been replaced
         import requests.utils
         import requests.adapters
+
         # replace these variables in case these modules were
         # imported before we replaced certifi.core.where
         requests.utils.DEFAULT_CA_BUNDLE_PATH = _override_where()
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = _override_where()
+
+
+def _override_where():
+    """Helper function"""
+    # change this to match the location of cacert.pem
+    return os.path.abspath(
+        os.path.join("venv", "Lib", "site-packages", "certifi", "cacert.pem")
+    )
+
+
+def main() -> None:
+    """Main function"""
 
     gph = GraphState(graph=[], wall_nodes=set())
 
@@ -42,6 +47,8 @@ def main() -> None:
 
     run_pathfinding(gph, algo, lgc, txt)
 
+    overide_where()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
