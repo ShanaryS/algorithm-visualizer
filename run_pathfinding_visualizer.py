@@ -52,3 +52,22 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    # --- Known Bugs ---
+    # IMG files does not work when built as .exe
+    # On algo completion with mid node, changing them does not update correctly
+    # Bi dijk only draws best_path when edges of swarms are touching, mid node
+    # (Potential) Maze changes size if window loses focus
+    #   pygame.event.set_grab and pygame.mouse.get_focused potential solutions
+    # Updating entire screen every frame instead of changed items
+
+    # --- Features to add ---
+    # Add second location (Seems pointless as can't zoom too far)
+    #   Use markers from maps api, disable clicking, becomes like google maps
+    # Sticky mud for patches where algo goes slowly
+    # Oil slick where algo goes faster
+    # Take in consideration speed limit of roads
+    # Instantly update algo when changing walls after completion
+    # Add prim maze
+    # Multithreading (Concurrency, Parallelism)
+    # Async for getting clean img while displaying img_base
+    # Write tests
