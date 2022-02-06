@@ -10,6 +10,11 @@ import os
 def overide_where():
     """Fixes error when compiling program to exe."""
 
+    def _override_where():
+        """Helper function"""
+        # change this to match the location of cacert.pem
+        return os.path.abspath(os.path.join("lib", "cacert.pem"))
+
     if hasattr(sys, "frozen"):
         import certifi.core
 
@@ -26,16 +31,10 @@ def overide_where():
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = _override_where()
 
 
-def _override_where():
-    """Helper function"""
-    # change this to match the location of cacert.pem
-    return os.path.abspath(
-        os.path.join("venv", "Lib", "site-packages", "certifi", "cacert.pem")
-    )
-
-
 def main() -> None:
     """Main function"""
+
+    overide_where()
 
     gph = GraphState(graph=[], wall_nodes=set())
 
@@ -47,13 +46,10 @@ def main() -> None:
 
     run_pathfinding(gph, algo, lgc, txt)
 
-    overide_where()
-
 
 if __name__ == "__main__":
     main()
     # --- Known Bugs ---
-    # IMG files does not work when built as .exe
     # On algo completion with mid node, changing them does not update correctly
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # (Potential) Maze changes size if window loses focus

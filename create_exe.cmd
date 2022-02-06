@@ -9,7 +9,9 @@ signtool timestamp /t http://timestamp.digicert.com bin\\%name%.exe
 
 del %name%".spec"
 rmdir /s /q "__pycache__" "build"
-copy ".env" "bin"
+mkdir "bin\lib"
+copy "lib\.env" "bin\lib"
+copy "venv\Lib\site-packages\certifi\cacert.pem" "bin\lib"
 
 
 set name="Sorting Visualizer"

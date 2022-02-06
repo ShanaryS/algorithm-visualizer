@@ -1,7 +1,7 @@
 """Handles inputs from user"""
 
 
-import os.path
+import os
 from dataclasses import dataclass
 import pygame
 from src.pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
@@ -11,6 +11,7 @@ from src.pathfinding.graph import GraphState, VisText, set_graph, draw, reset_gr
 from src.pathfinding.node import Square
 from typing import Optional
 from src.pathfinding.maps import get_img_base, write_img_base, get_img_clean, write_img_clean
+from src.pathfinding.maps import IMG_LOCATION, IMG_BASE_NAME, IMG_CLEAN_NAME
 
 
 @dataclass
@@ -373,7 +374,8 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
     gph.has_img = True
     gph.img = pygame.image.load(
-        os.path.join('img_base.jpg')).convert()
+        os.path.join(IMG_LOCATION, IMG_BASE_NAME)).convert()
+    os.remove(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
     change_graph_size(gph, algo, txt, 400)
     _reset_ordinal_nodes(lgc)
 
@@ -383,7 +385,8 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     write_img_clean(get_img_clean(txt.address))
 
     gph.img = pygame.image.load(
-        os.path.join('img_clean.jpg')).convert()
+        os.path.join(IMG_LOCATION, IMG_CLEAN_NAME)).convert()
+    os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
     draw(gph, txt, legend=True)
     gph.has_img = False
     gph.speed_multiplier = 500

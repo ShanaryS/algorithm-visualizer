@@ -7,9 +7,14 @@ import tkinter as tk
 import tkinter.messagebox
 
 
+IMG_LOCATION = "lib"
+IMG_BASE_NAME = "img_base.jpg"
+IMG_CLEAN_NAME = "img_clean.jpg"
+
+
 def get_api_key() -> str:
     """Gets api key from local environmental variables"""
-    load_dotenv()
+    load_dotenv(os.path.join("lib", ".env"))
     API_KEY = os.getenv('API_KEY')
     if not API_KEY:
         _invalid_api_key()
@@ -43,7 +48,7 @@ def get_img_base(loc) -> bytes:
 def write_img_base(img) -> None:
     """Saves image as file"""
 
-    with open(os.path.join('img_base.jpg'), 'wb') as \
+    with open(os.path.join(IMG_LOCATION, IMG_BASE_NAME), 'wb') as \
             img_file:
         img_file.write(img)
 
@@ -70,7 +75,7 @@ def get_img_clean(loc) -> bytes:
 def write_img_clean(img) -> None:
     """Saves image as file"""
 
-    with open(os.path.join('img_clean.jpg'), 'wb') as img_file:
+    with open(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME), 'wb') as img_file:
         img_file.write(img)
 
 
