@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Pathfinding Visualizer",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "run_pathfinding_visualizer.py",
             "console": "integratedTerminal"
         }
     ]

@@ -211,11 +211,20 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding start manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
         elif algo.a_star_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
 
     # If end node does not exist, and start node does exist, create end node.
     # If not currently ordinal node.
@@ -225,11 +234,20 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
         elif algo.a_star_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
+            if lgc.mid:
+                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
+            else:
+                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
 
     # If start and end node exists, create wall. If not currently ordinal node.
     # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
@@ -263,18 +281,17 @@ def _middle_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt:
     pos, row, col, square = _get_square_clicked(gph)
 
     # Set square to mid if no square is already mid, and not currently ordinal node.
-    if not lgc.mid:
-        if square != lgc.start and square != lgc.end:
-            lgc.mid = square
-            square.set_mid()
+    if not lgc.mid and square != lgc.start and square != lgc.end:
+        lgc.mid = square
+        square.set_mid()
 
-            # Handles removing and adding mid manually instead of dragging on algo completion.
-            if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
-            elif algo.a_star_finished and lgc.start and lgc.mid and lgc.end:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
-            elif algo.bi_dijkstra_finished and lgc.start and lgc.mid and lgc.end:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
+        # Handles removing and adding mid manually instead of dragging on algo completion.
+        if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+            start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
+        elif algo.a_star_finished and lgc.start and lgc.mid and lgc.end:
+            start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
+        elif algo.bi_dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+            start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
 
 
 def _reset_ordinal_nodes(lgc: LogicState) -> None:

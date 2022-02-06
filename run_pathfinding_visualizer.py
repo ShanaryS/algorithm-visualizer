@@ -50,7 +50,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
     # --- Known Bugs ---
-    # On algo completion with mid node, changing them does not update correctly
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # (Potential) Maze changes size if window loses focus
     #   pygame.event.set_grab and pygame.mouse.get_focused potential solutions
