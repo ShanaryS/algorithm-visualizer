@@ -60,6 +60,14 @@ class Square:
     def is_closed(self) -> bool:
         """Checks if closed node"""
         return self.color == CLOSED_COLOR
+    
+    def is_closed_alt(self) -> bool:
+        """Checks if closed node for second swarm of bi_dijkstra"""
+        return self.color == CLOSED_ALT_COLOR
+    
+    def is_closed_alt_(self) -> bool:
+        """Checks if closed node for end node when mid is included"""
+        return self.color == CLOSED_ALT_COLOR_
 
     def is_start(self) -> bool:
         """Checks if start node"""
@@ -102,6 +110,14 @@ class Square:
     def set_closed(self) -> None:
         """Sets node to closed"""
         self.color = CLOSED_COLOR
+    
+    def set_closed_alt(self) -> None:
+        """Sets node to closed for second swarm of bi_dijkstra"""
+        self.color = CLOSED_ALT_COLOR
+    
+    def set_closed_alt_(self) -> None:
+        """Sets node to closed for end now when mid is included"""
+        self.color = CLOSED_ALT_COLOR_
 
     def set_start(self) -> None:
         """Sets node to start"""

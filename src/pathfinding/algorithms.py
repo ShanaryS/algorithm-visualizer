@@ -231,6 +231,7 @@ def bi_dijkstra(gph: GraphState,
 
         # Terminates if found the best path
         for nei in curr_square.neighbours:
+            # Start swarm reaching mid (end node if no mid) swarm
             if curr_square.is_open() and nei.is_open_alt():
                 if draw_best_path:
                     best_path_bi_dijkstra(gph, algo, txt, came_from_start, came_from_end,
@@ -239,6 +240,7 @@ def bi_dijkstra(gph: GraphState,
 
                 return came_from_start, came_from_end, curr_square, nei
 
+            # Mid (end if no mid) swarm reaching start swarm
             elif curr_square.is_open_alt() and nei.is_open() and not alt_color:
                 if draw_best_path:
                     best_path_bi_dijkstra(gph, algo, txt, came_from_start, came_from_end,
@@ -247,6 +249,7 @@ def bi_dijkstra(gph: GraphState,
 
                 return came_from_start, came_from_end, nei, curr_square
 
+            # Mid swarm reaching end swarm
             elif curr_square.is_open_alt() and nei.is_open_alt_():
                 if draw_best_path:
                     best_path_bi_dijkstra(gph, algo, txt, came_from_start, came_from_end,
@@ -255,6 +258,7 @@ def bi_dijkstra(gph: GraphState,
 
                 return came_from_start, came_from_end, curr_square, nei
 
+            # End swarm reaching mid swarm
             elif curr_square.is_open_alt_() and nei.is_open_alt():
                 if draw_best_path:
                     best_path_bi_dijkstra(gph, algo, txt, came_from_start, came_from_end,
@@ -308,7 +312,13 @@ def bi_dijkstra(gph: GraphState,
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_node:
-            curr_square.set_closed()
+            # Set square to proper closed value based on it's open value
+            if curr_square.is_open():
+                curr_square.set_closed()
+            elif curr_square.is_open_alt():
+                curr_square.set_closed_alt()
+            elif curr_square.is_open_alt_():
+                curr_square.set_closed_alt_()
 
     return False
 

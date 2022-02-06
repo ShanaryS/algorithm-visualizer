@@ -278,7 +278,8 @@ def reset_algo(gph: GraphState, algo) -> None:
         for j in range(gph.rows):
             square = gph.graph[i][j]
             if square.is_open() or square.is_open_alt() or square.is_open_alt_()\
-                    or square.is_closed() or square.is_path():
+                    or square.is_closed() or square.is_closed_alt() \
+                        or square.is_closed_alt_() or square.is_path():
                 square.reset()
 
 
