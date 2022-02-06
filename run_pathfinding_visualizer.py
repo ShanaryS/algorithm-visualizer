@@ -56,6 +56,8 @@ if __name__ == "__main__":
     # --- Known Bugs ---
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Updating entire screen every frame instead of changed items
+    #   Update the entire text box whenever the update_text func is called
+    #   Otherwise only update that square's area when used by anything
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
