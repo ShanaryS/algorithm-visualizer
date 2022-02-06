@@ -59,7 +59,6 @@ if __name__ == "__main__":
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
-    # Oil slick where algo goes faster
     # Take in consideration speed limit of roads
     #   Use length of open_set to assign queue_pos
     # Add prim maze
