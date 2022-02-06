@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import pygame
 from src.pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
-from src.pathfinding.graph import GRAPH_RECT, GraphState, VisText, set_graph, draw, reset_graph, \
+from src.pathfinding.graph import GraphState, VisText, set_graph, draw, reset_graph, \
     reset_algo, change_graph_size, set_squares_to_roads, draw_vis_text, HEIGHT
 from src.pathfinding.node import Square
 from typing import Optional
@@ -419,7 +419,8 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
         os.path.join(IMG_LOCATION, IMG_CLEAN_NAME)).convert()
     os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
     gph.base_drawn = False
-    draw(gph, txt, legend=True)
+    draw(gph, txt)
+    gph.update_legend = True
     gph.has_img = False
     gph.speed_multiplier = 500
     set_squares_to_roads(gph)
@@ -430,6 +431,7 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
 
     txt.address = txt.address.replace(',', '')  # Used to get rid of commas inserted by url encoding.
 
+    gph.base_drawn = False
     draw(gph, txt)
     draw_vis_text(txt, is_input=True)
 
@@ -450,7 +452,6 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
                     _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
-                draw(gph, txt)
                 draw_vis_text(txt, is_input=True)
         
     pygame.quit()

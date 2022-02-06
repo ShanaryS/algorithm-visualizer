@@ -33,6 +33,7 @@ class GraphState:
     rects_to_update: list
     base_drawn: bool = False
     draw_lines: bool = False
+    update_legend: bool = False
     rows: int = ROWS
     square_size: float = SQUARE_SIZE
     has_img: bool = False
@@ -48,7 +49,7 @@ class GraphState:
         if isinstance(obj, Square):
             square_color, square_pos = obj.draw_square()
             obj = _draw_square(square_color, square_pos)
-        
+
         self.rects_to_update.append(obj)
 
 
@@ -133,9 +134,10 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
         if gph.has_img:
             _draw_img(gph)
         else:
-            # Sets background of graph to white and legend to grey
+            # Sets background of graph to white
             gph.add_rect_to_update(WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT))
             _draw_lines(gph)
+        # Sets background of legend to grey
         gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         if legend:
@@ -145,6 +147,11 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
     else:
         if not legend:
             gph.base_drawn = False
+    
+    if gph.update_legend:
+        gph.update_legend = False
+        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        _draw_legend(gph, txt)
 
     # Decideds how much of the display to update
     if gph.rects_to_update:
@@ -352,6 +359,10 @@ def draw_vis_text(
             )
         )
     elif is_input:
+        # Reset legend area (inefficient, only need area with new text)
+        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+
+        # Instructions on what to type
         text_rect.append(
             WINDOW.blit(
                 txt.vis_text_input,
@@ -361,6 +372,7 @@ def draw_vis_text(
                 ),
             )
         )
+        # Update text with new input
         txt.update_vis_text_input()
         text_rect.append(
             WINDOW.blit(
