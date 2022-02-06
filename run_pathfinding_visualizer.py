@@ -49,6 +49,10 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+    # --- Update github page ---
+    # In first gif, show adding walls after competion as well
+
     # --- Known Bugs ---
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Updating entire screen every frame instead of changed items
