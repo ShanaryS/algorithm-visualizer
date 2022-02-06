@@ -8,6 +8,7 @@ from src.pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, V
 from src.pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
 from src.pathfinding.node import Square
+from typing import Union
 
 
 @dataclass
@@ -31,7 +32,7 @@ def dijkstra(gph: GraphState,
              ignore_node: Square = None,
              draw_best_path: bool = True,
              visualize: bool = True) \
-             -> [dict, bool]:
+             -> Union[dict, bool]:
 
     """Code for the dijkstra algorithm"""
 
@@ -106,7 +107,7 @@ def a_star(gph: GraphState,
            ignore_node: Square = None,
            draw_best_path: bool = True,
            visualize: bool = True) \
-           -> [dict, bool]:
+           -> Union[dict, bool]:
 
     """Code for the A* algorithm"""
 
@@ -193,7 +194,7 @@ def bi_dijkstra(gph: GraphState,
                 ignore_node: Square = None,
                 draw_best_path: bool = True,
                 visualize: bool = True) \
-                -> [dict, bool]:
+                -> Union[dict, bool]:
 
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
 
@@ -460,7 +461,7 @@ def algo_no_vis(gph: GraphState,
                 ignore_node: Square = None,
                 draw_best_path: bool = True,
                 reset: bool = True) \
-                -> [dict, bool]:
+                -> Union[dict, bool]:
 
     """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
 
