@@ -1,5 +1,7 @@
 @echo off
 
+rmdir /s /q "bin"
+
 set name="Pathfinding Visualizer"
 set src="run_pathfinding_visualizer.py"
 
