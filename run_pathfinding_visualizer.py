@@ -51,8 +51,6 @@ if __name__ == "__main__":
     main()
     # --- Known Bugs ---
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
-    # (Potential) Maze changes size if window loses focus
-    #   pygame.event.set_grab and pygame.mouse.get_focused potential solutions
     # Updating entire screen every frame instead of changed items
 
     # --- Features to add ---
