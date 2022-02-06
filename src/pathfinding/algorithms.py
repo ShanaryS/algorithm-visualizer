@@ -83,18 +83,20 @@ def dijkstra(gph: GraphState,
                     open_set_hash.add(nei)
                     if nei != end and nei.color != CLOSED_COLOR and nei != ignore_node:
                         nei.set_open()
+                        gph.add_rect_to_update(nei)
+        
+        # Sets square to closed after finished checking
+        if curr_square != start and curr_square != ignore_node:
+            curr_square.set_closed()
+            gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         i += 1
         if visualize and not curr_square.is_closed():
             if i % gph.speed_multiplier == 0:
                 i = 0
-                draw(gph, txt, display_update=False)
+                draw(gph, txt)
                 draw_vis_text(txt, is_dijkstra=True)
-
-        # Sets square to closed after finished checking
-        if curr_square != start and curr_square != ignore_node:
-            curr_square.set_closed()
 
     return False
 
@@ -161,18 +163,20 @@ def a_star(gph: GraphState,
                     open_set_hash.add(nei)
                     if nei != end and nei.color != CLOSED_COLOR and nei != ignore_node:
                         nei.set_open()
+                        gph.add_rect_to_update(nei)
+        
+        # Sets square to closed after finished checking
+        if curr_square != start and curr_square != ignore_node:
+            curr_square.set_closed()
+            gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         i += 1
         if visualize and not curr_square.is_closed():
             if i % gph.speed_multiplier == 0:
                 i = 0
-                draw(gph, txt, display_update=False)
+                draw(gph, txt)
                 draw_vis_text(txt, is_a_star=True)
-
-        # Sets square to closed after finished checking
-        if curr_square != start and curr_square != ignore_node:
-            curr_square.set_closed()
 
     return False
 
@@ -285,6 +289,7 @@ def bi_dijkstra(gph: GraphState,
                                 nei.set_open_alt()
                             else:
                                 nei.set_open()
+                            gph.add_rect_to_update(nei)
         elif temp[3] == 'end':
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
@@ -301,15 +306,8 @@ def bi_dijkstra(gph: GraphState,
                                 nei.set_open_alt_()
                             else:
                                 nei.set_open_alt()
-
-        # Only visualize if called. Checks if square is closed to not repeat when mid node included.
-        i += 1
-        if visualize and not curr_square.is_closed():
-            if i % gph.speed_multiplier == 0:
-                i = 0
-                draw(gph, txt, display_update=False)
-                draw_vis_text(txt, is_bi_dijkstra=True)
-
+                            gph.add_rect_to_update(nei)
+        
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_node:
             # Set square to proper closed value based on it's open value
@@ -319,6 +317,15 @@ def bi_dijkstra(gph: GraphState,
                 curr_square.set_closed_alt()
             elif curr_square.is_open_alt_():
                 curr_square.set_closed_alt_()
+            gph.add_rect_to_update(curr_square)
+
+        # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        i += 1
+        if visualize and not curr_square.is_closed():
+            if i % gph.speed_multiplier == 0:
+                i = 0
+                draw(gph, txt)
+                draw_vis_text(txt, is_bi_dijkstra=True)
 
     return False
 
@@ -343,10 +350,12 @@ def best_path_bi_dijkstra(gph: GraphState,
     best_path(gph, algo, txt, came_from_start, first_meet_node, visualize=visualize)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
     first_meet_node.set_path()
+    gph.add_rect_to_update(first_meet_node)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
 
     # Draws best path for second swarm
     second_meet_node.set_path()
+    gph.add_rect_to_update(second_meet_node)
     # To not skip the last two at once, need a draw and draw_vis_text here
     best_path(gph, algo, txt, came_from_end, second_meet_node, reverse=True, visualize=visualize)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
@@ -378,22 +387,24 @@ def best_path(gph: GraphState,
     if reverse:
         for square in path[:-1]:
             square.set_path()
+            gph.add_rect_to_update(square)
             i += 1
             if visualize:
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
-                    draw(gph, txt, display_update=False)
+                    draw(gph, txt)
                     draw_vis_text(txt, is_best_path=True)
     else:
         for square in path[len(path)-2::-1]:
             square.set_path()
+            gph.add_rect_to_update(square)
             i += 1
             if visualize:
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
-                    draw(gph, txt, display_update=False)
+                    draw(gph, txt)
                     draw_vis_text(txt, is_best_path=True)
 
 
@@ -422,6 +433,9 @@ def start_mid_end(gph: GraphState,
             mid_to_end = algo_no_vis(gph, algo, txt, mid, end, is_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
+            gph.add_rect_to_update(start)
+            gph.add_rect_to_update(mid)
+            gph.add_rect_to_update(end)
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -435,6 +449,9 @@ def start_mid_end(gph: GraphState,
             mid_to_end = algo_no_vis(gph, algo, txt, mid, end, is_a_star=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
+            gph.add_rect_to_update(start)
+            gph.add_rect_to_update(mid)
+            gph.add_rect_to_update(end)
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -449,6 +466,9 @@ def start_mid_end(gph: GraphState,
             mid_to_end = algo_no_vis(gph, algo, txt, mid, end, alt_color=True, is_bi_dijkstra=True, ignore_node=start,
                                      draw_best_path=False, reset=False)
             start.set_start(), mid.set_mid(), end.set_end()  # Fixes nodes disappearing when dragging
+            gph.add_rect_to_update(start)
+            gph.add_rect_to_update(mid)
+            gph.add_rect_to_update(end)
 
         # Fixes bug when can't find a path
         if not isinstance(start_to_mid, bool):
@@ -485,6 +505,7 @@ def algo_no_vis(gph: GraphState,
         if draw_best_path:
             dijkstra(gph, algo, txt, start, end, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
+            gph.add_rect_to_update(start)
         else:
             return dijkstra(gph, algo, txt, start, end,
                             ignore_node=ignore_node, draw_best_path=False, visualize=False)
@@ -497,6 +518,7 @@ def algo_no_vis(gph: GraphState,
         if draw_best_path:
             a_star(gph, algo, txt, start, end, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
+            gph.add_rect_to_update(start)
         else:
             return a_star(gph, algo, txt, start, end, ignore_node=ignore_node, draw_best_path=False, visualize=False)
     elif is_bi_dijkstra:
@@ -508,6 +530,7 @@ def algo_no_vis(gph: GraphState,
         if draw_best_path:
             bi_dijkstra(gph, algo, txt, start, end, alt_color=alt_color, visualize=False)
             start.set_start()  # Fixes start disappearing when dragging
+            gph.add_rect_to_update(start)
         else:
             return bi_dijkstra(gph, algo, txt, start, end, alt_color=alt_color, ignore_node=ignore_node,
                                draw_best_path=False, visualize=False)
@@ -548,18 +571,20 @@ def draw_recursive_maze(gph: GraphState,
     if chamber_width >= division_limit:
         for y in range(chamber_height):
             gph.graph[chamber_left + x_divide][chamber_top + y].set_wall()
+            gph.add_rect_to_update(gph.graph[chamber_left + x_divide][chamber_top + y])
             gph.wall_nodes.add(gph.graph[chamber_left + x_divide][chamber_top + y])
             if visualize:
-                draw(gph, txt, display_update=False)
+                draw(gph, txt)
                 draw_vis_text(txt, is_recursive_maze=True)
 
     # Draws horizontal maze line within chamber
     if chamber_height >= division_limit:
         for x in range(chamber_width):
             gph.graph[chamber_left + x][chamber_top + y_divide].set_wall()
+            gph.add_rect_to_update(gph.graph[chamber_left + x][chamber_top + y_divide])
             gph.wall_nodes.add(gph.graph[chamber_left + x][chamber_top + y_divide])
             if visualize:
-                draw(gph, txt, display_update=False)
+                draw(gph, txt)
                 draw_vis_text(txt, is_recursive_maze=True)
 
     # Terminates if below division limit
@@ -614,9 +639,10 @@ def draw_recursive_maze(gph: GraphState,
             if y >= gph.rows:
                 y = gph.rows - 1
         gph.graph[x][y].reset()
+        gph.add_rect_to_update(gph.graph[x][y])
         gph.wall_nodes.discard(gph.graph[x][y])
         if visualize:
-            draw(gph, txt, display_update=False)
+            draw(gph, txt)
             draw_vis_text(txt, is_recursive_maze=True)
 
     # Recursively divides chambers

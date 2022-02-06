@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import pygame
 from src.pathfinding.algorithms import dijkstra, a_star, bi_dijkstra, \
     start_mid_end, algo_no_vis, draw_recursive_maze, AlgoState
-from src.pathfinding.graph import GraphState, VisText, set_graph, draw, reset_graph, \
+from src.pathfinding.graph import GRAPH_RECT, GraphState, VisText, set_graph, draw, reset_graph, \
     reset_algo, change_graph_size, set_squares_to_roads, draw_vis_text, HEIGHT
 from src.pathfinding.node import Square
 from typing import Optional
@@ -159,6 +159,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                         lgc.start.set_wall()
                     else:
                         lgc.start.reset()
+                    gph.add_rect_to_update(lgc.start)
                     lgc.start = square
                     square.set_start()
                 elif last_square == 'mid':
@@ -166,6 +167,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                         lgc.mid.set_wall()
                     else:
                         lgc.mid.reset()
+                    gph.add_rect_to_update(lgc.mid)
                     lgc.mid = square
                     square.set_mid()
                 elif last_square == 'end':
@@ -173,6 +175,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                         lgc.end.set_wall()
                     else:
                         lgc.end.reset()
+                    gph.add_rect_to_update(lgc.end)
                     lgc.end = square
                     square.set_end()
 
@@ -208,6 +211,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
         else:
             # Add wall
             square.set_wall()
+            gph.add_rect_to_update(square)
             gph.wall_nodes.add(square)
 
             # Updates algo
@@ -250,6 +254,8 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     elif square != lgc.start and square != lgc.mid and square != lgc.end and algo.maze is False:
         square.set_wall()
         gph.wall_nodes.add(square)
+    
+    gph.add_rect_to_update(square)
 
 
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
@@ -263,6 +269,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
 
     # Reset square and ordinal node if it was any
     square.reset()
+    gph.add_rect_to_update(square)
     if square == lgc.start:
         lgc.start = None
     elif square == lgc.mid:
@@ -280,6 +287,7 @@ def _middle_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt:
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
         square.set_mid()
+        gph.add_rect_to_update(square)
 
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
@@ -409,6 +417,7 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     gph.img = pygame.image.load(
         os.path.join(IMG_LOCATION, IMG_CLEAN_NAME)).convert()
     os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
+    gph.add_rect_to_update(GRAPH_RECT)
     draw(gph, txt, legend=True)
     gph.has_img = False
     gph.speed_multiplier = 500
@@ -437,7 +446,7 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
                     _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
-        draw(gph, txt, display_update=False)
+        draw(gph, txt)
         draw_vis_text(txt, is_input=True)
 
     pygame.quit()

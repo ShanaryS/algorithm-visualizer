@@ -36,7 +36,7 @@ def main() -> None:
 
     overide_where()
 
-    gph = GraphState(graph=[], wall_nodes=set())
+    gph = GraphState(graph=[], wall_nodes=set(), rects_to_update=[])
 
     algo = AlgoState(ordinal_node_clicked=[])
 
