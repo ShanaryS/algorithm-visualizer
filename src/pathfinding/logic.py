@@ -257,7 +257,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
 
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
-    """Handles mouse left click"""
+    """Handles mouse right click"""
 
     pos, row, col, square = _get_square_clicked(gph)
 
@@ -276,7 +276,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
 
 
 def _middle_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
-    """Handles mouse left click"""
+    """Handles mouse wheel click"""
 
     pos, row, col, square = _get_square_clicked(gph)
 
