@@ -270,6 +270,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     # Reset square and ordinal node if it was any
     square.reset()
     gph.add_rect_to_update(square)
+    gph.draw_lines = True
     if square == lgc.start:
         lgc.start = None
     elif square == lgc.mid:
@@ -417,7 +418,7 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     gph.img = pygame.image.load(
         os.path.join(IMG_LOCATION, IMG_CLEAN_NAME)).convert()
     os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
-    gph.add_rect_to_update(GRAPH_RECT)
+    gph.base_drawn = False
     draw(gph, txt, legend=True)
     gph.has_img = False
     gph.speed_multiplier = 500
@@ -428,6 +429,9 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
     """Gets the address from the user"""
 
     txt.address = txt.address.replace(',', '')  # Used to get rid of commas inserted by url encoding.
+
+    draw(gph, txt)
+    draw_vis_text(txt, is_input=True)
 
     while lgc.run:
         for event in pygame.event.get():
@@ -446,7 +450,7 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
                     _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
-        draw(gph, txt)
-        draw_vis_text(txt, is_input=True)
-
+                draw(gph, txt)
+                draw_vis_text(txt, is_input=True)
+        
     pygame.quit()

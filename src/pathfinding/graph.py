@@ -31,6 +31,8 @@ class GraphState:
     graph: list
     wall_nodes: set
     rects_to_update: list
+    base_drawn: bool = False
+    draw_lines: bool = False
     rows: int = ROWS
     square_size: float = SQUARE_SIZE
     has_img: bool = False
@@ -39,7 +41,6 @@ class GraphState:
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
     speed_multiplier: int = 1
-    base_drawn: bool = False
 
     def add_rect_to_update(self, obj) -> None:
         """Adds rect to update, converts non rects to rect"""
@@ -126,23 +127,16 @@ def set_graph(gph: GraphState) -> None:
 def draw(gph: GraphState, txt: VisText, legend=False) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
-    # If colors of square were updated, reflected here
-    # for square in gph.rects_to_update:
-    #     if isinstance(square, Square):
-    #         square_color, square_pos = square.draw_square()
-    #         _draw_square(square_color, square_pos)
-
     # Draws the horizontal and vertical lines on the graph unless it has image
-    if gph.has_img:
-        gph.add_rect_to_update(GRAPH_RECT)
-        _draw_img(gph)
-    else:
-        _draw_lines(gph)
 
     if not gph.base_drawn:
-        # Sets background of graph to white and legend to grey
-        WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT)
-        WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT)
+        if gph.has_img:
+            _draw_img(gph)
+        else:
+            # Sets background of graph to white and legend to grey
+            gph.add_rect_to_update(WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT))
+            _draw_lines(gph)
+        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         if legend:
             _draw_legend(gph, txt)
@@ -151,28 +145,24 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
     else:
         if not legend:
             gph.base_drawn = False
-            _draw_legend(gph, txt)
 
     # Decideds how much of the display to update
     if gph.rects_to_update:
-        for i, rect in enumerate(gph.rects_to_update):
-            if isinstance(rect, Square):
-                gph.rects_to_update.pop(i)
+        if gph.draw_lines:
+            _draw_lines(gph)
+            gph.draw_lines = False
         pygame.display.update(gph.rects_to_update)
         gph.rects_to_update.clear()
-    else:
-        pygame.display.update()
 
 
 def _draw_square(square_color, square_pos) -> None:
     """Draws square with color and correct positioning"""
-    pygame.draw.rect(WINDOW, square_color, square_pos)
+    return pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
 def _draw_lines(gph: GraphState) -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
-    gph.add_rect_to_update(GRAPH_RECT)
     for i in range(gph.rows):
         pygame.draw.line(
             WINDOW, LINE_COLOR, (0, i * gph.square_size), (WIDTH, i * gph.square_size)
@@ -403,6 +393,7 @@ def reset_graph(gph: GraphState, algo) -> None:
             square.wall_color = WALL_COLOR
             square.reset()
             gph.add_rect_to_update(square)
+    gph.draw_lines = True
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -428,6 +419,7 @@ def reset_algo(gph: GraphState, algo) -> None:
             ):
                 square.reset()
                 gph.add_rect_to_update(square)
+    gph.draw_lines = True
 
 
 def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None:
