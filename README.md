@@ -113,7 +113,7 @@ To use google maps functionality, you need static maps api key from google.
 
 You can get it for free at: https://developers.google.com/maps/documentation/maps-static/get-api-key.
 
-Once you have access, create a '.env' file in the root project directory (or next to .exe if created) with the text:
+Once you have access, create a '.env' file in the lib directory (also for .exe) with the text:
 ```bash
 API_KEY="YOUR_KEY"
 ```
