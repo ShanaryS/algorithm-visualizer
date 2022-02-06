@@ -50,7 +50,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
     # --- Known Bugs ---
-    # Instantly update algo when changing walls after completion
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Updating entire screen every frame instead of changed items
 
@@ -58,6 +57,7 @@ if __name__ == "__main__":
     # Sticky mud for patches where algo goes slowly
     # Oil slick where algo goes faster
     # Take in consideration speed limit of roads
+    #   Use length of open_set to assign queue_pos
     # Add prim maze
     # Multithreading (Concurrency, Parallelism)
     # Write tests

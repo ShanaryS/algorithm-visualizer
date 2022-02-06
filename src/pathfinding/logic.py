@@ -203,6 +203,20 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
             algo.ordinal_node_clicked.append('mid')
         elif square is lgc.end:
             algo.ordinal_node_clicked.append('end')
+        
+        # On algo completion, add wall and update algo
+        else:
+            # Add wall
+            square.set_wall()
+            gph.wall_nodes.add(square)
+
+            # Updates algo
+            if algo.dijkstra_finished:
+                _dijkstra_button(gph, algo, lgc, txt, visualize=False)
+            elif algo.a_star_finished:
+                _a_star_button(gph, algo, lgc, txt, visualize=False)
+            elif algo.bi_dijkstra_finished:
+                _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
     # If start node does not exist, create it. If not currently ordinal node.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
@@ -211,20 +225,11 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding start manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
+            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
         elif algo.a_star_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
+            _a_star_button(gph, algo, lgc, txt, visualize=False)
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
+            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
     # If end node does not exist, and start node does exist, create end node.
     # If not currently ordinal node.
@@ -234,20 +239,11 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
+            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
         elif algo.a_star_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
+            _a_star_button(gph, algo, lgc, txt, visualize=False)
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            if lgc.mid:
-                start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=False)
-            else:
-                algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
+            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
     # If start and end node exists, create wall. If not currently ordinal node.
     # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
@@ -305,7 +301,7 @@ def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> No
     _reset_ordinal_nodes(lgc)
 
 
-def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True) -> None:
     """Run the dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
@@ -321,12 +317,15 @@ def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: Vis
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True)
+        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_dijkstra=True, visualize=visualize)
     else:
-        dijkstra(gph, algo, txt, lgc.start, lgc.end)
+        if visualize:
+            dijkstra(gph, algo, txt, lgc.start, lgc.end)
+        else:
+            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
 
 
-def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True) -> None:
     """Runs the A* algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
@@ -342,12 +341,15 @@ def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisTe
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True)
+        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_a_star=True, visualize=visualize)
     else:
-        a_star(gph, algo, txt, lgc.start, lgc.end)
+        if visualize:
+            a_star(gph, algo, txt, lgc.start, lgc.end)
+        else:
+            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
 
 
-def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True) -> None:
     """Runs the Bi-Directional Dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
@@ -363,9 +365,12 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True)
+        start_mid_end(gph, algo, txt, lgc.start, lgc.mid, lgc.end, is_bi_dijkstra=True, visualize=visualize)
     else:
-        bi_dijkstra(gph, algo, txt, lgc.start, lgc.end)
+        if visualize:
+            bi_dijkstra(gph, algo, txt, lgc.start, lgc.end)
+        else:
+            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
 
 
 def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True) -> None:
