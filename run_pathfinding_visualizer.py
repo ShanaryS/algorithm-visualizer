@@ -56,6 +56,8 @@ if __name__ == "__main__":
     # Reset legend after changing text (best path)
     # Maze generation
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
+    #   Also optimizes dragging nodes. Futher optimization is to only reset
+    #   nodes that will be different under new conditions. Most won't change.
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
