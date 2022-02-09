@@ -647,7 +647,4 @@ def draw_recursive_maze(gph: GraphState,
 
     # Recursively divides chambers
     for chamber in chambers:
-        if visualize:
-            draw_recursive_maze(gph, txt, chamber)
-        else:
-            draw_recursive_maze(gph, txt, chamber, visualize=False)
+        draw_recursive_maze(gph, txt, chamber, visualize=visualize)
