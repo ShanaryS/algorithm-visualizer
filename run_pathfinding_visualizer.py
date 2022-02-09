@@ -50,6 +50,13 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+    # --- Partial Display Update Bugs ---
+    # Tranisitions between maps
+    # Pathfinding algorithms
+    # Reset legend after changing text (best path)
+    # Maze generation
+    # 40ms when reseting large graph, maybe save nodes that aren't reset?
+
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
 
