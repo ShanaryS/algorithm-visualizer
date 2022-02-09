@@ -59,6 +59,8 @@ if __name__ == "__main__":
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
+    # In features note that only changed pixels update each fresh
+    #   Mention that it took a lot of effort!
 
     # --- Known Bugs ---
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
