@@ -25,6 +25,7 @@ class LogicState:
     GRAPH_SMALL: int = 22
     GRAPH_MEDIUM: int = 46
     GRAPH_LARGE: int = 95
+    GRAPH_MAX: int = 400
 
 
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -407,7 +408,7 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     gph.img = pygame.image.load(
         os.path.join(IMG_LOCATION, IMG_BASE_NAME)).convert()
     os.remove(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
-    change_graph_size(gph, algo, txt, 400)
+    change_graph_size(gph, algo, txt, lgc.GRAPH_MAX)
     _reset_ordinal_nodes(lgc)
 
 
