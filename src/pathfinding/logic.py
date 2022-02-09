@@ -26,6 +26,7 @@ class LogicState:
     GRAPH_MEDIUM: int = 46
     GRAPH_LARGE: int = 95
     GRAPH_MAX: int = 400
+    BEST_PATH_SLEEP: int = 3
 
 
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -87,26 +88,26 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
             # Draw recursive maze with "G" key on keyboard
             if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
-                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
             if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
-                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
                 _recursive_maze_buttons(gph, algo, lgc, txt, visualize=False)
 
             # Redraw small maze with "S" key on keyboard if not currently small
             if event.type == pygame.KEYDOWN and event.key == pygame.K_s and gph.rows != lgc.GRAPH_SMALL:
-                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_SMALL, 3)
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_SMALL, lgc.BEST_PATH_SLEEP)
 
             # Redraw medium maze with "M" key on keyboard if not currently medium
             if event.type == pygame.KEYDOWN and event.key == pygame.K_m and gph.rows != lgc.GRAPH_MEDIUM:
-                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_MEDIUM, 3)
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_MEDIUM, lgc.BEST_PATH_SLEEP)
 
             # Redraw large maze with "L" key on keyboard if not currently large
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l and gph.rows != lgc.GRAPH_LARGE:
-                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, 3)
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
 
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
