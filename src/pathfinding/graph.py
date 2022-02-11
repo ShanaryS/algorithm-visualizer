@@ -128,11 +128,10 @@ def set_graph(gph: GraphState) -> None:
             gph.graph[i].append(square)
 
 
-def draw(gph: GraphState, txt: VisText, legend=False) -> None:
+def draw(gph: GraphState, txt: VisText, legend=False, algo_running=False) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     # Draws the horizontal and vertical lines on the graph unless it has image
-
     if not gph.base_drawn:
         if gph.has_img:
             _draw_img(gph)
@@ -148,8 +147,10 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
 
         gph.base_drawn = True
     else:
-        if not legend:
+        if not legend and not algo_running:
             gph.base_drawn = False
+        elif algo_running:
+            _draw_lines(gph)
 
     if gph.update_legend:
         gph.update_legend = False
