@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs ---
-    # Tranisitions between maps
     # Pathfinding algorithms
     # Reset legend after changing text (best path)
     # Maze generation
