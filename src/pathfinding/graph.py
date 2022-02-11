@@ -34,6 +34,7 @@ class GraphState:
     base_drawn: bool = False
     draw_lines: bool = False
     update_legend: bool = False
+    update_entire_screen: bool = False
     rows: int = ROWS
     square_size: float = SQUARE_SIZE
     has_img: bool = False
@@ -111,6 +112,9 @@ class VisText:
 def set_graph(gph: GraphState) -> None:
     """Creates the graph object that stores the location of all the squares"""
 
+    # Changing so many nodes, faster to update entire screen
+    gph.update_entire_screen = True
+
     gph.graph = []
     for i in range(gph.rows):
         gph.graph.append([])
@@ -122,7 +126,6 @@ def set_graph(gph: GraphState) -> None:
             square.update_values(gph.rows, gph.square_size)
 
             gph.graph[i].append(square)
-            gph.add_rect_to_update(square)
 
 
 def draw(gph: GraphState, txt: VisText, legend=False) -> None:
@@ -154,12 +157,17 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
         _draw_legend(gph, txt)
 
     # Decideds how much of the display to update
-    if gph.rects_to_update:
+    if gph.update_entire_screen:
+        # Pygame chokes when updating a lot of rects that covers the screen
+        # So we just upate the entire screen like this instead
+        gph.update_entire_screen = False
+        pygame.display.update()
+    elif gph.rects_to_update:
         if gph.draw_lines:
             _draw_lines(gph)
             gph.draw_lines = False
         pygame.display.update(gph.rects_to_update)
-        gph.rects_to_update.clear()
+    gph.rects_to_update.clear()
 
 
 def _draw_square(square_color, square_pos) -> None:
@@ -450,3 +458,4 @@ def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None
     # Recreates graph with new values
     set_graph(gph)
     draw(gph, txt)
+    pass
