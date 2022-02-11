@@ -95,7 +95,7 @@ def run_pathfinding(
 
             # Reset graph with "SPACE" on keyboard
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                _reset_graph_button(gph, algo, lgc)
+                _reset_graph_button(gph, algo, lgc, txt)
 
             # Run Dijkstra with "D" key on keyboard
             if (
@@ -436,9 +436,9 @@ def _reset_ordinal_nodes(lgc: LogicState) -> None:
     lgc.start = lgc.mid = lgc.end = None
 
 
-def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState) -> None:
+def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Resets the graph"""
-    reset_graph(gph, algo)
+    reset_graph(gph, algo, txt, graph_max=lgc.GRAPH_MAX, graph_default=lgc.GRAPH_MEDIUM)
     _reset_ordinal_nodes(lgc)
 
 
@@ -551,7 +551,7 @@ def _recursive_maze_buttons(
     gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
 ) -> None:
     """Draws recursive maze"""
-    reset_graph(gph, algo)  # Resets entire graph to prevent any unintended behaviour
+    reset_graph(gph, algo, txt)  # Resets entire graph to prevent any unintended behaviour
     draw_recursive_maze(gph, txt, visualize=visualize)  # Draw maze
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_nodes(lgc)

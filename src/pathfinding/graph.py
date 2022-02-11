@@ -150,7 +150,7 @@ def draw(gph: GraphState, txt: VisText, legend=False) -> None:
     else:
         if not legend:
             gph.base_drawn = False
-    
+
     if gph.update_legend:
         gph.update_legend = False
         gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
@@ -201,7 +201,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square = gph.graph[x][y]
-            # square.wall_color = WALL_COLOR_MAP  # Change wall color for easy visibility
+            square.wall_color = WALL_COLOR_MAP  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
 
@@ -397,7 +397,7 @@ def draw_vis_text(
     pygame.display.update(text_rect)
 
 
-def reset_graph(gph: GraphState, algo) -> None:
+def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None) -> None:
     """Resets entire graph removing every square"""
 
     # Need to update these values
@@ -408,13 +408,16 @@ def reset_graph(gph: GraphState, algo) -> None:
     gph.speed_multiplier = 1
 
     # Resets each square
-    for i in range(gph.rows):
-        for j in range(gph.rows):
-            square = gph.graph[i][j]
-            square.wall_color = WALL_COLOR
-            square.reset()
-            gph.add_rect_to_update(square)
-    gph.draw_lines = True
+    if gph.rows == graph_max:
+        change_graph_size(gph, algo, txt, graph_default)
+    else:
+        for i in range(gph.rows):
+            for j in range(gph.rows):
+                square = gph.graph[i][j]
+                square.wall_color = WALL_COLOR
+                square.reset()
+                gph.add_rect_to_update(square)
+        gph.draw_lines = True
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -452,7 +455,7 @@ def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None
     draw_vis_text(txt, is_graph_size=True)
 
     # Updates rows and square size with new values
-    reset_graph(gph, algo)
+    reset_graph(gph, algo, txt)
     gph.rows = new_row_size
     gph.square_size = WIDTH / gph.rows
 

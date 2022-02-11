@@ -406,6 +406,7 @@ def best_path(gph: GraphState,
                     pygame.time.delay(algo.best_path_sleep)
                     draw(gph, txt)
                     draw_vis_text(txt, is_best_path=True)
+    gph.update_legend = True
 
 
 def start_mid_end(gph: GraphState,

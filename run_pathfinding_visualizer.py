@@ -52,8 +52,8 @@ if __name__ == "__main__":
 
     # --- Partial Display Update Bugs ---
     # Pathfinding algorithms
-    # Reset legend after changing text (best path)
     # Maze generation
+    # Potentially map isn't being converted to graph properly
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
     #   nodes that will be different under new conditions. Most won't change.
