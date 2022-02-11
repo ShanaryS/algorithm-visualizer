@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs ---
-    # Maze generation
     # Potentially map isn't being converted to graph properly
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
