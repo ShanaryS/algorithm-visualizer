@@ -195,11 +195,13 @@ def _draw_img(gph: GraphState) -> None:
 def set_squares_to_roads(gph: GraphState) -> None:
     """Gets the color of a single pixel"""
 
+    gph.update_entire_screen = True
+
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square = gph.graph[x][y]
-            square.wall_color = WALL_COLOR_MAP
+            # square.wall_color = WALL_COLOR_MAP  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
 
@@ -230,7 +232,6 @@ def set_squares_to_roads(gph: GraphState) -> None:
             else:
                 square.set_wall()
                 gph.wall_nodes.add(square)
-            gph.add_rect_to_update(square)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
@@ -458,4 +459,3 @@ def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None
     # Recreates graph with new values
     set_graph(gph)
     draw(gph, txt)
-    pass
