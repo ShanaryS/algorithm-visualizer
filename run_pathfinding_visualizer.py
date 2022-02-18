@@ -50,11 +50,18 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    # --- Partial Display Update Bugs ---
-    # Potentially map isn't being converted to graph properly
+    # --- Partial Display Update Bugs/Features ---
+    # Instant maze does not draw barriers
+    # Text over legend
+    # Bidijk slower that other algos
+    # Algos too fast
+    # Map is not being converted to squares, only moving to background
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
     #   nodes that will be different under new conditions. Most won't change.
+    # Default to large grid? Speed of algos now allow it.
+    # Add a key that queues up all squares that change until the button is pressed again
+    #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
