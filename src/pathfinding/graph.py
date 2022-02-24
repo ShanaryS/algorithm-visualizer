@@ -394,7 +394,7 @@ def draw_vis_text(
             )
         )
 
-    # Always called after draw. In that scenario draw won't update display so this will
+    # Updates the portion of the screen that contains changing text
     pygame.display.update(text_rect)
 
 
