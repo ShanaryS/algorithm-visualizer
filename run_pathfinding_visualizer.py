@@ -55,6 +55,7 @@ if __name__ == "__main__":
     # Text over legend
     # Bidijk slower that other algos
     # Algos too fast
+    # Delay in starting algos with converted map
     # Map is not being converted to squares, only moving to background
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
