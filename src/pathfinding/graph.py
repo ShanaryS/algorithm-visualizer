@@ -78,7 +78,7 @@ class VisText:
     )
     legend_recursive_maze = FONT.render("Generate maze - Press 'G'", True, LEGEND_COLOR)
     legend_instant_recursive_maze = FONT.render(
-        "Generate maze (Instantly) - Press 'I'", True, LEGEND_COLOR
+        "Generate maze (Invisible) - Press 'I'", True, LEGEND_COLOR
     )
     legend_address = FONT.render(
         "Press 'Enter' to visit anywhere in the world!", True, LEGEND_COLOR

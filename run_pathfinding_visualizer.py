@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Instant maze does not draw barriers
     # Text over legend
     # Bidijk slower that other algos
     # Algos too fast
@@ -74,6 +73,7 @@ if __name__ == "__main__":
     # Updating entire screen every frame instead of changed items
     #   Update the entire text box whenever the update_text func is called
     #   Otherwise only update that square's area when used by anything
+    # Instant maze is invisible (made it a feature instead since regular maze much faster now)
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
