@@ -92,8 +92,8 @@ def dijkstra(
             gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
-        i += 1
         if visualize and not curr_square.is_closed():
+            i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)

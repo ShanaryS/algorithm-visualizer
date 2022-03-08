@@ -23,6 +23,9 @@ pygame.display.set_caption(
 )
 pygame.font.init()
 
+# Other constants
+DEFAULT_SPEED_MULTIPLIER = 1
+
 
 @dataclass
 class GraphState:
@@ -42,7 +45,7 @@ class GraphState:
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
-    speed_multiplier: int = 1
+    speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
 
     def add_rect_to_update(self, obj) -> None:
         """Adds rect to update, converts non rects to rect"""
@@ -409,7 +412,7 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
     algo.a_star_finished = False
     algo.bi_dijkstra_finished = False
     algo.maze = False
-    gph.speed_multiplier = 1
+    gph.speed_multiplier = DEFAULT_SPEED_MULTIPLIER
 
     # Resets each square
     if gph.rows == graph_max:
