@@ -408,14 +408,15 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
     """Resets entire graph removing every square"""
 
     # Need to update these values
+    gph.speed_multiplier = DEFAULT_SPEED_MULTIPLIER
     algo.dijkstra_finished = False
     algo.a_star_finished = False
     algo.bi_dijkstra_finished = False
     algo.maze = False
-    gph.speed_multiplier = DEFAULT_SPEED_MULTIPLIER
 
     # Resets each square
-    if gph.rows == graph_max:
+    if gph.rows == graph_max or gph.has_img:
+        gph.has_img = False
         change_graph_size(gph, algo, txt, graph_default)
     else:
         for i in range(gph.rows):
