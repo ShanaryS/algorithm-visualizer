@@ -128,8 +128,11 @@ def set_graph(gph: GraphState) -> None:
             gph.graph[i].append(square)
 
 
-def draw(gph: GraphState, txt: VisText, legend=False, algo_running=False) -> None:
+def draw(gph: GraphState, txt: VisText, legend=False, clear_legend=False, algo_running=False) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
+
+    if clear_legend:
+        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
     # Draws the horizontal and vertical lines on the graph unless it has image
     if not gph.base_drawn:
@@ -314,7 +317,7 @@ def draw_vis_text(
                 txt.vis_text_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_dijkstra.get_width() // 2,
-                    center_legend_area - txt.vis_text_dijkstra.get_height() // 2,
+                    center_legend_area - txt.vis_text_dijkstra.get_height() // 2 - 10,
                 ),
             )
         )
@@ -324,7 +327,7 @@ def draw_vis_text(
                 txt.vis_text_a_star,
                 (
                     WIDTH // 2 - txt.vis_text_a_star.get_width() // 2,
-                    center_legend_area - txt.vis_text_a_star.get_height() // 2,
+                    center_legend_area - txt.vis_text_a_star.get_height() // 2 - 10,
                 ),
             )
         )
@@ -334,7 +337,7 @@ def draw_vis_text(
                 txt.vis_text_bi_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_bi_dijkstra.get_width() // 2,
-                    center_legend_area - txt.vis_text_bi_dijkstra.get_height() // 2,
+                    center_legend_area - txt.vis_text_bi_dijkstra.get_height() // 2 - 10,
                 ),
             )
         )
@@ -344,7 +347,7 @@ def draw_vis_text(
                 txt.vis_text_best_path,
                 (
                     WIDTH // 2 - txt.vis_text_best_path.get_width() // 2,
-                    center_legend_area - txt.vis_text_best_path.get_height() // 2,
+                    center_legend_area - txt.vis_text_best_path.get_height() // 2 + 10,
                 ),
             )
         )

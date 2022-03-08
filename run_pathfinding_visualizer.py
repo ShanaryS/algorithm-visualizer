@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Text over legend
     # Bidijk slower that other algos
     # Algos too fast
     # Delay in starting algos with converted map

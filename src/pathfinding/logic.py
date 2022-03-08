@@ -449,6 +449,7 @@ def _dijkstra_button(
 
     # Resets algo visualizations without removing ordinal nodes or walls
     reset_algo(gph, algo)
+    draw(gph, txt, clear_legend=True)
 
     # Updates neighbours in case anything has changed
     for row in gph.graph:
@@ -484,6 +485,7 @@ def _a_star_button(
 
     # Resets algo visualizations without removing ordinal nodes or walls
     reset_algo(gph, algo)
+    draw(gph, txt, clear_legend=True)
 
     # Updates neighbours in case anything has changed
     for row in gph.graph:
@@ -519,6 +521,7 @@ def _bi_dijkstra_button(
 
     # Resets algo visualizations without removing ordinal nodes or walls
     reset_algo(gph, algo)
+    draw(gph, txt, clear_legend=True)
 
     # Updates neighbours in case anything has changed
     for row in gph.graph:
@@ -552,6 +555,7 @@ def _recursive_maze_buttons(
 ) -> None:
     """Draws recursive maze"""
     reset_graph(gph, algo, txt)  # Resets entire graph to prevent any unintended behaviour
+    draw(gph, txt, clear_legend=True)
     gph.base_drawn = False
     draw_recursive_maze(gph, txt, visualize=visualize)  # Draw maze
     gph.update_legend = True
