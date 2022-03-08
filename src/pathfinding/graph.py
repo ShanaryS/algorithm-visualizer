@@ -200,7 +200,7 @@ def _draw_img(gph: GraphState) -> None:
 
 
 def set_squares_to_roads(gph: GraphState) -> None:
-    """Gets the color of a single pixel"""
+    """Sets squares to the color of a single pixel"""
 
     gph.update_entire_screen = True
 
