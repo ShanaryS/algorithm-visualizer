@@ -409,14 +409,14 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
 
     # Need to update these values
     gph.speed_multiplier = DEFAULT_SPEED_MULTIPLIER
+    gph.has_img = False
     algo.dijkstra_finished = False
     algo.a_star_finished = False
     algo.bi_dijkstra_finished = False
     algo.maze = False
 
     # Resets each square
-    if gph.rows == graph_max or gph.has_img:
-        gph.has_img = False
+    if gph.rows == graph_max:
         change_graph_size(gph, algo, txt, graph_default)
     else:
         for i in range(gph.rows):

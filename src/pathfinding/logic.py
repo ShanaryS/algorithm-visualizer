@@ -80,21 +80,21 @@ def run_pathfinding(
                 algo.ordinal_node_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT:
+            if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
                 _left_click_button(gph, algo, lgc, txt)
 
             # RIGHT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT:
+            elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
                 _right_click_button(gph, lgc)
 
             # MIDDLE MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < HEIGHT:
+            elif pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
                 _middle_click_button(gph, algo, lgc, txt)
 
             """Keyboard buttons"""
 
             # Reset graph with "SPACE" on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not gph.has_img:
                 _reset_graph_button(gph, algo, lgc, txt)
 
             # Run Dijkstra with "D" key on keyboard
@@ -103,6 +103,7 @@ def run_pathfinding(
                 and event.key == pygame.K_d
                 and lgc.start
                 and lgc.end
+                and not gph.has_img
             ):
                 _dijkstra_button(gph, algo, lgc, txt)
 
@@ -112,6 +113,7 @@ def run_pathfinding(
                 and event.key == pygame.K_a
                 and lgc.start
                 and lgc.end
+                and not gph.has_img
             ):
                 _a_star_button(gph, algo, lgc, txt)
 
@@ -121,11 +123,12 @@ def run_pathfinding(
                 and event.key == pygame.K_b
                 and lgc.start
                 and lgc.end
+                and not gph.has_img
             ):
                 _bi_dijkstra_button(gph, algo, lgc, txt)
 
             # Draw recursive maze with "G" key on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img:
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
@@ -133,7 +136,7 @@ def run_pathfinding(
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_i and not gph.has_img:
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
@@ -145,6 +148,7 @@ def run_pathfinding(
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_s
                 and gph.rows != lgc.GRAPH_SMALL
+                and not gph.has_img
             ):
                 _graph_size_buttons(
                     gph, algo, lgc, txt, lgc.GRAPH_SMALL, lgc.BEST_PATH_SLEEP
@@ -155,6 +159,7 @@ def run_pathfinding(
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_m
                 and gph.rows != lgc.GRAPH_MEDIUM
+                and not gph.has_img
             ):
                 _graph_size_buttons(
                     gph, algo, lgc, txt, lgc.GRAPH_MEDIUM, lgc.BEST_PATH_SLEEP
@@ -165,6 +170,7 @@ def run_pathfinding(
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_l
                 and gph.rows != lgc.GRAPH_LARGE
+                and not gph.has_img
             ):
                 _graph_size_buttons(
                     gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
