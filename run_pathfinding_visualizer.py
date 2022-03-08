@@ -51,8 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Bidijk slower that other algos
-    # Algos too fast
     # Delay in starting algos with converted map
     # Map is not being converted to squares, only moving to background
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
@@ -68,6 +66,7 @@ if __name__ == "__main__":
     #   Mention that it took a lot of effort!
 
     # --- Known Bugs ---
+    # Bi dijk redraws open nodes
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Updating entire screen every frame instead of changed items
     #   Update the entire text box whenever the update_text func is called

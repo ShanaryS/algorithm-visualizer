@@ -87,12 +87,13 @@ def dijkstra(
                         gph.add_rect_to_update(nei)
 
         # Sets square to closed after finished checking
+        already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
             gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
-        if visualize and not curr_square.is_closed():
+        if visualize and not already_closed:
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
@@ -168,12 +169,13 @@ def a_star(
                         gph.add_rect_to_update(nei)
 
         # Sets square to closed after finished checking
+        already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
             gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
-        if visualize and not curr_square.is_closed():
+        if visualize and not already_closed:
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
@@ -352,6 +354,11 @@ def bi_dijkstra(
                             gph.add_rect_to_update(nei)
 
         # Sets square to closed after finished checking
+        already_closed = any((
+            curr_square.is_closed(),
+            curr_square.is_closed_alt(),
+            curr_square.is_closed_alt_()
+        ))
         if curr_square != start and curr_square != end and curr_square != ignore_node:
             # Set square to proper closed value based on it's open value
             if curr_square.is_open():
@@ -363,7 +370,7 @@ def bi_dijkstra(
             gph.add_rect_to_update(curr_square)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
-        if visualize and not curr_square.is_closed():
+        if visualize and not already_closed:
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
