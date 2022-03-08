@@ -56,7 +56,6 @@ if __name__ == "__main__":
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
     #   nodes that will be different under new conditions. Most won't change.
-    # Default to large grid? Speed of algos now allow it.
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
 
