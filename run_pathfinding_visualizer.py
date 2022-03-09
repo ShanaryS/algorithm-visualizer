@@ -51,10 +51,8 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Delay in starting algos with converted map
-    # 40ms when reseting large graph, maybe save nodes that aren't reset?
-    #   Also optimizes dragging nodes. Futher optimization is to only reset
-    #   nodes that will be different under new conditions. Most won't change.
+    # Do you always need to iterate through entirety of gph.graph or can use gph.rects_to_update?
+    #   Would multithreading/parallelism help?
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
     # Rewrite draw function
@@ -67,10 +65,12 @@ if __name__ == "__main__":
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
-    # Updating entire screen every frame instead of changed items
-    #   Update the entire text box whenever the update_text func is called
-    #   Otherwise only update that square's area when used by anything
-    # Instant maze is invisible (made it a feature instead since regular maze much faster now)
+    # Add multithreading to code that iterates through gph.graph
+
+    # --- C++ Performance Rewrite ---
+    # Rewrite algorithms.py into C++
+    # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
+    #   Changing to large graph takes 40ms
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
