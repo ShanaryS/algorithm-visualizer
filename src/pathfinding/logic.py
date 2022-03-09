@@ -618,9 +618,8 @@ def _convert_img_to_squares(
 def _get_address_from_user(gph: GraphState, lgc: LogicState, txt: VisText) -> None:
     """Gets the address from the user"""
 
-    txt.address = txt.address.replace(
-        ",", ""
-    )  # Used to get rid of commas inserted by url encoding.
+    # Used to get rid of commas inserted by url encoding.
+    txt.address = txt.address.replace(",", "")
 
     gph.base_drawn = False
     draw(gph, txt)
