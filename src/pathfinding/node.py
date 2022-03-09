@@ -2,7 +2,6 @@
 
 
 from src.pathfinding.colors import *
-from src.pathfinding.values import ROWS, SQUARE_SIZE
 
 
 class Square:
@@ -21,11 +20,12 @@ class Square:
     all_wall_nodes = set()
     all_path_nodes = set()
 
-    def __init__(self, row: int, col: int) -> None:
-        self.rows: int = ROWS
-        self.square_size: float = SQUARE_SIZE
+    def __init__(self, row: int, col: int, rows: int, square_size) -> None:
         self.row: int = row
         self.col: int = col
+        self.rows: int = rows
+        self.square_size: float = square_size
+
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
         self.neighbours: list = []
@@ -183,14 +183,6 @@ class Square:
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
         return self.color, (self.x, self.y, int(self.square_size), int(self.square_size))
-
-    def update_values(self, rows: int, square_size: float) -> None:
-        """Updates the attributes of node. Used when changing graph size"""
-
-        self.rows = rows
-        self.square_size = square_size
-        self.x = self.row * self.square_size
-        self.y = self.col * self.square_size
     
     def _discard_node(self) -> None:
         """Discard the node from corresponding set when changed"""

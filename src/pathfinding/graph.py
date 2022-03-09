@@ -121,11 +121,7 @@ def set_graph(gph: GraphState) -> None:
         gph.graph.append([])
         for j in range(gph.rows):
             # Uses Square class to create square object with necessary attributes
-            square = Square(i, j)
-
-            # Necessary for when changing graph size
-            square.update_values(gph.rows, gph.square_size)
-
+            square = Square(i, j, gph.rows, gph.square_size)
             gph.graph[i].append(square)
 
 
