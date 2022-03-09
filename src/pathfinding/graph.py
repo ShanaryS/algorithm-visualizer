@@ -172,8 +172,6 @@ def draw(
         gph.rects_to_update.clear()
     else:
         # Queues all changed squares to update
-        if Square.get_nodes_to_update:
-            gph.draw_lines = True
         for square in Square.get_nodes_to_update():
             gph.add_to_update_queue(square)
         Square.clear_nodes_to_update()
@@ -436,6 +434,7 @@ def reset_graph(
                 square = gph.graph[i][j]
                 square.wall_color = WALL_COLOR
                 square.reset()
+        gph.draw_lines = True
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -459,6 +458,7 @@ def reset_algo(gph: GraphState, algo) -> None:
     for type_list in nodes_to_reset:
         for square in type_list:
             square.reset()
+    gph.draw_lines = True
 
 
 def change_graph_size(
