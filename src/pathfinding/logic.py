@@ -178,11 +178,11 @@ def run_pathfinding(
 
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
-                _convert_img_to_squares(gph, algo, lgc, txt)
+                _convert_img_to_squares(gph, txt)
 
             # Enter an address with the "ENTER" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                _get_address_from_user(gph, lgc, txt)
+                _get_address_from_user(gph, algo, lgc, txt)
 
         clock.tick(gph.FPS)
 
@@ -584,8 +584,10 @@ def _graph_size_buttons(
     _reset_ordinal_nodes(lgc)
 
 
-def _load_img_to_graph(gph: GraphState, lgc: LogicState, txt: VisText) -> None:
+def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Loads the image onto the graph"""
+    
+    change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
     write_img_base(get_img_base(txt.address))
 
@@ -597,25 +599,25 @@ def _load_img_to_graph(gph: GraphState, lgc: LogicState, txt: VisText) -> None:
     _reset_ordinal_nodes(lgc)
 
 
-def _convert_img_to_squares(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
 
     write_img_clean(get_img_clean(txt.address))
 
     gph.img = pygame.image.load(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
     os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
-    change_graph_size(gph, algo, txt, lgc.GRAPH_MAX)
+
     gph.base_drawn = False
     draw(gph, txt)
+
     gph.update_legend = True
     gph.has_img = False
     gph.speed_multiplier = 500
+
     set_squares_to_roads(gph)
 
 
-def _get_address_from_user(gph: GraphState, lgc: LogicState, txt: VisText) -> None:
+def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Gets the address from the user"""
 
     # Used to get rid of commas inserted by url encoding.
@@ -639,7 +641,7 @@ def _get_address_from_user(gph: GraphState, lgc: LogicState, txt: VisText) -> No
                     txt.address = txt.address[:-1]
                 elif event.key == pygame.K_RETURN:
                     txt.address = ", ".join(txt.address.split())
-                    _load_img_to_graph(gph, lgc, txt)
+                    _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
                 draw_vis_text(txt, is_input=True)

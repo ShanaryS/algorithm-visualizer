@@ -52,7 +52,6 @@ if __name__ == "__main__":
 
     # --- Partial Display Update Bugs/Features ---
     # Delay in starting algos with converted map
-    # Map is not being converted to squares, only moving to background
     # 40ms when reseting large graph, maybe save nodes that aren't reset?
     #   Also optimizes dragging nodes. Futher optimization is to only reset
     #   nodes that will be different under new conditions. Most won't change.

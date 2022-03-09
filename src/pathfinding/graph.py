@@ -131,7 +131,13 @@ def set_graph(gph: GraphState) -> None:
             gph.graph[i].append(square)
 
 
-def draw(gph: GraphState, txt: VisText, legend=False, clear_legend=False, algo_running=False) -> None:
+def draw(
+    gph: GraphState,
+    txt: VisText,
+    legend=False,
+    clear_legend=False,
+    algo_running=False,
+) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     if clear_legend:
@@ -239,6 +245,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
             else:
                 square.set_wall()
                 gph.wall_nodes.add(square)
+            gph.add_rect_to_update(square)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
@@ -340,7 +347,9 @@ def draw_vis_text(
                 txt.vis_text_bi_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_bi_dijkstra.get_width() // 2,
-                    center_legend_area - txt.vis_text_bi_dijkstra.get_height() // 2 - 10,
+                    center_legend_area
+                    - txt.vis_text_bi_dijkstra.get_height() // 2
+                    - 10,
                 ),
             )
         )
@@ -404,7 +413,9 @@ def draw_vis_text(
     pygame.display.update(text_rect)
 
 
-def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None) -> None:
+def reset_graph(
+    gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None
+) -> None:
     """Resets entire graph removing every square"""
 
     # Need to update these values
@@ -454,7 +465,9 @@ def reset_algo(gph: GraphState, algo) -> None:
     gph.draw_lines = True
 
 
-def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None:
+def change_graph_size(
+    gph: GraphState, algo, txt: VisText, new_row_size, to_draw=True
+) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
@@ -469,4 +482,5 @@ def change_graph_size(gph: GraphState, algo, txt: VisText, new_row_size) -> None
 
     # Recreates graph with new values
     set_graph(gph)
-    draw(gph, txt)
+    if to_draw:
+        draw(gph, txt)
