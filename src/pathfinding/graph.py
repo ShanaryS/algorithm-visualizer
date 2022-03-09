@@ -100,7 +100,7 @@ class VisText:
         "Generating recursive maze...", True, VIS_COLOR
     )
     vis_text_graph_size = FONT.render(
-        "Changing graph size... May take up to 30 seconds", True, VIS_COLOR
+        "Changing graph size...", True, VIS_COLOR
     )
     vis_text_input = FONT.render(
         "Enter an address (NO COMMAS, ONLY SPACES):", True, LEGEND_COLOR
