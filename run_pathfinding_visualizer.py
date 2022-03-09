@@ -58,6 +58,7 @@ if __name__ == "__main__":
     #   nodes that will be different under new conditions. Most won't change.
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
+    # Rewrite draw function
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
