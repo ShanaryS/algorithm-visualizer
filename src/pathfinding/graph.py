@@ -1,7 +1,6 @@
 """Draws and updates graph for visualization"""
 
 
-from numpy import isin
 from src.pathfinding.colors import *
 from dataclasses import dataclass
 import pygame
@@ -446,20 +445,19 @@ def reset_algo(gph: GraphState, algo) -> None:
     algo.bi_dijkstra_finished = False
 
     # Resets only certain colors
-    for i in range(gph.rows):
-        for j in range(gph.rows):
-            square = gph.graph[i][j]
-            if (
-                square.is_open()
-                or square.is_open_alt()
-                or square.is_open_alt_()
-                or square.is_closed()
-                or square.is_closed_alt()
-                or square.is_closed_alt_()
-                or square.is_path()
-            ):
-                square.reset()
-                gph.add_rect_to_update(square)
+    nodes_to_reset = [
+        Square.all_open_nodes,
+        Square.all_open_nodes_alt,
+        Square.all_open_nodes_alt_,
+        Square.all_closed_nodes,
+        Square.all_closed_nodes_alt,
+        Square.all_closed_nodes_alt_,
+        Square.all_path_nodes
+    ]
+    for type_list in nodes_to_reset:
+        for square in type_list:
+            square.reset()
+            gph.add_rect_to_update(square)
     gph.draw_lines = True
 
 
