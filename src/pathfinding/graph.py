@@ -45,7 +45,7 @@ class GraphState:
     FPS: int = 240
     speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
 
-    def add_rect_to_update(self, obj) -> None:
+    def add_to_update_queue(self, obj) -> None:
         """Adds rect to update, converts non rects to rect"""
 
         if isinstance(obj, Square):
@@ -135,7 +135,7 @@ def draw(
     """Main function to update the window. Called by all operations that updates the window."""
 
     if clear_legend:
-        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
     # Draws the horizontal and vertical lines on the graph unless it has image
     if not gph.base_drawn:
@@ -143,10 +143,10 @@ def draw(
             _draw_img(gph)
         else:
             # Sets background of graph to white
-            gph.add_rect_to_update(WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT))
+            gph.add_to_update_queue(WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT))
             _draw_lines(gph)
         # Sets background of legend to grey
-        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         if legend:
             _draw_legend(gph, txt)
@@ -160,7 +160,7 @@ def draw(
 
     if gph.update_legend:
         gph.update_legend = False
-        gph.add_rect_to_update(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
     # Decideds how much of the display to update
@@ -169,12 +169,21 @@ def draw(
         # So we just upate the entire screen like this instead
         gph.update_entire_screen = False
         pygame.display.update()
-    elif gph.rects_to_update:
+        gph.rects_to_update.clear()
+    else:
+        # Queues all changed squares to update
+        if Square.get_nodes_to_update:
+            gph.draw_lines = True
+        for square in Square.get_nodes_to_update():
+            gph.add_to_update_queue(square)
+        Square.clear_nodes_to_update()
+        
+    if gph.rects_to_update:
         if gph.draw_lines:
-            _draw_lines(gph)
             gph.draw_lines = False
+            _draw_lines(gph)
         pygame.display.update(gph.rects_to_update)
-    gph.rects_to_update.clear()
+        gph.rects_to_update.clear()
 
 
 def _draw_square(square_color, square_pos) -> None:
@@ -196,7 +205,7 @@ def _draw_lines(gph: GraphState) -> None:
 
 def _draw_img(gph: GraphState) -> None:
     """Draws the maps image onto the graph"""
-    gph.add_rect_to_update(WINDOW.blit(gph.img, (0, 0)))
+    gph.add_to_update_queue(WINDOW.blit(gph.img, (0, 0)))
 
 
 def set_squares_to_roads(gph: GraphState) -> None:
@@ -238,7 +247,6 @@ def set_squares_to_roads(gph: GraphState) -> None:
                     square.is_highway = True
             else:
                 square.set_wall()
-            gph.add_rect_to_update(square)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
@@ -428,8 +436,6 @@ def reset_graph(
                 square = gph.graph[i][j]
                 square.wall_color = WALL_COLOR
                 square.reset()
-                gph.add_rect_to_update(square)
-        gph.draw_lines = True
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -453,8 +459,6 @@ def reset_algo(gph: GraphState, algo) -> None:
     for type_list in nodes_to_reset:
         for square in type_list:
             square.reset()
-            gph.add_rect_to_update(square)
-    gph.draw_lines = True
 
 
 def change_graph_size(

@@ -235,7 +235,6 @@ def _left_click_button(
                         lgc.start.set_wall()
                     else:
                         lgc.start.reset()
-                    gph.add_rect_to_update(lgc.start)
                     lgc.start = square
                     square.set_start()
                 elif last_square == "mid":
@@ -243,7 +242,6 @@ def _left_click_button(
                         lgc.mid.set_wall()
                     else:
                         lgc.mid.reset()
-                    gph.add_rect_to_update(lgc.mid)
                     lgc.mid = square
                     square.set_mid()
                 elif last_square == "end":
@@ -251,7 +249,6 @@ def _left_click_button(
                         lgc.end.set_wall()
                     else:
                         lgc.end.reset()
-                    gph.add_rect_to_update(lgc.end)
                     lgc.end = square
                     square.set_end()
 
@@ -315,7 +312,6 @@ def _left_click_button(
         else:
             # Add wall
             square.set_wall()
-            gph.add_rect_to_update(square)
 
             # Updates algo
             if algo.dijkstra_finished:
@@ -362,8 +358,6 @@ def _left_click_button(
     ):
         square.set_wall()
 
-    gph.add_rect_to_update(square)
-
 
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     """Handles mouse right click"""
@@ -372,8 +366,6 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
 
     # Reset square and ordinal node if it was any
     square.reset()
-    gph.add_rect_to_update(square)
-    gph.draw_lines = True
     if square == lgc.start:
         lgc.start = None
     elif square == lgc.mid:
@@ -393,7 +385,6 @@ def _middle_click_button(
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
         square.set_mid()
-        gph.add_rect_to_update(square)
 
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:

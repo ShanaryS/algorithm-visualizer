@@ -52,11 +52,9 @@ if __name__ == "__main__":
 
     # --- Partial Display Update Bugs/Features ---
     # Walls appearing after dragging nodes on completion
-    # Walls of large maze are weird on algo start
-    # Have Square class keep track of squares that need to update
+    # Walls of maze are weird on algo start
     # Do you always need to iterate through entirety of gph.graph or can use gph.rects_to_update?
     #   Would multithreading/parallelism help?
-    #   Plan to use square set_ methods to keep track of what isn't a reset sqaure, keep a list in class var
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
     # Rewrite draw function
