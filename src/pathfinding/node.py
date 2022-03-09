@@ -8,6 +8,19 @@ from src.pathfinding.values import ROWS, SQUARE_SIZE
 class Square:
     """Defines the properties needed for each node on graph"""
 
+    all_empty_nodes = set()
+    all_open_nodes = set()
+    all_open_nodes_alt = set()
+    all_open_nodes_alt_ = set()
+    all_closed_nodes = set()
+    all_closed_nodes_alt = set()
+    all_closed_nodes_alt_ = set()
+    all_start_nodes = set()
+    all_mid_nodes = set()
+    all_end_nodes = set()
+    all_wall_nodes = set()
+    all_path_nodes = set()
+
     def __init__(self, row: int, col: int) -> None:
         self.rows: int = ROWS
         self.square_size: float = SQUARE_SIZE
@@ -150,3 +163,63 @@ class Square:
         self.square_size = square_size
         self.x = self.row * self.square_size
         self.y = self.col * self.square_size
+    
+    @classmethod
+    def get_all_empty_nodes(cls):
+        "Gets all empty nodes"
+        return cls.all_empty_nodes
+
+    @classmethod
+    def get_all_open_nodes(cls):
+        "Gets all open nodes"
+        return cls.all_open_nodes
+
+    @classmethod
+    def get_all_open_nodes_alt(cls):
+        "Gets all open_alt nodes"
+        return cls.all_open_nodes_alt
+
+    @classmethod
+    def get_all_open_nodes_alt_(cls):
+        "Gets all open_alt_ nodes"
+        return cls.all_open_nodes_alt_
+
+    @classmethod
+    def get_all_closed_nodes(cls):
+        "Gets all closed nodes"
+        return cls.all_closed_nodes
+
+    @classmethod
+    def get_all_closed_nodes_alt(cls):
+        "Gets all closed_alt nodes"
+        return cls.all_closed_nodes_alt
+
+    @classmethod
+    def get_all_closed_nodes_alt_(cls):
+        "Gets all closed_alt_ nodes"
+        return cls.all_closed_nodes_alt_
+
+    @classmethod
+    def get_all_start_nodes(cls):
+        "Gets all start nodes"
+        return cls.all_start_nodes
+
+    @classmethod
+    def get_all_mid_nodes(cls):
+        "Gets all mid nodes"
+        return cls.all_mid_nodes
+
+    @classmethod
+    def get_all_end_nodes(cls):
+        "Gets all end nodes"
+        return cls.all_end_nodes
+
+    @classmethod
+    def get_all_wall_nodes(cls):
+        "Gets all wall nodes"
+        return cls.all_wall_nodes
+
+    @classmethod
+    def get_all_path_nodes(cls):
+        "Gets all path nodes"
+        return cls.all_path_nodes
