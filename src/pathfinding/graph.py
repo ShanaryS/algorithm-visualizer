@@ -32,7 +32,6 @@ class GraphState:
     """Stores the state of the graph. Changes with graph size."""
 
     graph: list
-    wall_nodes: set
     rects_to_update: list
     base_drawn: bool = False
     draw_lines: bool = False
@@ -244,7 +243,6 @@ def set_squares_to_roads(gph: GraphState) -> None:
                     square.is_highway = True
             else:
                 square.set_wall()
-                gph.wall_nodes.add(square)
             gph.add_rect_to_update(square)
 
 

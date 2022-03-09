@@ -36,7 +36,7 @@ def main() -> None:
 
     overide_where()
 
-    gph = GraphState(graph=[], wall_nodes=set(), rects_to_update=[])
+    gph = GraphState(graph=[], rects_to_update=[])
 
     algo = AlgoState(ordinal_node_clicked=[])
 
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Have Square class keep track of squares that need to update
     # Do you always need to iterate through entirety of gph.graph or can use gph.rects_to_update?
     #   Would multithreading/parallelism help?
     #   Plan to use square set_ methods to keep track of what isn't a reset sqaure, keep a list in class var

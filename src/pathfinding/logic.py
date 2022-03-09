@@ -231,7 +231,7 @@ def _left_click_button(
 
                 # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
-                    if lgc.start in gph.wall_nodes:
+                    if lgc.start in Square.all_wall_nodes:
                         lgc.start.set_wall()
                     else:
                         lgc.start.reset()
@@ -239,7 +239,7 @@ def _left_click_button(
                     lgc.start = square
                     square.set_start()
                 elif last_square == "mid":
-                    if lgc.mid in gph.wall_nodes:
+                    if lgc.mid in Square.all_wall_nodes:
                         lgc.mid.set_wall()
                     else:
                         lgc.mid.reset()
@@ -247,7 +247,7 @@ def _left_click_button(
                     lgc.mid = square
                     square.set_mid()
                 elif last_square == "end":
-                    if lgc.end in gph.wall_nodes:
+                    if lgc.end in Square.all_wall_nodes:
                         lgc.end.set_wall()
                     else:
                         lgc.end.reset()
@@ -316,7 +316,6 @@ def _left_click_button(
             # Add wall
             square.set_wall()
             gph.add_rect_to_update(square)
-            gph.wall_nodes.add(square)
 
             # Updates algo
             if algo.dijkstra_finished:
@@ -362,7 +361,6 @@ def _left_click_button(
         and algo.maze is False
     ):
         square.set_wall()
-        gph.wall_nodes.add(square)
 
     gph.add_rect_to_update(square)
 
@@ -371,10 +369,6 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     """Handles mouse right click"""
 
     pos, row, col, square = _get_square_clicked(gph)
-
-    # If square to remove is wall, need to remove it from wall_node as well to retain accuracy
-    if square.is_wall():
-        gph.wall_nodes.discard(square)
 
     # Reset square and ordinal node if it was any
     square.reset()

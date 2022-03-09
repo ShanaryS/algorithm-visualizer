@@ -753,7 +753,6 @@ def draw_recursive_maze(
         for y in range(chamber_height):
             gph.graph[chamber_left + x_divide][chamber_top + y].set_wall()
             gph.add_rect_to_update(gph.graph[chamber_left + x_divide][chamber_top + y])
-            gph.wall_nodes.add(gph.graph[chamber_left + x_divide][chamber_top + y])
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -763,7 +762,6 @@ def draw_recursive_maze(
         for x in range(chamber_width):
             gph.graph[chamber_left + x][chamber_top + y_divide].set_wall()
             gph.add_rect_to_update(gph.graph[chamber_left + x][chamber_top + y_divide])
-            gph.wall_nodes.add(gph.graph[chamber_left + x][chamber_top + y_divide])
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -845,7 +843,6 @@ def draw_recursive_maze(
                 y = gph.rows - 1
         gph.graph[x][y].reset()
         gph.add_rect_to_update(gph.graph[x][y])
-        gph.wall_nodes.discard(gph.graph[x][y])
         if visualize:
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)

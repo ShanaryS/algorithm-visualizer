@@ -109,16 +109,19 @@ class Square:
     def reset(self) -> None:
         """Sets node to blank"""
         self._discard_node()
+        type(self).all_empty_nodes.add(self)
         self.color, self.is_highway = DEFAULT_COLOR, False
 
     def set_open(self) -> None:
         """Sets node to open"""
         self._discard_node()
+        type(self).all_open_nodes.add(self)
         self.color = OPEN_COLOR
 
     def set_open_alt(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         self._discard_node()
+        type(self).all_open_nodes_alt.add(self)
         self.color = OPEN_ALT_COLOR
 
     def set_open_alt_(self) -> None:
@@ -126,46 +129,55 @@ class Square:
         Each swarms needs to be different colors for best path algo to work.
         """
         self._discard_node()
+        type(self).all_open_nodes_alt_.add(self)
         self.color = OPEN_ALT_COLOR_
 
     def set_closed(self) -> None:
         """Sets node to closed"""
         self._discard_node()
+        type(self).all_closed_nodes.add(self)
         self.color = CLOSED_COLOR
     
     def set_closed_alt(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
         self._discard_node()
+        type(self).all_closed_nodes_alt.add(self)
         self.color = CLOSED_ALT_COLOR
     
     def set_closed_alt_(self) -> None:
         """Sets node to closed for end now when mid is included"""
         self._discard_node()
+        type(self).all_closed_nodes_alt_.add(self)
         self.color = CLOSED_ALT_COLOR_
 
     def set_start(self) -> None:
         """Sets node to start"""
         self._discard_node()
+        type(self).all_start_nodes.add(self)
         self.color = START_COLOR
 
     def set_mid(self) -> None:
         """Sets node to mid"""
         self._discard_node()
+        type(self).all_mid_nodes.add(self)
         self.color = MID_COLOR
 
     def set_end(self) -> None:
         """Sets node to end"""
         self._discard_node()
+        type(self).all_end_nodes.add(self)
         self.color = END_COLOR
 
     def set_wall(self) -> None:
         """Sets node to wall"""
         self._discard_node()
+        type(self).all_wall_nodes.add(self)
         self.color = self.wall_color
 
     def set_path(self) -> None:
         """Sets node to path"""
         self._discard_node()
+        type(self).all_path_nodes.add(self)
         self.color = PATH_COLOR
 
     def draw_square(self) -> tuple:
