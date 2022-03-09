@@ -101,55 +101,71 @@ class Square:
     def is_path(self) -> bool:
         """Checks if path node"""
         return self.color == PATH_COLOR
+    
+    def get_color(self) -> tuple:
+        """Gets color of square"""
+        return self.color
 
     def reset(self) -> None:
         """Sets node to blank"""
+        self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
 
     def set_open(self) -> None:
         """Sets node to open"""
+        self._discard_node()
         self.color = OPEN_COLOR
 
     def set_open_alt(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
+        self._discard_node()
         self.color = OPEN_ALT_COLOR
 
     def set_open_alt_(self) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
+        self._discard_node()
         self.color = OPEN_ALT_COLOR_
 
     def set_closed(self) -> None:
         """Sets node to closed"""
+        self._discard_node()
         self.color = CLOSED_COLOR
     
     def set_closed_alt(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
+        self._discard_node()
         self.color = CLOSED_ALT_COLOR
     
     def set_closed_alt_(self) -> None:
         """Sets node to closed for end now when mid is included"""
+        self._discard_node()
         self.color = CLOSED_ALT_COLOR_
 
     def set_start(self) -> None:
         """Sets node to start"""
+        self._discard_node()
         self.color = START_COLOR
 
     def set_mid(self) -> None:
         """Sets node to mid"""
+        self._discard_node()
         self.color = MID_COLOR
 
     def set_end(self) -> None:
         """Sets node to end"""
+        self._discard_node()
         self.color = END_COLOR
 
     def set_wall(self) -> None:
         """Sets node to wall"""
+        self._discard_node()
         self.color = self.wall_color
 
     def set_path(self) -> None:
         """Sets node to path"""
+        self._discard_node()
         self.color = PATH_COLOR
 
     def draw_square(self) -> tuple:
@@ -164,62 +180,90 @@ class Square:
         self.x = self.row * self.square_size
         self.y = self.col * self.square_size
     
+    def _discard_node(self) -> None:
+        """Discard the node from corresponding set when changed"""
+        
+        if self.is_empty:
+            type(self).all_empty_nodes.discard(self)
+        elif self.is_open:
+            type(self).all_open_nodes.discard(self)
+        elif self.is_open_alt:
+            type(self).all_open_nodes_alt.discard(self)
+        elif self.is_open_alt_:
+            type(self).all_open_nodes_alt_.discard(self)
+        elif self.is_closed:
+            type(self).all_closed_nodes.discard(self)
+        elif self.is_closed_alt:
+            type(self).all_closed_nodes_alt.discard(self)
+        elif self.is_closed_alt_:
+            type(self).all_closed_nodes_alt_.discard(self)
+        elif self.is_start:
+            type(self).all_start_nodes.discard(self)
+        elif self.is_mid:
+            type(self).all_mid_nodes.discard(self)
+        elif self.is_end:
+            type(self).all_end_nodes.discard(self)
+        elif self.is_wall:
+            type(self).all_wall_nodes.discard(self)
+        elif self.is_path:
+            type(self).all_path_nodes.discard(self)
+    
     @classmethod
-    def get_all_empty_nodes(cls):
+    def get_all_empty_nodes(cls) -> set:
         "Gets all empty nodes"
         return cls.all_empty_nodes
 
     @classmethod
-    def get_all_open_nodes(cls):
+    def get_all_open_nodes(cls) -> set:
         "Gets all open nodes"
         return cls.all_open_nodes
 
     @classmethod
-    def get_all_open_nodes_alt(cls):
+    def get_all_open_nodes_alt(cls) -> set:
         "Gets all open_alt nodes"
         return cls.all_open_nodes_alt
 
     @classmethod
-    def get_all_open_nodes_alt_(cls):
+    def get_all_open_nodes_alt_(cls) -> set:
         "Gets all open_alt_ nodes"
         return cls.all_open_nodes_alt_
 
     @classmethod
-    def get_all_closed_nodes(cls):
+    def get_all_closed_nodes(cls) -> set:
         "Gets all closed nodes"
         return cls.all_closed_nodes
 
     @classmethod
-    def get_all_closed_nodes_alt(cls):
+    def get_all_closed_nodes_alt(cls) -> set:
         "Gets all closed_alt nodes"
         return cls.all_closed_nodes_alt
 
     @classmethod
-    def get_all_closed_nodes_alt_(cls):
+    def get_all_closed_nodes_alt_(cls) -> set:
         "Gets all closed_alt_ nodes"
         return cls.all_closed_nodes_alt_
 
     @classmethod
-    def get_all_start_nodes(cls):
+    def get_all_start_nodes(cls) -> set:
         "Gets all start nodes"
         return cls.all_start_nodes
 
     @classmethod
-    def get_all_mid_nodes(cls):
+    def get_all_mid_nodes(cls) -> set:
         "Gets all mid nodes"
         return cls.all_mid_nodes
 
     @classmethod
-    def get_all_end_nodes(cls):
+    def get_all_end_nodes(cls) -> set:
         "Gets all end nodes"
         return cls.all_end_nodes
 
     @classmethod
-    def get_all_wall_nodes(cls):
+    def get_all_wall_nodes(cls) -> set:
         "Gets all wall nodes"
         return cls.all_wall_nodes
 
     @classmethod
-    def get_all_path_nodes(cls):
+    def get_all_path_nodes(cls) -> set:
         "Gets all path nodes"
         return cls.all_path_nodes
