@@ -443,6 +443,7 @@ def _dijkstra_button(
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Updates neighbours in case anything has changed
+    square: Square
     for row in gph.graph:
         for square in row:
             square.update_neighbours(gph)
@@ -479,6 +480,7 @@ def _a_star_button(
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Updates neighbours in case anything has changed
+    square: Square
     for row in gph.graph:
         for square in row:
             square.update_neighbours(gph)
@@ -515,6 +517,7 @@ def _bi_dijkstra_button(
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Updates neighbours in case anything has changed
+    square: Square
     for row in gph.graph:
         for square in row:
             square.update_neighbours(gph)

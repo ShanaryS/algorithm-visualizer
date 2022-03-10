@@ -72,6 +72,7 @@ def dijkstra(
             return came_from
 
         # Decides the order of neighbours to check
+        nei: Square
         for nei in curr_square.neighbours:
             temp_g_score: int = g_score[curr_square] + 1
 
@@ -152,6 +153,7 @@ def a_star(
             return came_from
 
         # Decides the order of neighbours to check
+        nei: Square
         for nei in curr_square.neighbours:
             temp_g_score: int = g_score[curr_square] + 1
 
@@ -237,6 +239,7 @@ def bi_dijkstra(
         open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
+        nei: Square
         for nei in curr_square.neighbours:
             # Start swarm reaching mid (end node if no mid) swarm
             if curr_square.is_open() and nei.is_open_alt():

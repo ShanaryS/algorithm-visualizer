@@ -170,6 +170,7 @@ def draw(
         gph.rects_to_update.clear()
     else:
         # Queues all changed squares to update
+        square: Square
         for square in Square.get_nodes_to_update():
             gph.add_to_update_queue(square)
         Square.clear_nodes_to_update()
