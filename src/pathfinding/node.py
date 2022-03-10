@@ -20,6 +20,7 @@ class Square:
     all_end_nodes = set()
     all_wall_nodes = set()
     all_path_nodes = set()
+    all_history_nodes = set()
 
     # All changed nodes are queue for update each frame
     nodes_to_update = []
@@ -39,6 +40,7 @@ class Square:
         self.neighbours: list = []
         self.color = DEFAULT_COLOR
         self.wall_color = WALL_COLOR
+        self.color_history = None
         self.is_highway = False
 
     def __lt__(self, other) -> bool:
@@ -325,7 +327,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_history():
             return
+
+        self.color_history = self.color
         self.color = NODE_HISTORY_COLOR
+        type(self).all_history_nodes.add(self)
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
@@ -361,63 +366,68 @@ class Square:
     
     @classmethod
     def get_all_empty_nodes(cls) -> set:
-        "Gets all empty nodes"
+        """Gets all empty nodes"""
         return cls.all_empty_nodes
 
     @classmethod
     def get_all_open_nodes(cls) -> set:
-        "Gets all open nodes"
+        """Gets all open nodes"""
         return cls.all_open_nodes
 
     @classmethod
     def get_all_open_nodes_alt(cls) -> set:
-        "Gets all open_alt nodes"
+        """Gets all open_alt nodes"""
         return cls.all_open_nodes_alt
 
     @classmethod
     def get_all_open_nodes_alt_(cls) -> set:
-        "Gets all open_alt_ nodes"
+        """Gets all open_alt_ nodes"""
         return cls.all_open_nodes_alt_
 
     @classmethod
     def get_all_closed_nodes(cls) -> set:
-        "Gets all closed nodes"
+        """Gets all closed nodes"""
         return cls.all_closed_nodes
 
     @classmethod
     def get_all_closed_nodes_alt(cls) -> set:
-        "Gets all closed_alt nodes"
+        """Gets all closed_alt nodes"""
         return cls.all_closed_nodes_alt
 
     @classmethod
     def get_all_closed_nodes_alt_(cls) -> set:
-        "Gets all closed_alt_ nodes"
+        """Gets all closed_alt_ nodes"""
         return cls.all_closed_nodes_alt_
 
     @classmethod
     def get_all_start_nodes(cls) -> set:
-        "Gets all start nodes"
+        """Gets all start nodes"""
         return cls.all_start_nodes
 
     @classmethod
     def get_all_mid_nodes(cls) -> set:
-        "Gets all mid nodes"
+        """Gets all mid nodes"""
         return cls.all_mid_nodes
 
     @classmethod
     def get_all_end_nodes(cls) -> set:
-        "Gets all end nodes"
+        """Gets all end nodes"""
         return cls.all_end_nodes
 
     @classmethod
     def get_all_wall_nodes(cls) -> set:
-        "Gets all wall nodes"
+        """Gets all wall nodes"""
         return cls.all_wall_nodes
 
     @classmethod
     def get_all_path_nodes(cls) -> set:
-        "Gets all path nodes"
+        """Gets all path nodes"""
         return cls.all_path_nodes
+    
+    @classmethod
+    def get_all_history_nodes(cls) -> set:
+        """Gets all history nodes"""
+        return cls.all_history_nodes
     
     @classmethod
     def get_nodes_to_update(cls) -> list:
@@ -450,6 +460,11 @@ class Square:
         cls.all_wall_nodes.clear()
         cls.all_path_nodes.clear()
     
+    @classmethod
+    def clear_history_nodes(cls) -> None:
+        """Clears set that keeps track of history nodes"""
+        cls.all_history_nodes.clear()
+
     @classmethod
     def clear_node_history(cls) -> None:
         """Clears node history"""

@@ -182,28 +182,33 @@ def draw(
         pygame.display.update()
         gph.rects_to_update.clear()
     else:
+        # Queues all changed squares to visualize change
+        if gph.visualize_node_history:
+            gph.visualize_node_history = False
+            for square in Square.get_node_history():
+                square.set_history()
+                gph.add_to_update_queue(square)
+            Square.clear_node_history()
         # Queues all changed squares to update
-        square: Square
-        for square in Square.get_nodes_to_update():
-            gph.add_to_update_queue(square)
+        else:
+            square: Square
+            for square in Square.get_nodes_to_update():
+                gph.add_to_update_queue(square)
 
-    if gph.visualize_node_history:
-        gph.visualize_node_history = False
-        for square in Square.get_node_history():
-            square.set_history()
-            gph.add_to_update_queue(square)
-        Square.clear_node_history()
 
     _draw_square_borders(gph)
 
     if gph.rects_to_update:
         pygame.display.update(gph.rects_to_update)
-        for square in Square.get_node_history():
-            # Set square to value before history, maybe use dict?
-            pass##########################################################################################################
+        
+        # Used to reset squares to previous color like nothing happened
+        for square in Square.get_all_history_nodes():
+            square.color = square.color_history
+            square.color_history = None
 
     # Clear update queues
     Square.clear_nodes_to_update()
+    Square.clear_history_nodes()
     gph.rects_to_update.clear()
 
 
