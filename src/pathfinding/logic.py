@@ -225,9 +225,8 @@ def _left_click_button(
 
             # Checks if the mouse is currently on an ordinal node, no need to update anything
             if square != lgc.start and square != lgc.mid and square != lgc.end:
-                last_square = algo.ordinal_node_clicked[
-                    0
-                ]  # Used to move ordinal node to new pos
+                # Used to move ordinal node to new pos
+                last_square = algo.ordinal_node_clicked[0]
 
                 # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":

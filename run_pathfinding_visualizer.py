@@ -53,6 +53,7 @@ if __name__ == "__main__":
     # --- Partial Display Update Bugs/Features ---
     # Walls appearing after dragging nodes on completion
     # Walls of maze are weird on algo start
+    # Dragging updates slow
     # Only draw lines around squares that were updated
     # Do you always need to iterate through entirety of gph.graph or can use gph.rects_to_update?
     #   Would multithreading/parallelism help?
