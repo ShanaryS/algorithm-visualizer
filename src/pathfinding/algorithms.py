@@ -95,6 +95,7 @@ def dijkstra(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
+                gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_dijkstra=True)
 
@@ -175,6 +176,7 @@ def a_star(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
+                gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_a_star=True)
 
@@ -348,11 +350,13 @@ def bi_dijkstra(
                                 nei.set_open_alt()
 
         # Sets square to closed after finished checking
-        already_closed = any((
-            curr_square.is_closed(),
-            curr_square.is_closed_alt(),
-            curr_square.is_closed_alt_()
-        ))
+        already_closed = any(
+            (
+                curr_square.is_closed(),
+                curr_square.is_closed_alt(),
+                curr_square.is_closed_alt_(),
+            )
+        )
         if curr_square != start and curr_square != end and curr_square != ignore_node:
             # Set square to proper closed value based on it's open value
             if curr_square.is_open():
@@ -367,6 +371,7 @@ def bi_dijkstra(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
+                gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_bi_dijkstra=True)
 
@@ -443,6 +448,7 @@ def best_path(
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
+                    gph.draw_lines = True
                     draw(gph, txt, algo_running=True)
                     draw_vis_text(txt, is_best_path=True)
     else:
@@ -453,6 +459,7 @@ def best_path(
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
+                    gph.draw_lines = True
                     draw(gph, txt, algo_running=True)
                     draw_vis_text(txt, is_best_path=True)
     gph.update_legend = True
@@ -504,7 +511,7 @@ def start_mid_end(
                 draw_best_path=False,
                 reset=False,
             )
-            
+
             # Fixes nodes disappearing when dragging
             start.set_start()
             mid.set_mid()
@@ -742,6 +749,7 @@ def draw_recursive_maze(
         for y in range(chamber_height):
             gph.graph[chamber_left + x_divide][chamber_top + y].set_wall()
             if visualize:
+                gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
 
@@ -750,6 +758,7 @@ def draw_recursive_maze(
         for x in range(chamber_width):
             gph.graph[chamber_left + x][chamber_top + y_divide].set_wall()
             if visualize:
+                gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
 
@@ -830,6 +839,7 @@ def draw_recursive_maze(
                 y = gph.rows - 1
         gph.graph[x][y].reset()
         if visualize:
+            gph.draw_lines = True
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)
 

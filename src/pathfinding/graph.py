@@ -155,8 +155,6 @@ def draw(
     else:
         if not legend and not algo_running:
             gph.base_drawn = False
-        elif algo_running:
-            _draw_lines(gph)
 
     if gph.update_legend:
         gph.update_legend = False
