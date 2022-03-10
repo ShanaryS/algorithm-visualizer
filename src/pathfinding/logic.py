@@ -356,7 +356,6 @@ def _left_click_button(
         and algo.maze is False
     ):
         square.set_wall(gph)
-        gph.draw_square_borders = True
 
 
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
