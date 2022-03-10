@@ -24,6 +24,10 @@ class Square:
     # All changed nodes are queue for update each frame
     nodes_to_update = []
 
+    # Used for checking if only changed nodes are being updated
+    node_history = set()
+    track_node_history = False
+
     def __init__(self, row: int, col: int, rows: int, square_size) -> None:
         self.row: int = row
         self.col: int = col
@@ -114,6 +118,10 @@ class Square:
         """Checks if path node"""
         return self.color == PATH_COLOR
     
+    def is_history(self) -> bool:
+        """Checks if history node"""
+        return self.color == NODE_HISTORY_COLOR
+    
     def get_color(self) -> tuple:
         """Gets color of square"""
         return self.color
@@ -123,6 +131,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_empty():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
 
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
@@ -135,6 +147,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_open():
             return
+
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = OPEN_COLOR
@@ -147,6 +163,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_open_alt():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = OPEN_ALT_COLOR
@@ -162,6 +182,10 @@ class Square:
         if self.is_open_alt_():
             return
         
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
+        
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
         self._update_surrounding_neighbour_pool(gph)
@@ -173,6 +197,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_closed():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = CLOSED_COLOR
@@ -186,6 +214,10 @@ class Square:
         if self.is_closed_alt():
             return
         
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
+        
         self._discard_node()
         self.color = CLOSED_ALT_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -197,6 +229,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_closed_alt_():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = CLOSED_ALT_COLOR_
@@ -210,6 +246,10 @@ class Square:
         if self.is_start():
             return
         
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
+        
         self._discard_node()
         self.color = START_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -221,6 +261,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_mid():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = MID_COLOR
@@ -234,6 +278,10 @@ class Square:
         if self.is_end():
             return
         
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
+        
         self._discard_node()
         self.color = END_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -245,6 +293,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_wall():
             return
+        
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
         
         self._discard_node()
         self.color = self.wall_color
@@ -258,11 +310,22 @@ class Square:
         if self.is_path():
             return
         
+        # Add to node history if user requests to track
+        if type(self).track_node_history:
+            type(self).node_history.add(self)
+        
         self._discard_node()
         self.color = PATH_COLOR
         self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_path_nodes.add(self)
+    
+    def set_history(self) -> None:
+        """Sets node to history visualization"""
+        # Don't do anything if already set correctly
+        if self.is_history():
+            return
+        self.color = NODE_HISTORY_COLOR
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
@@ -362,6 +425,11 @@ class Square:
         return cls.nodes_to_update
     
     @classmethod
+    def get_node_history(cls) -> list:
+        """Get node history"""
+        return cls.node_history
+    
+    @classmethod
     def clear_nodes_to_update(cls) -> None:
         """Clears nodes to update"""
         cls.nodes_to_update.clear()
@@ -381,3 +449,8 @@ class Square:
         cls.all_end_nodes.clear()
         cls.all_wall_nodes.clear()
         cls.all_path_nodes.clear()
+    
+    @classmethod
+    def clear_node_history(cls) -> None:
+        """Clears node history"""
+        cls.node_history.clear()

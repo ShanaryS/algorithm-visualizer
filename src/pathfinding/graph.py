@@ -39,6 +39,7 @@ class GraphState:
     square_size: float = SQUARE_SIZE
     has_img: bool = False
     img: Optional[bytes] = None
+    visualize_node_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
@@ -85,6 +86,12 @@ class VisText:
     )
     legend_convert_map = FONT.render(
         "Press 'C' to convert location into the graph", True, LEGEND_COLOR
+    )
+    legend_node_history = FONT.render(
+        "Track changes on graph - Press 'V'", True, LEGEND_COLOR
+    )
+    legend_node_history_show = FONT.render(
+        "Storing changes for node history... Press 'V' to show", True, VIS_COLOR
     )
 
     vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
@@ -167,7 +174,6 @@ def draw(
         gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
-
     # Decides how much of the display to update
     if gph.update_entire_screen:
         # Pygame chokes when updating a lot of rects that covers the screen
@@ -180,12 +186,22 @@ def draw(
         square: Square
         for square in Square.get_nodes_to_update():
             gph.add_to_update_queue(square)
-    
+
+    if gph.visualize_node_history:
+        gph.visualize_node_history = False
+        for square in Square.get_node_history():
+            square.set_history()
+            gph.add_to_update_queue(square)
+        Square.clear_node_history()
+
     _draw_square_borders(gph)
 
     if gph.rects_to_update:
         pygame.display.update(gph.rects_to_update)
-  
+        for square in Square.get_node_history():
+            # Set square to value before history, maybe use dict?
+            pass##########################################################################################################
+
     # Clear update queues
     Square.clear_nodes_to_update()
     gph.rects_to_update.clear()
@@ -318,6 +334,22 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             center_legend_area - txt.legend_address.get_height() // 2,
         ),
     )
+    if Square.track_node_history:
+        WINDOW.blit(
+            txt.legend_node_history_show,
+            (
+                WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                center_legend_area - txt.legend_node_history_show.get_height() // 2 + 30,
+            ),
+        )
+    else:
+        WINDOW.blit(
+            txt.legend_node_history,
+            (
+                WIDTH // 2 - txt.legend_node_history.get_width() // 2,
+                center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
+            ),
+        )
     if gph.has_img:
         WINDOW.blit(
             txt.legend_convert_map,
@@ -326,6 +358,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 center_legend_area - txt.legend_convert_map.get_height() // 2 + 15,
             ),
         )
+
 
 
 def draw_vis_text(

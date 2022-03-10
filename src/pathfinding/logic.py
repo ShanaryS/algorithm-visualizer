@@ -183,6 +183,10 @@ def run_pathfinding(
             # Enter an address with the "ENTER" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 _get_address_from_user(gph, algo, lgc, txt)
+            
+            # Visualize changes with the "V" key
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_v:
+                _visualize_changes_button(gph, lgc, txt)
 
         clock.tick(gph.FPS)
 
@@ -616,3 +620,18 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
                 draw_vis_text(txt, is_input=True)
 
     pygame.quit()
+
+
+def _visualize_changes_button(gph: GraphState, lgc: LogicState, txt: VisText) -> None:
+    """Visualize the changed parts of the screen between toggles"""
+    # Stop tracking node history and display it
+    if Square.track_node_history:
+        Square.track_node_history = False
+        gph.visualize_node_history = True
+        gph.update_legend = True
+        draw(gph, txt, legend=True)
+    # Start tracking node history
+    else:
+        Square.track_node_history = True
+        gph.update_legend = True
+        draw(gph, txt, legend=True)
