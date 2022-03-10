@@ -33,7 +33,7 @@ class GraphState:
     graph: list
     rects_to_update: list
     base_drawn: bool = False
-    draw_lines: bool = False
+    draw_square_borders: bool = False
     update_legend: bool = False
     update_entire_screen: bool = False
     rows: int = ROWS
@@ -182,8 +182,8 @@ def draw(
         Square.clear_nodes_to_update()
         
     if gph.rects_to_update:
-        if gph.draw_lines:
-            gph.draw_lines = False
+        if gph.draw_square_borders:
+            gph.draw_square_borders = False
             _draw_lines(gph)
         pygame.display.update(gph.rects_to_update)
         gph.rects_to_update.clear()
@@ -447,7 +447,7 @@ def reset_graph(
                 square: Square = gph.graph[i][j]
                 square.wall_color = WALL_COLOR
                 square.reset(gph)
-        gph.draw_lines = True
+        gph.draw_square_borders = True
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -472,7 +472,7 @@ def reset_algo(gph: GraphState, algo) -> None:
     for type_list in nodes_to_reset:
         for square in type_list:
             square.reset(gph)
-    gph.draw_lines = True
+    gph.draw_square_borders = True
 
 
 def change_graph_size(

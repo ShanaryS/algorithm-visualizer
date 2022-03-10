@@ -96,7 +96,7 @@ def dijkstra(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
-                gph.draw_lines = True
+                gph.draw_square_borders = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_dijkstra=True)
 
@@ -178,7 +178,7 @@ def a_star(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
-                gph.draw_lines = True
+                gph.draw_square_borders = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_a_star=True)
 
@@ -374,7 +374,7 @@ def bi_dijkstra(
             i += 1
             if i % gph.speed_multiplier == 0:
                 i = 0
-                gph.draw_lines = True
+                gph.draw_square_borders = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_bi_dijkstra=True)
 
@@ -452,7 +452,7 @@ def best_path(
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
-                    gph.draw_lines = True
+                    gph.draw_square_borders = True
                     draw(gph, txt, algo_running=True)
                     draw_vis_text(txt, is_best_path=True)
     else:
@@ -463,7 +463,7 @@ def best_path(
                 if i % gph.speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
-                    gph.draw_lines = True
+                    gph.draw_square_borders = True
                     draw(gph, txt, algo_running=True)
                     draw_vis_text(txt, is_best_path=True)
     gph.update_legend = True
@@ -763,7 +763,7 @@ def draw_recursive_maze(
             square: Square = gph.graph[chamber_left + x_divide][chamber_top + y]
             square.set_wall(gph)
             if visualize:
-                gph.draw_lines = True
+                gph.draw_square_borders = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
 
@@ -773,7 +773,7 @@ def draw_recursive_maze(
             square: Square = gph.graph[chamber_left + x][chamber_top + y_divide]
             square.set_wall(gph)
             if visualize:
-                gph.draw_lines = True
+                gph.draw_square_borders = True
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
 
@@ -855,7 +855,7 @@ def draw_recursive_maze(
         square: Square = gph.graph[x][y]
         square.reset(gph)
         if visualize:
-            gph.draw_lines = True
+            gph.draw_square_borders = True
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)
 

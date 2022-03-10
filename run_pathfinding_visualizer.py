@@ -51,10 +51,8 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Dragging updates slow
+    # Dragging updates slowly
     # Only draw lines around squares that were updated
-    # Do you always need to iterate through entirety of gph.graph or can use gph.rects_to_update?
-    #   Would multithreading/parallelism help?
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
     # Rewrite draw function
