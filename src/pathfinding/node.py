@@ -55,6 +55,14 @@ class Square:
             self.neighbours.append(gph.graph[self.row][self.col+1])
         if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():  # LEFT
             self.neighbours.append(gph.graph[self.row][self.col-1])
+    
+    def _update_surrounding_neighbour_pool(self, gph) -> None:
+        """Update's this square's neighbours' neighbours to remove this square.
+        Wall nodes cannot be neighbours while every other node can be.
+        """
+        nei: Square
+        for nei in self.neighbours:
+            nei.update_neighbours(gph)
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
@@ -108,89 +116,101 @@ class Square:
         """Gets color of square"""
         return self.color
 
-    def reset(self) -> None:
+    def reset(self, gph) -> None:
         """Sets node to blank"""
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_empty_nodes.add(self)
 
-    def set_open(self) -> None:
+    def set_open(self, gph) -> None:
         """Sets node to open"""
         self._discard_node()
         self.color = OPEN_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes.add(self)
 
-    def set_open_alt(self) -> None:
+    def set_open_alt(self, gph) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         self._discard_node()
         self.color = OPEN_ALT_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt.add(self)
 
-    def set_open_alt_(self) -> None:
+    def set_open_alt_(self, gph) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt_.add(self)
 
-    def set_closed(self) -> None:
+    def set_closed(self, gph) -> None:
         """Sets node to closed"""
         self._discard_node()
         self.color = CLOSED_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_closed_nodes.add(self)
     
-    def set_closed_alt(self) -> None:
+    def set_closed_alt(self, gph) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
         self._discard_node()
         self.color = CLOSED_ALT_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_closed_nodes_alt.add(self)
     
-    def set_closed_alt_(self) -> None:
+    def set_closed_alt_(self, gph) -> None:
         """Sets node to closed for end now when mid is included"""
         self._discard_node()
         self.color = CLOSED_ALT_COLOR_
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_closed_nodes_alt_.add(self)
 
-    def set_start(self) -> None:
+    def set_start(self, gph) -> None:
         """Sets node to start"""
         self._discard_node()
         self.color = START_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
 
-    def set_mid(self) -> None:
+    def set_mid(self, gph) -> None:
         """Sets node to mid"""
         self._discard_node()
         self.color = MID_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
 
-    def set_end(self) -> None:
+    def set_end(self, gph) -> None:
         """Sets node to end"""
         self._discard_node()
         self.color = END_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_end_nodes.add(self)
 
-    def set_wall(self) -> None:
+    def set_wall(self, gph) -> None:
         """Sets node to wall"""
         self._discard_node()
         self.color = self.wall_color
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_wall_nodes.add(self)
 
-    def set_path(self) -> None:
+    def set_path(self, gph) -> None:
         """Sets node to path"""
         self._discard_node()
         self.color = PATH_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_path_nodes.add(self)
 

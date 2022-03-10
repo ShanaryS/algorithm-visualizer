@@ -123,6 +123,12 @@ def set_graph(gph: GraphState) -> None:
             # Uses Square class to create square object with necessary attributes
             square = Square(row, col, gph.rows, gph.square_size)
             gph.graph[row].append(square)
+    
+    # Updates neighbours
+    square: Square
+    for row in gph.graph:
+        for square in row:
+            square.update_neighbours(gph)
 
 
 def draw(
@@ -238,12 +244,12 @@ def set_squares_to_roads(gph: GraphState) -> None:
             if avg_tot > cutoff:
                 # If b is greater, then it is white.
                 if avg_b > 225:
-                    square.reset()
+                    square.reset(gph)
                 else:
-                    square.reset()
+                    square.reset(gph)
                     square.is_highway = True
             else:
-                square.set_wall()
+                square.set_wall(gph)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
@@ -440,7 +446,7 @@ def reset_graph(
             for j in range(gph.rows):
                 square: Square = gph.graph[i][j]
                 square.wall_color = WALL_COLOR
-                square.reset()
+                square.reset(gph)
         gph.draw_lines = True
 
 
@@ -462,9 +468,10 @@ def reset_algo(gph: GraphState, algo) -> None:
         Square.all_closed_nodes_alt_,
         Square.all_path_nodes
     ]
+    square: Square
     for type_list in nodes_to_reset:
         for square in type_list:
-            square.reset()
+            square.reset(gph)
     gph.draw_lines = True
 
 

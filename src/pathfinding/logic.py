@@ -232,25 +232,25 @@ def _left_click_button(
                 # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
                     if lgc.start in Square.all_wall_nodes:
-                        lgc.start.set_wall()
+                        lgc.start.set_wall(gph)
                     else:
-                        lgc.start.reset()
+                        lgc.start.reset(gph)
                     lgc.start = square
-                    square.set_start()
+                    square.set_start(gph)
                 elif last_square == "mid":
                     if lgc.mid in Square.all_wall_nodes:
-                        lgc.mid.set_wall()
+                        lgc.mid.set_wall(gph)
                     else:
-                        lgc.mid.reset()
+                        lgc.mid.reset(gph)
                     lgc.mid = square
-                    square.set_mid()
+                    square.set_mid(gph)
                 elif last_square == "end":
                     if lgc.end in Square.all_wall_nodes:
-                        lgc.end.set_wall()
+                        lgc.end.set_wall(gph)
                     else:
-                        lgc.end.reset()
+                        lgc.end.reset(gph)
                     lgc.end = square
-                    square.set_end()
+                    square.set_end(gph)
 
                 # Runs the algo again instantly with no visualizations, handles whether mid exists
                 if algo.dijkstra_finished:
@@ -311,7 +311,7 @@ def _left_click_button(
         # On algo completion, add wall and update algo
         else:
             # Add wall
-            square.set_wall()
+            square.set_wall(gph)
 
             # Updates algo
             if algo.dijkstra_finished:
@@ -324,7 +324,7 @@ def _left_click_button(
     # If start node does not exist, create it. If not currently ordinal node.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
         lgc.start = square
-        square.set_start()
+        square.set_start(gph)
 
         # Handles removing and adding start manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
@@ -338,7 +338,7 @@ def _left_click_button(
     # If not currently ordinal node.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
         lgc.end = square
-        square.set_end()
+        square.set_end(gph)
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
@@ -356,7 +356,7 @@ def _left_click_button(
         and square != lgc.end
         and algo.maze is False
     ):
-        square.set_wall()
+        square.set_wall(gph)
 
 
 def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
@@ -365,7 +365,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     pos, row, col, square = _get_square_clicked(gph)
 
     # Reset square and ordinal node if it was any
-    square.reset()
+    square.reset(gph)
     if square == lgc.start:
         lgc.start = None
     elif square == lgc.mid:
@@ -384,7 +384,7 @@ def _middle_click_button(
     # Set square to mid if no square is already mid, and not currently ordinal node.
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
-        square.set_mid()
+        square.set_mid(gph)
 
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
@@ -442,12 +442,6 @@ def _dijkstra_button(
     reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
-    # Updates neighbours in case anything has changed
-    square: Square
-    for row in gph.graph:
-        for square in row:
-            square.update_neighbours(gph)
-
     # Necessary to for dragging nodes on completion
     algo.dijkstra_finished = True
 
@@ -479,12 +473,6 @@ def _a_star_button(
     reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
-    # Updates neighbours in case anything has changed
-    square: Square
-    for row in gph.graph:
-        for square in row:
-            square.update_neighbours(gph)
-
     # Necessary to for dragging nodes on completion
     algo.a_star_finished = True
 
@@ -515,12 +503,6 @@ def _bi_dijkstra_button(
     # Resets algo visualizations without removing ordinal nodes or walls
     reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
-
-    # Updates neighbours in case anything has changed
-    square: Square
-    for row in gph.graph:
-        for square in row:
-            square.update_neighbours(gph)
 
     # Necessary to for dragging nodes on completion
     algo.bi_dijkstra_finished = True
