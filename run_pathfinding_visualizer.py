@@ -60,11 +60,14 @@ if __name__ == "__main__":
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
     # Rewrite draw function
+    # Compare performance with changes
+    # Create a new branch 'archive/pre_partial_display_update' for current main branch
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
     # In features note that only changed pixels update each fresh
     #   Mention that it took a lot of effort!
+    # Create git branch 'archive/MVP_of_visualizers' for old folder
 
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
@@ -75,6 +78,7 @@ if __name__ == "__main__":
     # Rewrite algorithms.py into C++
     # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
     #   Changing to large graph takes 40ms
+    # Create new branch 'archive/python_only'
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
