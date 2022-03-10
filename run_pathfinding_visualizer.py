@@ -52,7 +52,6 @@ if __name__ == "__main__":
 
     # --- Partial Display Update Bugs/Features ---
     # Dragging updates slowly
-    # Only draw lines around squares that were updated
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
     # Rewrite draw function

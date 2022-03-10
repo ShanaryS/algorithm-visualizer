@@ -97,9 +97,7 @@ class VisText:
     vis_text_recursive_maze = FONT.render(
         "Generating recursive maze...", True, VIS_COLOR
     )
-    vis_text_graph_size = FONT.render(
-        "Changing graph size...", True, VIS_COLOR
-    )
+    vis_text_graph_size = FONT.render("Changing graph size...", True, VIS_COLOR)
     vis_text_input = FONT.render(
         "Enter an address (NO COMMAS, ONLY SPACES):", True, LEGEND_COLOR
     )
@@ -123,7 +121,7 @@ def set_graph(gph: GraphState) -> None:
             # Uses Square class to create square object with necessary attributes
             square = Square(row, col, gph.rows, gph.square_size)
             gph.graph[row].append(square)
-    
+
     # Updates neighbours
     square: Square
     for row in gph.graph:
@@ -167,7 +165,8 @@ def draw(
         gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
-    # Decideds how much of the display to update
+
+    # Decides how much of the display to update
     if gph.update_entire_screen:
         # Pygame chokes when updating a lot of rects that covers the screen
         # So we just upate the entire screen like this instead
@@ -179,14 +178,17 @@ def draw(
         square: Square
         for square in Square.get_nodes_to_update():
             gph.add_to_update_queue(square)
-        Square.clear_nodes_to_update()
-        
+    
+    if gph.draw_square_borders:
+        gph.draw_square_borders = False
+        _draw_square_borders(gph)
+
     if gph.rects_to_update:
-        if gph.draw_square_borders:
-            gph.draw_square_borders = False
-            _draw_lines(gph)
         pygame.display.update(gph.rects_to_update)
-        gph.rects_to_update.clear()
+  
+    # Clear update queues
+    Square.clear_nodes_to_update()
+    gph.rects_to_update.clear()
 
 
 def _draw_square(square_color, square_pos) -> None:
@@ -194,16 +196,36 @@ def _draw_square(square_color, square_pos) -> None:
     return pygame.draw.rect(WINDOW, square_color, square_pos)
 
 
+def _draw_square_borders(gph: GraphState) -> None:
+    """Draws the lines surrounding the updating squares"""
+
+    square: Square
+    for square in Square.get_nodes_to_update():
+        top_left = square.x, square.y
+        top_right = square.x, square.y + gph.square_size
+        bottom_left = square.x + gph.square_size, square.y
+        bottom_right = square.x + gph.square_size, square.y + gph.square_size
+
+        # Top
+        pygame.draw.line(WINDOW, LINE_COLOR, top_left, top_right)
+        # Right
+        pygame.draw.line(WINDOW, LINE_COLOR, top_right, bottom_right)
+        # Bottom
+        pygame.draw.line(WINDOW, LINE_COLOR, bottom_left, bottom_right)
+        # Left
+        pygame.draw.line(WINDOW, LINE_COLOR, top_left, bottom_left)
+
+
 def _draw_lines(gph: GraphState) -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
     for i in range(gph.rows):
-        pygame.draw.line(
-            WINDOW, LINE_COLOR, (0, i * gph.square_size), (WIDTH, i * gph.square_size)
-        )
-        pygame.draw.line(
-            WINDOW, LINE_COLOR, (i * gph.square_size, 0), (i * gph.square_size, WIDTH)
-        )
+        row = col = i * gph.square_size
+
+        # Horizonatal lines
+        pygame.draw.line(WINDOW, LINE_COLOR, (0, row), (WIDTH, row))
+        # Vertical lines
+        pygame.draw.line(WINDOW, LINE_COLOR, (col, 0), (col, WIDTH))
 
 
 def _draw_img(gph: GraphState) -> None:
@@ -418,11 +440,7 @@ def draw_vis_text(
 
 
 def reset_graph(
-    gph: GraphState,
-    algo, txt: VisText,
-    graph_max=None,
-    graph_default=None,
-    reset=True
+    gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None, reset=True
 ) -> None:
     """Resets entire graph removing every square"""
 
@@ -466,7 +484,7 @@ def reset_algo(gph: GraphState, algo) -> None:
         Square.all_closed_nodes,
         Square.all_closed_nodes_alt,
         Square.all_closed_nodes_alt_,
-        Square.all_path_nodes
+        Square.all_path_nodes,
     ]
     square: Square
     for type_list in nodes_to_reset:
