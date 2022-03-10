@@ -363,3 +363,19 @@ class Square:
     def clear_nodes_to_update(cls) -> None:
         """Clears nodes to update"""
         cls.nodes_to_update.clear()
+    
+    @classmethod
+    def clear_all_node_lists(cls) -> None:
+        """Clears the list of all nodes for recreating graph"""
+        cls.all_empty_nodes.clear()
+        cls.all_open_nodes.clear()
+        cls.all_open_nodes_alt.clear()
+        cls.all_open_nodes_alt_.clear()
+        cls.all_closed_nodes.clear()
+        cls.all_closed_nodes_alt.clear()
+        cls.all_closed_nodes_alt_.clear()
+        cls.all_start_nodes.clear()
+        cls.all_mid_nodes.clear()
+        cls.all_end_nodes.clear()
+        cls.all_wall_nodes.clear()
+        cls.all_path_nodes.clear()

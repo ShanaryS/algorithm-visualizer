@@ -113,6 +113,9 @@ def set_graph(gph: GraphState) -> None:
     # Changing so many nodes, faster to update entire screen
     gph.update_entire_screen = True
 
+    # Clear lists from previous graph
+    Square.clear_all_node_lists()
+
     gph.graph = []
     for row in range(gph.rows):
         gph.graph.append([])
