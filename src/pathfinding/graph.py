@@ -117,12 +117,12 @@ def set_graph(gph: GraphState) -> None:
     gph.update_entire_screen = True
 
     gph.graph = []
-    for i in range(gph.rows):
+    for row in range(gph.rows):
         gph.graph.append([])
-        for j in range(gph.rows):
+        for col in range(gph.rows):
             # Uses Square class to create square object with necessary attributes
-            square = Square(i, j, gph.rows, gph.square_size)
-            gph.graph[i].append(square)
+            square = Square(row, col, gph.rows, gph.square_size)
+            gph.graph[row].append(square)
 
 
 def draw(
