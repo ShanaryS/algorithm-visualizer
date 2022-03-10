@@ -747,7 +747,8 @@ def draw_recursive_maze(
     # Draws vertical maze line within chamber
     if chamber_width >= division_limit:
         for y in range(chamber_height):
-            gph.graph[chamber_left + x_divide][chamber_top + y].set_wall()
+            square: Square = gph.graph[chamber_left + x_divide][chamber_top + y]
+            square.set_wall()
             if visualize:
                 gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
@@ -756,7 +757,8 @@ def draw_recursive_maze(
     # Draws horizontal maze line within chamber
     if chamber_height >= division_limit:
         for x in range(chamber_width):
-            gph.graph[chamber_left + x][chamber_top + y_divide].set_wall()
+            square: Square = gph.graph[chamber_left + x][chamber_top + y_divide]
+            square.set_wall()
             if visualize:
                 gph.draw_lines = True
                 draw(gph, txt, algo_running=True)
@@ -837,7 +839,8 @@ def draw_recursive_maze(
                     y += 1
             if y >= gph.rows:
                 y = gph.rows - 1
-        gph.graph[x][y].reset()
+        square: Square = gph.graph[x][y]
+        square.reset()
         if visualize:
             gph.draw_lines = True
             draw(gph, txt, algo_running=True)

@@ -212,7 +212,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
-            square = gph.graph[x][y]
+            square: Square = gph.graph[x][y]
             square.wall_color = WALL_COLOR_MAP  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
@@ -437,7 +437,7 @@ def reset_graph(
         # Default case
         for i in range(gph.rows):
             for j in range(gph.rows):
-                square = gph.graph[i][j]
+                square: Square = gph.graph[i][j]
                 square.wall_color = WALL_COLOR
                 square.reset()
         gph.draw_lines = True
