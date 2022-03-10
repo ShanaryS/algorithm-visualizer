@@ -7,6 +7,7 @@ from src.pathfinding.colors import *
 class Square:
     """Defines the properties needed for each node on graph"""
 
+    # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()
     all_open_nodes = set()
     all_open_nodes_alt = set()
@@ -20,6 +21,7 @@ class Square:
     all_wall_nodes = set()
     all_path_nodes = set()
 
+    # All changed nodes are queue for update each frame
     nodes_to_update = []
 
     def __init__(self, row: int, col: int, rows: int, square_size) -> None:

@@ -51,6 +51,7 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Seems randomn visual bugs happen
     # Dragging updates slowly
     # Add a key that queues up all squares that change until the button is pressed again
     #   Flip all those square colors to purple. This is to verify that only specific nodes are updating
