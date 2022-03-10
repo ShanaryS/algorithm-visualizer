@@ -118,6 +118,10 @@ class Square:
 
     def reset(self, gph) -> None:
         """Sets node to blank"""
+        # Don't do anything if already set correctly
+        if self.is_empty():
+            return
+
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
         self._update_surrounding_neighbour_pool(gph)
@@ -126,6 +130,10 @@ class Square:
 
     def set_open(self, gph) -> None:
         """Sets node to open"""
+        # Don't do anything if already set correctly
+        if self.is_open():
+            return
+        
         self._discard_node()
         self.color = OPEN_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -134,6 +142,10 @@ class Square:
 
     def set_open_alt(self, gph) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
+        # Don't do anything if already set correctly
+        if self.is_open_alt():
+            return
+        
         self._discard_node()
         self.color = OPEN_ALT_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -144,6 +156,10 @@ class Square:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
+        # Don't do anything if already set correctly
+        if self.is_open_alt_():
+            return
+        
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
         self._update_surrounding_neighbour_pool(gph)
@@ -152,6 +168,10 @@ class Square:
 
     def set_closed(self, gph) -> None:
         """Sets node to closed"""
+        # Don't do anything if already set correctly
+        if self.is_closed():
+            return
+        
         self._discard_node()
         self.color = CLOSED_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -160,6 +180,10 @@ class Square:
     
     def set_closed_alt(self, gph) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
+        # Don't do anything if already set correctly
+        if self.is_closed_alt():
+            return
+        
         self._discard_node()
         self.color = CLOSED_ALT_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -168,6 +192,10 @@ class Square:
     
     def set_closed_alt_(self, gph) -> None:
         """Sets node to closed for end now when mid is included"""
+        # Don't do anything if already set correctly
+        if self.is_closed_alt_():
+            return
+        
         self._discard_node()
         self.color = CLOSED_ALT_COLOR_
         self._update_surrounding_neighbour_pool(gph)
@@ -176,6 +204,10 @@ class Square:
 
     def set_start(self, gph) -> None:
         """Sets node to start"""
+        # Don't do anything if already set correctly
+        if self.is_start():
+            return
+        
         self._discard_node()
         self.color = START_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -184,6 +216,10 @@ class Square:
 
     def set_mid(self, gph) -> None:
         """Sets node to mid"""
+        # Don't do anything if already set correctly
+        if self.is_mid():
+            return
+        
         self._discard_node()
         self.color = MID_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -192,6 +228,10 @@ class Square:
 
     def set_end(self, gph) -> None:
         """Sets node to end"""
+        # Don't do anything if already set correctly
+        if self.is_end():
+            return
+        
         self._discard_node()
         self.color = END_COLOR
         self._update_surrounding_neighbour_pool(gph)
@@ -200,6 +240,10 @@ class Square:
 
     def set_wall(self, gph) -> None:
         """Sets node to wall"""
+        # Don't do anything if already set correctly
+        if self.is_wall():
+            return
+        
         self._discard_node()
         self.color = self.wall_color
         self._update_surrounding_neighbour_pool(gph)
@@ -208,6 +252,10 @@ class Square:
 
     def set_path(self, gph) -> None:
         """Sets node to path"""
+        # Don't do anything if already set correctly
+        if self.is_path():
+            return
+        
         self._discard_node()
         self.color = PATH_COLOR
         self._update_surrounding_neighbour_pool(gph)
