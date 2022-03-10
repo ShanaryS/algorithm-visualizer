@@ -411,7 +411,11 @@ def draw_vis_text(
 
 
 def reset_graph(
-    gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None
+    gph: GraphState,
+    algo, txt: VisText,
+    graph_max=None,
+    graph_default=None,
+    reset=True
 ) -> None:
     """Resets entire graph removing every square"""
 
@@ -424,9 +428,13 @@ def reset_graph(
     algo.maze = False
 
     # Resets each square
-    if gph.rows == graph_max:
-        change_graph_size(gph, algo, txt, graph_default)
-    else:
+    if reset:
+        # If reseting graph from map, not a circular call
+        if gph.rows == graph_max:
+            change_graph_size(gph, algo, txt, graph_default)
+            return
+
+        # Default case
         for i in range(gph.rows):
             for j in range(gph.rows):
                 square = gph.graph[i][j]
@@ -470,7 +478,7 @@ def change_graph_size(
     draw_vis_text(txt, is_graph_size=True)
 
     # Updates rows and square size with new values
-    reset_graph(gph, algo, txt)
+    reset_graph(gph, algo, txt, reset=False)
     gph.rows = new_row_size
     gph.square_size = WIDTH / gph.rows
 
