@@ -475,7 +475,7 @@ def change_graph_size(
     """
 
     # Displays text that size is changing
-    draw_vis_text(txt, is_graph_size=True)
+    # draw_vis_text(txt, is_graph_size=True)  # So fast now it's not worth it.
 
     # Updates rows and square size with new values
     reset_graph(gph, algo, txt, reset=False)
