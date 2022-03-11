@@ -54,13 +54,11 @@ if __name__ == "__main__":
     # Dragging updates slowly
     # Rewrite draw function to make more clear
     # Compare performance with changes
-    # Create a new branch 'archive/pre_partial_display_update' for current main branch
 
     # --- Update github page ---
     # In first gif, show adding walls after competion as well
     # In features note that only changed pixels update each fresh
     #   Mention that it took a lot of effort!
-    # Create git branch 'archive/MVP_of_visualizers' for old folder
 
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
