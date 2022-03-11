@@ -45,58 +45,58 @@ def timer_print() -> None:
     # Display total time with correct units
     if g_timer_total_time > (10**9 * 60):
         final_total = g_timer_total_time / (10**9 * 60)
-        time_unit = "min"
+        final_total_time_unit = "min"
     elif g_timer_total_time > 10**9:
         final_total = g_timer_total_time / 10**9
-        time_unit = "s"
+        final_total_time_unit = "s"
     elif g_timer_total_time > 10**6:
         final_total = g_timer_total_time / 10**6
-        time_unit = "ms"
+        final_total_time_unit = "ms"
     elif g_timer_total_time > 10**3:
         final_total = g_timer_total_time / 10**3
-        time_unit = "us"
+        final_total_time_unit = "us"
     else:
         final_total = g_timer_total_time
-        time_unit = "ns"
+        final_total_time_unit = "ns"
     
     # Display min time with correct units
     if g_timer_min > (10**9 * 60):
         final_min = g_timer_min / (10**9 * 60)
-        time_unit = "min"
+        final_min_time_unit = "min"
     elif g_timer_min > 10**9:
         final_min = g_timer_min / 10**9
-        time_unit = "s"
+        final_min_time_unit = "s"
     elif g_timer_min > 10**6:
         final_min = g_timer_min / 10**6
-        time_unit = "ms"
+        final_min_time_unit = "ms"
     elif g_timer_min > 10**3:
         final_min = g_timer_min / 10**3
-        time_unit = "us"
+        final_min_time_unit = "us"
     else:
         final_min = g_timer_min
-        time_unit = "ns"
+        final_min_time_unit = "ns"
     
     # Display max time with correct units
     if g_timer_max > (10**9 * 60):
         final_max = g_timer_max / (10**9 * 60)
-        time_unit = "min"
+        final_max_time_unit = "min"
     elif g_timer_max > 10**9:
         final_max = g_timer_max / 10**9
-        time_unit = "s"
+        final_max_time_unit = "s"
     elif g_timer_max > 10**6:
         final_max = g_timer_max / 10**6
-        time_unit = "ms"
+        final_max_time_unit = "ms"
     elif g_timer_max > 10**3:
         final_max = g_timer_max / 10**3
-        time_unit = "us"
+        final_max_time_unit = "us"
     else:
         final_max = g_timer_max
-        time_unit = "ns"
+        final_max_time_unit = "ns"
     
     print("-------------------------------------")
-    print(f"Total Time: {final_total:.2f}{time_unit}")
-    print(f"Min Time: {final_min:.2f}{time_unit}")
-    print(f"Max Time: {final_max:.2f}{time_unit}")
+    print(f"Total Time: {final_total:.2f}{final_total_time_unit}")
+    print(f"Min Time: {final_min:.2f}{final_min_time_unit}")
+    print(f"Max Time: {final_max:.2f}{final_max_time_unit}")
     print(f"Count: {g_timer_count:,}")
     print("-------------------------------------")
     
