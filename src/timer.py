@@ -21,12 +21,12 @@ g_timer_total_time = 0
 def timer_start() -> None:
     """Start timer for a section of code"""
     global g_timer_start
-    g_timer_start = time.time_ns()
+    g_timer_start = time.perf_counter_ns()
 
 
 def timer_end() -> None:
     """End timer for a section of code"""
-    end = time.time_ns()
+    end = time.perf_counter_ns()
     
     global g_timer_start, g_timer_count, g_timer_min
     global g_timer_max, g_timer_total_time
