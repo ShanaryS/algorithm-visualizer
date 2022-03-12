@@ -648,7 +648,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(gph, algo)
+            reset_algo(algo)
         algo.dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
@@ -673,7 +673,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(gph, algo)
+            reset_algo(algo)
         algo.a_star_finished = True
 
         # Separates calling algo_no_vis with mid node or not
@@ -698,7 +698,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(gph, algo)
+            reset_algo(algo)
         algo.bi_dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not

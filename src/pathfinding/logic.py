@@ -443,7 +443,7 @@ def _dijkstra_button(
     """Run the dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(gph, algo)
+    reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion
@@ -474,7 +474,7 @@ def _a_star_button(
     """Runs the A* algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(gph, algo)
+    reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion
@@ -505,7 +505,7 @@ def _bi_dijkstra_button(
     """Runs the Bi-Directional Dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(gph, algo)
+    reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion
