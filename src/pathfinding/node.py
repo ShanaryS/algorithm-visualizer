@@ -149,7 +149,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_empty_nodes.add(self)
 
-    def set_open(self) -> None:
+    def set_open(self, gph) -> None:
         """Sets node to open"""
         # Don't do anything if already set correctly
         if self.is_open():
@@ -161,10 +161,11 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes.add(self)
 
-    def set_open_alt(self) -> None:
+    def set_open_alt(self, gph) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
         if self.is_open_alt():
@@ -176,10 +177,11 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_ALT_COLOR
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt.add(self)
 
-    def set_open_alt_(self) -> None:
+    def set_open_alt_(self, gph) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
@@ -193,6 +195,7 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
+        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt_.add(self)
 

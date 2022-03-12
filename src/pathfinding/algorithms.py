@@ -85,7 +85,7 @@ def dijkstra(
                     open_set.put((g_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
                     if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open()
+                        nei.set_open(gph)
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -166,7 +166,7 @@ def a_star(
                     open_set.put((f_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
                     if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open()
+                        nei.set_open(gph)
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -327,9 +327,9 @@ def bi_dijkstra(
                             and nei != ignore_node
                         ):
                             if alt_color:
-                                nei.set_open_alt()
+                                nei.set_open_alt(gph)
                             else:
-                                nei.set_open()
+                                nei.set_open(gph)
         elif temp[3] == "end":
             for nei in curr_square.neighbours:
                 temp_g_score = g_score[curr_square] + 1
@@ -347,9 +347,9 @@ def bi_dijkstra(
                             and nei != ignore_node
                         ):
                             if alt_color:
-                                nei.set_open_alt_()
+                                nei.set_open_alt_(gph)
                             else:
-                                nei.set_open_alt()
+                                nei.set_open_alt(gph)
 
         # Sets square to closed after finished checking
         already_closed = any(
