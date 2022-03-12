@@ -499,9 +499,24 @@ def reset_graph(
             return
 
         # Default case
-        for i in range(gph.rows):
-            for j in range(gph.rows):
-                square: Square = gph.graph[i][j]
+        nodes_to_reset = [
+            Square.all_empty_nodes.copy(),
+            Square.all_open_nodes.copy(),
+            Square.all_open_nodes_alt.copy(),
+            Square.all_open_nodes_alt_.copy(),
+            Square.all_closed_nodes.copy(),
+            Square.all_closed_nodes_alt.copy(),
+            Square.all_closed_nodes_alt_.copy(),
+            Square.all_start_nodes.copy(),
+            Square.all_mid_nodes.copy(),
+            Square.all_end_nodes.copy(),
+            Square.all_wall_nodes.copy(),
+            Square.all_path_nodes.copy(),
+            Square.all_history_nodes.copy(),
+        ]
+        square: Square
+        for type_list in nodes_to_reset:
+            for square in type_list:
                 square.wall_color = WALL_COLOR
                 square.reset()
 

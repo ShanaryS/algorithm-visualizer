@@ -329,30 +329,21 @@ class Square:
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
         
-        if self.is_empty():
-            type(self).all_empty_nodes.discard(self)
-        elif self.is_open():
-            type(self).all_open_nodes.discard(self)
-        elif self.is_open_alt():
-            type(self).all_open_nodes_alt.discard(self)
-        elif self.is_open_alt_():
-            type(self).all_open_nodes_alt_.discard(self)
-        elif self.is_closed():
-            type(self).all_closed_nodes.discard(self)
-        elif self.is_closed_alt():
-            type(self).all_closed_nodes_alt.discard(self)
-        elif self.is_closed_alt_():
-            type(self).all_closed_nodes_alt_.discard(self)
-        elif self.is_start():
-            type(self).all_start_nodes.discard(self)
-        elif self.is_mid():
-            type(self).all_mid_nodes.discard(self)
-        elif self.is_end():
-            type(self).all_end_nodes.discard(self)
-        elif self.is_wall() and remove_wall:
+        # Ordinal nodes should not remove wall to reinstate after dragging
+        if remove_wall:
             type(self).all_wall_nodes.discard(self)
-        elif self.is_path():
-            type(self).all_path_nodes.discard(self)
+        
+        type(self).all_empty_nodes.discard(self)
+        type(self).all_open_nodes.discard(self)
+        type(self).all_open_nodes_alt.discard(self)
+        type(self).all_open_nodes_alt_.discard(self)
+        type(self).all_closed_nodes.discard(self)
+        type(self).all_closed_nodes_alt.discard(self)
+        type(self).all_closed_nodes_alt_.discard(self)
+        type(self).all_start_nodes.discard(self)
+        type(self).all_mid_nodes.discard(self)
+        type(self).all_end_nodes.discard(self)
+        type(self).all_path_nodes.discard(self)
     
     @classmethod
     def get_all_empty_nodes(cls) -> set:
