@@ -95,8 +95,8 @@ def timer_print() -> None:
     
     print("-------------------------------------")
     print(f"Total Time: {final_total:.2f}{final_total_time_unit}")
-    print(f"Min Time: {final_min:.2f}{final_min_time_unit}")
     print(f"Max Time: {final_max:.2f}{final_max_time_unit}")
+    print(f"Min Time: {final_min:.2f}{final_min_time_unit}")
     print(f"Count: {g_timer_count:,}")
     print("-------------------------------------")
     
