@@ -51,20 +51,36 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Text for when getting images (when pressing Enter and C)
     # Start and mid square removes walls
     # Algos removing certain parts of maze
     # Rewrite draw function to make more clear
     # Compare performance with changes
+    
+    # --- Mutltithreading/Multiprocessing ---
+    # All performance intensive code
+    # Write tests for both threading and multiprocessing
 
     # --- Update github page ---
+    # Remake gifs
     # In first gif, show adding walls after competion as well
-    # In features note that only changed pixels update each fresh
-    #   Mention that it took a lot of effort!
+    # Written with a performance first mindset
+    #   Multiprocessing/Multithreading
+    #   Only changed pixels update each frame (Took a lot of effort!)
+    #   Show 'V' button to prove it actually does this (maze, map a_star then dijk)
+    #   Link to archive/pre-partial-display-update for speed comparisons
 
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Add multithreading to code that iterates through gph.graph
+
+    # --- Features to add ---
+    # Sticky mud for patches where algo goes slowly
+    # Take in consideration speed limit of roads
+    #   Use length of open_set to assign queue_pos
+    # Add prim maze
+    # Write tests
 
     # --- C++ Performance Rewrite ---
     # Rewrite node.py, algorithms.py into C++
@@ -72,11 +88,3 @@ if __name__ == "__main__":
     #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
     #   Changing to large graph takes 40ms
     # Create new branch 'archive/python_only'
-
-    # --- Features to add ---
-    # Sticky mud for patches where algo goes slowly
-    # Take in consideration speed limit of roads
-    #   Use length of open_set to assign queue_pos
-    # Add prim maze
-    # Multithreading (Concurrency, Parallelism)
-    # Write tests
