@@ -43,16 +43,16 @@ def timer_print() -> None:
     global g_timer_max, g_timer_total_time
     
     # Display total time with correct units
-    if g_timer_total_time > (10**9 * 60):
+    if g_timer_total_time >= (10**9 * 60):
         final_total = g_timer_total_time / (10**9 * 60)
         final_total_time_unit = "min"
-    elif g_timer_total_time > 10**9:
+    elif g_timer_total_time >= 10**9:
         final_total = g_timer_total_time / 10**9
         final_total_time_unit = "s"
-    elif g_timer_total_time > 10**6:
+    elif g_timer_total_time >= 10**6:
         final_total = g_timer_total_time / 10**6
         final_total_time_unit = "ms"
-    elif g_timer_total_time > 10**3:
+    elif g_timer_total_time >= 10**3:
         final_total = g_timer_total_time / 10**3
         final_total_time_unit = "us"
     else:
@@ -60,16 +60,16 @@ def timer_print() -> None:
         final_total_time_unit = "ns"
     
     # Display min time with correct units
-    if g_timer_min > (10**9 * 60):
+    if g_timer_min >= (10**9 * 60):
         final_min = g_timer_min / (10**9 * 60)
         final_min_time_unit = "min"
-    elif g_timer_min > 10**9:
+    elif g_timer_min >= 10**9:
         final_min = g_timer_min / 10**9
         final_min_time_unit = "s"
-    elif g_timer_min > 10**6:
+    elif g_timer_min >= 10**6:
         final_min = g_timer_min / 10**6
         final_min_time_unit = "ms"
-    elif g_timer_min > 10**3:
+    elif g_timer_min >= 10**3:
         final_min = g_timer_min / 10**3
         final_min_time_unit = "us"
     else:
@@ -77,16 +77,16 @@ def timer_print() -> None:
         final_min_time_unit = "ns"
     
     # Display max time with correct units
-    if g_timer_max > (10**9 * 60):
+    if g_timer_max >= (10**9 * 60):
         final_max = g_timer_max / (10**9 * 60)
         final_max_time_unit = "min"
-    elif g_timer_max > 10**9:
+    elif g_timer_max >= 10**9:
         final_max = g_timer_max / 10**9
         final_max_time_unit = "s"
-    elif g_timer_max > 10**6:
+    elif g_timer_max >= 10**6:
         final_max = g_timer_max / 10**6
         final_max_time_unit = "ms"
-    elif g_timer_max > 10**3:
+    elif g_timer_max >= 10**3:
         final_max = g_timer_max / 10**3
         final_max_time_unit = "us"
     else:
