@@ -2,6 +2,7 @@
 
 
 from src.pathfinding.colors import *
+from src.timer import timer_start, timer_end, timer_print
 
 
 class Square:
