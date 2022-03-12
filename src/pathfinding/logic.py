@@ -561,6 +561,7 @@ def _graph_size_buttons(
 def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Loads the image onto the graph"""
     
+    draw_vis_text(txt, is_base_img=True)
     change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
     write_img_base(get_img_base(txt.address))
@@ -576,6 +577,7 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
 
+    draw_vis_text(txt, is_clean_img=True)
     write_img_clean(get_img_clean(txt.address))
 
     gph.img = pygame.image.load(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
@@ -583,6 +585,7 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
 
     gph.base_drawn = False
     draw(gph, txt)
+    draw_vis_text(txt, is_converting_img=True)
 
     gph.update_legend = True
     gph.has_img = False

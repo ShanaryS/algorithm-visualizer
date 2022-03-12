@@ -109,6 +109,13 @@ class VisText:
         "Type an address then press 'Enter':", True, LEGEND_COLOR
     )
     vis_text_address = FONT.render(f"{address}", True, LEGEND_COLOR)
+    vis_text_base_img = FONT.render(f"Getting base image...", True, VIS_COLOR)
+    vis_text_clean_img = FONT.render(
+        f"Getting clean image...", True, VIS_COLOR
+    )
+    vis_text_converting_img = FONT.render(
+        f"Converting image...", True, VIS_COLOR
+    )
 
     def update_vis_text_input(self) -> None:
         """Updates vis_text_input with new input_text"""
@@ -332,38 +339,62 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             (WIDTH - txt.legend_instant_recursive_maze.get_width() - 2, 15 * 57.1 + 3),
         )
 
-    # Center Legend
-    WINDOW.blit(
-        txt.legend_address,
-        (
-            WIDTH // 2 - txt.legend_address.get_width() // 2,
-            center_legend_area - txt.legend_address.get_height() // 2,
-        ),
-    )
-    if Square.track_node_history:
+        # Center Legend
         WINDOW.blit(
-            txt.legend_node_history_show,
+            txt.legend_address,
             (
-                WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                center_legend_area - txt.legend_node_history_show.get_height() // 2 + 30,
+                WIDTH // 2 - txt.legend_address.get_width() // 2,
+                center_legend_area - txt.legend_address.get_height() // 2,
             ),
         )
-    else:
-        WINDOW.blit(
-            txt.legend_node_history,
-            (
-                WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
-            ),
-        )
+        if Square.track_node_history:
+            WINDOW.blit(
+                txt.legend_node_history_show,
+                (
+                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 30,
+                ),
+            )
+        else:
+            WINDOW.blit(
+                txt.legend_node_history,
+                (
+                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
+                    center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
+                ),
+            )
+    
     if gph.has_img:
+        WINDOW.blit(
+            txt.legend_address,
+            (
+                WIDTH // 2 - txt.legend_address.get_width() // 2,
+                center_legend_area - txt.legend_address.get_height() // 2 - 15,
+            ),
+        )
         WINDOW.blit(
             txt.legend_convert_map,
             (
                 WIDTH // 2 - txt.legend_convert_map.get_width() // 2,
-                center_legend_area - txt.legend_convert_map.get_height() // 2 + 15,
+                center_legend_area - txt.legend_convert_map.get_height() // 2,
             ),
         )
+        if Square.track_node_history:
+            WINDOW.blit(
+                txt.legend_node_history_show,
+                (
+                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 15,
+                ),
+            )
+        else:
+            WINDOW.blit(
+                txt.legend_node_history,
+                (
+                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
+                    center_legend_area - txt.legend_node_history.get_height() // 2 + 15,
+                ),
+            )
 
 
 
@@ -376,6 +407,9 @@ def draw_vis_text(
     is_recursive_maze=False,
     is_graph_size=False,
     is_input=False,
+    is_base_img=False,
+    is_clean_img=False,
+    is_converting_img=False,
 ) -> None:
     """Special text indicating some operation is being performed. No inputs are registered."""
 
@@ -470,6 +504,39 @@ def draw_vis_text(
                 (
                     WIDTH // 2 - txt.vis_text_address.get_width() // 2,
                     center_legend_area - txt.vis_text_address.get_height() // 2,
+                ),
+            )
+        )
+    elif is_base_img:
+        text_rect.append(
+            WINDOW.blit(
+                txt.vis_text_base_img,
+                (
+                    WIDTH // 2 - txt.vis_text_base_img.get_width() // 2,
+                    center_legend_area - txt.vis_text_base_img.get_height() // 2 + 15,
+                ),
+            )
+        )
+    elif is_clean_img:
+        # Reset legend area (inefficient, only need area with new text)
+        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        
+        text_rect.append(
+            WINDOW.blit(
+                txt.vis_text_clean_img,
+                (
+                    WIDTH // 2 - txt.vis_text_clean_img.get_width() // 2,
+                    center_legend_area - txt.vis_text_clean_img.get_height() // 2,
+                ),
+            )
+        )
+    elif is_converting_img:
+        text_rect.append(
+            WINDOW.blit(
+                txt.vis_text_converting_img,
+                (
+                    WIDTH // 2 - txt.vis_text_converting_img.get_width() // 2,
+                    center_legend_area - txt.vis_text_converting_img.get_height() // 2,
                 ),
             )
         )

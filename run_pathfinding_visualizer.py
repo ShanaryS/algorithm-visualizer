@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Text for when getting images (when pressing Enter and C)
     # Start and mid square removes walls
     # Algos removing certain parts of maze
     # Rewrite draw function to make more clear
