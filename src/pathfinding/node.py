@@ -246,7 +246,7 @@ class Square:
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
-        self._discard_node()
+        self._discard_node(remove_wall=False)
         self.color = START_COLOR
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
@@ -261,7 +261,7 @@ class Square:
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
-        self._discard_node()
+        self._discard_node(remove_wall=False)
         self.color = MID_COLOR
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
@@ -276,7 +276,7 @@ class Square:
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
-        self._discard_node()
+        self._discard_node(remove_wall=False)
         self.color = END_COLOR
         type(self).nodes_to_update.append(self)
         type(self).all_end_nodes.add(self)
@@ -326,7 +326,7 @@ class Square:
         """Updates the square with node type"""
         return self.color, (self.x, self.y, int(self.square_size), int(self.square_size))
     
-    def _discard_node(self) -> None:
+    def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
         
         if self.is_empty():
@@ -349,7 +349,7 @@ class Square:
             type(self).all_mid_nodes.discard(self)
         elif self.is_end():
             type(self).all_end_nodes.discard(self)
-        elif self.is_wall():
+        elif self.is_wall() and remove_wall:
             type(self).all_wall_nodes.discard(self)
         elif self.is_path():
             type(self).all_path_nodes.discard(self)
