@@ -106,7 +106,7 @@ class VisText:
     )
     vis_text_graph_size = FONT.render("Changing graph size...", True, VIS_COLOR)
     vis_text_input = FONT.render(
-        "Enter an address (NO COMMAS, ONLY SPACES):", True, LEGEND_COLOR
+        "Type an address then press 'Enter' (NO COMMAS, ONLY SPACES):", True, LEGEND_COLOR
     )
     vis_text_address = FONT.render(f"{address}", True, LEGEND_COLOR)
 
