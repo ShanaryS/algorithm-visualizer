@@ -37,7 +37,7 @@ def timer_end() -> None:
     g_timer_total_time += total
 
 
-def timer_print() -> None:
+def timer_print(profiling="Code section") -> None:
     """Prints info about the timer"""
     global g_timer_start, g_timer_count, g_timer_min
     global g_timer_max, g_timer_total_time
@@ -75,6 +75,9 @@ def timer_print() -> None:
     else:
         final_min = g_timer_min
         final_min_time_unit = "ns"
+    if final_min == float('inf'):
+        final_min = 0
+        final_min_time_unit = 'ns'
     
     # Display max time with correct units
     if g_timer_max >= (10**9 * 60):
@@ -92,13 +95,17 @@ def timer_print() -> None:
     else:
         final_max = g_timer_max
         final_max_time_unit = "ns"
+    if final_max == float('-inf'):
+        final_max = 0
+        final_max_time_unit = 'ns'
+    
     
     print("-------------------------------------")
+    print(f"--- {profiling} ---")
     print(f"Total Time: {final_total:.2f}{final_total_time_unit}")
     print(f"Max Time: {final_max:.2f}{final_max_time_unit}")
     print(f"Min Time: {final_min:.2f}{final_min_time_unit}")
     print(f"Count: {g_timer_count:,}")
-    print("-------------------------------------")
     
     g_timer_start = 0
     g_timer_count = 0
