@@ -34,7 +34,7 @@ from src.pathfinding.maps import (
     write_img_clean,
 )
 from src.pathfinding.maps import IMG_LOCATION, IMG_BASE_NAME, IMG_CLEAN_NAME
-from src.timer import timer_start, timer_end, timer_print
+from lib.timer import timer_start, timer_end, timer_print
 
 
 @dataclass

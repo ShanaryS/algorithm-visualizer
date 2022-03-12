@@ -4,7 +4,8 @@ Usage:
 2. Place timer_print() to print the result
 3. timer_print() should only be called once, timer_start() and timer_end()
     can be called as many times as needed. For example a section of a loop.
-4. Min Time result ignores zero time values as they are usually trivial
+4. timer_print() takes an optional string arg to name the section code in print
+5. Min Time result ignores zero time values as they are usually trivial
 """
 
 
