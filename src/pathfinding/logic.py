@@ -238,21 +238,21 @@ def _left_click_button(
                     if lgc.start in Square.all_wall_nodes:
                         lgc.start.set_wall(gph)
                     else:
-                        lgc.start.reset()
+                        lgc.start.reset(gph)
                     lgc.start = square
                     square.set_start(gph)
                 elif last_square == "mid":
                     if lgc.mid in Square.all_wall_nodes:
                         lgc.mid.set_wall(gph)
                     else:
-                        lgc.mid.reset()
+                        lgc.mid.reset(gph)
                     lgc.mid = square
                     square.set_mid(gph)
                 elif last_square == "end":
                     if lgc.end in Square.all_wall_nodes:
                         lgc.end.set_wall(gph)
                     else:
-                        lgc.end.reset()
+                        lgc.end.reset(gph)
                     lgc.end = square
                     square.set_end(gph)
 
@@ -369,7 +369,7 @@ def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
     pos, row, col, square = _get_square_clicked(gph)
 
     # Reset square and ordinal node if it was any
-    square.reset()
+    square.reset(gph)
     if square == lgc.start:
         lgc.start = None
     elif square == lgc.mid:
@@ -443,7 +443,7 @@ def _dijkstra_button(
     """Run the dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(algo)
+    reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion
@@ -474,7 +474,7 @@ def _a_star_button(
     """Runs the A* algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(algo)
+    reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion
@@ -505,7 +505,7 @@ def _bi_dijkstra_button(
     """Runs the Bi-Directional Dijkstra algorithm"""
 
     # Resets algo visualizations without removing ordinal nodes or walls
-    reset_algo(algo)
+    reset_algo(gph, algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
     # Necessary to for dragging nodes on completion

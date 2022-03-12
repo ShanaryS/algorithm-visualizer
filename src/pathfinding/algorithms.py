@@ -648,7 +648,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(algo)
+            reset_algo(gph, algo)
         algo.dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
@@ -673,7 +673,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(algo)
+            reset_algo(gph, algo)
         algo.a_star_finished = True
 
         # Separates calling algo_no_vis with mid node or not
@@ -698,7 +698,7 @@ def algo_no_vis(
         if (
             reset
         ):  # Used to not reset start -> mid visualizations if going from mid -> end
-            reset_algo(algo)
+            reset_algo(gph, algo)
         algo.bi_dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid node or not
@@ -847,7 +847,7 @@ def draw_recursive_maze(
             if y >= gph.rows:
                 y = gph.rows - 1
         square: Square = gph.graph[x][y]
-        square.reset()
+        square.reset(gph)
         if visualize:
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)

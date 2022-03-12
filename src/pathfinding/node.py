@@ -129,11 +129,14 @@ class Square:
         """Gets color of square"""
         return self.color
 
-    def reset(self) -> None:
+    def reset(self, gph) -> None:
         """Sets node to blank"""
         # Don't do anything if already set correctly
         if self.is_empty():
             return
+        
+        # Update neighbours to let them know it's no longer a wall
+        is_wall_res = self.is_wall()
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -141,6 +144,8 @@ class Square:
 
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
+        if is_wall_res:
+            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_empty_nodes.add(self)
 
@@ -243,8 +248,7 @@ class Square:
             return
 
         # Update neighbours to let them know it's no longer a wall
-        if self.is_wall():
-            self._update_surrounding_neighbour_pool(gph)
+        is_wall_res = self.is_wall()
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -252,6 +256,8 @@ class Square:
         
         self._discard_node(remove_wall=False)
         self.color = START_COLOR
+        if is_wall_res:
+            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
 
@@ -262,8 +268,7 @@ class Square:
             return
         
         # Update neighbours to let them know it's no longer a wall
-        if self.is_wall():
-            self._update_surrounding_neighbour_pool(gph)
+        is_wall_res = self.is_wall()
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -271,6 +276,8 @@ class Square:
         
         self._discard_node(remove_wall=False)
         self.color = MID_COLOR
+        if is_wall_res:
+            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
 
@@ -281,8 +288,7 @@ class Square:
             return
         
         # Update neighbours to let them know it's no longer a wall
-        if self.is_wall():
-            self._update_surrounding_neighbour_pool(gph)
+        is_wall_res = self.is_wall()
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -290,6 +296,8 @@ class Square:
         
         self._discard_node(remove_wall=False)
         self.color = END_COLOR
+        if is_wall_res:
+            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_end_nodes.add(self)
 

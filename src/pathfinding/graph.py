@@ -288,9 +288,9 @@ def set_squares_to_roads(gph: GraphState) -> None:
             if avg_tot > cutoff:
                 # If b is greater, then it is white.
                 if avg_b > 225:
-                    square.reset()
+                    square.reset(gph)
                 else:
-                    square.reset()
+                    square.reset(gph)
                     square.is_highway = True
             else:
                 square.set_wall(gph)
@@ -517,10 +517,10 @@ def reset_graph(
         for type_list in nodes_to_reset:
             for square in type_list:
                 square.wall_color = WALL_COLOR
-                square.reset()
+                square.reset(gph)
 
 
-def reset_algo(algo) -> None:
+def reset_algo(gph: GraphState, algo) -> None:
     """Resets algo colors while keeping ordinal nodes and walls"""
 
     # Need to update these values
@@ -541,7 +541,7 @@ def reset_algo(algo) -> None:
     square: Square
     for type_list in nodes_to_reset:
         for square in type_list:
-            square.reset()
+            square.reset(gph)
 
 
 def change_graph_size(
