@@ -516,13 +516,13 @@ def reset_algo(algo) -> None:
 
     # Resets only certain colors
     nodes_to_reset = [
-        Square.all_open_nodes,
-        Square.all_open_nodes_alt,
-        Square.all_open_nodes_alt_,
-        Square.all_closed_nodes,
-        Square.all_closed_nodes_alt,
-        Square.all_closed_nodes_alt_,
-        Square.all_path_nodes,
+        Square.all_open_nodes.copy(),
+        Square.all_open_nodes_alt.copy(),
+        Square.all_open_nodes_alt_.copy(),
+        Square.all_closed_nodes.copy(),
+        Square.all_closed_nodes_alt.copy(),
+        Square.all_closed_nodes_alt_.copy(),
+        Square.all_path_nodes.copy(),
     ]
     square: Square
     for type_list in nodes_to_reset:
