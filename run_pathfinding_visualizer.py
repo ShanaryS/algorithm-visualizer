@@ -51,6 +51,9 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Empty lists on reset graph (maybe reset algos)
+    # Algos not working on map
+    # Walls not resetting on reset graph
     # Rewrite draw function to make more clear
     # Compare performance with changes
 

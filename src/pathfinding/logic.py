@@ -240,21 +240,21 @@ def _left_click_button(
                     else:
                         lgc.start.reset()
                     lgc.start = square
-                    square.set_start()
+                    square.set_start(gph)
                 elif last_square == "mid":
                     if lgc.mid in Square.all_wall_nodes:
                         lgc.mid.set_wall(gph)
                     else:
                         lgc.mid.reset()
                     lgc.mid = square
-                    square.set_mid()
+                    square.set_mid(gph)
                 elif last_square == "end":
                     if lgc.end in Square.all_wall_nodes:
                         lgc.end.set_wall(gph)
                     else:
                         lgc.end.reset()
                     lgc.end = square
-                    square.set_end()
+                    square.set_end(gph)
 
                 # Runs the algo again instantly with no visualizations, handles whether mid exists
                 if algo.dijkstra_finished:
@@ -328,7 +328,7 @@ def _left_click_button(
     # If start node does not exist, create it. If not currently ordinal node.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
         lgc.start = square
-        square.set_start()
+        square.set_start(gph)
 
         # Handles removing and adding start manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
@@ -342,7 +342,7 @@ def _left_click_button(
     # If not currently ordinal node.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
         lgc.end = square
-        square.set_end()
+        square.set_end(gph)
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.end:
@@ -388,7 +388,7 @@ def _middle_click_button(
     # Set square to mid if no square is already mid, and not currently ordinal node.
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
-        square.set_mid()
+        square.set_mid(gph)
 
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:

@@ -236,11 +236,15 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_closed_nodes_alt_.add(self)
 
-    def set_start(self) -> None:
+    def set_start(self, gph) -> None:
         """Sets node to start"""
         # Don't do anything if already set correctly
         if self.is_start():
             return
+
+        # Update neighbours to let them know it's no longer a wall
+        if self.is_wall():
+            self._update_surrounding_neighbour_pool(gph)
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -251,11 +255,15 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
 
-    def set_mid(self) -> None:
+    def set_mid(self, gph) -> None:
         """Sets node to mid"""
         # Don't do anything if already set correctly
         if self.is_mid():
             return
+        
+        # Update neighbours to let them know it's no longer a wall
+        if self.is_wall():
+            self._update_surrounding_neighbour_pool(gph)
         
         # Add to node history if user requests to track
         if type(self).track_node_history:
@@ -266,11 +274,15 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
 
-    def set_end(self) -> None:
+    def set_end(self, gph) -> None:
         """Sets node to end"""
         # Don't do anything if already set correctly
         if self.is_end():
             return
+        
+        # Update neighbours to let them know it's no longer a wall
+        if self.is_wall():
+            self._update_surrounding_neighbour_pool(gph)
         
         # Add to node history if user requests to track
         if type(self).track_node_history:

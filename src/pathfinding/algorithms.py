@@ -513,9 +513,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start()
-            mid.set_mid()
-            end.set_end()
+            start.set_start(gph)
+            mid.set_mid(gph)
+            end.set_end(gph)
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -551,9 +551,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start()
-            mid.set_mid()
-            end.set_end()
+            start.set_start(gph)
+            mid.set_mid(gph)
+            end.set_end(gph)
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -597,9 +597,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start()
-            mid.set_mid()
-            end.set_end()
+            start.set_start(gph)
+            mid.set_mid(gph)
+            end.set_end(gph)
 
         # Fixes bug when can't find a path
         if not isinstance(start_to_mid, bool):
@@ -656,8 +656,8 @@ def algo_no_vis(
             dijkstra(gph, algo, txt, start, end, visualize=False)
             
             # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
+            start.set_start(gph)
+            end.set_end(gph)
         else:
             return dijkstra(
                 gph,
@@ -681,8 +681,8 @@ def algo_no_vis(
             a_star(gph, algo, txt, start, end, visualize=False)
             
             # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
+            start.set_start(gph)
+            end.set_end(gph)
         else:
             return a_star(
                 gph,
@@ -708,8 +708,8 @@ def algo_no_vis(
             )
             
             # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
+            start.set_start(gph)
+            end.set_end(gph)
         else:
             return bi_dijkstra(
                 gph,
