@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Algos not working on map
     # Rewrite draw function to make more clear
     # Compare performance with changes
 
@@ -61,6 +60,7 @@ if __name__ == "__main__":
     #   Mention that it took a lot of effort!
 
     # --- Known Bugs ---
+    # Algos removing certain parts of maze
     # Bi dijk redraws open nodes
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
     # Add multithreading to code that iterates through gph.graph
