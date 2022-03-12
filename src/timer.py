@@ -102,6 +102,6 @@ def timer_print() -> None:
     
     g_timer_start = 0
     g_timer_count = 0
-    g_timer_min = 0
-    g_timer_max = 0
+    g_timer_min = float('inf')
+    g_timer_max = float('-inf')
     g_timer_total_time = 0
