@@ -51,7 +51,7 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Dragging updates slowly
+    # Walls not visualizing after placing after completion
     # Rewrite draw function to make more clear
     # Compare performance with changes
 
@@ -66,8 +66,9 @@ if __name__ == "__main__":
     # Add multithreading to code that iterates through gph.graph
 
     # --- C++ Performance Rewrite ---
-    # Rewrite algorithms.py into C++
+    # Rewrite node.py, algorithms.py into C++
     # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
+    #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
     #   Changing to large graph takes 40ms
     # Create new branch 'archive/python_only'
 
