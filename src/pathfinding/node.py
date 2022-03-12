@@ -55,7 +55,7 @@ class Square:
     def update_neighbours(self, gph) -> None:
         """Updates the neighbours in the four cardinal directions"""
 
-        self.neighbours = []
+        self.neighbours.clear()
         if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():  # Down
             self.neighbours.append(gph.graph[self.row+1][self.col])
         if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():  # UP
