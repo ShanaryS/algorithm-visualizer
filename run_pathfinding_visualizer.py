@@ -58,6 +58,7 @@ if __name__ == "__main__":
     # Compare performance with changes
     
     # --- Mutltithreading/Multiprocessing ---
+    # Update performance section of github with Multiprocessing/Multithreading
     # All performance intensive code
     # Write tests for both threading and multiprocessing
 
@@ -65,7 +66,6 @@ if __name__ == "__main__":
     # Remake gifs
     # In first gif, show adding walls after competion as well
     # Written with a performance first mindset
-    #   Multiprocessing/Multithreading
     #   Only changed pixels update each frame (Took a lot of effort!)
     #   Show 'V' button to prove it actually does this (maze, map a_star then dijk)
     #   Link to archive/pre-partial-display-update for speed comparisons
