@@ -500,7 +500,6 @@ def reset_graph(
 
         # Default case
         nodes_to_reset = [
-            Square.all_empty_nodes.copy(),
             Square.all_open_nodes.copy(),
             Square.all_open_nodes_alt.copy(),
             Square.all_open_nodes_alt_.copy(),
