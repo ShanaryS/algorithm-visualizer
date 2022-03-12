@@ -177,13 +177,13 @@ def run_pathfinding(
                     gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
                 )
 
-            # Convert map into grid with "C" key
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
-                _convert_img_to_squares(gph, txt)
-
             # Enter an address with the "ENTER" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 _get_address_from_user(gph, algo, lgc, txt)
+
+            # Convert map into grid with "C" key
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
+                _convert_img_to_squares(gph, txt)
             
             # Visualize changes with the "V" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_v:
