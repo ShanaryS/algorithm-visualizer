@@ -95,7 +95,7 @@ def dijkstra(
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
-            if i % gph.speed_multiplier == 0:
+            if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_dijkstra=True)
@@ -176,7 +176,7 @@ def a_star(
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
-            if i % gph.speed_multiplier == 0:
+            if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_a_star=True)
@@ -371,7 +371,7 @@ def bi_dijkstra(
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
-            if i % gph.speed_multiplier == 0:
+            if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_bi_dijkstra=True)
@@ -447,7 +447,7 @@ def best_path(
             square.set_path()
             i += 1
             if visualize:
-                if i % gph.speed_multiplier == 0:
+                if i % gph.path_speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
                     draw(gph, txt, algo_running=True)
@@ -457,7 +457,7 @@ def best_path(
             square.set_path()
             i += 1
             if visualize:
-                if i % gph.speed_multiplier == 0:
+                if i % gph.path_speed_multiplier == 0:
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
                     draw(gph, txt, algo_running=True)

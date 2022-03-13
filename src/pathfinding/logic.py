@@ -608,7 +608,8 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
 
     gph.update_legend = True
     gph.has_img = False
-    gph.speed_multiplier = 500
+    gph.algo_speed_multiplier = 500
+    gph.path_speed_multiplier = 1
 
     set_squares_to_roads(gph)
 

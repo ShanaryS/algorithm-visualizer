@@ -44,7 +44,8 @@ class GraphState:
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
-    speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
+    algo_speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
+    path_speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
 
     def add_to_update_queue(self, obj) -> None:
         """Adds rect to update, converts non rects to rect"""
@@ -551,7 +552,8 @@ def reset_graph(
     """Resets entire graph removing every square"""
 
     # Need to update these values
-    gph.speed_multiplier = DEFAULT_SPEED_MULTIPLIER
+    gph.algo_speed_multiplier = DEFAULT_SPEED_MULTIPLIER
+    gph.path_speed_multiplier = DEFAULT_SPEED_MULTIPLIER
     gph.has_img = False
     algo.dijkstra_finished = False
     algo.a_star_finished = False
