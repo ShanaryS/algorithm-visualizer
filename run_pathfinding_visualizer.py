@@ -66,8 +66,6 @@ if __name__ == "__main__":
     #   - Key functions speed to check: update_neighbours, change_graph_size,
     #   set_squares_to_roads, 
     #   - node.py
-    #       - _discard_node
-    #       - clear_all_node_lists
     #       - update_nieghbours
     #       - _update_surrounding_neighbour_pool
     #   - graph.py
