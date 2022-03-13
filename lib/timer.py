@@ -60,6 +60,24 @@ def timer_print(profiling="Code section") -> None:
         final_total = g_timer_total_time
         final_total_time_unit = "ns"
     
+    # Display average time with correct units
+    average_time = g_timer_total_time / g_timer_count
+    if average_time >= (10**9 * 60):
+        final_average = average_time / (10**9 * 60)
+        final_average_time_unit = "min"
+    elif average_time >= 10**9:
+        final_average = average_time / 10**9
+        final_average_time_unit = "s"
+    elif average_time >= 10**6:
+        final_average = average_time / 10**6
+        final_average_time_unit = "ms"
+    elif average_time >= 10**3:
+        final_average = average_time / 10**3
+        final_average_time_unit = "us"
+    else:
+        final_average = average_time
+        final_average_time_unit = "ns"
+    
     # Display min time with correct units
     if g_timer_min >= (10**9 * 60):
         final_min = g_timer_min / (10**9 * 60)
@@ -104,6 +122,7 @@ def timer_print(profiling="Code section") -> None:
     print("-------------------------------------")
     print(f"--- {profiling} ---")
     print(f"Total Time: {final_total:.2f}{final_total_time_unit}")
+    print(f"Avg Time: {final_average:.2f}{final_average_time_unit}")
     print(f"Max Time: {final_max:.2f}{final_max_time_unit}")
     print(f"Min Time: {final_min:.2f}{final_min_time_unit}")
     print(f"Count: {g_timer_count:,}")
