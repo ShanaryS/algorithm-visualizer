@@ -60,13 +60,13 @@ class Square:
         self.neighbours["Right"] = None
         self.neighbours["Down"] = None
         
-        if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():  # LEFT
+        if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():
             self.neighbours["Left"] = gph.graph[self.row][self.col-1]
-        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():  # UP
+        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():
             self.neighbours["Up"] = gph.graph[self.row-1][self.col]
-        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():  # RIGHT
+        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():
             self.neighbours["Right"] = gph.graph[self.row][self.col+1]
-        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():  # Down
+        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():
             self.neighbours["Down"] = gph.graph[self.row+1][self.col]
     
     def get_neighbours(self) -> list:
