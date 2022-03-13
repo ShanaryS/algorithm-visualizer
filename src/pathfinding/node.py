@@ -38,7 +38,7 @@ class Square:
 
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
-        self.neighbours: list = []
+        self.neighbours: dict = {}
         self.color = DEFAULT_COLOR
         self.wall_color = WALL_COLOR
         self.color_history = None
@@ -55,22 +55,35 @@ class Square:
     def update_neighbours(self, gph) -> None:
         """Updates the neighbours in the four cardinal directions"""
 
-        self.neighbours.clear()
-        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():  # Down
-            self.neighbours.append(gph.graph[self.row+1][self.col])
-        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():  # UP
-            self.neighbours.append(gph.graph[self.row-1][self.col])
-        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():  # RIGHT
-            self.neighbours.append(gph.graph[self.row][self.col+1])
+        self.neighbours["Left"] = None
+        self.neighbours["Up"] = None
+        self.neighbours["Right"] = None
+        self.neighbours["Down"] = None
+        
         if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():  # LEFT
-            self.neighbours.append(gph.graph[self.row][self.col-1])
+            self.neighbours["Left"] = gph.graph[self.row][self.col-1]
+        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():  # UP
+            self.neighbours["Up"] = gph.graph[self.row-1][self.col]
+        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():  # RIGHT
+            self.neighbours["Right"] = gph.graph[self.row][self.col+1]
+        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():  # Down
+            self.neighbours["Down"] = gph.graph[self.row+1][self.col]
+    
+    def get_neighbours(self) -> list:
+        """Gets list of neighbours"""
+        neighbours = []
+        for direction in self.neighbours:
+            nei = self.neighbours[direction]
+            if nei:
+                neighbours.append(nei)
+        return neighbours
     
     def _update_surrounding_neighbour_pool(self, gph) -> None:
         """Update's this square's neighbours' neighbours to remove this square.
         Wall nodes cannot be neighbours while every other node can be.
         """
         nei: Square
-        for nei in self.neighbours:
+        for nei in self.get_neighbours():
             nei.update_neighbours(gph)
 
     def is_empty(self) -> bool:

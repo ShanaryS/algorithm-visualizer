@@ -74,7 +74,7 @@ def dijkstra(
 
         # Decides the order of neighbours to check
         nei: Square
-        for nei in curr_square.neighbours:
+        for nei in curr_square.get_neighbours():
             temp_g_score: int = g_score[curr_square] + 1
 
             if temp_g_score < g_score[nei]:
@@ -154,7 +154,7 @@ def a_star(
 
         # Decides the order of neighbours to check
         nei: Square
-        for nei in curr_square.neighbours:
+        for nei in curr_square.get_neighbours():
             temp_g_score: int = g_score[curr_square] + 1
 
             if temp_g_score < g_score[nei]:
@@ -239,7 +239,7 @@ def bi_dijkstra(
 
         # Terminates if found the best path
         nei: Square
-        for nei in curr_square.neighbours:
+        for nei in curr_square.get_neighbours():
             # Start swarm reaching mid (end node if no mid) swarm
             if curr_square.is_open() and nei.is_open_alt():
                 if draw_best_path:
@@ -311,7 +311,7 @@ def bi_dijkstra(
         # Decides the order of neighbours to check for both swarms.
         temp_g_score: int
         if temp[3] == "start":
-            for nei in curr_square.neighbours:
+            for nei in curr_square.get_neighbours():
                 temp_g_score = g_score[curr_square] + 1
 
                 if temp_g_score < g_score[nei]:
@@ -331,7 +331,7 @@ def bi_dijkstra(
                             else:
                                 nei.set_open(gph)
         elif temp[3] == "end":
-            for nei in curr_square.neighbours:
+            for nei in curr_square.get_neighbours():
                 temp_g_score = g_score[curr_square] + 1
 
                 if temp_g_score < g_score[nei]:
