@@ -51,11 +51,15 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Put command imports in __init__? Pygame?
     # Bug with removing maze with _update_single_neighbour()
     # Rewrite draw function to make more clear
     # Compare performance with changes
     
     # --- Mutltithreading/Multiprocessing ---
+    # May need multiprocessing.freeze_support()
+    # 90us for thread startup, linear scaling for func calls
+    # 2s for process startup, non linear scaling for increased func calls
     # Update performance section of github with Multiprocessing/Multithreading
     # All performance intensive code
     #   - Cannot update two neighbouring squares if becoming a wall is possible
