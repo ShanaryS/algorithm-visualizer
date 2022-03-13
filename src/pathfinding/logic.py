@@ -76,21 +76,37 @@ def run_pathfinding(
                 algo.ordinal_node_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            if pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
+            if (
+                pygame.mouse.get_pressed(3)[0]
+                and pygame.mouse.get_pos()[1] < HEIGHT
+                and not gph.has_img
+            ):
                 _left_click_button(gph, algo, lgc, txt)
 
             # RIGHT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
+            elif (
+                pygame.mouse.get_pressed(3)[2]
+                and pygame.mouse.get_pos()[1] < HEIGHT
+                and not gph.has_img
+            ):
                 _right_click_button(gph, lgc)
 
             # MIDDLE MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img:
+            elif (
+                pygame.mouse.get_pressed(3)[1]
+                and pygame.mouse.get_pos()[1] < HEIGHT
+                and not gph.has_img
+            ):
                 _middle_click_button(gph, algo, lgc, txt)
 
             """Keyboard buttons"""
 
             # Reset graph with "SPACE" on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not gph.has_img:
+            if (
+                event.type == pygame.KEYDOWN
+                and event.key == pygame.K_SPACE
+                and not gph.has_img
+            ):
                 _reset_graph_button(gph, algo, lgc, txt)
 
             # Run Dijkstra with "D" key on keyboard
@@ -124,7 +140,11 @@ def run_pathfinding(
                 _bi_dijkstra_button(gph, algo, lgc, txt)
 
             # Draw recursive maze with "G" key on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img:
+            if (
+                event.type == pygame.KEYDOWN
+                and event.key == pygame.K_g
+                and not gph.has_img
+            ):
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
@@ -132,7 +152,11 @@ def run_pathfinding(
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_i and not gph.has_img:
+            if (
+                event.type == pygame.KEYDOWN
+                and event.key == pygame.K_i
+                and not gph.has_img
+            ):
                 if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
@@ -179,7 +203,7 @@ def run_pathfinding(
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
                 _convert_img_to_squares(gph, txt)
-            
+
             # Visualize changes with the "V" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_v:
                 _visualize_changes_button(gph, txt)
@@ -426,7 +450,9 @@ def _reset_ordinal_nodes(lgc: LogicState) -> None:
     lgc.start = lgc.mid = lgc.end = None
 
 
-def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _reset_graph_button(
+    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
+) -> None:
     """Resets the graph"""
     reset_graph(gph, algo, txt, graph_max=lgc.GRAPH_MAX, graph_default=lgc.GRAPH_MEDIUM)
     _reset_ordinal_nodes(lgc)
@@ -529,7 +555,9 @@ def _recursive_maze_buttons(
     gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
 ) -> None:
     """Draws recursive maze"""
-    reset_graph(gph, algo, txt)  # Resets entire graph to prevent any unintended behaviour
+    reset_graph(
+        gph, algo, txt
+    )  # Resets entire graph to prevent any unintended behaviour
     draw(gph, txt, clear_legend=True, algo_running=True)
     gph.base_drawn = False
     draw_recursive_maze(gph, txt, visualize=visualize)  # Draw maze
@@ -553,9 +581,11 @@ def _graph_size_buttons(
     _reset_ordinal_nodes(lgc)
 
 
-def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _load_img_to_graph(
+    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
+) -> None:
     """Loads the image onto the graph"""
-    
+
     draw_vis_text(txt, is_base_img=True)
     change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
@@ -583,7 +613,9 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     set_squares_to_roads(gph)
 
 
-def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _get_address_from_user(
+    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
+) -> None:
     """Gets the address from the user"""
 
     # Used to get rid of commas inserted by url encoding.
@@ -624,6 +656,6 @@ def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
     # Start tracking node history
     else:
         Square.track_node_history = True
-    
+
     gph.update_legend = True
     draw(gph, txt, legend=True)
