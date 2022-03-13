@@ -59,7 +59,7 @@ class Square:
         return self.row, self.col
 
     def update_neighbours(self, gph) -> None:
-        """Updates the neighbours in the four cardinal directions"""
+        """Updates this square's neighbours in the four cardinal directions"""
 
         self.neighbours[LEFT] = None
         self.neighbours[UP] = None
@@ -75,39 +75,18 @@ class Square:
         if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():
             self.neighbours[DOWN] = gph.graph[self.row+1][self.col]
     
-    def get_neighbours(self) -> list:
+    def get_neighbours(self, include_walls=False) -> list:
         """Gets list of neighbours"""
         neighbours = []
         for direction in self.neighbours:
-            nei = self.neighbours[direction]
+            nei: Square = self.neighbours[direction]
+            # Append walls to list if include_walls and nei exists
             if nei:
-                neighbours.append(nei)
+                if not nei.is_wall():
+                    neighbours.append(nei)
+                elif include_walls:
+                    neighbours.append(nei)
         return neighbours
-
-    def _update_single_neighbour(self, nei, direction) -> None:
-        """Updates a neighbour's neighbour in the direction provided"""
-        # From the prespective of nei, direction is reversed
-        if direction == LEFT:
-            update_direction = RIGHT
-        elif direction == UP:
-            update_direction = DOWN
-        elif direction == RIGHT:
-            update_direction = LEFT
-        elif direction == DOWN:
-            update_direction = UP
-        nei.neighbours[update_direction] = None if self.is_wall() else self
-    
-    def _update_surrounding_neighbour_pool(self, gph) -> None:
-        """Update's this square's neighbours' neighbours to remove this square.
-        Wall nodes cannot be neighbours while every other node can be.
-        """
-        nei: Square
-        for nei in self.get_neighbours():
-            nei.update_neighbours(gph)
-        # for direction in self.neighbours:
-        #     nei: Square = self.neighbours[direction]
-        #     if nei:
-        #         self._update_single_neighbour(nei, direction)
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
@@ -171,17 +150,12 @@ class Square:
         if self.is_empty():
             return
         
-        # Update neighbours to let them know it's no longer a wall
-        is_wall_res = self.is_wall()
-        
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
 
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
-        if is_wall_res:
-            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_empty_nodes.add(self)
 
@@ -197,7 +171,6 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_COLOR
-        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes.add(self)
 
@@ -213,7 +186,6 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_ALT_COLOR
-        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt.add(self)
 
@@ -231,7 +203,6 @@ class Square:
         
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
-        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt_.add(self)
 
@@ -286,17 +257,12 @@ class Square:
         if self.is_start():
             return
 
-        # Update neighbours to let them know it's no longer a wall
-        is_wall_res = self.is_wall()
-        
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
         self._discard_node(remove_wall=False)
         self.color = START_COLOR
-        if is_wall_res:
-            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
 
@@ -306,17 +272,12 @@ class Square:
         if self.is_mid():
             return
         
-        # Update neighbours to let them know it's no longer a wall
-        is_wall_res = self.is_wall()
-        
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
         self._discard_node(remove_wall=False)
         self.color = MID_COLOR
-        if is_wall_res:
-            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
 
@@ -326,17 +287,12 @@ class Square:
         if self.is_end():
             return
         
-        # Update neighbours to let them know it's no longer a wall
-        is_wall_res = self.is_wall()
-        
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
         
         self._discard_node(remove_wall=False)
         self.color = END_COLOR
-        if is_wall_res:
-            self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_end_nodes.add(self)
 
@@ -352,7 +308,6 @@ class Square:
         
         self._discard_node()
         self.color = self.wall_color
-        self._update_surrounding_neighbour_pool(gph)
         type(self).nodes_to_update.append(self)
         type(self).all_wall_nodes.add(self)
 
