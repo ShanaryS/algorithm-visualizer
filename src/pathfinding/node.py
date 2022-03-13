@@ -144,7 +144,7 @@ class Square:
         """Gets color of square"""
         return self.color
 
-    def reset(self, gph) -> None:
+    def reset(self) -> None:
         """Sets node to blank"""
         # Don't do anything if already set correctly
         if self.is_empty():
@@ -159,7 +159,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_empty_nodes.add(self)
 
-    def set_open(self, gph) -> None:
+    def set_open(self) -> None:
         """Sets node to open"""
         # Don't do anything if already set correctly
         if self.is_open():
@@ -174,7 +174,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes.add(self)
 
-    def set_open_alt(self, gph) -> None:
+    def set_open_alt(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
         if self.is_open_alt():
@@ -189,7 +189,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_open_nodes_alt.add(self)
 
-    def set_open_alt_(self, gph) -> None:
+    def set_open_alt_(self) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
@@ -251,7 +251,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_closed_nodes_alt_.add(self)
 
-    def set_start(self, gph) -> None:
+    def set_start(self) -> None:
         """Sets node to start"""
         # Don't do anything if already set correctly
         if self.is_start():
@@ -266,7 +266,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_start_nodes.add(self)
 
-    def set_mid(self, gph) -> None:
+    def set_mid(self) -> None:
         """Sets node to mid"""
         # Don't do anything if already set correctly
         if self.is_mid():
@@ -281,7 +281,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_mid_nodes.add(self)
 
-    def set_end(self, gph) -> None:
+    def set_end(self) -> None:
         """Sets node to end"""
         # Don't do anything if already set correctly
         if self.is_end():
@@ -296,7 +296,7 @@ class Square:
         type(self).nodes_to_update.append(self)
         type(self).all_end_nodes.add(self)
 
-    def set_wall(self, gph) -> None:
+    def set_wall(self) -> None:
         """Sets node to wall"""
         # Don't do anything if already set correctly
         if self.is_wall():

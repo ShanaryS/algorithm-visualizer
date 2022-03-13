@@ -295,12 +295,12 @@ def set_squares_to_roads(gph: GraphState) -> None:
             if avg_tot > cutoff:
                 # If b is greater, then it is white.
                 if avg_b > 225:
-                    square.reset(gph)
+                    square.reset()
                 else:
-                    square.reset(gph)
+                    square.reset()
                     square.is_highway = True
             else:
-                square.set_wall(gph)
+                square.set_wall()
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
@@ -584,7 +584,7 @@ def reset_graph(
         for type_list in nodes_to_reset:
             for square in type_list:
                 square.wall_color = WALL_COLOR
-                square.reset(gph)
+                square.reset()
 
 
 def reset_algo(gph: GraphState, algo) -> None:
@@ -608,7 +608,7 @@ def reset_algo(gph: GraphState, algo) -> None:
     square: Square
     for type_list in nodes_to_reset:
         for square in type_list:
-            square.reset(gph)
+            square.reset()
 
 
 def change_graph_size(

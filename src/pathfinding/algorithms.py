@@ -85,7 +85,7 @@ def dijkstra(
                     open_set.put((g_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
                     if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open(gph)
+                        nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -166,7 +166,7 @@ def a_star(
                     open_set.put((f_score[nei], queue_pos, nei))
                     open_set_hash.add(nei)
                     if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open(gph)
+                        nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -327,9 +327,9 @@ def bi_dijkstra(
                             and nei != ignore_node
                         ):
                             if alt_color:
-                                nei.set_open_alt(gph)
+                                nei.set_open_alt()
                             else:
-                                nei.set_open(gph)
+                                nei.set_open()
         elif temp[3] == "end":
             for nei in curr_square.get_neighbours():
                 temp_g_score = g_score[curr_square] + 1
@@ -347,9 +347,9 @@ def bi_dijkstra(
                             and nei != ignore_node
                         ):
                             if alt_color:
-                                nei.set_open_alt_(gph)
+                                nei.set_open_alt_()
                             else:
-                                nei.set_open_alt(gph)
+                                nei.set_open_alt()
 
         # Sets square to closed after finished checking
         already_closed = any(
@@ -513,9 +513,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start(gph)
-            mid.set_mid(gph)
-            end.set_end(gph)
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -551,9 +551,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start(gph)
-            mid.set_mid(gph)
-            end.set_end(gph)
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         best_path(gph, algo, txt, start_to_mid, mid, visualize=visualize)
         best_path(gph, algo, txt, mid_to_end, end, visualize=visualize)
@@ -597,9 +597,9 @@ def start_mid_end(
             )
 
             # Fixes nodes disappearing when dragging
-            start.set_start(gph)
-            mid.set_mid(gph)
-            end.set_end(gph)
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         # Fixes bug when can't find a path
         if not isinstance(start_to_mid, bool):
@@ -656,8 +656,8 @@ def algo_no_vis(
             dijkstra(gph, algo, txt, start, end, visualize=False)
             
             # Fixes start disappearing when dragging
-            start.set_start(gph)
-            end.set_end(gph)
+            start.set_start()
+            end.set_end()
         else:
             return dijkstra(
                 gph,
@@ -681,8 +681,8 @@ def algo_no_vis(
             a_star(gph, algo, txt, start, end, visualize=False)
             
             # Fixes start disappearing when dragging
-            start.set_start(gph)
-            end.set_end(gph)
+            start.set_start()
+            end.set_end()
         else:
             return a_star(
                 gph,
@@ -708,8 +708,8 @@ def algo_no_vis(
             )
             
             # Fixes start disappearing when dragging
-            start.set_start(gph)
-            end.set_end(gph)
+            start.set_start()
+            end.set_end()
         else:
             return bi_dijkstra(
                 gph,
@@ -757,7 +757,7 @@ def draw_recursive_maze(
     if chamber_width >= division_limit:
         for y in range(chamber_height):
             square: Square = gph.graph[chamber_left + x_divide][chamber_top + y]
-            square.set_wall(gph)
+            square.set_wall()
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -766,7 +766,7 @@ def draw_recursive_maze(
     if chamber_height >= division_limit:
         for x in range(chamber_width):
             square: Square = gph.graph[chamber_left + x][chamber_top + y_divide]
-            square.set_wall(gph)
+            square.set_wall()
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -847,7 +847,7 @@ def draw_recursive_maze(
             if y >= gph.rows:
                 y = gph.rows - 1
         square: Square = gph.graph[x][y]
-        square.reset(gph)
+        square.reset()
         if visualize:
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)
