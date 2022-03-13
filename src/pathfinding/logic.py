@@ -569,7 +569,6 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     gph.has_img = True
     gph.img = pygame.image.load(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
     os.remove(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
-    set_graph(gph)
     draw(gph, txt)
     _reset_ordinal_nodes(lgc)
 
