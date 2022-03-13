@@ -27,12 +27,7 @@ from src.pathfinding.graph import (
 )
 from src.pathfinding.node import Square
 from typing import Optional
-from src.pathfinding.maps import (
-    get_img_base,
-    write_img_base,
-    get_img_clean,
-    write_img_clean,
-)
+from src.pathfinding.maps import get_img_base, get_img_clean
 from src.pathfinding.maps import IMG_LOCATION, IMG_BASE_NAME, IMG_CLEAN_NAME
 from lib.timer import timer_start, timer_end, timer_print
 
@@ -564,11 +559,8 @@ def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     draw_vis_text(txt, is_base_img=True)
     change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
-    write_img_base(get_img_base(txt.address))
-
+    gph.img = pygame.image.load(get_img_base(txt.address))
     gph.has_img = True
-    gph.img = pygame.image.load(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
-    os.remove(os.path.join(IMG_LOCATION, IMG_BASE_NAME))
     draw(gph, txt)
     _reset_ordinal_nodes(lgc)
 
@@ -577,10 +569,8 @@ def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
 
     draw_vis_text(txt, is_clean_img=True)
-    write_img_clean(get_img_clean(txt.address))
 
-    gph.img = pygame.image.load(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
-    os.remove(os.path.join(IMG_LOCATION, IMG_CLEAN_NAME))
+    gph.img = pygame.image.load(get_img_clean(txt.address))
 
     gph.base_drawn = False
     draw(gph, txt)
