@@ -51,12 +51,39 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
+    # Don't save img to disk but keep it in memory, check speed difference
+    # Turn self.neighbours into dict with keys of left, up, right, down
+    #   - With set methods, update or remove current square from each neighbour
+    #   specifically instead of all squares for each neighbour
     # Rewrite draw function to make more clear
     # Compare performance with changes
     
     # --- Mutltithreading/Multiprocessing ---
     # Update performance section of github with Multiprocessing/Multithreading
     # All performance intensive code
+    #   - Cannot update two neighbouring squares if becoming a wall is possible
+    #   - Keep pygame on its own processor at all times?
+    #       - Whenever calling funcs that update pygame: draw, draw_vis_text, reset_graph, reset_algo
+    #       - E.g algo button reset and draw calls are 80ms vs 700ms for entire algo after
+    #       - No point if draw call is right before run_pathfinding or other non time critical event
+    #   - Key functions speed to check: update_neighbours, change_graph_size,
+    #   set_squares_to_roads, 
+    #   - node.py
+    #       - _discard_node
+    #       - clear_all_node_lists
+    #       - update_nieghbours
+    #       - _update_surrounding_neighbour_pool
+    #   - graph.py
+    #       - set_graph
+    #       - set_squares_to_roads
+    #       - reset_graph
+    #       - reset_algo
+    #   - algorithms.py
+    #       - dijkstra
+    #       - a_star
+    #       - bi_dijkstra
+    #       - best_path
+    #       - draw_recursive_maze
     # Write tests for both threading and multiprocessing
 
     # --- Update github page ---
@@ -65,7 +92,7 @@ if __name__ == "__main__":
     # Written with a performance first mindset
     #   Only changed pixels update each frame (Took a lot of effort!)
     #   Show 'V' button to prove it actually does this (maze, map a_star then dijk)
-    #   Link to archive/pre-partial-display-update for speed comparisons
+    #   Link to archive/V2.0/feature-complete for speed comparisons
 
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
