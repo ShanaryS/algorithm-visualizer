@@ -95,7 +95,7 @@ class Square:
             update_direction = LEFT
         elif direction == DOWN:
             update_direction = UP
-        nei.neighbours[update_direction] = self
+        nei.neighbours[update_direction] = None if self.is_wall() else self
     
     def _update_surrounding_neighbour_pool(self, gph) -> None:
         """Update's this square's neighbours' neighbours to remove this square.
@@ -105,7 +105,7 @@ class Square:
         for nei in self.get_neighbours():
             nei.update_neighbours(gph)
         # for direction in self.neighbours:
-        #     nei = self.neighbours[direction]
+        #     nei: Square = self.neighbours[direction]
         #     if nei:
         #         self._update_single_neighbour(nei, direction)
 
