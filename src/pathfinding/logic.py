@@ -632,10 +632,9 @@ def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
     if Square.track_node_history:
         Square.track_node_history = False
         gph.visualize_node_history = True
-        gph.update_legend = True
-        draw(gph, txt, legend=True)
     # Start tracking node history
     else:
         Square.track_node_history = True
-        gph.update_legend = True
-        draw(gph, txt, legend=True)
+    
+    gph.update_legend = True
+    draw(gph, txt, legend=True)
