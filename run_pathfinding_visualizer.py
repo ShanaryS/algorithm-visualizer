@@ -51,7 +51,6 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Don't save img to disk but keep it in memory, check speed difference
     # Turn self.neighbours into dict with keys of left, up, right, down
     #   - With set methods, update or remove current square from each neighbour
     #   specifically instead of all squares for each neighbour
