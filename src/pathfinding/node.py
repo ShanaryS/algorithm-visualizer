@@ -5,6 +5,12 @@ from src.pathfinding.colors import *
 from lib.timer import timer_start, timer_end, timer_print
 
 
+LEFT = "Left"
+UP = "Up"
+RIGHT = "Right"
+DOWN = "Down"
+
+
 class Square:
     """Defines the properties needed for each node on graph"""
 
@@ -55,19 +61,19 @@ class Square:
     def update_neighbours(self, gph) -> None:
         """Updates the neighbours in the four cardinal directions"""
 
-        self.neighbours["Left"] = None
-        self.neighbours["Up"] = None
-        self.neighbours["Right"] = None
-        self.neighbours["Down"] = None
+        self.neighbours[LEFT] = None
+        self.neighbours[UP] = None
+        self.neighbours[RIGHT] = None
+        self.neighbours[DOWN] = None
         
         if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():
-            self.neighbours["Left"] = gph.graph[self.row][self.col-1]
+            self.neighbours[LEFT] = gph.graph[self.row][self.col-1]
         if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():
-            self.neighbours["Up"] = gph.graph[self.row-1][self.col]
+            self.neighbours[UP] = gph.graph[self.row-1][self.col]
         if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():
-            self.neighbours["Right"] = gph.graph[self.row][self.col+1]
+            self.neighbours[RIGHT] = gph.graph[self.row][self.col+1]
         if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():
-            self.neighbours["Down"] = gph.graph[self.row+1][self.col]
+            self.neighbours[DOWN] = gph.graph[self.row+1][self.col]
     
     def get_neighbours(self) -> list:
         """Gets list of neighbours"""
@@ -77,6 +83,19 @@ class Square:
             if nei:
                 neighbours.append(nei)
         return neighbours
+
+    def _update_single_neighbour(self, nei, direction) -> None:
+        """Updates a neighbour's neighbour in the direction provided"""
+        # From the prespective of nei, direction is reversed
+        if direction == LEFT:
+            update_direction = RIGHT
+        elif direction == UP:
+            update_direction = DOWN
+        elif direction == RIGHT:
+            update_direction = LEFT
+        elif direction == DOWN:
+            update_direction = UP
+        nei.neighbours[update_direction] = self
     
     def _update_surrounding_neighbour_pool(self, gph) -> None:
         """Update's this square's neighbours' neighbours to remove this square.
@@ -85,6 +104,10 @@ class Square:
         nei: Square
         for nei in self.get_neighbours():
             nei.update_neighbours(gph)
+        # for direction in self.neighbours:
+        #     nei = self.neighbours[direction]
+        #     if nei:
+        #         self._update_single_neighbour(nei, direction)
 
     def is_empty(self) -> bool:
         """Checks if blank node"""

@@ -51,9 +51,7 @@ if __name__ == "__main__":
     main()
 
     # --- Partial Display Update Bugs/Features ---
-    # Turn self.neighbours into dict with keys of left, up, right, down
-    #   - With set methods, update or remove current square from each neighbour
-    #   specifically instead of all squares for each neighbour
+    # Bug with removing maze with _update_single_neighbour()
     # Rewrite draw function to make more clear
     # Compare performance with changes
     
