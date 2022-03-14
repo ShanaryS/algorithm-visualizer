@@ -589,7 +589,7 @@ def reset_graph(
                 square.reset()
 
 
-def reset_algo(gph: GraphState, algo) -> None:
+def reset_algo(algo) -> None:
     """Resets algo colors while keeping ordinal nodes and walls"""
 
     # Need to update these values
