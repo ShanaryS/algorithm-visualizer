@@ -52,6 +52,9 @@ if __name__ == "__main__":
 
 # --- Mutltithreading/Multiprocessing ---
 # Time that the algorithms took to complete
+# Maybe just put pygame and logic on two distinct processes at leave it at that
+#   - Else probably would need to mantually set processes then manually assign it to everything
+#   - Need to already have processes started else there won't be any performance increase
 # psutil.cpu_count(logical=True/False), add to requirements.txt
 # May need multiprocessing.freeze_support()
 # 2ms to 54us for thread startup, linear scaling for func calls
@@ -64,7 +67,6 @@ if __name__ == "__main__":
 #       - Whenever calling funcs that update pygame: draw, draw_vis_text, reset_graph, reset_algo
 #       - E.g algo button reset and draw calls are 80ms vs 700ms for entire algo after
 #       - No point if draw call is right before run_pathfinding or other non time critical event
-#   - Key functions speed to check: set_squares_to_roads
 #   - run_pathfinding_visualizer.py
 #   - node.py (Not invidiually)
 #       - _discard_node
@@ -73,15 +75,15 @@ if __name__ == "__main__":
 #       - _update_surrounding_neighbour_pool
 #   - graph.py
 #       - set_graph
-#       - set_squares_to_roads
+#       - set_squares_to_roads*
 #       - reset_graph
 #       - reset_algo
 #   - algorithms.py
-#       - dijkstra
-#       - a_star
-#       - bi_dijkstra
-#       - best_path
-#       - draw_recursive_maze
+#       - dijkstra*
+#       - a_star*
+#       - bi_dijkstra*
+#       - best_path*
+#       - draw_recursive_maze*
 # Write tests for both threading and multiprocessing
 
 # --- Known Bugs ---
