@@ -61,7 +61,8 @@ def timer_print(profiling="Code section") -> None:
         final_total_time_unit = "ns"
     
     # Display average time with correct units
-    g_timer_count = g_timer_count if 0 else 1  # Divide by zero fix
+    # Divide by zero fix
+    g_timer_count = g_timer_count if g_timer_count != 0 else 1
     average_time = g_timer_total_time / g_timer_count
     if average_time >= (10**9 * 60):
         final_average = average_time / (10**9 * 60)
