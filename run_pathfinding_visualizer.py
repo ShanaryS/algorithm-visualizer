@@ -55,8 +55,8 @@ if __name__ == "__main__":
     
     # --- Mutltithreading/Multiprocessing ---
     # May need multiprocessing.freeze_support()
-    # 90us for thread startup, linear scaling for func calls
-    # 2s for process startup, non linear scaling for increased func calls
+    # 2ms to 54us for thread startup, linear scaling for func calls
+    # 1.35s to 600us for process startup, non linear scaling for increased func calls
     # Update performance section of github with Multiprocessing/Multithreading
     # All performance intensive code
     #   - Cannot update two neighbouring squares if becoming a wall is possible
