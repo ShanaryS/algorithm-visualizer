@@ -51,10 +51,12 @@ if __name__ == "__main__":
     main()
 
 # --- Mutltithreading/Multiprocessing ---
+# Time that the algorithms took to complete
 # psutil.cpu_count(logical=True/False), add to requirements.txt
 # May need multiprocessing.freeze_support()
 # 2ms to 54us for thread startup, linear scaling for func calls
 # 1.35s to 600us for process startup, non linear scaling for increased func calls
+# https://stackoverflow.com/questions/66018977/using-multiprocessing-with-pygame
 # Update performance section of github with Multiprocessing/Multithreading
 # All performance intensive code
 #   - Cannot update two neighbouring squares if becoming a wall is possible
@@ -62,8 +64,7 @@ if __name__ == "__main__":
 #       - Whenever calling funcs that update pygame: draw, draw_vis_text, reset_graph, reset_algo
 #       - E.g algo button reset and draw calls are 80ms vs 700ms for entire algo after
 #       - No point if draw call is right before run_pathfinding or other non time critical event
-#   - Key functions speed to check: update_neighbours, change_graph_size,
-#   set_squares_to_roads, 
+#   - Key functions speed to check: set_squares_to_roads
 #   - run_pathfinding_visualizer.py
 #   - node.py (Not invidiually)
 #       - _discard_node
