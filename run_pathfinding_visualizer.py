@@ -51,6 +51,7 @@ if __name__ == "__main__":
     main()
 
 # --- Mutltithreading/Multiprocessing ---
+# psutil.cpu_count(logical=True/False), add to requirements.txt
 # May need multiprocessing.freeze_support()
 # 2ms to 54us for thread startup, linear scaling for func calls
 # 1.35s to 600us for process startup, non linear scaling for increased func calls
