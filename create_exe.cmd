@@ -40,6 +40,6 @@ rmdir /s /q "__pycache__" "build"
 
 echo.
 echo --------------------------------------------------------------
-echo Executable and source files located in "bin" directory.
+echo Executable located in "bin" directory.
 echo.
 pause

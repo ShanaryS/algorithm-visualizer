@@ -1,5 +1,9 @@
+__pycache__
 .idea
 .env
 /venv
 *.jpg
 /bin
+*.spec
+*.prof
+*.austin
