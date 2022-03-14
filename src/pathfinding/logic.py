@@ -1,7 +1,6 @@
 """Handles inputs from user"""
 
 
-import os
 from dataclasses import dataclass
 import pygame
 from src.pathfinding.algorithms import (
