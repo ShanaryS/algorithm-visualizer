@@ -50,9 +50,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    # --- Partial Display Update Bugs/Features ---
-    # Compare performance with changes
-    
     # --- Mutltithreading/Multiprocessing ---
     # May need multiprocessing.freeze_support()
     # 2ms to 54us for thread startup, linear scaling for func calls
