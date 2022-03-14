@@ -59,6 +59,8 @@ def dijkstra(
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                import sys
+                sys.exit()
 
         # Gets the square currently being checked
         curr_square: Square = open_set.get()[2]
@@ -135,6 +137,8 @@ def a_star(
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                import sys
+                sys.exit()
 
         # Gets the square currently being checked
         curr_square: Square = open_set.get()[2]
@@ -223,6 +227,8 @@ def bi_dijkstra(
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                import sys
+                sys.exit()
 
         # Gets the square currently being checked
         temp: tuple = open_set.get()
