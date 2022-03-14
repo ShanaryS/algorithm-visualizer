@@ -79,18 +79,9 @@ if __name__ == "__main__":
     #       - draw_recursive_maze
     # Write tests for both threading and multiprocessing
 
-    # --- Update github page ---
-    # Remake gifs
-    # In first gif, show adding walls after competion as well
-    # Written with a performance first mindset
-    #   Only changed pixels update each frame (Took a lot of effort!)
-    #   Show 'V' button to prove it actually does this (maze, map a_star then dijk)
-    #   Link to archive/V2.0/feature-complete for speed comparisons
-
     # --- Known Bugs ---
     # Bi dijk redraws open nodes
     # Bi dijk only draws best_path when edges of swarms are touching, mid node
-    # Add multithreading to code that iterates through gph.graph
 
     # --- Features to add ---
     # Sticky mud for patches where algo goes slowly
