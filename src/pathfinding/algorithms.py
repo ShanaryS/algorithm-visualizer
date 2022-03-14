@@ -60,6 +60,7 @@ def dijkstra(
             if event.type == pygame.QUIT:
                 pygame.quit()
                 import sys
+
                 sys.exit()
 
         # Gets the square currently being checked
@@ -138,6 +139,7 @@ def a_star(
             if event.type == pygame.QUIT:
                 pygame.quit()
                 import sys
+
                 sys.exit()
 
         # Gets the square currently being checked
@@ -228,6 +230,7 @@ def bi_dijkstra(
             if event.type == pygame.QUIT:
                 pygame.quit()
                 import sys
+
                 sys.exit()
 
         # Gets the square currently being checked
@@ -316,11 +319,7 @@ def bi_dijkstra(
                     g_score[nei] = temp_g_score
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "start"))
-                    if (
-                        nei != end
-                        and not nei.is_closed()
-                        and nei != ignore_node
-                    ):
+                    if nei != end and not nei.is_closed() and nei != ignore_node:
                         if alt_color:
                             nei.set_open_alt()
                         else:
@@ -334,11 +333,7 @@ def bi_dijkstra(
                     g_score[nei] = temp_g_score
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "end"))
-                    if (
-                        nei != start
-                        and not nei.is_closed()
-                        and nei != ignore_node
-                    ):
+                    if nei != start and not nei.is_closed() and nei != ignore_node:
                         if alt_color:
                             nei.set_open_alt_()
                         else:
@@ -647,7 +642,7 @@ def algo_no_vis(
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
             dijkstra(gph, algo, txt, start, end, visualize=False)
-            
+
             # Fixes start disappearing when dragging
             start.set_start()
             end.set_end()
@@ -672,7 +667,7 @@ def algo_no_vis(
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
             a_star(gph, algo, txt, start, end, visualize=False)
-            
+
             # Fixes start disappearing when dragging
             start.set_start()
             end.set_end()
@@ -699,7 +694,7 @@ def algo_no_vis(
             bi_dijkstra(
                 gph, algo, txt, start, end, alt_color=alt_color, visualize=False
             )
-            
+
             # Fixes start disappearing when dragging
             start.set_start()
             end.set_end()
