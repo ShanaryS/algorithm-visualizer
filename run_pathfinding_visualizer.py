@@ -64,11 +64,11 @@ if __name__ == "__main__":
 #       - No point if draw call is right before run_pathfinding or other non time critical event
 #   - Key functions speed to check: update_neighbours, change_graph_size,
 #   set_squares_to_roads, 
+#   - run_pathfinding_visualizer.py
 #   - node.py
 #       - update_nieghbours
 #       - _update_surrounding_neighbour_pool
 #   - graph.py
-#       - set_graph
 #       - set_squares_to_roads
 #       - reset_graph
 #       - reset_algo
