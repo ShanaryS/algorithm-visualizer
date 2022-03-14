@@ -112,12 +112,8 @@ class VisText:
     )
     vis_text_address = FONT.render(f"{address}", True, LEGEND_COLOR)
     vis_text_base_img = FONT.render(f"Getting base image...", True, VIS_COLOR)
-    vis_text_clean_img = FONT.render(
-        f"Getting clean image...", True, VIS_COLOR
-    )
-    vis_text_converting_img = FONT.render(
-        f"Converting image...", True, VIS_COLOR
-    )
+    vis_text_clean_img = FONT.render(f"Getting clean image...", True, VIS_COLOR)
+    vis_text_converting_img = FONT.render(f"Converting image...", True, VIS_COLOR)
 
     def update_vis_text_input(self) -> None:
         """Updates vis_text_input with new input_text"""
@@ -205,12 +201,11 @@ def draw(
             for square in Square.get_nodes_to_update():
                 gph.add_to_update_queue(square)
 
-
     _draw_square_borders(gph)
 
     if gph.rects_to_update:
         pygame.display.update(gph.rects_to_update)
-        
+
         # Used to reset squares to previous color like nothing happened
         for square in Square.get_all_history_nodes():
             square.color = square.color_history
@@ -354,7 +349,9 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 txt.legend_node_history_show,
                 (
                     WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 30,
+                    center_legend_area
+                    - txt.legend_node_history_show.get_height() // 2
+                    + 30,
                 ),
             )
         else:
@@ -365,7 +362,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                     center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
                 ),
             )
-    
+
     if gph.has_img:
         WINDOW.blit(
             txt.legend_address,
@@ -386,7 +383,9 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 txt.legend_node_history_show,
                 (
                     WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 15,
+                    center_legend_area
+                    - txt.legend_node_history_show.get_height() // 2
+                    + 15,
                 ),
             )
         else:
@@ -397,7 +396,6 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                     center_legend_area - txt.legend_node_history.get_height() // 2 + 15,
                 ),
             )
-
 
 
 def draw_vis_text(
@@ -522,7 +520,7 @@ def draw_vis_text(
     elif is_clean_img:
         # Reset legend area (inefficient, only need area with new text)
         text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
-        
+
         text_rect.append(
             WINDOW.blit(
                 txt.vis_text_clean_img,
