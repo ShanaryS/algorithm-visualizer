@@ -58,7 +58,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
   <img src="https://user-images.githubusercontent.com/86130442/131287945-a9409a1d-7f8e-4396-af52-14591e421225.gif" alt="animated" />
 </p>
 
-## Improvements
+## Performance Improvements
 
 * Partial display update (Only update changed pixels between frames; Took a lot of effort!)
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
