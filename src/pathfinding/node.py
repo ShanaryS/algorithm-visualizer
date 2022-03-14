@@ -3,7 +3,7 @@
 
 from src.pathfinding.colors import *
 from lib.timer import timer_start, timer_end, timer_print
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 
 LEFT = "Left"
@@ -67,13 +67,13 @@ class Square:
         self.neighbours[RIGHT] = None
         self.neighbours[DOWN] = None
 
-        if self.col > 0 and not gph.graph[self.row][self.col - 1].is_wall():
+        if self.col > 0:
             self.neighbours[LEFT] = gph.graph[self.row][self.col - 1]
-        if self.row > 0 and not gph.graph[self.row - 1][self.col].is_wall():
+        if self.row > 0:
             self.neighbours[UP] = gph.graph[self.row - 1][self.col]
-        if self.col < self.rows - 1 and not gph.graph[self.row][self.col + 1].is_wall():
+        if self.col < self.rows - 1:
             self.neighbours[RIGHT] = gph.graph[self.row][self.col + 1]
-        if self.row < self.rows - 1 and not gph.graph[self.row + 1][self.col].is_wall():
+        if self.row < self.rows - 1:
             self.neighbours[DOWN] = gph.graph[self.row + 1][self.col]
 
     def get_neighbours(self, include_walls=False) -> list:
@@ -348,22 +348,22 @@ class Square:
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            # Ordinal nodes should not remove wall to reinstate after dragging
-            if remove_wall:
-                executor.submit(type(self).all_wall_nodes.discard(self))
+        
+        # Ordinal nodes should not remove wall to reinstate after dragging
+        if remove_wall:
+            type(self).all_wall_nodes.discard(self)
 
-            executor.submit(type(self).all_empty_nodes.discard(self))
-            executor.submit(type(self).all_open_nodes.discard(self))
-            executor.submit(type(self).all_open_nodes_alt.discard(self))
-            executor.submit(type(self).all_open_nodes_alt_.discard(self))
-            executor.submit(type(self).all_closed_nodes.discard(self))
-            executor.submit(type(self).all_closed_nodes_alt.discard(self))
-            executor.submit(type(self).all_closed_nodes_alt_.discard(self))
-            executor.submit(type(self).all_start_nodes.discard(self))
-            executor.submit(type(self).all_mid_nodes.discard(self))
-            executor.submit(type(self).all_end_nodes.discard(self))
-            executor.submit(type(self).all_path_nodes.discard(self))
+        type(self).all_empty_nodes.discard(self)
+        type(self).all_open_nodes.discard(self)
+        type(self).all_open_nodes_alt.discard(self)
+        type(self).all_open_nodes_alt_.discard(self)
+        type(self).all_closed_nodes.discard(self)
+        type(self).all_closed_nodes_alt.discard(self)
+        type(self).all_closed_nodes_alt_.discard(self)
+        type(self).all_start_nodes.discard(self)
+        type(self).all_mid_nodes.discard(self)
+        type(self).all_end_nodes.discard(self)
+        type(self).all_path_nodes.discard(self)
 
     @classmethod
     def get_all_empty_nodes(cls) -> set:
