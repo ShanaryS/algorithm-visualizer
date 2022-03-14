@@ -41,7 +41,6 @@ def dijkstra(
     queue_pos: int = 0
     open_set = PriorityQueue()
     open_set.put((0, queue_pos, start))
-    open_set_hash: set = {start}
 
     # Determine what is the best square to check
     g_score: dict = {square: float("inf") for row in gph.graph for square in row}
@@ -61,7 +60,6 @@ def dijkstra(
 
         # Gets the square currently being checked
         curr_square: Square = open_set.get()[2]
-        open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
         if curr_square == end:
@@ -79,12 +77,10 @@ def dijkstra(
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
                 g_score[nei] = temp_g_score
-                if nei not in open_set_hash:
-                    queue_pos += 1
-                    open_set.put((g_score[nei], queue_pos, nei))
-                    open_set_hash.add(nei)
-                    if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open()
+                queue_pos += 1
+                open_set.put((g_score[nei], queue_pos, nei))
+                if nei != end and not nei.is_closed() and nei != ignore_node:
+                    nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -119,7 +115,6 @@ def a_star(
     queue_pos: int = 0
     open_set = PriorityQueue()
     open_set.put((0, queue_pos, start))
-    open_set_hash: set = {start}
 
     # Determine what is the best square to check
     g_score: dict = {square: float("inf") for row in gph.graph for square in row}
@@ -141,7 +136,6 @@ def a_star(
 
         # Gets the square currently being checked
         curr_square: Square = open_set.get()[2]
-        open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
         if curr_square == end:
@@ -160,12 +154,10 @@ def a_star(
                 came_from[nei] = curr_square
                 g_score[nei] = temp_g_score
                 f_score[nei] = temp_g_score + heuristic(nei.get_pos(), end.get_pos())
-                if nei not in open_set_hash:
-                    queue_pos += 1
-                    open_set.put((f_score[nei], queue_pos, nei))
-                    open_set_hash.add(nei)
-                    if nei != end and not nei.is_closed() and nei != ignore_node:
-                        nei.set_open()
+                queue_pos += 1
+                open_set.put((f_score[nei], queue_pos, nei))
+                if nei != end and not nei.is_closed() and nei != ignore_node:
+                    nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
@@ -208,7 +200,6 @@ def bi_dijkstra(
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
     open_set = PriorityQueue()
-    open_set_hash: set = {start, end}
     open_set.put((0, queue_pos, start, "start"))
     queue_pos += 1
     open_set.put((0, queue_pos, end, "end"))
@@ -234,7 +225,6 @@ def bi_dijkstra(
         # Gets the square currently being checked
         temp: tuple = open_set.get()
         curr_square: Square = temp[2]
-        open_set_hash.remove(curr_square)
 
         # Terminates if found the best path
         nei: Square
@@ -316,19 +306,17 @@ def bi_dijkstra(
                 if temp_g_score < g_score[nei]:
                     came_from_start[nei] = curr_square
                     g_score[nei] = temp_g_score
-                    if nei not in open_set_hash:
-                        queue_pos += 1
-                        open_set.put((g_score[nei], queue_pos, nei, "start"))
-                        open_set_hash.add(nei)
-                        if (
-                            nei != end
-                            and not nei.is_closed()
-                            and nei != ignore_node
-                        ):
-                            if alt_color:
-                                nei.set_open_alt()
-                            else:
-                                nei.set_open()
+                    queue_pos += 1
+                    open_set.put((g_score[nei], queue_pos, nei, "start"))
+                    if (
+                        nei != end
+                        and not nei.is_closed()
+                        and nei != ignore_node
+                    ):
+                        if alt_color:
+                            nei.set_open_alt()
+                        else:
+                            nei.set_open()
         elif temp[3] == "end":
             for nei in curr_square.get_neighbours():
                 temp_g_score = g_score[curr_square] + 1
@@ -336,19 +324,17 @@ def bi_dijkstra(
                 if temp_g_score < g_score[nei]:
                     came_from_end[nei] = curr_square
                     g_score[nei] = temp_g_score
-                    if nei not in open_set_hash:
-                        queue_pos += 1
-                        open_set.put((g_score[nei], queue_pos, nei, "end"))
-                        open_set_hash.add(nei)
-                        if (
-                            nei != start
-                            and not nei.is_closed()
-                            and nei != ignore_node
-                        ):
-                            if alt_color:
-                                nei.set_open_alt_()
-                            else:
-                                nei.set_open_alt()
+                    queue_pos += 1
+                    open_set.put((g_score[nei], queue_pos, nei, "end"))
+                    if (
+                        nei != start
+                        and not nei.is_closed()
+                        and nei != ignore_node
+                    ):
+                        if alt_color:
+                            nei.set_open_alt_()
+                        else:
+                            nei.set_open_alt()
 
         # Sets square to closed after finished checking
         already_closed = any(
