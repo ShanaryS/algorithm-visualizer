@@ -29,7 +29,6 @@ from src.pathfinding.node import Square
 from typing import Optional
 from src.pathfinding.maps import get_img_base, get_img_clean
 from src.pathfinding.maps import IMG_LOCATION, IMG_BASE_NAME, IMG_CLEAN_NAME
-from lib.timer import timer_start, timer_end, timer_print
 
 
 @dataclass

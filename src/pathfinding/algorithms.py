@@ -9,7 +9,6 @@ from src.pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
 from src.pathfinding.node import Square
 from typing import Union
-from lib.timer import timer_start, timer_end, timer_print
 
 
 @dataclass
