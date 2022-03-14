@@ -54,6 +54,9 @@ def run_pathfinding(
 
     # Creates the graph nodes
     set_graph(gph)
+    
+    # Only allow certain events
+    pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN])
 
     # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
     clock = pygame.time.Clock()
