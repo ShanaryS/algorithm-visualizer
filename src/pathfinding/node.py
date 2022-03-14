@@ -448,19 +448,18 @@ class Square:
     @classmethod
     def clear_all_node_lists(cls) -> None:
         """Clears the list of all nodes for recreating graph"""
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            executor.submit(cls.all_empty_nodes.clear())
-            executor.submit(cls.all_open_nodes.clear())
-            executor.submit(cls.all_open_nodes_alt.clear())
-            executor.submit(cls.all_open_nodes_alt_.clear())
-            executor.submit(cls.all_closed_nodes.clear())
-            executor.submit(cls.all_closed_nodes_alt.clear())
-            executor.submit(cls.all_closed_nodes_alt_.clear())
-            executor.submit(cls.all_start_nodes.clear())
-            executor.submit(cls.all_mid_nodes.clear())
-            executor.submit(cls.all_end_nodes.clear())
-            executor.submit(cls.all_wall_nodes.clear())
-            executor.submit(cls.all_path_nodes.clear())
+        cls.all_empty_nodes.clear()
+        cls.all_open_nodes.clear()
+        cls.all_open_nodes_alt.clear()
+        cls.all_open_nodes_alt_.clear()
+        cls.all_closed_nodes.clear()
+        cls.all_closed_nodes_alt.clear()
+        cls.all_closed_nodes_alt_.clear()
+        cls.all_start_nodes.clear()
+        cls.all_mid_nodes.clear()
+        cls.all_end_nodes.clear()
+        cls.all_wall_nodes.clear()
+        cls.all_path_nodes.clear()
 
     @classmethod
     def clear_history_nodes(cls) -> None:
