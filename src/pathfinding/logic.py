@@ -562,7 +562,7 @@ def _recursive_maze_buttons(
     )  # Resets entire graph to prevent any unintended behaviour
     draw(gph, txt, clear_legend=True, algo_running=True)
     gph.base_drawn = False
-    draw_recursive_maze(gph, txt, visualize=visualize)  # Draw maze
+    draw_recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
     gph.update_legend = True
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_nodes(lgc)

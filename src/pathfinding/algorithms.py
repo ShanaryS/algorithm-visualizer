@@ -142,7 +142,7 @@ def dijkstra(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer=algo.timer_to_string()
+        txt.algo_timer = algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
@@ -236,7 +236,7 @@ def a_star(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer=algo.timer_to_string()
+        txt.algo_timer = algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
@@ -434,7 +434,7 @@ def bi_dijkstra(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer=algo.timer_to_string()
+        txt.algo_timer = algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
@@ -793,7 +793,7 @@ def algo_no_vis(
 
 
 def draw_recursive_maze(
-    gph: GraphState, txt: VisText, chamber: tuple = None, visualize: bool = True
+    gph: GraphState, algo: AlgoState, txt: VisText, chamber: tuple = None, visualize: bool = True
 ) -> None:
 
     """Creates maze using recursive division.
@@ -801,6 +801,12 @@ def draw_recursive_maze(
     https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
     Inspired by https://github.com/ChrisKneller/pygame-pathfinder
     """
+    
+    # Only reset timer on first call
+    if not chamber:
+        algo.timer_reset()
+    # Start timer here to include setup in timer
+    algo.timer_start()
 
     # Sets min size for division
     division_limit: int = 3
@@ -891,9 +897,16 @@ def draw_recursive_maze(
 
     # Prevents drawing wall over gaps
     gaps_to_offset: list = [x for x in range(num_gaps - 1, gph.rows, num_gaps)]
+    
+    # End timer here to resume in loop
+    algo.timer_end()
 
     # Draws the gaps into the walls
     for wall in get_random_sample(walls, num_gaps):
+        
+        # Continue timer here
+        algo.timer_start()
+        
         if wall[3] == 1:
             x = get_randrange(wall[0], wall[0] + wall[2])
             y = wall[1]
@@ -916,10 +929,15 @@ def draw_recursive_maze(
                 y = gph.rows - 1
         square: Square = gph.graph[x][y]
         square.reset()
+        
+        # End timer before visualizing
+        algo.timer_end()
+        txt.algo_timer = algo.timer_to_string()
+        
         if visualize:
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)
 
     # Recursively divides chambers
     for chamber in chambers:
-        draw_recursive_maze(gph, txt, chamber, visualize=visualize)
+        draw_recursive_maze(gph, algo, txt, chamber, visualize=visualize)
