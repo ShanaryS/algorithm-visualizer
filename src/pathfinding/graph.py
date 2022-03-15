@@ -418,7 +418,11 @@ def draw_vis_text(
     is_clean_img=False,
     is_converting_img=False,
 ) -> None:
-    """Special text indicating some operation is being performed. No inputs are registered."""    
+    """Special text indicating some operation is being performed. No inputs are registered."""
+    
+    # Clear legend to prevent drawing overself.
+    # Same cost as using precise rects.
+    WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT)    
 
     text_rects = []  # Used to only update text area
 
