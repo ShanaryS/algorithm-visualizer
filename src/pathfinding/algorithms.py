@@ -25,19 +25,19 @@ class AlgoState:
     maze: bool = False
     best_path_sleep: int = 3
     highway_multiplier: int = 3
-    
+
     # Timer for algorithm
     timer_total: float = 0
     timer_avg: float = None
-    timer_max: float = float('-inf')
-    timer_min: float = float('inf')
+    timer_max: float = float("-inf")
+    timer_min: float = float("inf")
     timer_count: int = 0
     timer_start_time: float = None
-    
+
     def timer_start(self) -> None:
         """Start timer for algo"""
         self.timer_start_time = perf_counter()
-    
+
     def timer_end(self, count=True) -> None:
         """End timer for algo"""
         end = perf_counter()
@@ -50,18 +50,18 @@ class AlgoState:
         self.timer_max = max(self.timer_min, total)
         if total > 0:  # 0 min values are trivial
             self.timer_min = min(self.timer_min, total)
-    
+
     def timer_to_string(self) -> str:
         """Get string of current state of timer"""
-        s = f"Time: {self.timer_total:.2f}s - # Nodes: {self.timer_count:,}"
+        s = f"Time: {self.timer_total:.3f}s - # Nodes: {self.timer_count:,}"
         return s
-    
+
     def timer_reset(self) -> None:
         """Resets timer"""
         self.timer_total: float = 0
         self.timer_avg: float = None
-        self.timer_max: float = float('-inf')
-        self.timer_min: float = float('inf')
+        self.timer_max: float = float("-inf")
+        self.timer_min: float = float("inf")
         self.timer_count: int = 0
         self.timer_start_time: float = None
 
@@ -82,7 +82,7 @@ def dijkstra(
     # Clear previous and start timer here to include setup of algo into timer
     algo.timer_reset()
     algo.timer_start()
-    
+
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
     open_set = PriorityQueue()
@@ -94,14 +94,14 @@ def dijkstra(
 
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from: dict = {}
-    
+
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0
     while not open_set.empty():
-        
+
         # Time increments for each node being checked
         algo.timer_start()
 
@@ -141,7 +141,7 @@ def dijkstra(
         already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
-        
+
         # End timer before visualizing for better comparisons
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
@@ -169,7 +169,7 @@ def a_star(
 ) -> Union[dict, bool]:
 
     """Code for the A* algorithm"""
-    
+
     # Clear previous and start timer here to include setup of algo into timer
     algo.timer_reset()
     algo.timer_start()
@@ -187,14 +187,14 @@ def a_star(
 
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from: dict = {}
-    
+
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0  # Used to speed up graph if using map
     while not open_set.empty():
-        
+
         # Time increments for each node being checked
         algo.timer_start()
 
@@ -235,7 +235,7 @@ def a_star(
         already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
-        
+
         # End timer before visualizing for better comparisons
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
@@ -272,7 +272,7 @@ def bi_dijkstra(
 ) -> Union[dict, bool]:
 
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
-    
+
     # Clear previous and start timer here to include setup of algo into timer
     algo.timer_reset()
     algo.timer_start()
@@ -292,14 +292,14 @@ def bi_dijkstra(
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from_start: dict = {}
     came_from_end: dict = {}
-    
+
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0
     while not open_set.empty():
-        
+
         # Time increments for each node being checked
         algo.timer_start()
 
@@ -433,7 +433,7 @@ def bi_dijkstra(
                 curr_square.set_closed_alt()
             elif curr_square.is_open_alt_():
                 curr_square.set_closed_alt_()
-        
+
         # End timer before visualizing for better comparisons
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
@@ -795,7 +795,11 @@ def algo_no_vis(
 
 
 def draw_recursive_maze(
-    gph: GraphState, algo: AlgoState, txt: VisText, chamber: tuple = None, visualize: bool = True
+    gph: GraphState,
+    algo: AlgoState,
+    txt: VisText,
+    chamber: tuple = None,
+    visualize: bool = True,
 ) -> None:
 
     """Creates maze using recursive division.
@@ -803,7 +807,7 @@ def draw_recursive_maze(
     https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
     Inspired by https://github.com/ChrisKneller/pygame-pathfinder
     """
-    
+
     # Only reset timer on first call
     if not chamber:
         algo.timer_reset()
@@ -828,7 +832,7 @@ def draw_recursive_maze(
     # Helps with location of chambers
     x_divide = int(chamber_width / 2)
     y_divide = int(chamber_height / 2)
-    
+
     # End timer here to resume in loop
     algo.timer_end(count=False)
 
@@ -859,7 +863,7 @@ def draw_recursive_maze(
     # Terminates if below division limit
     if chamber_width < division_limit and chamber_height < division_limit:
         return
-    
+
     algo.timer_start()
 
     # Defining limits on where to draw walls
@@ -910,16 +914,16 @@ def draw_recursive_maze(
 
     # Prevents drawing wall over gaps
     gaps_to_offset: list = [x for x in range(num_gaps - 1, gph.rows, num_gaps)]
-    
+
     # End timer here to resume in loop
     algo.timer_end(count=False)
 
     # Draws the gaps into the walls
     for wall in get_random_sample(walls, num_gaps):
-        
+
         # Continue timer here
         algo.timer_start()
-        
+
         if wall[3] == 1:
             x = get_randrange(wall[0], wall[0] + wall[2])
             y = wall[1]
@@ -942,11 +946,11 @@ def draw_recursive_maze(
                 y = gph.rows - 1
         square: Square = gph.graph[x][y]
         square.reset()
-        
+
         # End timer before visualizing
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
-        
+
         if visualize:
             draw(gph, txt, algo_running=True)
             draw_vis_text(txt, is_recursive_maze=True)
