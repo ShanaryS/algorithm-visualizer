@@ -38,13 +38,15 @@ class AlgoState:
         """Start timer for algo"""
         self.timer_start_time = perf_counter()
     
-    def timer_end(self) -> None:
+    def timer_end(self, count=True) -> None:
         """End timer for algo"""
         end = perf_counter()
         total = end - self.timer_start_time
         self.timer_total += total
-        self.timer_count += 1
-        self.timer_avg = self.timer_total / self.timer_count
+        if count:
+            self.timer_count += 1
+        if self.timer_count:
+            self.timer_avg = self.timer_total / self.timer_count
         self.timer_max = max(self.timer_min, total)
         if total > 0:  # 0 min values are trivial
             self.timer_min = min(self.timer_min, total)
@@ -94,7 +96,7 @@ def dijkstra(
     came_from: dict = {}
     
     # End timer here to start it again in loop
-    algo.timer_end()
+    algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0
@@ -187,7 +189,7 @@ def a_star(
     came_from: dict = {}
     
     # End timer here to start it again in loop
-    algo.timer_end()
+    algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0  # Used to speed up graph if using map
@@ -292,7 +294,7 @@ def bi_dijkstra(
     came_from_end: dict = {}
     
     # End timer here to start it again in loop
-    algo.timer_end()
+    algo.timer_end(count=False)
 
     # Continues until every node has been checked or best path found
     i = 0
@@ -826,12 +828,18 @@ def draw_recursive_maze(
     # Helps with location of chambers
     x_divide = int(chamber_width / 2)
     y_divide = int(chamber_height / 2)
+    
+    # End timer here to resume in loop
+    algo.timer_end(count=False)
 
     # Draws vertical maze line within chamber
     if chamber_width >= division_limit:
         for y in range(chamber_height):
+            algo.timer_start()
             square: Square = gph.graph[chamber_left + x_divide][chamber_top + y]
             square.set_wall()
+            algo.timer_end()
+            txt.algo_timer = algo.timer_to_string()
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -839,8 +847,11 @@ def draw_recursive_maze(
     # Draws horizontal maze line within chamber
     if chamber_height >= division_limit:
         for x in range(chamber_width):
+            algo.timer_start()
             square: Square = gph.graph[chamber_left + x][chamber_top + y_divide]
             square.set_wall()
+            algo.timer_end()
+            txt.algo_timer = algo.timer_to_string()
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_recursive_maze=True)
@@ -848,6 +859,8 @@ def draw_recursive_maze(
     # Terminates if below division limit
     if chamber_width < division_limit and chamber_height < division_limit:
         return
+    
+    algo.timer_start()
 
     # Defining limits on where to draw walls
     top_left: tuple = (chamber_left, chamber_top, x_divide, y_divide)
@@ -899,7 +912,7 @@ def draw_recursive_maze(
     gaps_to_offset: list = [x for x in range(num_gaps - 1, gph.rows, num_gaps)]
     
     # End timer here to resume in loop
-    algo.timer_end()
+    algo.timer_end(count=False)
 
     # Draws the gaps into the walls
     for wall in get_random_sample(walls, num_gaps):
