@@ -1,6 +1,6 @@
 # Algorithm Visualizer
 
-This tool visualizes the operations of the most popular pathfinding, sorting, and searching algorithms. This is helpful to anyone trying to understand these algorithms or even just to enjoy the beauty of math. This was implemented fully using NumPy and Matplotlib for Search and Sort visualizations, and Pygame with google maps API for pathfinding visualizations. All done in Python, fully interactive for all algorithms.
+This tool visualizes the operations of the most popular pathfinding, sorting, and searching algorithms. This is helpful to anyone trying to understand these algorithms or even just to enjoy the beauty of math. This was implemented fully using NumPy and Matplotlib for Search and Sort visualizations, and Pygame with google maps API for pathfinding visualizations. All done in Python, fully interactive for all algorithms with multithreading/multiprocessing support and per pixel screen updates.
 
 ***
 
