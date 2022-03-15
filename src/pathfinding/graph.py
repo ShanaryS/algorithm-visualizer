@@ -26,6 +26,8 @@ pygame.font.init()
 
 # Other constants
 DEFAULT_SPEED_MULTIPLIER = 1
+CENTER_GRAPH = HEIGHT // 2
+CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
 @dataclass
@@ -63,6 +65,7 @@ class VisText:
     """Creates the text needed for legend and when visualizing"""
 
     address: str = ""
+    algo_timer: str = ""
 
     FONT = pygame.font.SysFont("Comic Sans MS", 12)
 
@@ -114,10 +117,16 @@ class VisText:
     vis_text_base_img = FONT.render(f"Getting base image...", True, VIS_COLOR)
     vis_text_clean_img = FONT.render(f"Getting clean image...", True, VIS_COLOR)
     vis_text_converting_img = FONT.render(f"Converting image...", True, VIS_COLOR)
+    vis_text_algo_timer = FONT.render(f"{algo_timer}", True, LEGEND_COLOR)
+    
 
-    def update_vis_text_input(self) -> None:
-        """Updates vis_text_input with new input_text"""
+    def update_vis_text_address(self) -> None:
+        """Updates vis_text_address with new input_text"""
         self.vis_text_address = self.FONT.render(f"{self.address}", True, LEGEND_COLOR)
+    
+    def update_vis_text_algo_timer(self) -> None:
+        """Updates vix_text_algo_timer with new time"""
+        self.vis_text_algo_timer = self.FONT.render(f"{self.algo_timer}", True, LEGEND_COLOR)
 
 
 def set_graph(gph: GraphState) -> None:
@@ -303,9 +312,6 @@ def set_squares_to_roads(gph: GraphState) -> None:
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
     """Helper function to define the location of the legend"""
 
-    # center_graph = HEIGHT//2
-    center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
-
     if not gph.has_img:
         # Left legend
         WINDOW.blit(txt.legend_add_node, (2, 15 * 53.1 + 3))
@@ -341,15 +347,16 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             txt.legend_address,
             (
                 WIDTH // 2 - txt.legend_address.get_width() // 2,
-                center_legend_area - txt.legend_address.get_height() // 2,
+                CENTER_LEGEND_AREA - txt.legend_address.get_height() // 2,
             ),
         )
+        _draw_algo_timer(txt)
         if Square.track_node_history:
             WINDOW.blit(
                 txt.legend_node_history_show,
                 (
                     WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area
+                    CENTER_LEGEND_AREA
                     - txt.legend_node_history_show.get_height() // 2
                     + 30,
                 ),
@@ -359,7 +366,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 txt.legend_node_history,
                 (
                     WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
+                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 30,
                 ),
             )
 
@@ -368,14 +375,14 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             txt.legend_address,
             (
                 WIDTH // 2 - txt.legend_address.get_width() // 2,
-                center_legend_area - txt.legend_address.get_height() // 2 - 15,
+                CENTER_LEGEND_AREA - txt.legend_address.get_height() // 2 - 15,
             ),
         )
         WINDOW.blit(
             txt.legend_convert_map,
             (
                 WIDTH // 2 - txt.legend_convert_map.get_width() // 2,
-                center_legend_area - txt.legend_convert_map.get_height() // 2,
+                CENTER_LEGEND_AREA - txt.legend_convert_map.get_height() // 2,
             ),
         )
         if Square.track_node_history:
@@ -383,7 +390,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 txt.legend_node_history_show,
                 (
                     WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area
+                    CENTER_LEGEND_AREA
                     - txt.legend_node_history_show.get_height() // 2
                     + 15,
                 ),
@@ -393,7 +400,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 txt.legend_node_history,
                 (
                     WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    center_legend_area - txt.legend_node_history.get_height() // 2 + 15,
+                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 15,
                 ),
             )
 
@@ -411,138 +418,150 @@ def draw_vis_text(
     is_clean_img=False,
     is_converting_img=False,
 ) -> None:
-    """Special text indicating some operation is being performed. No inputs are registered."""
+    """Special text indicating some operation is being performed. No inputs are registered."""    
 
-    # Defines the center of the graph and legend for text placement
-    center_graph = HEIGHT // 2
-    center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
-
-    text_rect = []  # Used to only update text area
+    text_rects = []  # Used to only update text area
 
     # Text to be shown depending on operation
     if is_dijkstra:
-        text_rect.append(
+        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_dijkstra.get_width() // 2,
-                    center_legend_area - txt.vis_text_dijkstra.get_height() // 2 - 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_dijkstra.get_height() // 2 - 10,
                 ),
             )
         )
     elif is_a_star:
-        text_rect.append(
+        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_a_star,
                 (
                     WIDTH // 2 - txt.vis_text_a_star.get_width() // 2,
-                    center_legend_area - txt.vis_text_a_star.get_height() // 2 - 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_a_star.get_height() // 2 - 10,
                 ),
             )
         )
     elif is_bi_dijkstra:
-        text_rect.append(
+        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_bi_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_bi_dijkstra.get_width() // 2,
-                    center_legend_area
+                    CENTER_LEGEND_AREA
                     - txt.vis_text_bi_dijkstra.get_height() // 2
                     - 10,
                 ),
             )
         )
     elif is_best_path:
-        text_rect.append(
+        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_best_path,
                 (
                     WIDTH // 2 - txt.vis_text_best_path.get_width() // 2,
-                    center_legend_area - txt.vis_text_best_path.get_height() // 2 + 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_best_path.get_height() // 2 + 10,
                 ),
             )
         )
     elif is_recursive_maze:
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_recursive_maze,
                 (
                     WIDTH // 2 - txt.vis_text_recursive_maze.get_width() // 2,
-                    center_legend_area - txt.vis_text_recursive_maze.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_recursive_maze.get_height() // 2,
                 ),
             )
         )
     elif is_graph_size:
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_graph_size,
                 (
                     WIDTH // 2 - txt.vis_text_graph_size.get_width() // 2,
-                    center_graph - txt.vis_text_graph_size.get_height() // 2,
+                    CENTER_GRAPH - txt.vis_text_graph_size.get_height() // 2,
                 ),
             )
         )
     elif is_input:
         # Reset legend area (inefficient, only need area with new text)
-        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        text_rects.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         # Instructions on what to type
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_input,
                 (
                     WIDTH // 2 - txt.vis_text_input.get_width() // 2,
-                    center_legend_area - txt.vis_text_input.get_height() // 2 - 15,
+                    CENTER_LEGEND_AREA - txt.vis_text_input.get_height() // 2 - 15,
                 ),
             )
         )
         # Update text with new input
-        txt.update_vis_text_input()
-        text_rect.append(
+        txt.update_vis_text_address()
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_address,
                 (
                     WIDTH // 2 - txt.vis_text_address.get_width() // 2,
-                    center_legend_area - txt.vis_text_address.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_address.get_height() // 2,
                 ),
             )
         )
     elif is_base_img:
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_base_img,
                 (
                     WIDTH // 2 - txt.vis_text_base_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_base_img.get_height() // 2 + 15,
+                    CENTER_LEGEND_AREA - txt.vis_text_base_img.get_height() // 2 + 15,
                 ),
             )
         )
     elif is_clean_img:
         # Reset legend area (inefficient, only need area with new text)
-        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        text_rects.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_clean_img,
                 (
                     WIDTH // 2 - txt.vis_text_clean_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_clean_img.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_clean_img.get_height() // 2,
                 ),
             )
         )
     elif is_converting_img:
-        text_rect.append(
+        text_rects.append(
             WINDOW.blit(
                 txt.vis_text_converting_img,
                 (
                     WIDTH // 2 - txt.vis_text_converting_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_converting_img.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_converting_img.get_height() // 2,
                 ),
             )
         )
 
     # Updates the portion of the screen that contains changing text
-    pygame.display.update(text_rect)
+    pygame.display.update(text_rects)
+
+
+def _draw_algo_timer(txt: VisText) -> pygame.Rect:
+    """Draws timer of algo"""
+    txt.update_vis_text_algo_timer()
+    return WINDOW.blit(
+        txt.vis_text_algo_timer,
+        (
+            WIDTH // 2 - txt.vis_text_algo_timer.get_width() // 2,
+            CENTER_LEGEND_AREA - txt.vis_text_algo_timer.get_height() // 2 - 15,
+        ),
+    )
 
 
 def reset_graph(

@@ -49,10 +49,19 @@ class AlgoState:
         if total > 0:  # 0 min values are trivial
             self.timer_min = min(self.timer_min, total)
     
-    def timer_to_string(self) -> None:
+    def timer_to_string(self) -> str:
         """Get string of current state of timer"""
-        string = f"Total Time: {self.timer_total} - Count: {self.timer_count}"
-        return string
+        s = f"Time: {self.timer_total:.2f}s - # Nodes: {self.timer_count:,}"
+        return s
+    
+    def timer_reset(self) -> None:
+        """Resets timer"""
+        self.timer_total: float = 0
+        self.timer_avg: float = None
+        self.timer_max: float = float('-inf')
+        self.timer_min: float = float('inf')
+        self.timer_count: int = 0
+        self.timer_start_time: float = None
 
 
 def dijkstra(
@@ -68,7 +77,8 @@ def dijkstra(
 
     """Code for the dijkstra algorithm"""
 
-    # Start timer here to include setup of algo into timer
+    # Clear previous and start timer here to include setup of algo into timer
+    algo.timer_reset()
     algo.timer_start()
     
     # Used to determine the order of squares to check. Order of args helper decide the priority.
@@ -138,6 +148,7 @@ def dijkstra(
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
+                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_dijkstra=True)
 
@@ -157,7 +168,8 @@ def a_star(
 
     """Code for the A* algorithm"""
     
-    # Start timer here to include setup of algo into timer
+    # Clear previous and start timer here to include setup of algo into timer
+    algo.timer_reset()
     algo.timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
@@ -230,6 +242,7 @@ def a_star(
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
+                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_a_star=True)
 
@@ -258,7 +271,8 @@ def bi_dijkstra(
 
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
     
-    # Start timer here to include setup of algo into timer
+    # Clear previous and start timer here to include setup of algo into timer
+    algo.timer_reset()
     algo.timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
@@ -426,6 +440,7 @@ def bi_dijkstra(
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
+                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_bi_dijkstra=True)
 
