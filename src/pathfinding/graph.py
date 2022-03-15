@@ -351,7 +351,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 CENTER_LEGEND_AREA - txt.legend_address.get_height() // 2,
             ),
         )
-        _draw_algo_timer(txt)
+        draw_algo_timer(txt)
         if Square.track_node_history:
             WINDOW.blit(
                 txt.legend_node_history_show,
@@ -429,7 +429,7 @@ def draw_vis_text(
 
     # Text to be shown depending on operation
     if is_dijkstra:
-        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(draw_algo_timer(txt))
         text_rects.append(
             WINDOW.blit(
                 txt.vis_text_dijkstra,
@@ -440,7 +440,7 @@ def draw_vis_text(
             )
         )
     elif is_a_star:
-        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(draw_algo_timer(txt))
         text_rects.append(
             WINDOW.blit(
                 txt.vis_text_a_star,
@@ -451,7 +451,7 @@ def draw_vis_text(
             )
         )
     elif is_bi_dijkstra:
-        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(draw_algo_timer(txt))
         text_rects.append(
             WINDOW.blit(
                 txt.vis_text_bi_dijkstra,
@@ -464,7 +464,7 @@ def draw_vis_text(
             )
         )
     elif is_best_path:
-        text_rects.append(_draw_algo_timer(txt))
+        text_rects.append(draw_algo_timer(txt))
         text_rects.append(
             WINDOW.blit(
                 txt.vis_text_best_path,
@@ -557,7 +557,7 @@ def draw_vis_text(
     pygame.display.update(text_rects)
 
 
-def _draw_algo_timer(txt: VisText) -> pygame.Rect:
+def draw_algo_timer(txt: VisText) -> pygame.Rect:
     """Draws timer of algo"""
     txt.update_vis_text_algo_timer()
     return WINDOW.blit(
