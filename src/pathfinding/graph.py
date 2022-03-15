@@ -118,15 +118,16 @@ class VisText:
     vis_text_clean_img = FONT.render(f"Getting clean image...", True, VIS_COLOR)
     vis_text_converting_img = FONT.render(f"Converting image...", True, VIS_COLOR)
     vis_text_algo_timer = FONT.render(f"{algo_timer}", True, LEGEND_COLOR)
-    
 
     def update_vis_text_address(self) -> None:
         """Updates vis_text_address with new input_text"""
         self.vis_text_address = self.FONT.render(f"{self.address}", True, LEGEND_COLOR)
-    
+
     def update_vis_text_algo_timer(self) -> None:
         """Updates vix_text_algo_timer with new time"""
-        self.vis_text_algo_timer = self.FONT.render(f"{self.algo_timer}", True, LEGEND_COLOR)
+        self.vis_text_algo_timer = self.FONT.render(
+            f"{self.algo_timer}", True, LEGEND_COLOR
+        )
 
 
 def set_graph(gph: GraphState) -> None:
@@ -419,10 +420,10 @@ def draw_vis_text(
     is_converting_img=False,
 ) -> None:
     """Special text indicating some operation is being performed. No inputs are registered."""
-    
+
     # Clear legend to prevent drawing overself.
     # Same cost as using precise rects.
-    WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT)    
+    WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT)
 
     text_rects = []  # Used to only update text area
 
@@ -563,7 +564,7 @@ def _draw_algo_timer(txt: VisText) -> pygame.Rect:
         txt.vis_text_algo_timer,
         (
             WIDTH // 2 - txt.vis_text_algo_timer.get_width() // 2,
-            CENTER_LEGEND_AREA - txt.vis_text_algo_timer.get_height() // 2 - 15,
+            CENTER_LEGEND_AREA - txt.vis_text_algo_timer.get_height() // 2 - 32,
         ),
     )
 
