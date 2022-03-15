@@ -142,13 +142,13 @@ def dijkstra(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
+        txt.algo_timer=algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
-                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_dijkstra=True)
 
@@ -236,13 +236,13 @@ def a_star(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
+        txt.algo_timer=algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
-                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_a_star=True)
 
@@ -434,13 +434,13 @@ def bi_dijkstra(
         
         # End timer before visualizing for better comparisons
         algo.timer_end()
+        txt.algo_timer=algo.timer_to_string()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
-                txt.algo_timer=algo.timer_to_string()
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(txt, is_bi_dijkstra=True)
 
