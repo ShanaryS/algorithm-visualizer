@@ -715,9 +715,8 @@ def algo_no_vis(
 
     # Selects the correct algo to use
     if is_dijkstra:
-        if (
-            reset
-        ):  # Used to not reset start -> mid visualizations if going from mid -> end
+        # Used to not reset start -> mid visualizations if going from mid -> end
+        if reset:
             reset_algo(algo)
         algo.dijkstra_finished = True
 
@@ -740,9 +739,8 @@ def algo_no_vis(
                 visualize=False,
             )
     elif is_a_star:
-        if (
-            reset
-        ):  # Used to not reset start -> mid visualizations if going from mid -> end
+        # Used to not reset start -> mid visualizations if going from mid -> end
+        if reset:
             reset_algo(algo)
         algo.a_star_finished = True
 
@@ -765,9 +763,8 @@ def algo_no_vis(
                 visualize=False,
             )
     elif is_bi_dijkstra:
-        if (
-            reset
-        ):  # Used to not reset start -> mid visualizations if going from mid -> end
+        # Used to not reset start -> mid visualizations if going from mid -> end
+        if reset:
             reset_algo(algo)
         algo.bi_dijkstra_finished = True
 
