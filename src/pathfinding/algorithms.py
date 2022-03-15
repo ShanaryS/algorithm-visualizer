@@ -8,6 +8,7 @@ from src.pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, V
 from src.pathfinding.values import get_random_sample, get_randrange
 from queue import PriorityQueue
 from src.pathfinding.node import Square
+from time import perf_counter
 from typing import Union
 from lib.timer import timer_start, timer_end, timer_print
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
@@ -23,7 +24,35 @@ class AlgoState:
     bi_dijkstra_finished: bool = False
     maze: bool = False
     best_path_sleep: int = 3
-    highway_multiplier = 3
+    highway_multiplier: int = 3
+    
+    # Timer for algorithm
+    timer_total: float = 0
+    timer_avg: float = None
+    timer_max: float = float('-inf')
+    timer_min: float = float('inf')
+    timer_count: int = 0
+    timer_start_time: float = None
+    
+    def timer_start(self) -> None:
+        """Start timer for algo"""
+        self.timer_start_time = perf_counter()
+    
+    def timer_end(self) -> None:
+        """End timer for algo"""
+        end = perf_counter()
+        total = end - self.timer_start_time
+        self.timer_total += total
+        self.timer_count += 1
+        self.timer_avg = self.timer_total / self.timer_count
+        self.timer_max = max(self.timer_min, total)
+        if total > 0:  # 0 min values are trivial
+            self.timer_min = min(self.timer_min, total)
+    
+    def timer_to_string(self) -> None:
+        """Get string of current state of timer"""
+        string = f"Total Time: {self.timer_total} - Count: {self.timer_count}"
+        return string
 
 
 def dijkstra(
@@ -39,6 +68,9 @@ def dijkstra(
 
     """Code for the dijkstra algorithm"""
 
+    # Start timer here to include setup of algo into timer
+    algo.timer_start()
+    
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
     open_set = PriorityQueue()
@@ -50,10 +82,16 @@ def dijkstra(
 
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from: dict = {}
+    
+    # End timer here to start it again in loop
+    algo.timer_end()
 
     # Continues until every node has been checked or best path found
     i = 0
     while not open_set.empty():
+        
+        # Time increments for each node being checked
+        algo.timer_start()
 
         # If uses closes window the program terminates
         for event in pygame.event.get():
@@ -91,6 +129,9 @@ def dijkstra(
         already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
+        
+        # End timer before visualizing for better comparisons
+        algo.timer_end()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
@@ -115,6 +156,9 @@ def a_star(
 ) -> Union[dict, bool]:
 
     """Code for the A* algorithm"""
+    
+    # Start timer here to include setup of algo into timer
+    algo.timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
@@ -129,10 +173,16 @@ def a_star(
 
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from: dict = {}
+    
+    # End timer here to start it again in loop
+    algo.timer_end()
 
     # Continues until every node has been checked or best path found
     i = 0  # Used to speed up graph if using map
     while not open_set.empty():
+        
+        # Time increments for each node being checked
+        algo.timer_start()
 
         # If uses closes window the program terminates
         for event in pygame.event.get():
@@ -171,6 +221,9 @@ def a_star(
         already_closed = curr_square.is_closed()
         if curr_square != start and curr_square != ignore_node:
             curr_square.set_closed()
+        
+        # End timer before visualizing for better comparisons
+        algo.timer_end()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
@@ -204,6 +257,9 @@ def bi_dijkstra(
 ) -> Union[dict, bool]:
 
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
+    
+    # Start timer here to include setup of algo into timer
+    algo.timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
@@ -220,10 +276,16 @@ def bi_dijkstra(
     # Keeps track of next node for every node in graph. A linked list basically.
     came_from_start: dict = {}
     came_from_end: dict = {}
+    
+    # End timer here to start it again in loop
+    algo.timer_end()
 
     # Continues until every node has been checked or best path found
     i = 0
     while not open_set.empty():
+        
+        # Time increments for each node being checked
+        algo.timer_start()
 
         # If uses closes window the program terminates
         for event in pygame.event.get():
@@ -355,6 +417,9 @@ def bi_dijkstra(
                 curr_square.set_closed_alt()
             elif curr_square.is_open_alt_():
                 curr_square.set_closed_alt_()
+        
+        # End timer before visualizing for better comparisons
+        algo.timer_end()
 
         # Only visualize if called. Checks if square is closed to not repeat when mid node included.
         if visualize and not already_closed:
