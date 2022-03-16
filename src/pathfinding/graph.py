@@ -190,6 +190,8 @@ def draw(
         gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
+    """Speed up code between this section. Primarily if gph.rects_to_update"""
+
     # Decides how much of the display to update
     if gph.update_entire_screen:
         # Pygame chokes when updating a lot of rects that covers the screen
@@ -220,6 +222,11 @@ def draw(
         for square in Square.get_all_history_nodes():
             square.color = square.color_history
             square.color_history = None
+    
+    """Speed up code above this. Specificially ^^^. Too many rects.
+    Find the specific number of rects where it's better to flip screen.
+    Also fixed thick line being drawn on flip (or not).
+    """
 
     # Clear update queues
     Square.clear_nodes_to_update()
