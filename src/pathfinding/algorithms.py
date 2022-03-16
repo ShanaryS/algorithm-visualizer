@@ -723,10 +723,6 @@ def algo_no_vis(
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
             dijkstra(gph, algo, txt, start, end, visualize=False)
-
-            # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
         else:
             return dijkstra(
                 gph,
@@ -747,10 +743,6 @@ def algo_no_vis(
         # Separates calling algo_no_vis with mid node or not
         if draw_best_path:
             a_star(gph, algo, txt, start, end, visualize=False)
-
-            # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
         else:
             return a_star(
                 gph,
@@ -773,10 +765,6 @@ def algo_no_vis(
             bi_dijkstra(
                 gph, algo, txt, start, end, alt_color=alt_color, visualize=False
             )
-
-            # Fixes start disappearing when dragging
-            start.set_start()
-            end.set_end()
         else:
             return bi_dijkstra(
                 gph,
