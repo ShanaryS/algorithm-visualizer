@@ -228,7 +228,7 @@ def draw(
     gph.rects_to_update.clear()
 
 
-def _draw_square(square_color, square_pos) -> None:
+def _draw_square(square_color, square_pos) -> pygame.Rect:
     """Draws square with color and correct positioning"""
     return pygame.draw.rect(WINDOW, square_color, square_pos)
 
