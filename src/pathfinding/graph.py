@@ -133,7 +133,9 @@ class VisText:
 def set_graph(gph: GraphState) -> None:
     """Creates the graph object that stores the location of all the squares"""
 
-    # Changing so many nodes, faster to update entire screen
+    # Not actually creating nodes on screen so need to update screen manually
+    # This function just draws lines over a white back ground, nodes are
+    # technically created upon a set_* method.
     gph.update_entire_screen = True
 
     # Clear lists from previous graph
@@ -192,35 +194,33 @@ def draw(
 
     """Speed up code between this section. Primarily if gph.rects_to_update"""
 
-    # Decides how much of the display to update
-    if gph.update_entire_screen:
-        # Pygame chokes when updating a lot of rects that covers the screen
-        # So we just upate the entire screen like this instead
-        gph.update_entire_screen = False
-        pygame.display.update()
-        gph.rects_to_update.clear()
+    # Queues all changed squares to visualize change
+    if gph.visualize_node_history:
+        gph.visualize_node_history = False
+        for square in Square.get_node_history():
+            square.set_history()
+            gph.add_to_update_queue(square)
+        Square.clear_node_history()
+    # Queues all changed squares to update
     else:
-        # Queues all changed squares to visualize change
-        if gph.visualize_node_history:
-            gph.visualize_node_history = False
-            for square in Square.get_node_history():
-                square.set_history()
-                gph.add_to_update_queue(square)
-            Square.clear_node_history()
-        # Queues all changed squares to update
-        else:
-            square: Square
-            for square in Square.get_nodes_to_update():
-                gph.add_to_update_queue(square)
-
-    if gph.rects_to_update:
-        _draw_square_borders(gph)
+        square: Square
+        for square in Square.get_nodes_to_update():
+            gph.add_to_update_queue(square)
+    
+    _draw_square_borders(gph)
+    
+    
+    # It's faster to update entire screen of number of rects is greater than 20
+    if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
+        gph.update_entire_screen = False
+        pygame.display.flip()
+    else:
         pygame.display.update(gph.rects_to_update)
 
-        # Used to reset squares to previous color like nothing happened
-        for square in Square.get_all_history_nodes():
-            square.color = square.color_history
-            square.color_history = None
+    # Used to reset squares to previous color like nothing happened
+    for square in Square.get_all_history_nodes():
+        square.color = square.color_history
+        square.color_history = None
 
     """Speed up code above this. Specificially ^^^. Too many rects.
     Find the specific number of rects where it's better to flip screen.
@@ -277,8 +277,6 @@ def _draw_img(gph: GraphState) -> None:
 
 def set_squares_to_roads(gph: GraphState) -> None:
     """Sets squares to the color of a single pixel"""
-
-    gph.update_entire_screen = True
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(len(gph.graph)):
