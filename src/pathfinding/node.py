@@ -332,6 +332,10 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_history():
             return
+        
+        # Don't do anything if ordinal node
+        if self.is_start() or self.is_mid() or self.is_end():
+            return
 
         self.color_history = self.color
         self.color = NODE_HISTORY_COLOR
