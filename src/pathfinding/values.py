@@ -8,7 +8,14 @@ import random
 # Recursive division only works on certain row values. 22,23,46,47,94,95,...
 ROWS: int = 46
 WIDTH_HEIGHT: int = 800
-SQUARE_SIZE: float = WIDTH_HEIGHT / ROWS
+
+
+def calc_square_size(width, rows) -> float:
+    """Calculates square size"""
+    return (width - 1) / rows
+
+
+SQUARE_SIZE: float = calc_square_size(WIDTH_HEIGHT, ROWS)
 
 
 def get_random_sample(population: tuple, k: int) -> list:

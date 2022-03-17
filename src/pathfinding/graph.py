@@ -4,7 +4,7 @@
 from src.pathfinding.colors import *
 from dataclasses import dataclass
 import pygame
-from src.pathfinding.values import ROWS, SQUARE_SIZE, WIDTH_HEIGHT
+from src.pathfinding.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
 from src.pathfinding.node import Square
 from typing import Optional
 from lib.timer import timer_start, timer_end, timer_print
@@ -652,7 +652,7 @@ def change_graph_size(
     # Updates rows and square size with new values
     reset_graph(gph, algo, txt, reset=False)
     gph.rows = new_row_size
-    gph.square_size = WIDTH / gph.rows
+    gph.square_size = calc_square_size(WIDTH, gph.rows)
 
     # Recreates graph with new values
     set_graph(gph)
