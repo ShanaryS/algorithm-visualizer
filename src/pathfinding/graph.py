@@ -206,25 +206,20 @@ def draw(
         square: Square
         for square in Square.get_nodes_to_update():
             gph.add_to_update_queue(square)
-    
-    _draw_square_borders(gph)
-    
+
     # It's faster to update entire screen if number of rects is greater than 20
     if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
         gph.update_entire_screen = False
+        _draw_lines(gph)
         pygame.display.flip()
     else:
+        _draw_square_borders(gph)
         pygame.display.update(gph.rects_to_update)
 
     # Used to reset squares to previous color like nothing happened
     for square in Square.get_all_history_nodes():
         square.color = square.color_history
         square.color_history = None
-
-    """Speed up code above this. Specificially ^^^. Too many rects.
-    Find the specific number of rects where it's better to flip screen.
-    Also fixed thick line being drawn on flip (or not).
-    """
 
     # Clear update queues
     Square.clear_nodes_to_update()
