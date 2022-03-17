@@ -209,7 +209,7 @@ def draw(
     
     _draw_square_borders(gph)
     
-    # It's faster to update entire screen of number of rects is greater than 20
+    # It's faster to update entire screen if number of rects is greater than 20
     if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
         gph.update_entire_screen = False
         pygame.display.flip()
