@@ -208,6 +208,7 @@ def draw(
             gph.add_to_update_queue(square)
 
     # It's faster to update entire screen if number of rects is greater than 20
+    # 40x speedup
     if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
         gph.update_entire_screen = False
         _draw_lines(gph)
