@@ -31,7 +31,7 @@ class Square:
     all_history_nodes = set()
 
     # All changed nodes are queue for update each frame
-    nodes_to_update = []
+    nodes_to_update = set()
 
     # Used for checking if only changed nodes are being updated
     node_history = set()
@@ -157,7 +157,7 @@ class Square:
 
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_empty_nodes.add(self)
 
     def set_open(self) -> None:
@@ -172,7 +172,7 @@ class Square:
 
         self._discard_node()
         self.color = OPEN_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes.add(self)
 
     def set_open_alt(self) -> None:
@@ -187,7 +187,7 @@ class Square:
 
         self._discard_node()
         self.color = OPEN_ALT_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt.add(self)
 
     def set_open_alt_(self) -> None:
@@ -204,7 +204,7 @@ class Square:
 
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt_.add(self)
 
     def set_closed(self) -> None:
@@ -219,7 +219,7 @@ class Square:
 
         self._discard_node()
         self.color = CLOSED_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes.add(self)
 
     def set_closed_alt(self) -> None:
@@ -234,7 +234,7 @@ class Square:
 
         self._discard_node()
         self.color = CLOSED_ALT_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt.add(self)
 
     def set_closed_alt_(self) -> None:
@@ -249,7 +249,7 @@ class Square:
 
         self._discard_node()
         self.color = CLOSED_ALT_COLOR_
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt_.add(self)
 
     def set_start(self) -> None:
@@ -264,7 +264,7 @@ class Square:
 
         self._discard_node(remove_wall=False)
         self.color = START_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_start_nodes.add(self)
 
     def set_mid(self) -> None:
@@ -279,7 +279,7 @@ class Square:
 
         self._discard_node(remove_wall=False)
         self.color = MID_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_mid_nodes.add(self)
 
     def set_end(self) -> None:
@@ -294,7 +294,7 @@ class Square:
 
         self._discard_node(remove_wall=False)
         self.color = END_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_end_nodes.add(self)
 
     def set_wall(self) -> None:
@@ -309,7 +309,7 @@ class Square:
 
         self._discard_node()
         self.color = self.wall_color
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_wall_nodes.add(self)
 
     def set_path(self) -> None:
@@ -324,7 +324,7 @@ class Square:
 
         self._discard_node()
         self.color = PATH_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_path_nodes.add(self)
 
     def set_history(self) -> None:
