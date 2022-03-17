@@ -37,11 +37,11 @@ class Square:
     node_history = set()
     track_node_history = False
 
-    def __init__(self, row: int, col: int, rows: int, square_size) -> None:
-        self.row: int = row
-        self.col: int = col
-        self.rows: int = rows
-        self.square_size: float = square_size
+    def __init__(self, row: int, col: int, rows: int, square_size: float) -> None:
+        self.row = row
+        self.col = col
+        self.rows = rows
+        self.square_size = square_size
 
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
@@ -332,7 +332,7 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_history():
             return
-        
+
         # Don't do anything if ordinal node
         if self.is_start() or self.is_mid() or self.is_end():
             return
@@ -352,7 +352,7 @@ class Square:
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
-        
+
         # Ordinal nodes should not remove wall to reinstate after dragging
         if remove_wall:
             type(self).all_wall_nodes.discard(self)
