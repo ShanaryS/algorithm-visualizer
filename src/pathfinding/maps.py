@@ -8,11 +8,6 @@ from urllib.parse import quote as url_encode
 from dotenv import load_dotenv
 
 
-IMG_LOCATION = "lib"
-IMG_BASE_NAME = "img_base.jpg"
-IMG_CLEAN_NAME = "img_clean.jpg"
-
-
 def _get_api_key() -> str:
     """Gets api key from local environmental variables"""
     load_dotenv(os.path.join("lib", ".env"))

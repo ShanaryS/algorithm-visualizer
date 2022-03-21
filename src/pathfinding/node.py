@@ -2,6 +2,7 @@
 
 
 from src.pathfinding.colors import *
+from lib.timer import timer_start, timer_end, timer_print
 
 
 LEFT = "Left"
@@ -29,17 +30,17 @@ class Square:
     all_history_nodes = set()
 
     # All changed nodes are queue for update each frame
-    nodes_to_update = []
+    nodes_to_update = set()
 
     # Used for checking if only changed nodes are being updated
     node_history = set()
     track_node_history = False
 
-    def __init__(self, row: int, col: int, rows: int, square_size) -> None:
-        self.row: int = row
-        self.col: int = col
-        self.rows: int = rows
-        self.square_size: float = square_size
+    def __init__(self, row: int, col: int, rows: int, square_size: float) -> None:
+        self.row = row
+        self.col = col
+        self.rows = rows
+        self.square_size = square_size
 
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
@@ -64,16 +65,16 @@ class Square:
         self.neighbours[UP] = None
         self.neighbours[RIGHT] = None
         self.neighbours[DOWN] = None
-        
-        if self.col > 0 and not gph.graph[self.row][self.col-1].is_wall():
-            self.neighbours[LEFT] = gph.graph[self.row][self.col-1]
-        if self.row > 0 and not gph.graph[self.row-1][self.col].is_wall():
-            self.neighbours[UP] = gph.graph[self.row-1][self.col]
-        if self.col < self.rows-1 and not gph.graph[self.row][self.col + 1].is_wall():
-            self.neighbours[RIGHT] = gph.graph[self.row][self.col+1]
-        if self.row < self.rows-1 and not gph.graph[self.row + 1][self.col].is_wall():
-            self.neighbours[DOWN] = gph.graph[self.row+1][self.col]
-    
+
+        if self.col > 0:
+            self.neighbours[LEFT] = gph.graph[self.row][self.col - 1]
+        if self.row > 0:
+            self.neighbours[UP] = gph.graph[self.row - 1][self.col]
+        if self.col < self.rows - 1:
+            self.neighbours[RIGHT] = gph.graph[self.row][self.col + 1]
+        if self.row < self.rows - 1:
+            self.neighbours[DOWN] = gph.graph[self.row + 1][self.col]
+
     def get_neighbours(self, include_walls=False) -> list:
         """Gets list of neighbours"""
         neighbours = []
@@ -106,11 +107,11 @@ class Square:
     def is_closed(self) -> bool:
         """Checks if closed node"""
         return self.color == CLOSED_COLOR
-    
+
     def is_closed_alt(self) -> bool:
         """Checks if closed node for second swarm of bi_dijkstra"""
         return self.color == CLOSED_ALT_COLOR
-    
+
     def is_closed_alt_(self) -> bool:
         """Checks if closed node for end node when mid is included"""
         return self.color == CLOSED_ALT_COLOR_
@@ -134,11 +135,11 @@ class Square:
     def is_path(self) -> bool:
         """Checks if path node"""
         return self.color == PATH_COLOR
-    
+
     def is_history(self) -> bool:
         """Checks if history node"""
         return self.color == NODE_HISTORY_COLOR
-    
+
     def get_color(self) -> tuple:
         """Gets color of square"""
         return self.color
@@ -148,14 +149,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_empty():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
 
         self._discard_node()
         self.color, self.is_highway = DEFAULT_COLOR, False
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_empty_nodes.add(self)
 
     def set_open(self) -> None:
@@ -167,10 +168,10 @@ class Square:
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = OPEN_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes.add(self)
 
     def set_open_alt(self) -> None:
@@ -178,14 +179,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_open_alt():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = OPEN_ALT_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt.add(self)
 
     def set_open_alt_(self) -> None:
@@ -195,14 +196,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_open_alt_():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = OPEN_ALT_COLOR_
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt_.add(self)
 
     def set_closed(self) -> None:
@@ -210,44 +211,44 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_closed():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = CLOSED_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes.add(self)
-    
+
     def set_closed_alt(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
         if self.is_closed_alt():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = CLOSED_ALT_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt.add(self)
-    
+
     def set_closed_alt_(self) -> None:
         """Sets node to closed for end now when mid is included"""
         # Don't do anything if already set correctly
         if self.is_closed_alt_():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = CLOSED_ALT_COLOR_
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt_.add(self)
 
     def set_start(self) -> None:
@@ -259,10 +260,10 @@ class Square:
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node(remove_wall=False)
         self.color = START_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_start_nodes.add(self)
 
     def set_mid(self) -> None:
@@ -270,14 +271,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_mid():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node(remove_wall=False)
         self.color = MID_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_mid_nodes.add(self)
 
     def set_end(self) -> None:
@@ -285,14 +286,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_end():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node(remove_wall=False)
         self.color = END_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_end_nodes.add(self)
 
     def set_wall(self) -> None:
@@ -300,14 +301,14 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_wall():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = self.wall_color
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_wall_nodes.add(self)
 
     def set_path(self) -> None:
@@ -315,20 +316,24 @@ class Square:
         # Don't do anything if already set correctly
         if self.is_path():
             return
-        
+
         # Add to node history if user requests to track
         if type(self).track_node_history:
             type(self).node_history.add(self)
-        
+
         self._discard_node()
         self.color = PATH_COLOR
-        type(self).nodes_to_update.append(self)
+        type(self).nodes_to_update.add(self)
         type(self).all_path_nodes.add(self)
-    
+
     def set_history(self) -> None:
         """Sets node to history visualization"""
         # Don't do anything if already set correctly
         if self.is_history():
+            return
+
+        # Don't do anything if ordinal node or path node
+        if self.is_start() or self.is_mid() or self.is_end() or self.is_path():
             return
 
         self.color_history = self.color
@@ -337,15 +342,20 @@ class Square:
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
-        return self.color, (self.x, self.y, int(self.square_size), int(self.square_size))
-    
+        return self.color, (
+            self.x,
+            self.y,
+            int(self.square_size),
+            int(self.square_size),
+        )
+
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
-        
+
         # Ordinal nodes should not remove wall to reinstate after dragging
         if remove_wall:
             type(self).all_wall_nodes.discard(self)
-        
+
         type(self).all_empty_nodes.discard(self)
         type(self).all_open_nodes.discard(self)
         type(self).all_open_nodes_alt.discard(self)
@@ -357,7 +367,7 @@ class Square:
         type(self).all_mid_nodes.discard(self)
         type(self).all_end_nodes.discard(self)
         type(self).all_path_nodes.discard(self)
-    
+
     @classmethod
     def get_all_empty_nodes(cls) -> set:
         """Gets all empty nodes"""
@@ -417,27 +427,27 @@ class Square:
     def get_all_path_nodes(cls) -> set:
         """Gets all path nodes"""
         return cls.all_path_nodes
-    
+
     @classmethod
     def get_all_history_nodes(cls) -> set:
         """Gets all history nodes"""
         return cls.all_history_nodes
-    
+
     @classmethod
-    def get_nodes_to_update(cls) -> list:
+    def get_nodes_to_update(cls) -> set:
         """Gets nodes to update"""
         return cls.nodes_to_update
-    
+
     @classmethod
-    def get_node_history(cls) -> list:
+    def get_node_history(cls) -> set:
         """Get node history"""
         return cls.node_history
-    
+
     @classmethod
     def clear_nodes_to_update(cls) -> None:
         """Clears nodes to update"""
         cls.nodes_to_update.clear()
-    
+
     @classmethod
     def clear_all_node_lists(cls) -> None:
         """Clears the list of all nodes for recreating graph"""
@@ -453,7 +463,7 @@ class Square:
         cls.all_end_nodes.clear()
         cls.all_wall_nodes.clear()
         cls.all_path_nodes.clear()
-    
+
     @classmethod
     def clear_history_nodes(cls) -> None:
         """Clears set that keeps track of history nodes"""
