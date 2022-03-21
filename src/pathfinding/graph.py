@@ -29,7 +29,7 @@ CENTER_GRAPH = HEIGHT // 2
 CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
-def create_pygame_window() -> pygame.Surface:
+def create_pygame_window() -> None:
     """Create the pygame window."""
     global window
     window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
