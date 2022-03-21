@@ -10,7 +10,6 @@ from queue import PriorityQueue
 from src.pathfinding.node import Square
 from time import perf_counter
 from typing import Union
-from lib.timer import timer_start, timer_end, timer_print
 
 
 @dataclass
