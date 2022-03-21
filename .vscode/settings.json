@@ -1,4 +1,5 @@
 {
     "python.formatting.provider": "black",
-    "python.defaultInterpreterPath": "venv/Scripts/python"
+    "python.defaultInterpreterPath": "venv/Scripts/python",
+    "austin.interval": 1
 }

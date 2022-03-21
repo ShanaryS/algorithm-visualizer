@@ -1,7 +1,6 @@
 """Handles inputs from user"""
 
 
-import os
 from dataclasses import dataclass
 import pygame
 from src.pathfinding.algorithms import (
@@ -16,6 +15,7 @@ from src.pathfinding.algorithms import (
 from src.pathfinding.graph import (
     GraphState,
     VisText,
+    create_pygame_window,
     set_graph,
     draw,
     reset_graph,
@@ -28,7 +28,7 @@ from src.pathfinding.graph import (
 from src.pathfinding.node import Square
 from typing import Optional
 from src.pathfinding.maps import get_img_base, get_img_clean
-from src.pathfinding.maps import IMG_LOCATION, IMG_BASE_NAME, IMG_CLEAN_NAME
+from lib.timer import timer_start, timer_end, timer_print
 
 
 @dataclass
@@ -50,9 +50,15 @@ def run_pathfinding(
     gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
 ) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
+    
+    # Create pygame window
+    create_pygame_window()
 
     # Creates the graph nodes
     set_graph(gph)
+    
+    # Only allow certain events
+    pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN])
 
     # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
     clock = pygame.time.Clock()
@@ -88,7 +94,7 @@ def run_pathfinding(
                 and pygame.mouse.get_pos()[1] < HEIGHT
                 and not gph.has_img
             ):
-                _right_click_button(gph, lgc)
+                _right_click_button(gph, algo, lgc, txt)
 
             # MIDDLE MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             elif (
@@ -218,6 +224,11 @@ def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     y, x = pos
     row = int(y / gph.square_size)
     col = int(x / gph.square_size)
+    
+    # Fix clicking past square boundaries.
+    square_max = gph.rows-1
+    row = square_max if row > square_max else row
+    col = square_max if col > square_max else col
     return row, col
 
 
@@ -381,19 +392,32 @@ def _left_click_button(
         square.set_wall()
 
 
-def _right_click_button(gph: GraphState, lgc: LogicState) -> None:
+def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Handles mouse right click"""
 
     square = _get_square_clicked(gph)
 
     # Reset square and ordinal node if it was any
     square.reset()
+    was_ordinal = False
     if square == lgc.start:
         lgc.start = None
+        was_ordinal = True
     elif square == lgc.mid:
         lgc.mid = None
+        was_ordinal = True
     elif square == lgc.end:
         lgc.end = None
+        was_ordinal = True
+        
+    # Updates algo
+    if not was_ordinal:
+        if algo.dijkstra_finished:
+            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
+        elif algo.a_star_finished:
+            _a_star_button(gph, algo, lgc, txt, visualize=False)
+        elif algo.bi_dijkstra_finished:
+            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
 
 def _middle_click_button(
@@ -559,7 +583,7 @@ def _recursive_maze_buttons(
     )  # Resets entire graph to prevent any unintended behaviour
     draw(gph, txt, clear_legend=True, algo_running=True)
     gph.base_drawn = False
-    draw_recursive_maze(gph, txt, visualize=visualize)  # Draw maze
+    draw_recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
     gph.update_legend = True
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_nodes(lgc)

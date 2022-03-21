@@ -4,9 +4,10 @@
 from src.pathfinding.colors import *
 from dataclasses import dataclass
 import pygame
-from src.pathfinding.values import ROWS, SQUARE_SIZE, WIDTH_HEIGHT
+from src.pathfinding.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
 from src.pathfinding.node import Square
 from typing import Optional
+from lib.timer import timer_start, timer_end, timer_print
 
 
 # Defining window properties as well as graph size
@@ -14,7 +15,7 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 879
 WIDTH = WIDTH_HEIGHT
 HEIGHT = WIDTH_HEIGHT
-WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+window = None  # Created with create_pygame_window()
 GRAPH_RECT = pygame.Rect(0, 0, WINDOW_WIDTH, HEIGHT)
 LEGEND_RECT = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
 pygame.display.set_caption(
@@ -24,6 +25,8 @@ pygame.font.init()
 
 # Other constants
 DEFAULT_SPEED_MULTIPLIER = 1
+CENTER_GRAPH = HEIGHT // 2
+CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
 @dataclass
@@ -61,6 +64,7 @@ class VisText:
     """Creates the text needed for legend and when visualizing"""
 
     address: str = ""
+    algo_timer: str = ""
 
     FONT = pygame.font.SysFont("Comic Sans MS", 12)
 
@@ -110,22 +114,33 @@ class VisText:
     )
     vis_text_address = FONT.render(f"{address}", True, LEGEND_COLOR)
     vis_text_base_img = FONT.render(f"Getting base image...", True, VIS_COLOR)
-    vis_text_clean_img = FONT.render(
-        f"Getting clean image...", True, VIS_COLOR
-    )
-    vis_text_converting_img = FONT.render(
-        f"Converting image...", True, VIS_COLOR
-    )
+    vis_text_clean_img = FONT.render(f"Getting clean image...", True, VIS_COLOR)
+    vis_text_converting_img = FONT.render(f"Converting image...", True, VIS_COLOR)
+    vis_text_algo_timer = FONT.render(f"{algo_timer}", True, LEGEND_COLOR)
 
-    def update_vis_text_input(self) -> None:
-        """Updates vis_text_input with new input_text"""
+    def update_vis_text_address(self) -> None:
+        """Updates vis_text_address with new input_text"""
         self.vis_text_address = self.FONT.render(f"{self.address}", True, LEGEND_COLOR)
+
+    def update_vis_text_algo_timer(self) -> None:
+        """Updates vix_text_algo_timer with new time"""
+        self.vis_text_algo_timer = self.FONT.render(
+            f"{self.algo_timer}", True, LEGEND_COLOR
+        )
+
+
+def create_pygame_window() -> None:
+    """Create the pygame window."""
+    global window
+    window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
 def set_graph(gph: GraphState) -> None:
     """Creates the graph object that stores the location of all the squares"""
 
-    # Changing so many nodes, faster to update entire screen
+    # Not actually creating nodes on screen so need to update screen manually
+    # This function just draws lines over a white back ground, nodes are
+    # technically created upon a set_* method.
     gph.update_entire_screen = True
 
     # Clear lists from previous graph
@@ -156,7 +171,7 @@ def draw(
     """Main function to update the window. Called by all operations that updates the window."""
 
     if clear_legend:
-        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
     # Draws the horizontal and vertical lines on the graph unless it has image
     if not gph.base_drawn:
@@ -164,10 +179,10 @@ def draw(
             _draw_img(gph)
         else:
             # Sets background of graph to white
-            gph.add_to_update_queue(WINDOW.fill(DEFAULT_COLOR, GRAPH_RECT))
+            gph.add_to_update_queue(window.fill(DEFAULT_COLOR, GRAPH_RECT))
             _draw_lines(gph)
         # Sets background of legend to grey
-        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         if legend:
             _draw_legend(gph, txt)
@@ -179,40 +194,36 @@ def draw(
 
     if gph.update_legend:
         gph.update_legend = False
-        gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        gph.add_to_update_queue(window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
-    # Decides how much of the display to update
-    if gph.update_entire_screen:
-        # Pygame chokes when updating a lot of rects that covers the screen
-        # So we just upate the entire screen like this instead
-        gph.update_entire_screen = False
-        pygame.display.update()
-        gph.rects_to_update.clear()
+    # Queues all changed squares to visualize change
+    if gph.visualize_node_history:
+        gph.visualize_node_history = False
+        for square in Square.get_node_history():
+            square.set_history()
+            gph.add_to_update_queue(square)
+        Square.clear_node_history()
+    # Queues all changed squares to update
     else:
-        # Queues all changed squares to visualize change
-        if gph.visualize_node_history:
-            gph.visualize_node_history = False
-            for square in Square.get_node_history():
-                square.set_history()
-                gph.add_to_update_queue(square)
-            Square.clear_node_history()
-        # Queues all changed squares to update
-        else:
-            square: Square
-            for square in Square.get_nodes_to_update():
-                gph.add_to_update_queue(square)
+        square: Square
+        for square in Square.get_nodes_to_update():
+            gph.add_to_update_queue(square)
 
-
-    _draw_square_borders(gph)
-
-    if gph.rects_to_update:
+    # It's faster to update entire screen if number of rects is greater than 20
+    # 40x speedup
+    if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
+        gph.update_entire_screen = False
+        _draw_lines(gph)
+        pygame.display.flip()
+    else:
+        _draw_square_borders(gph)
         pygame.display.update(gph.rects_to_update)
-        
-        # Used to reset squares to previous color like nothing happened
-        for square in Square.get_all_history_nodes():
-            square.color = square.color_history
-            square.color_history = None
+
+    # Used to reset squares to previous color like nothing happened
+    for square in Square.get_all_history_nodes():
+        square.color = square.color_history
+        square.color_history = None
 
     # Clear update queues
     Square.clear_nodes_to_update()
@@ -220,9 +231,9 @@ def draw(
     gph.rects_to_update.clear()
 
 
-def _draw_square(square_color, square_pos) -> None:
+def _draw_square(square_color, square_pos) -> pygame.Rect:
     """Draws square with color and correct positioning"""
-    return pygame.draw.rect(WINDOW, square_color, square_pos)
+    return pygame.draw.rect(window, square_color, square_pos)
 
 
 def _draw_square_borders(gph: GraphState) -> None:
@@ -236,13 +247,13 @@ def _draw_square_borders(gph: GraphState) -> None:
         bottom_right = square.x + gph.square_size, square.y + gph.square_size
 
         # Top
-        pygame.draw.line(WINDOW, LINE_COLOR, top_left, top_right)
+        pygame.draw.line(window, LINE_COLOR, top_left, top_right)
         # Right
-        pygame.draw.line(WINDOW, LINE_COLOR, top_right, bottom_right)
+        pygame.draw.line(window, LINE_COLOR, top_right, bottom_right)
         # Bottom
-        pygame.draw.line(WINDOW, LINE_COLOR, bottom_left, bottom_right)
+        pygame.draw.line(window, LINE_COLOR, bottom_left, bottom_right)
         # Left
-        pygame.draw.line(WINDOW, LINE_COLOR, top_left, bottom_left)
+        pygame.draw.line(window, LINE_COLOR, top_left, bottom_left)
 
 
 def _draw_lines(gph: GraphState) -> None:
@@ -252,20 +263,18 @@ def _draw_lines(gph: GraphState) -> None:
         row = col = i * gph.square_size
 
         # Horizonatal lines
-        pygame.draw.line(WINDOW, LINE_COLOR, (0, row), (WIDTH, row))
+        pygame.draw.line(window, LINE_COLOR, (0, row), (WIDTH, row))
         # Vertical lines
-        pygame.draw.line(WINDOW, LINE_COLOR, (col, 0), (col, WIDTH))
+        pygame.draw.line(window, LINE_COLOR, (col, 0), (col, WIDTH))
 
 
 def _draw_img(gph: GraphState) -> None:
     """Draws the maps image onto the graph"""
-    gph.add_to_update_queue(WINDOW.blit(gph.img, (0, 0)))
+    gph.add_to_update_queue(window.blit(gph.img, (0, 0)))
 
 
 def set_squares_to_roads(gph: GraphState) -> None:
     """Sets squares to the color of a single pixel"""
-
-    gph.update_entire_screen = True
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(len(gph.graph)):
@@ -284,7 +293,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
                     square.col * int(gph.square_size),
                     (square.col + 1) * int(gph.square_size),
                 ):
-                    r, g, b, a = WINDOW.get_at((i, j))
+                    r, g, b, a = window.get_at((i, j))
                     tot += r + g + b
                     tot_b += b
             avg_tot = tot / gph.square_size ** 2 / 3  # Gets the average of each square
@@ -306,96 +315,97 @@ def set_squares_to_roads(gph: GraphState) -> None:
 def _draw_legend(gph: GraphState, txt: VisText) -> None:
     """Helper function to define the location of the legend"""
 
-    # center_graph = HEIGHT//2
-    center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
-
     if not gph.has_img:
         # Left legend
-        WINDOW.blit(txt.legend_add_node, (2, 15 * 53.1 + 3))
-        WINDOW.blit(txt.legend_add_mid_node, (2, 15 * 54.1 + 3))
-        WINDOW.blit(txt.legend_remove_node, (2, 15 * 55.1 + 3))
-        WINDOW.blit(txt.legend_clear_graph, (2, 15 * 56.1 + 3))
-        WINDOW.blit(txt.legend_graph_size, (2, 15 * 57.1 + 3))
+        window.blit(txt.legend_add_node, (2, 15 * 53.1 + 3))
+        window.blit(txt.legend_add_mid_node, (2, 15 * 54.1 + 3))
+        window.blit(txt.legend_remove_node, (2, 15 * 55.1 + 3))
+        window.blit(txt.legend_clear_graph, (2, 15 * 56.1 + 3))
+        window.blit(txt.legend_graph_size, (2, 15 * 57.1 + 3))
 
         # Right legend
-        WINDOW.blit(
+        window.blit(
             txt.legend_dijkstra,
             (WIDTH - txt.legend_dijkstra.get_width() - 2, 15 * 53.1 + 3),
         )
-        WINDOW.blit(
+        window.blit(
             txt.legend_a_star,
             (WIDTH - txt.legend_a_star.get_width() - 2, 15 * 54.1 + 3),
         )
-        WINDOW.blit(
+        window.blit(
             txt.legend_bi_dijkstra,
             (WIDTH - txt.legend_bi_dijkstra.get_width() - 2, 15 * 55.1 + 3),
         )
-        WINDOW.blit(
+        window.blit(
             txt.legend_recursive_maze,
             (WIDTH - txt.legend_recursive_maze.get_width() - 2, 15 * 56.1 + 3),
         )
-        WINDOW.blit(
+        window.blit(
             txt.legend_instant_recursive_maze,
             (WIDTH - txt.legend_instant_recursive_maze.get_width() - 2, 15 * 57.1 + 3),
         )
 
         # Center Legend
-        WINDOW.blit(
+        window.blit(
             txt.legend_address,
             (
                 WIDTH // 2 - txt.legend_address.get_width() // 2,
-                center_legend_area - txt.legend_address.get_height() // 2,
+                CENTER_LEGEND_AREA - txt.legend_address.get_height() // 2,
             ),
         )
+        draw_algo_timer(txt)
         if Square.track_node_history:
-            WINDOW.blit(
+            window.blit(
                 txt.legend_node_history_show,
                 (
                     WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 30,
+                    CENTER_LEGEND_AREA
+                    - txt.legend_node_history_show.get_height() // 2
+                    + 30,
                 ),
             )
         else:
-            WINDOW.blit(
+            window.blit(
                 txt.legend_node_history,
                 (
                     WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    center_legend_area - txt.legend_node_history.get_height() // 2 + 30,
-                ),
-            )
-    
-    if gph.has_img:
-        WINDOW.blit(
-            txt.legend_address,
-            (
-                WIDTH // 2 - txt.legend_address.get_width() // 2,
-                center_legend_area - txt.legend_address.get_height() // 2 - 15,
-            ),
-        )
-        WINDOW.blit(
-            txt.legend_convert_map,
-            (
-                WIDTH // 2 - txt.legend_convert_map.get_width() // 2,
-                center_legend_area - txt.legend_convert_map.get_height() // 2,
-            ),
-        )
-        if Square.track_node_history:
-            WINDOW.blit(
-                txt.legend_node_history_show,
-                (
-                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
-                    center_legend_area - txt.legend_node_history_show.get_height() // 2 + 15,
-                ),
-            )
-        else:
-            WINDOW.blit(
-                txt.legend_node_history,
-                (
-                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    center_legend_area - txt.legend_node_history.get_height() // 2 + 15,
+                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 30,
                 ),
             )
 
+    if gph.has_img:
+        window.blit(
+            txt.legend_address,
+            (
+                WIDTH // 2 - txt.legend_address.get_width() // 2,
+                CENTER_LEGEND_AREA - txt.legend_address.get_height() // 2 - 15,
+            ),
+        )
+        window.blit(
+            txt.legend_convert_map,
+            (
+                WIDTH // 2 - txt.legend_convert_map.get_width() // 2,
+                CENTER_LEGEND_AREA - txt.legend_convert_map.get_height() // 2,
+            ),
+        )
+        if Square.track_node_history:
+            window.blit(
+                txt.legend_node_history_show,
+                (
+                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                    CENTER_LEGEND_AREA
+                    - txt.legend_node_history_show.get_height() // 2
+                    + 15,
+                ),
+            )
+        else:
+            window.blit(
+                txt.legend_node_history,
+                (
+                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
+                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 15,
+                ),
+            )
 
 
 def draw_vis_text(
@@ -413,136 +423,152 @@ def draw_vis_text(
 ) -> None:
     """Special text indicating some operation is being performed. No inputs are registered."""
 
-    # Defines the center of the graph and legend for text placement
-    center_graph = HEIGHT // 2
-    center_legend_area = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
+    # Clear legend to prevent drawing overself.
+    # Same cost as using precise rects.
+    window.fill(LEGEND_AREA_COLOR, LEGEND_RECT)
 
-    text_rect = []  # Used to only update text area
+    text_rects = []  # Used to only update text area
 
     # Text to be shown depending on operation
     if is_dijkstra:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(draw_algo_timer(txt))
+        text_rects.append(
+            window.blit(
                 txt.vis_text_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_dijkstra.get_width() // 2,
-                    center_legend_area - txt.vis_text_dijkstra.get_height() // 2 - 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_dijkstra.get_height() // 2 - 10,
                 ),
             )
         )
     elif is_a_star:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(draw_algo_timer(txt))
+        text_rects.append(
+            window.blit(
                 txt.vis_text_a_star,
                 (
                     WIDTH // 2 - txt.vis_text_a_star.get_width() // 2,
-                    center_legend_area - txt.vis_text_a_star.get_height() // 2 - 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_a_star.get_height() // 2 - 10,
                 ),
             )
         )
     elif is_bi_dijkstra:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(draw_algo_timer(txt))
+        text_rects.append(
+            window.blit(
                 txt.vis_text_bi_dijkstra,
                 (
                     WIDTH // 2 - txt.vis_text_bi_dijkstra.get_width() // 2,
-                    center_legend_area
+                    CENTER_LEGEND_AREA
                     - txt.vis_text_bi_dijkstra.get_height() // 2
                     - 10,
                 ),
             )
         )
     elif is_best_path:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(draw_algo_timer(txt))
+        text_rects.append(
+            window.blit(
                 txt.vis_text_best_path,
                 (
                     WIDTH // 2 - txt.vis_text_best_path.get_width() // 2,
-                    center_legend_area - txt.vis_text_best_path.get_height() // 2 + 10,
+                    CENTER_LEGEND_AREA - txt.vis_text_best_path.get_height() // 2 + 10,
                 ),
             )
         )
     elif is_recursive_maze:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(
+            window.blit(
                 txt.vis_text_recursive_maze,
                 (
                     WIDTH // 2 - txt.vis_text_recursive_maze.get_width() // 2,
-                    center_legend_area - txt.vis_text_recursive_maze.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_recursive_maze.get_height() // 2,
                 ),
             )
         )
     elif is_graph_size:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(
+            window.blit(
                 txt.vis_text_graph_size,
                 (
                     WIDTH // 2 - txt.vis_text_graph_size.get_width() // 2,
-                    center_graph - txt.vis_text_graph_size.get_height() // 2,
+                    CENTER_GRAPH - txt.vis_text_graph_size.get_height() // 2,
                 ),
             )
         )
     elif is_input:
         # Reset legend area (inefficient, only need area with new text)
-        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+        text_rects.append(window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
 
         # Instructions on what to type
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(
+            window.blit(
                 txt.vis_text_input,
                 (
                     WIDTH // 2 - txt.vis_text_input.get_width() // 2,
-                    center_legend_area - txt.vis_text_input.get_height() // 2 - 15,
+                    CENTER_LEGEND_AREA - txt.vis_text_input.get_height() // 2 - 15,
                 ),
             )
         )
         # Update text with new input
-        txt.update_vis_text_input()
-        text_rect.append(
-            WINDOW.blit(
+        txt.update_vis_text_address()
+        text_rects.append(
+            window.blit(
                 txt.vis_text_address,
                 (
                     WIDTH // 2 - txt.vis_text_address.get_width() // 2,
-                    center_legend_area - txt.vis_text_address.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_address.get_height() // 2,
                 ),
             )
         )
     elif is_base_img:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(
+            window.blit(
                 txt.vis_text_base_img,
                 (
                     WIDTH // 2 - txt.vis_text_base_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_base_img.get_height() // 2 + 15,
+                    CENTER_LEGEND_AREA - txt.vis_text_base_img.get_height() // 2 + 15,
                 ),
             )
         )
     elif is_clean_img:
         # Reset legend area (inefficient, only need area with new text)
-        text_rect.append(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
-        
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
+
+        text_rects.append(
+            window.blit(
                 txt.vis_text_clean_img,
                 (
                     WIDTH // 2 - txt.vis_text_clean_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_clean_img.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_clean_img.get_height() // 2,
                 ),
             )
         )
     elif is_converting_img:
-        text_rect.append(
-            WINDOW.blit(
+        text_rects.append(
+            window.blit(
                 txt.vis_text_converting_img,
                 (
                     WIDTH // 2 - txt.vis_text_converting_img.get_width() // 2,
-                    center_legend_area - txt.vis_text_converting_img.get_height() // 2,
+                    CENTER_LEGEND_AREA - txt.vis_text_converting_img.get_height() // 2,
                 ),
             )
         )
 
     # Updates the portion of the screen that contains changing text
-    pygame.display.update(text_rect)
+    pygame.display.update(text_rects)
+
+
+def draw_algo_timer(txt: VisText) -> pygame.Rect:
+    """Draws timer of algo"""
+    txt.update_vis_text_algo_timer()
+    return window.blit(
+        txt.vis_text_algo_timer,
+        (
+            WIDTH // 2 - txt.vis_text_algo_timer.get_width() // 2,
+            CENTER_LEGEND_AREA - txt.vis_text_algo_timer.get_height() // 2 - 32,
+        ),
+    )
 
 
 def reset_graph(
@@ -625,7 +651,7 @@ def change_graph_size(
     # Updates rows and square size with new values
     reset_graph(gph, algo, txt, reset=False)
     gph.rows = new_row_size
-    gph.square_size = WIDTH / gph.rows
+    gph.square_size = calc_square_size(WIDTH, gph.rows)
 
     # Recreates graph with new values
     set_graph(gph)

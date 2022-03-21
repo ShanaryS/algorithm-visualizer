@@ -9,7 +9,7 @@ Usage:
 """
 
 
-import time
+from time import perf_counter_ns
 
 
 g_timer_start = 0
@@ -22,12 +22,12 @@ g_timer_total_time = 0
 def timer_start() -> None:
     """Start timer for a section of code"""
     global g_timer_start
-    g_timer_start = time.perf_counter_ns()
+    g_timer_start = perf_counter_ns()
 
 
 def timer_end() -> None:
     """End timer for a section of code"""
-    end = time.perf_counter_ns()
+    end = perf_counter_ns()
     
     global g_timer_start, g_timer_count, g_timer_min
     global g_timer_max, g_timer_total_time
