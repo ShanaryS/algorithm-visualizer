@@ -29,12 +29,6 @@ CENTER_GRAPH = HEIGHT // 2
 CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
-def create_pygame_window() -> None:
-    """Create the pygame window."""
-    global window
-    window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-
-
 @dataclass
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
@@ -133,6 +127,12 @@ class VisText:
         self.vis_text_algo_timer = self.FONT.render(
             f"{self.algo_timer}", True, LEGEND_COLOR
         )
+
+
+def create_pygame_window() -> None:
+    """Create the pygame window."""
+    global window
+    window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
 def set_graph(gph: GraphState) -> None:
