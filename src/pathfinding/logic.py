@@ -221,6 +221,11 @@ def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     y, x = pos
     row = int(y / gph.square_size)
     col = int(x / gph.square_size)
+    
+    # Fix clicking past square boundaries.
+    square_max = gph.rows-1
+    row = square_max if row > square_max else row
+    col = square_max if col > square_max else col
     return row, col
 
 
