@@ -192,8 +192,6 @@ def draw(
         gph.add_to_update_queue(WINDOW.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
-    """Speed up code between this section. Primarily if gph.rects_to_update"""
-
     # Queues all changed squares to visualize change
     if gph.visualize_node_history:
         gph.visualize_node_history = False
