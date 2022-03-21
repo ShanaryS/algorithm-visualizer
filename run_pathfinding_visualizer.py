@@ -49,20 +49,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-    # --- Update github page ---
-    # In first gif, show adding walls after competion as well
-
-    # --- Known Bugs ---
-    # Bi dijk only draws best_path when edges of swarms are touching, mid node
-    # Updating entire screen every frame instead of changed items
-    #   Update the entire text box whenever the update_text func is called
-    #   Otherwise only update that square's area when used by anything
-
-    # --- Features to add ---
-    # Sticky mud for patches where algo goes slowly
-    # Take in consideration speed limit of roads
-    #   Use length of open_set to assign queue_pos
-    # Add prim maze
-    # Multithreading (Concurrency, Parallelism)
-    # Write tests
