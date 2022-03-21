@@ -435,12 +435,12 @@ class Square:
         return cls.all_history_nodes
 
     @classmethod
-    def get_nodes_to_update(cls) -> list:
+    def get_nodes_to_update(cls) -> set:
         """Gets nodes to update"""
         return cls.nodes_to_update
 
     @classmethod
-    def get_node_history(cls) -> list:
+    def get_node_history(cls) -> set:
         """Get node history"""
         return cls.node_history
 
