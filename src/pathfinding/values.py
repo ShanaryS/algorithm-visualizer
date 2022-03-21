@@ -13,7 +13,14 @@ OFFSET: int = 1
 
 def calc_square_size(width, rows) -> float:
     """Calculates square size"""
-    return (width - OFFSET) / rows
+    
+    # Only use offset if size of square is larger than a pixel
+    if WIDTH_HEIGHT / width > 1:
+        final_width = width - OFFSET
+    else:
+        final_width = width
+    
+    return final_width / rows
 
 
 SQUARE_SIZE: float = calc_square_size(WIDTH_HEIGHT, ROWS)
