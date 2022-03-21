@@ -15,6 +15,7 @@ from src.pathfinding.algorithms import (
 from src.pathfinding.graph import (
     GraphState,
     VisText,
+    create_pygame_window,
     set_graph,
     draw,
     reset_graph,
@@ -49,6 +50,9 @@ def run_pathfinding(
     gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
 ) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
+    
+    # Create pygame window
+    create_pygame_window()
 
     # Creates the graph nodes
     set_graph(gph)
