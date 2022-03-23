@@ -1,4 +1,8 @@
-"""Class used to time different sections of code for debugging"""
+"""Class used to time different sections of code for debugging
+Usually would would import the class Timer and instance it per it's usage.
+If you want to share the same timer across your program, 
+import the variable timer instead.
+"""
 
 
 class Timer:
@@ -133,3 +137,7 @@ class Timer:
         
         # Reset timer after printing
         self._reset()
+
+
+# Import this var instead of class to share timer across modules
+timer = Timer()
