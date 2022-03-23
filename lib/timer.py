@@ -22,7 +22,7 @@ class Timer:
 
     def __init__(self, name="Code Section") -> None:
         self.timer_name = name
-        self.timer_start = 0
+        self.timer_start = None
         self.timer_count = 0
         self.timer_min = float('inf')
         self.timer_max = float('-inf')
