@@ -60,6 +60,8 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 ## Performance Improvements
 
+* Compiling with Pyinstaller
+  * Up to 3x faster
 * Partial display update (Only update changed pixels between frames; Took a lot of effort!)
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
   * A typical performance increase between ~30x to ~100x for pathfinding algorithms and medium maze generation
