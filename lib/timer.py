@@ -5,6 +5,9 @@ import the variable timer instead.
 """
 
 
+from typing import Callable
+
+
 class Timer:
     """Timer for a code section.
     
@@ -45,6 +48,15 @@ class Timer:
         self.timer_min = min(self.timer_min, total) if total > 0 else self.timer_min
         self.timer_max = max(self.timer_max, total)
         self.timer_total_time += total
+    
+    def loop(self, num_loops: int, func: Callable[..., None], args: list = None):
+        """Loops a function a number of times"""
+        if not args:
+            args = []
+        for _ in range(num_loops):
+            self.start()
+            func(*args)
+            self.end()
 
     def print(self) -> None:
         """Prints info about the timer"""
