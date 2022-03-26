@@ -28,7 +28,7 @@ CENTER_GRAPH = HEIGHT // 2
 CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
-@dataclass
+@dataclass(slots=True)
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
 

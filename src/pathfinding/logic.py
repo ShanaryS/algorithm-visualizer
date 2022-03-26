@@ -30,7 +30,7 @@ from typing import Optional
 from src.pathfinding.maps import get_img_base, get_img_clean
 
 
-@dataclass
+@dataclass(slots=True)
 class LogicState:
     """Stores the state of the logic"""
 

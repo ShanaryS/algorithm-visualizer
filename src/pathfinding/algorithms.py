@@ -12,7 +12,7 @@ from time import perf_counter
 from typing import Union
 
 
-@dataclass
+@dataclass(slots=True)
 class AlgoState:
     """Stores the state of the algorithms, whether they are finished or not"""
 
