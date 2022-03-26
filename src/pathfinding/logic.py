@@ -28,10 +28,9 @@ from src.pathfinding.graph import (
 from src.pathfinding.node import Square
 from typing import Optional
 from src.pathfinding.maps import get_img_base, get_img_clean
-from lib.timer import timer_start, timer_end, timer_print
 
 
-@dataclass
+@dataclass(slots=True)
 class LogicState:
     """Stores the state of the logic"""
 
