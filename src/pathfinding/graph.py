@@ -152,12 +152,6 @@ def set_graph(gph: GraphState) -> None:
             # Uses Square class to create square object with necessary attributes
             square = Square(row, col, gph.rows, gph.square_size)
             gph.graph[row].append(square)
-    
-    # Updates neighbours. 100x performance increase using map over nested loop
-    # def update_neighbours(square: Square):
-    #     square.update_neighbours(gph)
-    # for row in gph.graph:
-    #     map(update_neighbours, row)
 
     # Updates neighbours
     square: Square
