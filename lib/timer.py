@@ -51,8 +51,6 @@ class Timer:
     
     def loop(self, num_loops: int, func: Callable[..., None], args: list = None):
         """Loops a function a number of times"""
-        if not args:
-            args = []
         for _ in range(num_loops):
             self.start()
             func(*args)
