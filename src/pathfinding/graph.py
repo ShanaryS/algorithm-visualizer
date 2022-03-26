@@ -154,10 +154,16 @@ def set_graph(gph: GraphState) -> None:
             gph.graph[row].append(square)
     
     # Updates neighbours. 100x performance increase using map over nested loop
-    def update_neighbours(square: Square):
-        square.update_neighbours(gph)
+    # def update_neighbours(square: Square):
+    #     square.update_neighbours(gph)
+    # for row in gph.graph:
+    #     map(update_neighbours, row)
+
+    # Updates neighbours
+    square: Square
     for row in gph.graph:
-        map(update_neighbours, row)
+        for square in row:
+            square.update_neighbours(gph)
 
 
 def draw(
