@@ -50,6 +50,13 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# --- C++ Performance Rewrite ---
+# Rewrite node.py, algorithms.py into C++
+# Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
+#   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
+#   Changing to large graph takes 40ms
+# Create new branch 'archive/python_only'
+
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
 #   - Else probably would need to mantually set processes then manually assign it to everything
@@ -95,10 +102,3 @@ if __name__ == "__main__":
 #   Use length of open_set to assign queue_pos
 # Add prim maze
 # Write tests
-
-# --- C++ Performance Rewrite ---
-# Rewrite node.py, algorithms.py into C++
-# Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
-#   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
-#   Changing to large graph takes 40ms
-# Create new branch 'archive/python_only' 
