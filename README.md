@@ -74,7 +74,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
   * A typical performance increase between ~30x to ~100x for pathfinding algorithms and medium maze generation
   * 'V' button can be used to visualize the changed squares between toggles
-  * For comparison, check out archived branch [archive/V2.0/entire-display-update](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/entire-display-update)
+  * For comparison, check out archived branch [archive/V2.0/feature-complete](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/feature-complete)
 
 <p align="center">
   <strong>Speed up in action! (Relative to above gifs):</strong>
