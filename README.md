@@ -121,6 +121,7 @@ pip install -r requirements.txt
 
 To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.cmd').
 Then simply run the 'create_exe.cmd' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
+The script will attempt to sign the executables with microsoft's signtool if a valid certificate is available. You can create a valid self signed certificate by following [this guide](https://stackoverflow.com/a/47144138).
 
 Or run each visualizer directly using:
 
