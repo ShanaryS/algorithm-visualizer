@@ -2,7 +2,6 @@
 
 
 from src.pathfinding.colors import *
-from lib.timer import timer_start, timer_end, timer_print
 
 
 LEFT = "Left"
@@ -13,6 +12,20 @@ DOWN = "Down"
 
 class Square:
     """Defines the properties needed for each node on graph"""
+
+    __slots__ = (
+        "row",
+        "col",
+        "rows",
+        "square_size",
+        "x",
+        "y",
+        "neighbours",
+        "color",
+        "wall_color",
+        "color_history",
+        "is_highway"
+    )
 
     # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()

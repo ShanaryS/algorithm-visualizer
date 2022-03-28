@@ -7,7 +7,6 @@ import pygame
 from src.pathfinding.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
 from src.pathfinding.node import Square
 from typing import Optional
-from lib.timer import timer_start, timer_end, timer_print
 
 
 # Defining window properties as well as graph size
@@ -29,7 +28,7 @@ CENTER_GRAPH = HEIGHT // 2
 CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
 
-@dataclass
+@dataclass(slots=True)
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
 

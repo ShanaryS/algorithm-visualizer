@@ -16,6 +16,10 @@ This tool visualizes the operations of the most popular pathfinding, sorting, an
   <img src="https://user-images.githubusercontent.com/86130442/132488928-2ddace80-7be9-404d-903e-ecfe360bbf7f.gif" alt="animated" />
 </p>
 
+<p align="center">
+  (Algorithms slowed down for illustration purposes)
+</p>
+
 ***
 
 <p align="center">
@@ -24,6 +28,10 @@ This tool visualizes the operations of the most popular pathfinding, sorting, an
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/86130442/135311945-822a86b2-e09a-480d-bd98-c21d604a2f8f.gif" alt="animated" />
+</p>
+
+<p align="center">
+  (Algorithms slowed down for illustration purposes)
 </p>
 
 Add mid node to layer the search! Able to drag mid node as well:             |  Generate mazes with recursive division animations or instantly:
@@ -60,13 +68,27 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 ## Performance Improvements
 
-* Partial display update (Only update changed pixels between frames; Took a lot of effort!)
+* Compiling with Pyinstaller
+  * Up to 3x faster
+* Partial display update for pathfinding visualizer (Only update changed pixels between frames; Took a lot of effort!)
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
   * A typical performance increase between ~30x to ~100x for pathfinding algorithms and medium maze generation
   * 'V' button can be used to visualize the changed squares between toggles
-  * For comparison, check out archived branch [archive/V2.0/entire-display-update](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/entire-display-update)
+  * For comparison, check out archived branch [archive/V2.0/feature-complete](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/feature-complete)
 
-## Installation (Python 3.9.9)
+<p align="center">
+  <strong>Speed up in action! (Relative to above gifs):</strong>
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86130442/160454970-8e499a0f-32ee-4165-8376-856f05f726f1.gif" alt="animated" />
+</p>
+
+<p align="center">
+  Note: The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature.
+</p>
+
+## Installation (Python 3.10)
 
 Clone this repo and cd into it:
 
@@ -97,8 +119,9 @@ pip install -r requirements.txt
 
 # Usage
 
-To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.bat').
-Then simply run the 'create_exe.bat' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
+To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.cmd').
+Then simply run the 'create_exe.cmd' file. After about 2 minutes, all three visualizers will be in the newly created 'bin' folder in the root of the project.
+The script will attempt to sign the executables with microsoft's signtool if a valid certificate is available. You can create a valid self signed certificate by following [this guide](https://stackoverflow.com/a/47144138).
 
 Or run each visualizer directly using:
 
