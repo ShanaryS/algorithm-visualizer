@@ -68,7 +68,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
   * 'V' button can be used to visualize the changed squares between toggles
   * For comparison, check out archived branch [archive/V2.0/entire-display-update](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/entire-display-update)
 
-## Installation (Python 3.9.9)
+## Installation (Python 3.10)
 
 Clone this repo and cd into it:
 
