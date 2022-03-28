@@ -85,7 +85,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 </p>
 
 <p align="center">
-  Note: The purple color shows what pixels have been changed since the 'V' button toggle. It visualalizes the per-pixel display update feature.
+  Note: The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature.
 </p>
 
 ## Installation (Python 3.10)
