@@ -49,7 +49,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-#
+
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
 #   - Else probably would need to mantually set processes then manually assign it to everything
