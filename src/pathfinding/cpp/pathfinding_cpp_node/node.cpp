@@ -6,6 +6,11 @@ void my_func()
     std::cout << "It's working!\n";
 }
 
+void my_func2()
+{
+    std::cout << "It's working too!\n";
+}
+
 namespace py = pybind11;
 
 PYBIND11_MODULE(pathfinding_cpp_node, m) {
