@@ -1,8 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\src",
+    "\\src\\cpp",
+    "\\src\\cpp\\pathfinding",
+    "\\src\\py",
+    "\\src\\py\\pathfinding",
+    "\\src\\py\\pathfinding\\utils"
   ],
-  "SelectedNode": "\\Algorithm Visualizer.sln",
+  "SelectedNode": "\\src\\cpp\\test.cpp",
   "PreviewInSolutionExplorer": false
 }
