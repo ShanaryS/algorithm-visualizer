@@ -1,7 +1,7 @@
 """Creates square objects that drives the visualizations"""
 
 
-from src.pathfinding.colors import *
+from pathfinding.utils.colors import *
 
 
 LEFT = "Left"

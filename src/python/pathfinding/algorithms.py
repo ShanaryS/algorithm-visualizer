@@ -1,13 +1,13 @@
 """Contains pathfinding and maze generation algorithms"""
 
 
-from src.pathfinding.colors import *
+from pathfinding.utils.colors import *
 from dataclasses import dataclass
 import pygame
-from src.pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
-from src.pathfinding.values import get_random_sample, get_randrange
+from pathfinding.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
+from pathfinding.utils.values import get_random_sample, get_randrange
 from queue import PriorityQueue
-from src.pathfinding.node import Square
+from pathfinding.node import Square
 from time import perf_counter
 from typing import Union
 
@@ -150,7 +150,7 @@ def dijkstra(
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
-                draw_vis_text(txt, is_dijkstra=True)
+                draw_vis_text(gph, txt, is_dijkstra=True)
 
     return False
 
@@ -244,7 +244,7 @@ def a_star(
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
-                draw_vis_text(txt, is_a_star=True)
+                draw_vis_text(gph, txt, is_a_star=True)
 
     return False
 
@@ -442,7 +442,7 @@ def bi_dijkstra(
             if i % gph.algo_speed_multiplier == 0:
                 i = 0
                 draw(gph, txt, algo_running=True)
-                draw_vis_text(txt, is_bi_dijkstra=True)
+                draw_vis_text(gph, txt, is_bi_dijkstra=True)
 
     return False
 
@@ -519,7 +519,7 @@ def best_path(
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
                     draw(gph, txt, algo_running=True)
-                    draw_vis_text(txt, is_best_path=True)
+                    draw_vis_text(gph, txt, is_best_path=True)
     else:
         for square in path[len(path) - 2 :: -1]:
             square.set_path()
@@ -529,7 +529,7 @@ def best_path(
                     i = 0
                     pygame.time.delay(algo.best_path_sleep)
                     draw(gph, txt, algo_running=True)
-                    draw_vis_text(txt, is_best_path=True)
+                    draw_vis_text(gph, txt, is_best_path=True)
     gph.update_legend = True
 
 
@@ -829,7 +829,7 @@ def draw_recursive_maze(
             txt.algo_timer = algo.timer_to_string()
             if visualize:
                 draw(gph, txt, algo_running=True)
-                draw_vis_text(txt, is_recursive_maze=True)
+                draw_vis_text(gph, txt, is_recursive_maze=True)
 
     # Draws horizontal maze line within chamber
     if chamber_height >= division_limit:
@@ -841,7 +841,7 @@ def draw_recursive_maze(
             txt.algo_timer = algo.timer_to_string()
             if visualize:
                 draw(gph, txt, algo_running=True)
-                draw_vis_text(txt, is_recursive_maze=True)
+                draw_vis_text(gph, txt, is_recursive_maze=True)
 
     # Terminates if below division limit
     if chamber_width < division_limit and chamber_height < division_limit:
@@ -936,7 +936,7 @@ def draw_recursive_maze(
 
         if visualize:
             draw(gph, txt, algo_running=True)
-            draw_vis_text(txt, is_recursive_maze=True)
+            draw_vis_text(gph, txt, is_recursive_maze=True)
 
     # Recursively divides chambers
     for chamber in chambers:

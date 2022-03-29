@@ -10,6 +10,20 @@
             "request": "launch",
             "program": "run_pathfinding_visualizer.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Sorting Visualizer",
+            "type": "python",
+            "request": "launch",
+            "program": "run_sorting_visualizer.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Searching Visualizer",
+            "type": "python",
+            "request": "launch",
+            "program": "run_searching_visualizer.py",
+            "console": "integratedTerminal"
         }
     ]
 }

@@ -130,14 +130,14 @@ Or run each visualizer directly using:
 python run_pathfinding_visualizer
 ```
 
-* Sort Visualizer:
+* Sorting Visualizer:
 ```bash
-python run_sort_visualizer
+python run_sorting_visualizer
 ```
 
-* Search Visualizer:
+* Searching Visualizer:
 ```bash
-python run_search_visualizer
+python run_searching_visualizer
 ```
 
 To use google maps functionality, you need static maps api key from google.

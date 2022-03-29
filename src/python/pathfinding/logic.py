@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 import pygame
-from src.pathfinding.algorithms import (
+from pathfinding.algorithms import (
     dijkstra,
     a_star,
     bi_dijkstra,
@@ -12,10 +12,9 @@ from src.pathfinding.algorithms import (
     draw_recursive_maze,
     AlgoState,
 )
-from src.pathfinding.graph import (
+from pathfinding.graph import (
     GraphState,
     VisText,
-    create_pygame_window,
     set_graph,
     draw,
     reset_graph,
@@ -25,9 +24,9 @@ from src.pathfinding.graph import (
     draw_vis_text,
     HEIGHT,
 )
-from src.pathfinding.node import Square
+from pathfinding.node import Square
 from typing import Optional
-from src.pathfinding.maps import get_img_base, get_img_clean
+from pathfinding.utils.maps import get_img_base, get_img_clean
 
 
 @dataclass(slots=True)
@@ -51,7 +50,7 @@ def run_pathfinding(
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
     
     # Create pygame window
-    create_pygame_window()
+    gph.create_pygame_window()
 
     # Creates the graph nodes
     set_graph(gph)
@@ -608,7 +607,7 @@ def _load_img_to_graph(
 ) -> None:
     """Loads the image onto the graph"""
 
-    draw_vis_text(txt, is_base_img=True)
+    draw_vis_text(gph, txt, is_base_img=True)
     change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
     gph.img = pygame.image.load(get_img_base(txt.address))
@@ -620,13 +619,13 @@ def _load_img_to_graph(
 def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
     """Coverts the map data into nodes the algorithms can use"""
 
-    draw_vis_text(txt, is_clean_img=True)
+    draw_vis_text(gph, txt, is_clean_img=True)
 
     gph.img = pygame.image.load(get_img_clean(txt.address))
 
     gph.base_drawn = False
     draw(gph, txt)
-    draw_vis_text(txt, is_converting_img=True)
+    draw_vis_text(gph, txt, is_converting_img=True)
 
     gph.update_legend = True
     gph.has_img = False
@@ -646,7 +645,7 @@ def _get_address_from_user(
 
     gph.base_drawn = False
     draw(gph, txt)
-    draw_vis_text(txt, is_input=True)
+    draw_vis_text(gph, txt, is_input=True)
 
     while lgc.run:
         for event in pygame.event.get():
@@ -665,7 +664,7 @@ def _get_address_from_user(
                     _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
-                draw_vis_text(txt, is_input=True)
+                draw_vis_text(gph, txt, is_input=True)
 
     pygame.quit()
 
