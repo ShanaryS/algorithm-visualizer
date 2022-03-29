@@ -31,3 +31,5 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+    
+    # Keeps running in background if closed while algo running.
