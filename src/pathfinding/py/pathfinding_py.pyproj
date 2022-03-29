@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{a7629b96-b069-4482-918c-604b79e685cf}</ProjectGuid>
+    <ProjectGuid>{4fe1c0b9-1a42-4dbf-b16a-4c950891bc14}</ProjectGuid>
     <ProjectHome />
     <StartupFile>..\..\..\run_pathfinding_visualizer.py</StartupFile>
     <SearchPath>..\..\pathfinding</SearchPath>
@@ -13,7 +13,6 @@
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId>MSBuild|venv|$(MSBuildProjectFullPath)</InterpreterId>
     <IsWindowsApplication>True</IsWindowsApplication>
-    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -44,6 +43,18 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cpp\pathfinding_cpp_algorithms\pathfinding_cpp_algorithms.vcxproj">
+      <Name>pathfinding_cpp_algorithms</Name>
+      <Project>{b8504aa8-6977-4317-bcf5-a5524079aeb3}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\cpp\pathfinding_cpp_node\pathfinding_cpp_node.vcxproj">
+      <Name>pathfinding_cpp_node</Name>
+      <Project>{7ad7b322-8ad0-4cac-a61e-56c919942494}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

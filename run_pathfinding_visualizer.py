@@ -50,7 +50,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    from pathfinding_cpp_algorithms import my_func
+    my_func()
 
 # --- C++ Performance Rewrite ---
 # Calling C++ functions in python: https://docs.microsoft.com/en-us/visualstudio/python/working-with-c-cpp-python-in-visual-studio?view=vs-2022

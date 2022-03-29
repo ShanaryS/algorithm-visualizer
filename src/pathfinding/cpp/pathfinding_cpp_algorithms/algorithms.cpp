@@ -8,7 +8,7 @@ void my_func()
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(cpp, m) {
+PYBIND11_MODULE(pathfinding_cpp_algorithms, m) {
     m.def("my_func", &my_func, R"pbdoc(
         Amazing!
     )pbdoc");
