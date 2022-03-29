@@ -1,7 +1,7 @@
 """Run sort visualizer. Must be '__main__'."""
 
-from src.python.sorting.graph import Graph, set_graph
-from src.python.sorting.utils.values import generate_array
+from src.py.sorting.graph import Graph, set_graph
+from src.py.sorting.utils.values import generate_array
 
 
 def main() -> None:

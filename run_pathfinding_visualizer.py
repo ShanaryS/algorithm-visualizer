@@ -4,9 +4,9 @@
 import sys
 import os
 
-from src.python.pathfinding.logic import LogicState, run_pathfinding
-from src.python.pathfinding.graph import GraphState, VisText
-from src.python.pathfinding.algorithms import AlgoState
+from src.py.pathfinding.logic import LogicState, run_pathfinding
+from src.py.pathfinding.graph import GraphState, VisText
+from src.py.pathfinding.algorithms import AlgoState
 
 
 def overide_where():
