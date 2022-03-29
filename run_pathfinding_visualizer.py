@@ -1,12 +1,12 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
-from cpp import my_func
+
 import sys
 import os
 
-from src.py.pathfinding.logic import LogicState, run_pathfinding
-from src.py.pathfinding.graph import GraphState, VisText
-from src.py.pathfinding.algorithms import AlgoState
+from src.pathfinding.py.logic import LogicState, run_pathfinding
+from src.pathfinding.py.graph import GraphState, VisText
+from src.pathfinding.py.algorithms import AlgoState
 
 
 def overide_where():
@@ -50,8 +50,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    # main()
-    my_func()
+    main()
 
 # --- C++ Performance Rewrite ---
 # Calling C++ functions in python: https://docs.microsoft.com/en-us/visualstudio/python/working-with-c-cpp-python-in-visual-studio?view=vs-2022

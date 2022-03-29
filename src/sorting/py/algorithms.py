@@ -1,10 +1,10 @@
 """Contains sorting algorithms"""
 
 
-from sorting.utils.colors import *
+from py.utils.colors import *
 import matplotlib.pyplot as plt
 import numpy as np
-from sorting.utils.values import generate_array, get_factorial
+from py.utils.values import generate_array, get_factorial
 
 
 def selection(vis: plt.bar,

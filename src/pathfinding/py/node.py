@@ -1,7 +1,7 @@
 """Creates square objects that drives the visualizations"""
 
 
-from pathfinding.utils.colors import *
+from py.utils.colors import *
 
 
 LEFT = "Left"

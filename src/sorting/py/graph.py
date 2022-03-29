@@ -1,12 +1,12 @@
 """Draws and updates graph for visualization"""
 
 
-from sorting.utils.colors import *
+from py.utils.colors import *
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
-from sorting import algorithms as sort
-from sorting.utils.values import generate_array, remove_duplicates
+import py.algorithms as sort
+from py.utils.values import generate_array, remove_duplicates
 
 
 @dataclass
