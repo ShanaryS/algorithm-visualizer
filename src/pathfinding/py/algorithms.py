@@ -9,7 +9,6 @@ from py.utils.values import get_random_sample, get_randrange
 from queue import PriorityQueue
 from py.node import Square
 from time import perf_counter
-from typing import Union
 
 
 @dataclass(slots=True)
@@ -73,7 +72,7 @@ def dijkstra(
     ignore_node: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
-) -> Union[dict, bool]:
+) -> dict:
 
     """Code for the dijkstra algorithm"""
 
@@ -118,7 +117,7 @@ def dijkstra(
         if curr_square == end:
             if draw_best_path:
                 best_path(gph, algo, txt, came_from, end, visualize=visualize)
-                return True
+                return
 
             return came_from
 
@@ -152,7 +151,7 @@ def dijkstra(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_dijkstra=True)
 
-    return False
+    return
 
 
 def a_star(
@@ -164,7 +163,7 @@ def a_star(
     ignore_node: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
-) -> Union[dict, bool]:
+) -> dict:
 
     """Code for the A* algorithm"""
 
@@ -211,7 +210,7 @@ def a_star(
         if curr_square == end:
             if draw_best_path:
                 best_path(gph, algo, txt, came_from, end, visualize=visualize)
-                return True
+                return
 
             return came_from
 
@@ -246,7 +245,7 @@ def a_star(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_a_star=True)
 
-    return False
+    return
 
 
 def heuristic(pos1: tuple, pos2: tuple) -> int:
@@ -267,7 +266,7 @@ def bi_dijkstra(
     ignore_node: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
-) -> Union[dict, bool]:
+) -> dict:
 
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
 
@@ -329,7 +328,7 @@ def bi_dijkstra(
                         nei,
                         visualize=visualize,
                     )
-                    return True
+                    return
 
                 return came_from_start, came_from_end, curr_square, nei
 
@@ -346,7 +345,7 @@ def bi_dijkstra(
                         curr_square,
                         visualize=visualize,
                     )
-                    return True
+                    return
 
                 return came_from_start, came_from_end, nei, curr_square
 
@@ -363,7 +362,7 @@ def bi_dijkstra(
                         nei,
                         visualize=visualize,
                     )
-                    return True
+                    return
 
                 return came_from_start, came_from_end, curr_square, nei
 
@@ -380,7 +379,7 @@ def bi_dijkstra(
                         curr_square,
                         visualize=visualize,
                     )
-                    return True
+                    return
 
                 return came_from_start, came_from_end, nei, curr_square
 
@@ -444,7 +443,7 @@ def bi_dijkstra(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_bi_dijkstra=True)
 
-    return False
+    return
 
 
 def best_path_bi_dijkstra(
@@ -707,7 +706,7 @@ def algo_no_vis(
     ignore_node: Square = None,
     draw_best_path: bool = True,
     reset: bool = True,
-) -> Union[dict, bool]:
+) -> dict:
 
     """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
 

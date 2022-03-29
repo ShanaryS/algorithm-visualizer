@@ -96,6 +96,7 @@ if __name__ == "__main__":
 # Write tests for both threading and multiprocessing
 
 # --- Known Bugs ---
+# Can place walls during maze, causes crash when dragging over it
 # Bi dijk redraws open nodes
 # Bi dijk only draws best_path when edges of swarms are touching, mid node
 
