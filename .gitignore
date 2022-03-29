@@ -7,6 +7,6 @@ __pycache__
 *.spec
 *.prof
 *.austin
-/.vs
+.vs
 x64
 x86
