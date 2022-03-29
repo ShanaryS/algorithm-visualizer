@@ -6,13 +6,14 @@
     <ProjectGuid>{a7629b96-b069-4482-918c-604b79e685cf}</ProjectGuid>
     <ProjectHome />
     <StartupFile>..\..\..\run_pathfinding_visualizer.py</StartupFile>
-    <SearchPath />
+    <SearchPath>..\..\pathfinding</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId>MSBuild|venv|$(MSBuildProjectFullPath)</InterpreterId>
     <IsWindowsApplication>True</IsWindowsApplication>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
