@@ -1,6 +1,6 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
-
+from cpp import my_func
 import sys
 import os
 
@@ -50,9 +50,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    my_func()
 
 # --- C++ Performance Rewrite ---
+# Calling C++ functions in python: https://docs.microsoft.com/en-us/visualstudio/python/working-with-c-cpp-python-in-visual-studio?view=vs-2022
 # Rewrite node.py, algorithms.py into C++
 # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
