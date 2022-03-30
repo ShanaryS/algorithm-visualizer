@@ -78,23 +78,10 @@ class Square:
         """Returns the square location"""
         return self.row, self.col
 
-    def update_neighbours(self, gph) -> None:
-        """Updates this square's neighbours in the four cardinal directions"""
-
-        self.neighbours["Left"] = None
-        self.neighbours["Up"] = None
-        self.neighbours["Right"] = None
-        self.neighbours["Down"] = None
-
-        if self.col > 0:
-            self.neighbours["Left"] = gph.graph[self.row][self.col - 1]
-        if self.row > 0:
-            self.neighbours["Up"] = gph.graph[self.row - 1][self.col]
-        if self.col < self.rows - 1:
-            self.neighbours["Right"] = gph.graph[self.row][self.col + 1]
-        if self.row < self.rows - 1:
-            self.neighbours["Down"] = gph.graph[self.row + 1][self.col]
-
+    def get_color(self) -> tuple:
+        """Gets color of square"""
+        return self.color
+    
     def get_neighbours(self, include_walls=False) -> list:
         """Gets list of neighbours"""
         neighbours = []
@@ -107,6 +94,15 @@ class Square:
                 elif include_walls:
                     neighbours.append(nei)
         return neighbours
+
+    def draw_square(self) -> tuple:
+        """Updates the square with node type"""
+        return self.color, (
+            self.x,
+            self.y,
+            int(self.square_size),
+            int(self.square_size),
+        )
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
@@ -159,10 +155,6 @@ class Square:
     def is_history(self) -> bool:
         """Checks if history node"""
         return self.color == HISTORY_COLOR
-
-    def get_color(self) -> tuple:
-        """Gets color of square"""
-        return self.color
 
     def reset(self) -> None:
         """Sets node to blank"""
@@ -359,6 +351,23 @@ class Square:
         self.color_history = self.color
         self.color = HISTORY_COLOR
         type(self).all_history_nodes.add(self)
+    
+    def update_neighbours(self, gph) -> None:
+        """Updates this square's neighbours in the four cardinal directions"""
+
+        self.neighbours["Left"] = None
+        self.neighbours["Up"] = None
+        self.neighbours["Right"] = None
+        self.neighbours["Down"] = None
+
+        if self.col > 0:
+            self.neighbours["Left"] = gph.graph[self.row][self.col - 1]
+        if self.row > 0:
+            self.neighbours["Up"] = gph.graph[self.row - 1][self.col]
+        if self.col < self.rows - 1:
+            self.neighbours["Right"] = gph.graph[self.row][self.col + 1]
+        if self.row < self.rows - 1:
+            self.neighbours["Down"] = gph.graph[self.row + 1][self.col]
 
     def reset_wall_color(self) -> None:
         """Resets wall color to default"""
@@ -367,15 +376,6 @@ class Square:
     def set_wall_color_map(self) -> None:
         """Resets wall color for map to default"""
         self.wall_color = WALL_COLOR_MAP
-
-    def draw_square(self) -> tuple:
-        """Updates the square with node type"""
-        return self.color, (
-            self.x,
-            self.y,
-            int(self.square_size),
-            int(self.square_size),
-        )
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""

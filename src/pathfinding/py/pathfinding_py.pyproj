@@ -24,7 +24,6 @@
     <Compile Include="graph.py" />
     <Compile Include="logic.py" />
     <Compile Include="square.py" />
-    <Compile Include="utils\colors.py" />
     <Compile Include="utils\maps.py" />
     <Compile Include="utils\values.py" />
     <Compile Include="utils\__init__.py" />
