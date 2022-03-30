@@ -7,6 +7,25 @@
 #include <vector>
 
 
+struct Color
+{
+    const std::array<int, 3> DEFAULT_COLOR{ 255, 255, 255 };
+    const std::array<int, 3> OPEN_COLOR{ 64, 224, 208 };
+    const std::array<int, 3> OPEN_2_COLOR{ 64, 223, 208 };
+    const std::array<int, 3> OPEN_3_COLOR{ 64, 225, 208 };
+    const std::array<int, 3> CLOSED_COLOR{ 0, 0, 255 };
+    const std::array<int, 3> CLOSED_2_COLOR{ 0, 0, 254 };
+    const std::array<int, 3> CLOSED_3_COLOR{ 0, 0, 253 };
+    const std::array<int, 3> START_COLOR{ 0, 255, 0 };
+    const std::array<int, 3> MID_COLOR{ 255, 165, 0 };
+    const std::array<int, 3> END_COLOR{ 255, 0, 0 };
+    const std::array<int, 3> WALL_COLOR{ 0, 0, 0 };
+    const std::array<int, 3> WALL_COLOR_MAP{ 0, 0, 0 };
+    const std::array<int, 3> PATH_COLOR{ 255, 255, 0 };
+    const std::array<int, 3> NODE_HISTORY_COLOR{ 106, 13, 173 };
+};
+
+
 class Square
 {
 public:
@@ -15,8 +34,8 @@ public:
     {
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
-        m_color = Color::DEFAULT_COLOR;
-        m_wall_color = Color::WALL_COLOR;
+        m_color = color::DEFAULT_COLOR;
+        m_wall_color = color::WALL_COLOR;
         m_is_highway = false;
     }
 
@@ -29,19 +48,19 @@ public:
     void update_neighbours(auto gph);
     std::tuple<std::array<int, 3>, std::tuple<float, int>> draw_square() const;
 
-    bool is_empty() const { return m_color == Color::DEFAULT_COLOR; }
-    bool is_open() const { return m_color == Color::OPEN_COLOR; }
-    bool is_open2() const { return m_color == Color::OPEN_2_COLOR; }
-    bool is_open3() const { return m_color == Color::OPEN_3_COLOR; }
-    bool is_closed() const { return m_color == Color::CLOSED_COLOR; }
-    bool is_closed2() const { return m_color == Color::CLOSED_2_COLOR; }
-    bool is_closed3() const { return m_color == Color::CLOSED_3_COLOR; }
-    bool is_start() const { return m_color == Color::START_COLOR; }
-    bool is_mid() const { return m_color == Color::MID_COLOR; }
-    bool is_end() const { return m_color == Color::END_COLOR; }
-    bool is_wall() const { return m_color == Color::WALL_COLOR; }
-    bool is_path() const { return m_color == Color::PATH_COLOR; }
-    bool is_history() const { return m_color == Color::NODE_HISTORY_COLOR; }
+    bool is_empty() const { return m_color == color::DEFAULT_COLOR; }
+    bool is_open() const { return m_color == color::OPEN_COLOR; }
+    bool is_open2() const { return m_color == color::OPEN_2_COLOR; }
+    bool is_open3() const { return m_color == color::OPEN_3_COLOR; }
+    bool is_closed() const { return m_color == color::CLOSED_COLOR; }
+    bool is_closed2() const { return m_color == color::CLOSED_2_COLOR; }
+    bool is_closed3() const { return m_color == color::CLOSED_3_COLOR; }
+    bool is_start() const { return m_color == color::START_COLOR; }
+    bool is_mid() const { return m_color == color::MID_COLOR; }
+    bool is_end() const { return m_color == color::END_COLOR; }
+    bool is_wall() const { return m_color == color::WALL_COLOR; }
+    bool is_path() const { return m_color == color::PATH_COLOR; }
+    bool is_history() const { return m_color == color::NODE_HISTORY_COLOR; }
 
     void reset();
     void set_open();
@@ -57,8 +76,8 @@ public:
     void set_path();
     void set_history();
 
-    void reset_wall_color() { m_wall_color = Color::WALL_COLOR; }
-    void set_wall_color_map() { m_wall_color = Color::WALL_COLOR_MAP; }
+    void reset_wall_color() { m_wall_color = color::WALL_COLOR; }
+    void set_wall_color_map() { m_wall_color = color::WALL_COLOR_MAP; }
 
     std::unordered_set<Square> s_get_all_empty_nodes() { return s_all_empty_nodes; }
     std::unordered_set<Square> s_get_all_open_nodes() { return s_all_open_nodes; }
@@ -82,23 +101,7 @@ public:
     void s_clear_all_node_lists();
 
 private:
-    struct Color
-    {
-        static constexpr std::array<int, 3> DEFAULT_COLOR{ 255, 255, 255 };
-        static constexpr std::array<int, 3> OPEN_COLOR{ 64, 224, 208 };
-        static constexpr std::array<int, 3> OPEN_2_COLOR{ 64, 223, 208 };
-        static constexpr std::array<int, 3> OPEN_3_COLOR{ 64, 225, 208 };
-        static constexpr std::array<int, 3> CLOSED_COLOR{ 0, 0, 255 };
-        static constexpr std::array<int, 3> CLOSED_2_COLOR{ 0, 0, 254 };
-        static constexpr std::array<int, 3> CLOSED_3_COLOR{ 0, 0, 253 };
-        static constexpr std::array<int, 3> START_COLOR{ 0, 255, 0 };
-        static constexpr std::array<int, 3> MID_COLOR{ 255, 165, 0 };
-        static constexpr std::array<int, 3> END_COLOR{ 255, 0, 0 };
-        static constexpr std::array<int, 3> WALL_COLOR{ 0, 0, 0 };
-        static constexpr std::array<int, 3> WALL_COLOR_MAP{ 0, 0, 0 };
-        static constexpr std::array<int, 3> PATH_COLOR{ 255, 255, 0 };
-        static constexpr std::array<int, 3> NODE_HISTORY_COLOR{ 106, 13, 173 };
-    };
+    static Color color;
     
     int m_row;
     int m_col;
