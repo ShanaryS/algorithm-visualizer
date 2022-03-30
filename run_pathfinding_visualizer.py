@@ -66,6 +66,16 @@ if __name__ == "__main__":
 # - https://stackoverflow.com/a/51992944
 # Try to remove external cacert.pem dependency (also lib folder)
 
+# (Optimization Station: Things to test to see if faster)
+# Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
+
+
+
+
+
+
+
+
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
 #   - Else probably would need to mantually set processes then manually assign it to everything
