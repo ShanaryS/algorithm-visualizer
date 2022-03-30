@@ -52,7 +52,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Use enum instead of kwargs
 # Write gph.graph as a single list to optimize cache hits
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 
