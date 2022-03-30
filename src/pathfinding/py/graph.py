@@ -5,7 +5,7 @@ from py.utils.colors import *
 from dataclasses import dataclass
 import pygame
 from py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
-from py.node import Square
+from py.square import Square
 from typing import Optional
 
 

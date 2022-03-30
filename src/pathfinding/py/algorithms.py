@@ -7,7 +7,7 @@ import pygame
 from py.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
 from py.utils.values import get_random_sample, get_randrange
 from queue import PriorityQueue
-from py.node import Square
+from py.square import Square
 from time import perf_counter
 
 

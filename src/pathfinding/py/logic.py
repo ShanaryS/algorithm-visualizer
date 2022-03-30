@@ -24,7 +24,7 @@ from py.graph import (
     draw_vis_text,
     HEIGHT,
 )
-from py.node import Square
+from py.square import Square
 from typing import Optional
 from py.utils.maps import get_img_base, get_img_clean
 
