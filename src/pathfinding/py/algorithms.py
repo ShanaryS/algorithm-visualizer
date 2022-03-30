@@ -117,7 +117,7 @@ def dijkstra(
         if curr_square == end:
             if draw_best_path:
                 best_path(gph, algo, txt, came_from, end, visualize=visualize)
-                return
+                return dict()
 
             return came_from
 
@@ -151,7 +151,7 @@ def dijkstra(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_dijkstra=True)
 
-    return
+    return dict()
 
 
 def a_star(
@@ -210,7 +210,7 @@ def a_star(
         if curr_square == end:
             if draw_best_path:
                 best_path(gph, algo, txt, came_from, end, visualize=visualize)
-                return
+                return dict()
 
             return came_from
 
@@ -245,7 +245,7 @@ def a_star(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_a_star=True)
 
-    return
+    return dict()
 
 
 def heuristic(pos1: tuple, pos2: tuple) -> int:
@@ -328,7 +328,7 @@ def bi_dijkstra(
                         nei,
                         visualize=visualize,
                     )
-                    return
+                    return dict()
 
                 return came_from_start, came_from_end, curr_square, nei
 
@@ -345,7 +345,7 @@ def bi_dijkstra(
                         curr_square,
                         visualize=visualize,
                     )
-                    return
+                    return dict()
 
                 return came_from_start, came_from_end, nei, curr_square
 
@@ -362,7 +362,7 @@ def bi_dijkstra(
                         nei,
                         visualize=visualize,
                     )
-                    return
+                    return dict()
 
                 return came_from_start, came_from_end, curr_square, nei
 
@@ -379,7 +379,7 @@ def bi_dijkstra(
                         curr_square,
                         visualize=visualize,
                     )
-                    return
+                    return dict()
 
                 return came_from_start, came_from_end, nei, curr_square
 
@@ -443,7 +443,7 @@ def bi_dijkstra(
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_bi_dijkstra=True)
 
-    return
+    return dict()
 
 
 def best_path_bi_dijkstra(
@@ -458,10 +458,6 @@ def best_path_bi_dijkstra(
 ) -> None:
 
     """Used by bi_dijkstra to draw best path from in two parts"""
-
-    # Fixes bug when can't find a path
-    if isinstance(came_from_start, bool) or isinstance(came_from_end, bool):
-        return
 
     # Draws best path for first swarm
     best_path(gph, algo, txt, came_from_start, first_meet_node, visualize=visualize)
@@ -495,10 +491,6 @@ def best_path(
 ) -> None:
 
     """Main algo for reconstructing path"""
-
-    # Fixes bug when dragging where came_from would evaluate to bool instead of dict.
-    if isinstance(came_from, bool):
-        return
 
     # Puts node path into list so it's easier to traverse in either direction and choose start and end points
     path: list = []
@@ -668,29 +660,26 @@ def start_mid_end(
             mid.set_mid()
             end.set_end()
 
-        # Fixes bug when can't find a path
-        if not isinstance(start_to_mid, bool):
-            best_path_bi_dijkstra(
-                gph,
-                algo,
-                txt,
-                start_to_mid[0],
-                start_to_mid[1],
-                start_to_mid[2],
-                start_to_mid[3],
-                visualize=visualize,
-            )
-        if not isinstance(mid_to_end, bool):
-            best_path_bi_dijkstra(
-                gph,
-                algo,
-                txt,
-                mid_to_end[0],
-                mid_to_end[1],
-                mid_to_end[2],
-                mid_to_end[3],
-                visualize=visualize,
-            )
+        best_path_bi_dijkstra(
+            gph,
+            algo,
+            txt,
+            start_to_mid[0],
+            start_to_mid[1],
+            start_to_mid[2],
+            start_to_mid[3],
+            visualize=visualize,
+        )
+        best_path_bi_dijkstra(
+            gph,
+            algo,
+            txt,
+            mid_to_end[0],
+            mid_to_end[1],
+            mid_to_end[2],
+            mid_to_end[3],
+            visualize=visualize,
+        )
 
 
 def algo_no_vis(
