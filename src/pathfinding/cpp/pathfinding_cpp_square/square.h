@@ -1,17 +1,21 @@
 #pragma once
 
 #include <array>
+#include <string>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 
 class Square
 {
 public:
+    Square() = default;
     Square(int row, int col, int rows, float square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
+        m_valid = true;  // If casted to bool, return true
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
         m_color = s_default_color;
@@ -23,13 +27,16 @@ public:
 
     bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
     bool operator!= (const Square& other) const { return !(operator==(other)); }
+    
+    // False if instanced using default constructor
+    operator bool() const { return m_valid; }
 
     // Info about square
 
     std::array<int, 2> get_pos() const { return std::array<int, 2>{ m_row, m_col }; }
     std::array<int, 3> get_color() const { return m_color; }
-    std::array<Square, 4> get_neighbours(bool include_walls = false) const;
-    std::tuple<std::array<int, 3>, std::tuple<float, int>> draw_square() const;
+    std::vector<Square> get_neighbours(bool include_walls = false) const;
+    std::tuple<std::array<int, 3>, std::tuple<float, float, int, int>> draw_square() const;
 
     // Check square type
 
@@ -97,6 +104,9 @@ public:
     static void s_clear_all_node_lists();
 
 private:
+    // Used to check if instance is valid for casting to bool
+    bool m_valid{ false };
+
     // Member variables assigned from outside class
 
     int m_row;
@@ -108,7 +118,7 @@ private:
 
     float m_x;
     float m_y;
-    std::unordered_map<Square, Square> m_neighbours;
+    std::unordered_map<const std::string&, Square> m_neighbours;
     std::array<int, 3> m_color;
     std::array<int, 3> m_wall_color;
     std::array<int, 3> m_color_history;
