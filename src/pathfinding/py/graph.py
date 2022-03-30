@@ -593,11 +593,11 @@ def reset_graph(
         # Default case
         nodes_to_reset = [
             Square.get_all_open_nodes.copy(),
-            Square.get_all_open_nodes_alt.copy(),
-            Square.get_all_open_nodes_alt_.copy(),
+            Square.get_all_open_nodes_2.copy(),
+            Square.get_all_open_nodes_3.copy(),
             Square.get_all_closed_nodes.copy(),
-            Square.get_all_closed_nodes_alt.copy(),
-            Square.get_all_closed_nodes_alt_.copy(),
+            Square.get_all_closed_nodes_2.copy(),
+            Square.get_all_closed_nodes_3.copy(),
             Square.get_all_start_nodes.copy(),
             Square.get_all_mid_nodes.copy(),
             Square.get_all_end_nodes.copy(),
@@ -622,12 +622,12 @@ def reset_algo(algo) -> None:
 
     # Resets only certain colors
     nodes_to_reset = [
-        Square.get_all_open_nodes.copy(),
-        Square.get_all_open_nodes_alt.copy(),
-        Square.get_all_open_nodes_alt_.copy(),
-        Square.get_all_closed_nodes.copy(),
-        Square.get_all_closed_nodes_alt.copy(),
-        Square.get_all_closed_nodes_alt_.copy(),
+        Square.get_all_open_nodes().copy(),
+        Square.get_all_open_nodes_2().copy(),
+        Square.get_all_open_nodes_3().copy(),
+        Square.get_all_closed_nodes().copy(),
+        Square.get_all_closed_nodes_2().copy(),
+        Square.get_all_closed_nodes_3().copy(),
         Square.get_all_path_nodes.copy(),
     ]
     square: Square
