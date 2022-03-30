@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
 # --- C++ Performance Rewrite ---
 # Rewrite node.py, algorithms.py into C++
-# Implement discard node as switch statement
+# May need to write hash for square.cpp
 # Write gph.graph as a single list to optimize cache hits
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
