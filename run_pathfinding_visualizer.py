@@ -52,13 +52,17 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Rename node.py to square.py, rename projects
+# Use enum instead of kwargs
+# Write gph.graph as a single list to optimize cache hits
+# Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
+
 # --- C++ Performance Rewrite ---
-# Calling C++ functions in python: https://docs.microsoft.com/en-us/visualstudio/python/working-with-c-cpp-python-in-visual-studio?view=vs-2022
 # Rewrite node.py, algorithms.py into C++
 # Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
-# Create new branch 'archive/python_only'
+# Add algo timer to c++ functions?
 
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
