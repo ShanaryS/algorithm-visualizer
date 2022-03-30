@@ -37,11 +37,11 @@ class Square:
     # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()
     all_open_nodes = set()
-    all_open_nodes_2 = set()
-    all_open_nodes_3 = set()
+    all_open2_nodes = set()
+    all_open3_nodes = set()
     all_closed_nodes = set()
-    all_closed_nodes_2 = set()
-    all_closed_nodes_3 = set()
+    all_closed2_nodes = set()
+    all_closed3_nodes = set()
     all_start_nodes = set()
     all_mid_nodes = set()
     all_end_nodes = set()
@@ -112,11 +112,11 @@ class Square:
         """Checks if open node"""
         return self.color == OPEN_COLOR
 
-    def is_open_2(self) -> bool:
+    def is_open2(self) -> bool:
         """Checks if open node for second swarm of bi_dijkstra"""
         return self.color == OPEN_2_COLOR
 
-    def is_open_3(self) -> bool:
+    def is_open3(self) -> bool:
         """Checks if open node for end node when mid is included"""
         return self.color == OPEN_3_COLOR
 
@@ -124,11 +124,11 @@ class Square:
         """Checks if closed node"""
         return self.color == CLOSED_COLOR
 
-    def is_closed_2(self) -> bool:
+    def is_closed2(self) -> bool:
         """Checks if closed node for second swarm of bi_dijkstra"""
         return self.color == CLOSED_2_COLOR
 
-    def is_closed_3(self) -> bool:
+    def is_closed3(self) -> bool:
         """Checks if closed node for end node when mid is included"""
         return self.color == CLOSED_3_COLOR
 
@@ -186,10 +186,10 @@ class Square:
         type(self).nodes_to_update.add(self)
         type(self).all_open_nodes.add(self)
 
-    def set_open_2(self) -> None:
+    def set_open2(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
-        if self.is_open_2():
+        if self.is_open2():
             return
 
         # Add to node history if user requests to track
@@ -199,14 +199,14 @@ class Square:
         self._discard_node()
         self.color = OPEN_2_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_open_nodes_2.add(self)
+        type(self).all_open2_nodes.add(self)
 
-    def set_open_3(self) -> None:
+    def set_open3(self) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
         # Don't do anything if already set correctly
-        if self.is_open_3():
+        if self.is_open3():
             return
 
         # Add to node history if user requests to track
@@ -216,7 +216,7 @@ class Square:
         self._discard_node()
         self.color = OPEN_3_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_open_nodes_3.add(self)
+        type(self).all_open3_nodes.add(self)
 
     def set_closed(self) -> None:
         """Sets node to closed"""
@@ -233,10 +233,10 @@ class Square:
         type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes.add(self)
 
-    def set_closed_2(self) -> None:
+    def set_closed2(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
-        if self.is_closed_2():
+        if self.is_closed2():
             return
 
         # Add to node history if user requests to track
@@ -246,12 +246,12 @@ class Square:
         self._discard_node()
         self.color = CLOSED_2_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_closed_nodes_2.add(self)
+        type(self).all_closed2_nodes.add(self)
 
-    def set_closed_3(self) -> None:
+    def set_closed3(self) -> None:
         """Sets node to closed for end now when mid is included"""
         # Don't do anything if already set correctly
-        if self.is_closed_3():
+        if self.is_closed3():
             return
 
         # Add to node history if user requests to track
@@ -261,7 +261,7 @@ class Square:
         self._discard_node()
         self.color = CLOSED_3_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_closed_nodes_3.add(self)
+        type(self).all_closed3_nodes.add(self)
 
     def set_start(self) -> None:
         """Sets node to start"""
@@ -386,11 +386,11 @@ class Square:
 
         type(self).all_empty_nodes.discard(self)
         type(self).all_open_nodes.discard(self)
-        type(self).all_open_nodes_2.discard(self)
-        type(self).all_open_nodes_3.discard(self)
+        type(self).all_open2_nodes.discard(self)
+        type(self).all_open3_nodes.discard(self)
         type(self).all_closed_nodes.discard(self)
-        type(self).all_closed_nodes_2.discard(self)
-        type(self).all_closed_nodes_3.discard(self)
+        type(self).all_closed2_nodes.discard(self)
+        type(self).all_closed3_nodes.discard(self)
         type(self).all_start_nodes.discard(self)
         type(self).all_mid_nodes.discard(self)
         type(self).all_end_nodes.discard(self)
@@ -411,18 +411,18 @@ class Square:
         return cls.all_open_nodes
 
     @classmethod
-    def get_all_open_nodes_2(cls, copy=False) -> set:
+    def get_all_open2_nodes(cls, copy=False) -> set:
         """Gets all open_2 nodes"""
         if copy:
-            return cls.all_open_nodes_2.copy()
-        return cls.all_open_nodes_2
+            return cls.all_open2_nodes.copy()
+        return cls.all_open2_nodes
 
     @classmethod
-    def get_all_open_nodes_3(cls, copy=False) -> set:
+    def get_all_open3_nodes(cls, copy=False) -> set:
         """Gets all open_3 nodes"""
         if copy:
-            return cls.all_open_nodes_3.copy()
-        return cls.all_open_nodes_3
+            return cls.all_open3_nodes.copy()
+        return cls.all_open3_nodes
 
     @classmethod
     def get_all_closed_nodes(cls, copy=False) -> set:
@@ -432,18 +432,18 @@ class Square:
         return cls.all_closed_nodes
 
     @classmethod
-    def get_all_closed_nodes_2(cls, copy=False) -> set:
+    def get_all_closed2_nodes(cls, copy=False) -> set:
         """Gets all closed_2 nodes"""
         if copy:
-            return cls.all_closed_nodes_2.copy()
-        return cls.all_closed_nodes_2
+            return cls.all_closed2_nodes.copy()
+        return cls.all_closed2_nodes
 
     @classmethod
-    def get_all_closed_nodes_3(cls, copy=False) -> set:
+    def get_all_closed3_nodes(cls, copy=False) -> set:
         """Gets all closed_3 nodes"""
         if copy:
-            return cls.all_closed_nodes_3.copy()
-        return cls.all_closed_nodes_3
+            return cls.all_closed3_nodes.copy()
+        return cls.all_closed3_nodes
 
     @classmethod
     def get_all_start_nodes(cls, copy=False) -> set:
@@ -515,11 +515,11 @@ class Square:
             cls.all_empty_nodes.clear()
         
         cls.all_open_nodes.clear()
-        cls.all_open_nodes_2.clear()
-        cls.all_open_nodes_3.clear()
+        cls.all_open2_nodes.clear()
+        cls.all_open3_nodes.clear()
         cls.all_closed_nodes.clear()
-        cls.all_closed_nodes_2.clear()
-        cls.all_closed_nodes_3.clear()
+        cls.all_closed2_nodes.clear()
+        cls.all_closed3_nodes.clear()
         cls.all_start_nodes.clear()
         cls.all_mid_nodes.clear()
         cls.all_end_nodes.clear()

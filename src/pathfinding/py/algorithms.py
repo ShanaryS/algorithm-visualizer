@@ -315,7 +315,7 @@ def bi_dijkstra(
         nei: Square
         for nei in curr_square.get_neighbours():
             # Start swarm reaching mid (end node if no mid) swarm
-            if curr_square.is_open() and nei.is_open_2():
+            if curr_square.is_open() and nei.is_open2():
                 if draw_best_path:
                     best_path_bi_dijkstra(
                         gph,
@@ -332,7 +332,7 @@ def bi_dijkstra(
                 return came_from_start, came_from_end, curr_square, nei
 
             # Mid (end if no mid) swarm reaching start swarm
-            elif curr_square.is_open_2() and nei.is_open() and not alt_color:
+            elif curr_square.is_open2() and nei.is_open() and not alt_color:
                 if draw_best_path:
                     best_path_bi_dijkstra(
                         gph,
@@ -349,7 +349,7 @@ def bi_dijkstra(
                 return came_from_start, came_from_end, nei, curr_square
 
             # Mid swarm reaching end swarm
-            elif curr_square.is_open_2() and nei.is_open_3():
+            elif curr_square.is_open2() and nei.is_open3():
                 if draw_best_path:
                     best_path_bi_dijkstra(
                         gph,
@@ -366,7 +366,7 @@ def bi_dijkstra(
                 return came_from_start, came_from_end, curr_square, nei
 
             # End swarm reaching mid swarm
-            elif curr_square.is_open_3() and nei.is_open_2():
+            elif curr_square.is_open3() and nei.is_open2():
                 if draw_best_path:
                     best_path_bi_dijkstra(
                         gph,
@@ -395,7 +395,7 @@ def bi_dijkstra(
                     open_set.put((g_score[nei], queue_pos, nei, "start"))
                     if nei != end and not nei.is_closed() and nei != ignore_node:
                         if alt_color:
-                            nei.set_open_2()
+                            nei.set_open2()
                         else:
                             nei.set_open()
         elif temp[3] == "end":
@@ -409,26 +409,26 @@ def bi_dijkstra(
                     open_set.put((g_score[nei], queue_pos, nei, "end"))
                     if nei != start and not nei.is_closed() and nei != ignore_node:
                         if alt_color:
-                            nei.set_open_3()
+                            nei.set_open3()
                         else:
-                            nei.set_open_2()
+                            nei.set_open2()
 
         # Sets square to closed after finished checking
         already_closed = any(
             (
                 curr_square.is_closed(),
-                curr_square.is_closed_2(),
-                curr_square.is_closed_3(),
+                curr_square.is_closed2(),
+                curr_square.is_closed3(),
             )
         )
         if curr_square != start and curr_square != end and curr_square != ignore_node:
             # Set square to proper closed value based on it's open value
             if curr_square.is_open():
                 curr_square.set_closed()
-            elif curr_square.is_open_2():
-                curr_square.set_closed_2()
-            elif curr_square.is_open_3():
-                curr_square.set_closed_3()
+            elif curr_square.is_open2():
+                curr_square.set_closed2()
+            elif curr_square.is_open3():
+                curr_square.set_closed3()
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
