@@ -50,9 +50,9 @@
       <Project>{b8504aa8-6977-4317-bcf5-a5524079aeb3}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\cpp\pathfinding_cpp_node\pathfinding_cpp_node.vcxproj">
-      <Name>pathfinding_cpp_node</Name>
-      <Project>{7ad7b322-8ad0-4cac-a61e-56c919942494}</Project>
+    <ProjectReference Include="..\cpp\pathfinding_cpp_square\pathfinding_cpp_square.vcxproj">
+      <Name>pathfinding_cpp_square</Name>
+      <Project>{fcfcefe1-0a17-49c5-b214-3f145efa3aa9}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
