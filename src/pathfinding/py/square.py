@@ -1,22 +1,6 @@
 """Creates square objects that drives the visualizations"""
 
 
-DEFAULT_COLOR = (255, 255, 255)
-OPEN_COLOR = (64, 224, 208)
-OPEN_2_COLOR = (64, 223, 208)
-OPEN_3_COLOR = (64, 225, 208)
-CLOSED_COLOR = (0, 0, 255)
-CLOSED_2_COLOR = (0, 0, 254)
-CLOSED_3_COLOR = (0, 0, 253)
-START_COLOR = (0, 255, 0)
-MID_COLOR = (255, 165, 0)
-END_COLOR = (255, 0, 0)
-WALL_COLOR = (0, 0, 0)
-WALL_COLOR_MAP = (0, 0, 0)
-PATH_COLOR = (255, 255, 0)
-HISTORY_COLOR = (106, 13, 173)
-
-
 class Square:
     """Defines the properties needed for each node on graph"""
 
@@ -33,6 +17,22 @@ class Square:
         "color_history",
         "is_highway"
     )
+    
+    # Possible colors for square
+    _DEFAULT_COLOR = (255, 255, 255)
+    _OPEN_COLOR = (64, 224, 208)
+    _OPEN2_COLOR = (64, 223, 208)
+    _OPEN3_COLOR = (64, 225, 208)
+    _CLOSED_COLOR = (0, 0, 255)
+    _CLOSED2_COLOR = (0, 0, 254)
+    _CLOSED3_COLOR = (0, 0, 253)
+    _START_COLOR = (0, 255, 0)
+    _MID_COLOR = (255, 165, 0)
+    _END_COLOR = (255, 0, 0)
+    _WALL_COLOR = (0, 0, 0)
+    _WALL_COLOR_MAP = (0, 0, 0)
+    _PATH_COLOR = (255, 255, 0)
+    _HISTORY_COLOR = (106, 13, 173)
 
     # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()
@@ -65,8 +65,8 @@ class Square:
         self.x: float = self.row * self.square_size
         self.y: float = self.col * self.square_size
         self.neighbours: dict = {}
-        self.color = DEFAULT_COLOR
-        self.wall_color = WALL_COLOR
+        self.color = Square._DEFAULT_COLOR
+        self.wall_color = Square._WALL_COLOR
         self.color_history = None
         self.is_highway = False
 
@@ -106,43 +106,43 @@ class Square:
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
-        return self.color == DEFAULT_COLOR
+        return self.color == Square._DEFAULT_COLOR
 
     def is_open(self) -> bool:
         """Checks if open node"""
-        return self.color == OPEN_COLOR
+        return self.color == Square._OPEN_COLOR
 
     def is_open2(self) -> bool:
         """Checks if open node for second swarm of bi_dijkstra"""
-        return self.color == OPEN_2_COLOR
+        return self.color == Square._OPEN2_COLOR
 
     def is_open3(self) -> bool:
         """Checks if open node for end node when mid is included"""
-        return self.color == OPEN_3_COLOR
+        return self.color == Square._OPEN3_COLOR
 
     def is_closed(self) -> bool:
         """Checks if closed node"""
-        return self.color == CLOSED_COLOR
+        return self.color == Square._CLOSED_COLOR
 
     def is_closed2(self) -> bool:
         """Checks if closed node for second swarm of bi_dijkstra"""
-        return self.color == CLOSED_2_COLOR
+        return self.color == Square._CLOSED2_COLOR
 
     def is_closed3(self) -> bool:
         """Checks if closed node for end node when mid is included"""
-        return self.color == CLOSED_3_COLOR
+        return self.color == Square._CLOSED3_COLOR
 
     def is_start(self) -> bool:
         """Checks if start node"""
-        return self.color == START_COLOR
+        return self.color == Square._START_COLOR
 
     def is_mid(self) -> bool:
         """Checks if mid node"""
-        return self.color == MID_COLOR
+        return self.color == Square._MID_COLOR
 
     def is_end(self) -> bool:
         """Checks if end node"""
-        return self.color == END_COLOR
+        return self.color == Square._END_COLOR
 
     def is_wall(self) -> bool:
         """Checks if wall node"""
@@ -150,11 +150,11 @@ class Square:
 
     def is_path(self) -> bool:
         """Checks if path node"""
-        return self.color == PATH_COLOR
+        return self.color == Square._PATH_COLOR
 
     def is_history(self) -> bool:
         """Checks if history node"""
-        return self.color == HISTORY_COLOR
+        return self.color == Square._HISTORY_COLOR
 
     def reset(self) -> None:
         """Sets node to blank"""
@@ -163,13 +163,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color, self.is_highway = DEFAULT_COLOR, False
-        type(self).nodes_to_update.add(self)
-        type(self).all_empty_nodes.add(self)
+        self.color, self.is_highway = Square._DEFAULT_COLOR, False
+        Square.nodes_to_update.add(self)
+        Square.all_empty_nodes.add(self)
 
     def set_open(self) -> None:
         """Sets node to open"""
@@ -178,13 +178,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = OPEN_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_open_nodes.add(self)
+        self.color = Square._OPEN_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_open_nodes.add(self)
 
     def set_open2(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
@@ -193,13 +193,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = OPEN_2_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_open2_nodes.add(self)
+        self.color = Square._OPEN2_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_open2_nodes.add(self)
 
     def set_open3(self) -> None:
         """Sets node to open for end node when mid is included.
@@ -210,13 +210,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = OPEN_3_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_open3_nodes.add(self)
+        self.color = Square._OPEN3_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_open3_nodes.add(self)
 
     def set_closed(self) -> None:
         """Sets node to closed"""
@@ -225,13 +225,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = CLOSED_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_closed_nodes.add(self)
+        self.color = Square._CLOSED_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_closed_nodes.add(self)
 
     def set_closed2(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
@@ -240,13 +240,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = CLOSED_2_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_closed2_nodes.add(self)
+        self.color = Square._CLOSED2_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_closed2_nodes.add(self)
 
     def set_closed3(self) -> None:
         """Sets node to closed for end now when mid is included"""
@@ -255,13 +255,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = CLOSED_3_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_closed3_nodes.add(self)
+        self.color = Square._CLOSED3_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_closed3_nodes.add(self)
 
     def set_start(self) -> None:
         """Sets node to start"""
@@ -270,13 +270,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node(remove_wall=False)
-        self.color = START_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_start_nodes.add(self)
+        self.color = Square._START_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_start_nodes.add(self)
 
     def set_mid(self) -> None:
         """Sets node to mid"""
@@ -285,13 +285,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node(remove_wall=False)
-        self.color = MID_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_mid_nodes.add(self)
+        self.color = Square._MID_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_mid_nodes.add(self)
 
     def set_end(self) -> None:
         """Sets node to end"""
@@ -300,13 +300,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node(remove_wall=False)
-        self.color = END_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_end_nodes.add(self)
+        self.color = Square._END_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_end_nodes.add(self)
 
     def set_wall(self) -> None:
         """Sets node to wall"""
@@ -315,13 +315,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
         self.color = self.wall_color
-        type(self).nodes_to_update.add(self)
-        type(self).all_wall_nodes.add(self)
+        Square.nodes_to_update.add(self)
+        Square.all_wall_nodes.add(self)
 
     def set_path(self) -> None:
         """Sets node to path"""
@@ -330,13 +330,13 @@ class Square:
             return
 
         # Add to node history if user requests to track
-        if type(self).track_node_history:
-            type(self).node_history.add(self)
+        if Square.track_node_history:
+            Square.node_history.add(self)
 
         self._discard_node()
-        self.color = PATH_COLOR
-        type(self).nodes_to_update.add(self)
-        type(self).all_path_nodes.add(self)
+        self.color = Square._PATH_COLOR
+        Square.nodes_to_update.add(self)
+        Square.all_path_nodes.add(self)
 
     def set_history(self) -> None:
         """Sets node to history visualization"""
@@ -349,8 +349,8 @@ class Square:
             return
 
         self.color_history = self.color
-        self.color = HISTORY_COLOR
-        type(self).all_history_nodes.add(self)
+        self.color = Square._HISTORY_COLOR
+        Square.all_history_nodes.add(self)
     
     def update_neighbours(self, gph) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
@@ -371,30 +371,46 @@ class Square:
 
     def reset_wall_color(self) -> None:
         """Resets wall color to default"""
-        self.wall_color = WALL_COLOR
+        self.wall_color = Square._WALL_COLOR
 
     def set_wall_color_map(self) -> None:
         """Resets wall color for map to default"""
-        self.wall_color = WALL_COLOR_MAP
+        self.wall_color = Square._WALL_COLOR_MAP
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
-
+        
         # Ordinal nodes should not remove wall to reinstate after dragging
-        if remove_wall:
-            type(self).all_wall_nodes.discard(self)
-
-        type(self).all_empty_nodes.discard(self)
-        type(self).all_open_nodes.discard(self)
-        type(self).all_open2_nodes.discard(self)
-        type(self).all_open3_nodes.discard(self)
-        type(self).all_closed_nodes.discard(self)
-        type(self).all_closed2_nodes.discard(self)
-        type(self).all_closed3_nodes.discard(self)
-        type(self).all_start_nodes.discard(self)
-        type(self).all_mid_nodes.discard(self)
-        type(self).all_end_nodes.discard(self)
-        type(self).all_path_nodes.discard(self)
+        if self.color == self.wall_color and not remove_wall:
+            return
+        
+        match self.color:
+            case Square._DEFAULT_COLOR:
+                Square.all_empty_nodes.discard(self)
+            case Square._OPEN_COLOR:
+                Square.all_open_nodes.discard(self)
+            case Square._OPEN2_COLOR:
+                Square.all_open2_nodes.discard(self)
+            case Square._OPEN3_COLOR:
+                Square.all_open3_nodes.discard(self)
+            case Square._CLOSED_COLOR:
+                Square.all_closed_nodes.discard(self)
+            case Square._CLOSED2_COLOR:
+                Square.all_closed2_nodes.discard(self)
+            case Square._CLOSED3_COLOR:
+                Square.all_closed3_nodes.discard(self)
+            case Square._START_COLOR:
+                Square.all_start_nodes.discard(self)
+            case Square._MID_COLOR:
+                Square.all_mid_nodes.discard(self)
+            case Square._END_COLOR:
+                Square.all_end_nodes.discard(self)
+            case self.wall_color:  # Can be changed
+                Square.all_wall_nodes.discard(self)
+            case Square._PATH_COLOR:
+                Square.all_path_nodes.discard(self)
+            case Square._HISTORY_COLOR:
+                Square.all_history_nodes.discard(self)
 
     @classmethod
     def get_all_empty_nodes(cls, copy=False) -> set:
