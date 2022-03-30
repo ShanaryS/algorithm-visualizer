@@ -21,8 +21,8 @@ public:
 
     // Allow these operators
 
-    friend bool operator== (const Square& first, const Square& second);
-    friend bool operator!= (const Square& first, const Square& second);
+    bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
+    bool operator!= (const Square& other) const { return !(operator==(other)); }
 
     // Info about square
 

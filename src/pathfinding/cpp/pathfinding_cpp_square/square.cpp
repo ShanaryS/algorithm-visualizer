@@ -3,6 +3,10 @@
 #include "square.h"
 
 
+std::array<Square, 4> get_neighbours(bool include_walls = false) const;
+std::tuple<std::array<int, 3>, std::tuple<float, int>> draw_square() const;
+
+
 // Allow code to be imported into python using pybind11
 
 namespace py = pybind11;
