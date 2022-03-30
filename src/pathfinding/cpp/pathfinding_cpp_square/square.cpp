@@ -75,11 +75,11 @@ public:
 
     std::unordered_set<Square> s_get_all_empty_nodes() { return s_all_empty_nodes; }
     std::unordered_set<Square> s_get_all_open_nodes() { return s_all_open_nodes; }
-    std::unordered_set<Square> s_get_all_open_nodes2() { return s_all_open_nodes2; }
-    std::unordered_set<Square> s_get_all_open_nodes3() { return s_all_open_nodes3; }
+    std::unordered_set<Square> s_get_all_open2_nodes() { return s_all_open2_nodes; }
+    std::unordered_set<Square> s_get_all_open3_nodes() { return s_all_open3_nodes; }
     std::unordered_set<Square> s_get_all_closed_nodes() { return s_all_closed_nodes; }
-    std::unordered_set<Square> s_get_all_closed_nodes2() { return s_all_closed_nodes2; }
-    std::unordered_set<Square> s_get_all_closed_nodes3() { return s_all_closed_nodes3; }
+    std::unordered_set<Square> s_get_all_closed2_nodes() { return s_all_closed2_nodes; }
+    std::unordered_set<Square> s_get_all_closed3_nodes() { return s_all_closed3_nodes; }
     std::unordered_set<Square> s_get_all_start_nodes() { return s_all_start_nodes; }
     std::unordered_set<Square> s_get_all_mid_nodes() { return s_all_mid_nodes; }
     std::unordered_set<Square> s_get_all_end_nodes() { return s_all_end_nodes; }
@@ -138,11 +138,11 @@ private:
 
     static std::unordered_set<Square> s_all_empty_nodes;
     static std::unordered_set<Square> s_all_open_nodes;
-    static std::unordered_set<Square> s_all_open_nodes2;
-    static std::unordered_set<Square> s_all_open_nodes3;
+    static std::unordered_set<Square> s_all_open2_nodes;
+    static std::unordered_set<Square> s_all_open3_nodes;
     static std::unordered_set<Square> s_all_closed_nodes;
-    static std::unordered_set<Square> s_all_closed_nodes2;
-    static std::unordered_set<Square> s_all_closed_nodes3;
+    static std::unordered_set<Square> s_all_closed2_nodes;
+    static std::unordered_set<Square> s_all_closed3_nodes;
     static std::unordered_set<Square> s_all_start_nodes;
     static std::unordered_set<Square> s_all_mid_nodes;
     static std::unordered_set<Square> s_all_end_nodes;
