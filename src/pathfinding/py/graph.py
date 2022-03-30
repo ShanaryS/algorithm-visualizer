@@ -1,13 +1,19 @@
 """Draws and updates graph for visualization"""
 
 
-from py.utils.colors import *
 from dataclasses import dataclass
 import pygame
 from py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
 from py.square import Square
 from typing import Optional
 
+
+# Colors
+DEFAULT_COLOR = (255, 255, 255)
+LINE_COLOR = (128, 128, 128)
+LEGEND_COLOR = (0, 0, 0)
+LEGEND_AREA_COLOR = (128, 128, 128)
+VIS_COLOR = (255, 0, 0)
 
 # Defining window properties as well as graph size
 WINDOW_WIDTH = 800
@@ -592,18 +598,18 @@ def reset_graph(
 
         # Default case
         nodes_to_reset = [
-            Square.get_all_open_nodes.copy(),
-            Square.get_all_open_nodes_2.copy(),
-            Square.get_all_open_nodes_3.copy(),
-            Square.get_all_closed_nodes.copy(),
-            Square.get_all_closed_nodes_2.copy(),
-            Square.get_all_closed_nodes_3.copy(),
-            Square.get_all_start_nodes.copy(),
-            Square.get_all_mid_nodes.copy(),
-            Square.get_all_end_nodes.copy(),
-            Square.get_all_wall_nodes.copy(),
-            Square.get_all_path_nodes.copy(),
-            Square.get_all_history_nodes.copy(),
+            Square.get_all_open_nodes().copy(),
+            Square.get_all_open_nodes_2().copy(),
+            Square.get_all_open_nodes_3().copy(),
+            Square.get_all_closed_nodes().copy(),
+            Square.get_all_closed_nodes_2().copy(),
+            Square.get_all_closed_nodes_3().copy(),
+            Square.get_all_start_nodes().copy(),
+            Square.get_all_mid_nodes().copy(),
+            Square.get_all_end_nodes().copy(),
+            Square.get_all_wall_nodes().copy(),
+            Square.get_all_path_nodes().copy(),
+            Square.get_all_history_nodes().copy(),
         ]
         square: Square
         for type_list in nodes_to_reset:

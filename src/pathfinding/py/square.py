@@ -1,7 +1,20 @@
 """Creates square objects that drives the visualizations"""
 
 
-from py.utils.colors import *
+DEFAULT_COLOR = (255, 255, 255)
+OPEN_COLOR = (64, 224, 208)
+OPEN_2_COLOR = (64, 223, 208)
+OPEN_3_COLOR = (64, 225, 208)
+CLOSED_COLOR = (0, 0, 255)
+CLOSED_2_COLOR = (0, 0, 254)
+CLOSED_3_COLOR = (0, 0, 253)
+START_COLOR = (0, 255, 0)
+MID_COLOR = (255, 165, 0)
+END_COLOR = (255, 0, 0)
+WALL_COLOR = (0, 0, 0)
+WALL_COLOR_MAP = (0, 0, 0)
+PATH_COLOR = (255, 255, 0)
+HISTORY_COLOR = (106, 13, 173)
 
 
 class Square:
