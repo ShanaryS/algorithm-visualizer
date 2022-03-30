@@ -109,25 +109,25 @@ class Square:
         """Checks if open node"""
         return self.color == OPEN_COLOR
 
-    def is_open_alt(self) -> bool:
+    def is_open_2(self) -> bool:
         """Checks if open node for second swarm of bi_dijkstra"""
-        return self.color == OPEN_ALT_COLOR
+        return self.color == OPEN_2_COLOR
 
-    def is_open_alt_(self) -> bool:
+    def is_open_3(self) -> bool:
         """Checks if open node for end node when mid is included"""
-        return self.color == OPEN_ALT_COLOR_
+        return self.color == OPEN_3_COLOR
 
     def is_closed(self) -> bool:
         """Checks if closed node"""
         return self.color == CLOSED_COLOR
 
-    def is_closed_alt(self) -> bool:
+    def is_closed_2(self) -> bool:
         """Checks if closed node for second swarm of bi_dijkstra"""
-        return self.color == CLOSED_ALT_COLOR
+        return self.color == CLOSED_2_COLOR
 
-    def is_closed_alt_(self) -> bool:
+    def is_closed_3(self) -> bool:
         """Checks if closed node for end node when mid is included"""
-        return self.color == CLOSED_ALT_COLOR_
+        return self.color == CLOSED_3_COLOR
 
     def is_start(self) -> bool:
         """Checks if start node"""
@@ -187,10 +187,10 @@ class Square:
         type(self).nodes_to_update.add(self)
         type(self).all_open_nodes.add(self)
 
-    def set_open_alt(self) -> None:
+    def set_open_2(self) -> None:
         """Sets node to open for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
-        if self.is_open_alt():
+        if self.is_open_2():
             return
 
         # Add to node history if user requests to track
@@ -198,16 +198,16 @@ class Square:
             type(self).node_history.add(self)
 
         self._discard_node()
-        self.color = OPEN_ALT_COLOR
+        self.color = OPEN_2_COLOR
         type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt.add(self)
 
-    def set_open_alt_(self) -> None:
+    def set_open_3(self) -> None:
         """Sets node to open for end node when mid is included.
         Each swarms needs to be different colors for best path algo to work.
         """
         # Don't do anything if already set correctly
-        if self.is_open_alt_():
+        if self.is_open_3():
             return
 
         # Add to node history if user requests to track
@@ -215,7 +215,7 @@ class Square:
             type(self).node_history.add(self)
 
         self._discard_node()
-        self.color = OPEN_ALT_COLOR_
+        self.color = OPEN_3_COLOR
         type(self).nodes_to_update.add(self)
         type(self).all_open_nodes_alt_.add(self)
 
@@ -234,10 +234,10 @@ class Square:
         type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes.add(self)
 
-    def set_closed_alt(self) -> None:
+    def set_closed_2(self) -> None:
         """Sets node to closed for second swarm of bi_dijkstra"""
         # Don't do anything if already set correctly
-        if self.is_closed_alt():
+        if self.is_closed_2():
             return
 
         # Add to node history if user requests to track
@@ -245,14 +245,14 @@ class Square:
             type(self).node_history.add(self)
 
         self._discard_node()
-        self.color = CLOSED_ALT_COLOR
+        self.color = CLOSED_2_COLOR
         type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt.add(self)
 
-    def set_closed_alt_(self) -> None:
+    def set_closed_3(self) -> None:
         """Sets node to closed for end now when mid is included"""
         # Don't do anything if already set correctly
-        if self.is_closed_alt_():
+        if self.is_closed_3():
             return
 
         # Add to node history if user requests to track
@@ -260,7 +260,7 @@ class Square:
             type(self).node_history.add(self)
 
         self._discard_node()
-        self.color = CLOSED_ALT_COLOR_
+        self.color = CLOSED_3_COLOR
         type(self).nodes_to_update.add(self)
         type(self).all_closed_nodes_alt_.add(self)
 
