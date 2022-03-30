@@ -628,7 +628,7 @@ def reset_algo(algo) -> None:
         Square.get_all_closed_nodes().copy(),
         Square.get_all_closed_nodes_2().copy(),
         Square.get_all_closed_nodes_3().copy(),
-        Square.get_all_path_nodes.copy(),
+        Square.get_all_path_nodes().copy(),
     ]
     square: Square
     for type_list in nodes_to_reset:
