@@ -62,6 +62,8 @@ if __name__ == "__main__":
 #   Changing to large graph takes 40ms
 # Add algo timer to c++ functions?
 # Use -p tag in pyinstaller?
+# - https://github.com/pyinstaller/pyinstaller/issues/4073
+# - https://stackoverflow.com/a/51992944
 # Try to remove external cacert.pem dependency (also lib folder)
 
 # --- Mutltithreading/Multiprocessing ---
