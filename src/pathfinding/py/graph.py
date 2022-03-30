@@ -277,7 +277,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square: Square = gph.graph[x][y]
-            square.wall_color = WALL_COLOR_MAP  # Change wall color for easy visibility
+            square.set_wall_color_map()  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
 
@@ -592,23 +592,23 @@ def reset_graph(
 
         # Default case
         nodes_to_reset = [
-            Square.all_open_nodes.copy(),
-            Square.all_open_nodes_alt.copy(),
-            Square.all_open_nodes_alt_.copy(),
-            Square.all_closed_nodes.copy(),
-            Square.all_closed_nodes_alt.copy(),
-            Square.all_closed_nodes_alt_.copy(),
-            Square.all_start_nodes.copy(),
-            Square.all_mid_nodes.copy(),
-            Square.all_end_nodes.copy(),
-            Square.all_wall_nodes.copy(),
-            Square.all_path_nodes.copy(),
-            Square.all_history_nodes.copy(),
+            Square.get_all_open_nodes.copy(),
+            Square.get_all_open_nodes_alt.copy(),
+            Square.get_all_open_nodes_alt_.copy(),
+            Square.get_all_closed_nodes.copy(),
+            Square.get_all_closed_nodes_alt.copy(),
+            Square.get_all_closed_nodes_alt_.copy(),
+            Square.get_all_start_nodes.copy(),
+            Square.get_all_mid_nodes.copy(),
+            Square.get_all_end_nodes.copy(),
+            Square.get_all_wall_nodes.copy(),
+            Square.get_all_path_nodes.copy(),
+            Square.get_all_history_nodes.copy(),
         ]
         square: Square
         for type_list in nodes_to_reset:
             for square in type_list:
-                square.wall_color = WALL_COLOR
+                square.reset_wall_color()
                 square.reset()
 
 
@@ -622,13 +622,13 @@ def reset_algo(algo) -> None:
 
     # Resets only certain colors
     nodes_to_reset = [
-        Square.all_open_nodes.copy(),
-        Square.all_open_nodes_alt.copy(),
-        Square.all_open_nodes_alt_.copy(),
-        Square.all_closed_nodes.copy(),
-        Square.all_closed_nodes_alt.copy(),
-        Square.all_closed_nodes_alt_.copy(),
-        Square.all_path_nodes.copy(),
+        Square.get_all_open_nodes.copy(),
+        Square.get_all_open_nodes_alt.copy(),
+        Square.get_all_open_nodes_alt_.copy(),
+        Square.get_all_closed_nodes.copy(),
+        Square.get_all_closed_nodes_alt.copy(),
+        Square.get_all_closed_nodes_alt_.copy(),
+        Square.get_all_path_nodes.copy(),
     ]
     square: Square
     for type_list in nodes_to_reset:

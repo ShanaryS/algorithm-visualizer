@@ -4,12 +4,6 @@
 from py.utils.colors import *
 
 
-LEFT = "Left"
-UP = "Up"
-RIGHT = "Right"
-DOWN = "Down"
-
-
 class Square:
     """Defines the properties needed for each node on graph"""
 
@@ -30,11 +24,11 @@ class Square:
     # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()
     all_open_nodes = set()
-    all_open_nodes_alt = set()
-    all_open_nodes_alt_ = set()
+    all_open_nodes_2 = set()
+    all_open_nodes_3 = set()
     all_closed_nodes = set()
-    all_closed_nodes_alt = set()
-    all_closed_nodes_alt_ = set()
+    all_closed_nodes_2 = set()
+    all_closed_nodes_3 = set()
     all_start_nodes = set()
     all_mid_nodes = set()
     all_end_nodes = set()
@@ -74,19 +68,19 @@ class Square:
     def update_neighbours(self, gph) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
 
-        self.neighbours[LEFT] = None
-        self.neighbours[UP] = None
-        self.neighbours[RIGHT] = None
-        self.neighbours[DOWN] = None
+        self.neighbours["Left"] = None
+        self.neighbours["Up"] = None
+        self.neighbours["Right"] = None
+        self.neighbours["Down"] = None
 
         if self.col > 0:
-            self.neighbours[LEFT] = gph.graph[self.row][self.col - 1]
+            self.neighbours["Left"] = gph.graph[self.row][self.col - 1]
         if self.row > 0:
-            self.neighbours[UP] = gph.graph[self.row - 1][self.col]
+            self.neighbours["Up"] = gph.graph[self.row - 1][self.col]
         if self.col < self.rows - 1:
-            self.neighbours[RIGHT] = gph.graph[self.row][self.col + 1]
+            self.neighbours["Right"] = gph.graph[self.row][self.col + 1]
         if self.row < self.rows - 1:
-            self.neighbours[DOWN] = gph.graph[self.row + 1][self.col]
+            self.neighbours["Down"] = gph.graph[self.row + 1][self.col]
 
     def get_neighbours(self, include_walls=False) -> list:
         """Gets list of neighbours"""
@@ -151,7 +145,7 @@ class Square:
 
     def is_history(self) -> bool:
         """Checks if history node"""
-        return self.color == NODE_HISTORY_COLOR
+        return self.color == HISTORY_COLOR
 
     def get_color(self) -> tuple:
         """Gets color of square"""
@@ -200,7 +194,7 @@ class Square:
         self._discard_node()
         self.color = OPEN_2_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_open_nodes_alt.add(self)
+        type(self).all_open_nodes_2.add(self)
 
     def set_open_3(self) -> None:
         """Sets node to open for end node when mid is included.
@@ -217,7 +211,7 @@ class Square:
         self._discard_node()
         self.color = OPEN_3_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_open_nodes_alt_.add(self)
+        type(self).all_open_nodes_3.add(self)
 
     def set_closed(self) -> None:
         """Sets node to closed"""
@@ -247,7 +241,7 @@ class Square:
         self._discard_node()
         self.color = CLOSED_2_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_closed_nodes_alt.add(self)
+        type(self).all_closed_nodes_2.add(self)
 
     def set_closed_3(self) -> None:
         """Sets node to closed for end now when mid is included"""
@@ -262,7 +256,7 @@ class Square:
         self._discard_node()
         self.color = CLOSED_3_COLOR
         type(self).nodes_to_update.add(self)
-        type(self).all_closed_nodes_alt_.add(self)
+        type(self).all_closed_nodes_3.add(self)
 
     def set_start(self) -> None:
         """Sets node to start"""
@@ -350,8 +344,16 @@ class Square:
             return
 
         self.color_history = self.color
-        self.color = NODE_HISTORY_COLOR
+        self.color = HISTORY_COLOR
         type(self).all_history_nodes.add(self)
+
+    def reset_wall_color(self) -> None:
+        """Resets wall color to default"""
+        self.wall_color = WALL_COLOR
+
+    def set_wall_color_map(self) -> None:
+        """Resets wall color for map to default"""
+        self.wall_color = WALL_COLOR_MAP
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
@@ -371,11 +373,11 @@ class Square:
 
         type(self).all_empty_nodes.discard(self)
         type(self).all_open_nodes.discard(self)
-        type(self).all_open_nodes_alt.discard(self)
-        type(self).all_open_nodes_alt_.discard(self)
+        type(self).all_open_nodes_2.discard(self)
+        type(self).all_open_nodes_3.discard(self)
         type(self).all_closed_nodes.discard(self)
-        type(self).all_closed_nodes_alt.discard(self)
-        type(self).all_closed_nodes_alt_.discard(self)
+        type(self).all_closed_nodes_2.discard(self)
+        type(self).all_closed_nodes_3.discard(self)
         type(self).all_start_nodes.discard(self)
         type(self).all_mid_nodes.discard(self)
         type(self).all_end_nodes.discard(self)
@@ -392,14 +394,14 @@ class Square:
         return cls.all_open_nodes
 
     @classmethod
-    def get_all_open_nodes_alt(cls) -> set:
-        """Gets all open_alt nodes"""
-        return cls.all_open_nodes_alt
+    def get_all_open_nodes_2(cls) -> set:
+        """Gets all open_2 nodes"""
+        return cls.all_open_nodes_2
 
     @classmethod
-    def get_all_open_nodes_alt_(cls) -> set:
-        """Gets all open_alt_ nodes"""
-        return cls.all_open_nodes_alt_
+    def get_all_open_nodes_3(cls) -> set:
+        """Gets all open_3 nodes"""
+        return cls.all_open_nodes_3
 
     @classmethod
     def get_all_closed_nodes(cls) -> set:
@@ -407,14 +409,14 @@ class Square:
         return cls.all_closed_nodes
 
     @classmethod
-    def get_all_closed_nodes_alt(cls) -> set:
-        """Gets all closed_alt nodes"""
-        return cls.all_closed_nodes_alt
+    def get_all_closed_nodes_2(cls) -> set:
+        """Gets all closed_2 nodes"""
+        return cls.all_closed_nodes_2
 
     @classmethod
-    def get_all_closed_nodes_alt_(cls) -> set:
-        """Gets all closed_alt_ nodes"""
-        return cls.all_closed_nodes_alt_
+    def get_all_closed_nodes_3(cls) -> set:
+        """Gets all closed_3 nodes"""
+        return cls.all_closed_nodes_3
 
     @classmethod
     def get_all_start_nodes(cls) -> set:
@@ -466,11 +468,11 @@ class Square:
         """Clears the list of all nodes for recreating graph"""
         cls.all_empty_nodes.clear()
         cls.all_open_nodes.clear()
-        cls.all_open_nodes_alt.clear()
-        cls.all_open_nodes_alt_.clear()
+        cls.all_open_nodes_2.clear()
+        cls.all_open_nodes_3.clear()
         cls.all_closed_nodes.clear()
-        cls.all_closed_nodes_alt.clear()
-        cls.all_closed_nodes_alt_.clear()
+        cls.all_closed_nodes_2.clear()
+        cls.all_closed_nodes_3.clear()
         cls.all_start_nodes.clear()
         cls.all_mid_nodes.clear()
         cls.all_end_nodes.clear()

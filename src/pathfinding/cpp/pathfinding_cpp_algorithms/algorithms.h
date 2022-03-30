@@ -2,23 +2,9 @@
 
 #include "square.h"
 
+#include <unordered_map>
 #include <vector>
 
-class Square
-{
-public:
-    friend bool operator== (const Square& self, const Square& other);
-    friend bool operator< (const Square& self, const Square& other);
-    friend bool operator!= (const Square& self, const Square& other);
-    friend bool operator> (const Square& self, const Square& other);
-    friend bool operator<= (const Square& self, const Square& other);
-    friend bool operator>= (const Square& self, const Square& other);
-
-    std::vector<Square> get_neighbours() const;
-    bool is_closed() const;
-    void set_open();
-    void set_closed();
-};
 
 // Code for dijkstra algorithm
 std::unordered_map<Square, Square> dijkstra(

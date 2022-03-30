@@ -60,6 +60,7 @@ if __name__ == "__main__":
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
 # Add algo timer to c++ functions?
+# Remove node colors from colors.py so only source is in cpp, leave graph colors
 
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
