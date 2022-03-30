@@ -52,9 +52,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Write factory functions for set and get methods????
-# Create private set color method and add _discard_node
-
 # --- C++ Performance Rewrite ---
 # Rewrite node.py, algorithms.py into C++
 # Implement discard node as switch statement
