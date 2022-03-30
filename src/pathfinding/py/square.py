@@ -397,78 +397,108 @@ class Square:
         type(self).all_path_nodes.discard(self)
 
     @classmethod
-    def get_all_empty_nodes(cls) -> set:
+    def get_all_empty_nodes(cls, copy=False) -> set:
         """Gets all empty nodes"""
+        if copy:
+            return cls.all_empty_nodes.copy()
         return cls.all_empty_nodes
 
     @classmethod
-    def get_all_open_nodes(cls) -> set:
+    def get_all_open_nodes(cls, copy=False) -> set:
         """Gets all open nodes"""
+        if copy:
+            return cls.all_open_nodes.copy()
         return cls.all_open_nodes
 
     @classmethod
-    def get_all_open_nodes_2(cls) -> set:
+    def get_all_open_nodes_2(cls, copy=False) -> set:
         """Gets all open_2 nodes"""
+        if copy:
+            return cls.all_open_nodes_2.copy()
         return cls.all_open_nodes_2
 
     @classmethod
-    def get_all_open_nodes_3(cls) -> set:
+    def get_all_open_nodes_3(cls, copy=False) -> set:
         """Gets all open_3 nodes"""
+        if copy:
+            return cls.all_open_nodes_3.copy()
         return cls.all_open_nodes_3
 
     @classmethod
-    def get_all_closed_nodes(cls) -> set:
+    def get_all_closed_nodes(cls, copy=False) -> set:
         """Gets all closed nodes"""
+        if copy:
+            return cls.all_closed_nodes.copy()
         return cls.all_closed_nodes
 
     @classmethod
-    def get_all_closed_nodes_2(cls) -> set:
+    def get_all_closed_nodes_2(cls, copy=False) -> set:
         """Gets all closed_2 nodes"""
+        if copy:
+            return cls.all_closed_nodes_2.copy()
         return cls.all_closed_nodes_2
 
     @classmethod
-    def get_all_closed_nodes_3(cls) -> set:
+    def get_all_closed_nodes_3(cls, copy=False) -> set:
         """Gets all closed_3 nodes"""
+        if copy:
+            return cls.all_closed_nodes_3.copy()
         return cls.all_closed_nodes_3
 
     @classmethod
-    def get_all_start_nodes(cls) -> set:
+    def get_all_start_nodes(cls, copy=False) -> set:
         """Gets all start nodes"""
+        if copy:
+            return cls.all_start_nodes.copy()
         return cls.all_start_nodes
 
     @classmethod
-    def get_all_mid_nodes(cls) -> set:
+    def get_all_mid_nodes(cls, copy=False) -> set:
         """Gets all mid nodes"""
+        if copy:
+            return cls.all_mid_nodes.copy()
         return cls.all_mid_nodes
 
     @classmethod
-    def get_all_end_nodes(cls) -> set:
+    def get_all_end_nodes(cls, copy=False) -> set:
         """Gets all end nodes"""
+        if copy:
+            return cls.all_end_nodes.copy()
         return cls.all_end_nodes
 
     @classmethod
-    def get_all_wall_nodes(cls) -> set:
+    def get_all_wall_nodes(cls, copy=False) -> set:
         """Gets all wall nodes"""
+        if copy:
+            return cls.all_wall_nodes.copy()
         return cls.all_wall_nodes
 
     @classmethod
-    def get_all_path_nodes(cls) -> set:
+    def get_all_path_nodes(cls, copy=False) -> set:
         """Gets all path nodes"""
+        if copy:
+            return cls.all_path_nodes.copy()
         return cls.all_path_nodes
 
     @classmethod
-    def get_all_history_nodes(cls) -> set:
+    def get_all_history_nodes(cls, copy=False) -> set:
         """Gets all history nodes"""
+        if copy:
+            return cls.all_history_nodes.copy()
         return cls.all_history_nodes
 
     @classmethod
-    def get_nodes_to_update(cls) -> set:
+    def get_nodes_to_update(cls, copy=False) -> set:
         """Gets nodes to update"""
+        if copy:
+            return cls.nodes_to_update.copy()
         return cls.nodes_to_update
 
     @classmethod
-    def get_node_history(cls) -> set:
+    def get_node_history(cls, copy=False) -> set:
         """Get node history"""
+        if copy:
+            return cls.node_history.copy()
         return cls.node_history
 
     @classmethod
@@ -477,9 +507,13 @@ class Square:
         cls.nodes_to_update.clear()
 
     @classmethod
-    def clear_all_node_lists(cls) -> None:
+    def clear_all_node_lists(cls, clear_empty=True) -> None:
         """Clears the list of all nodes for recreating graph"""
-        cls.all_empty_nodes.clear()
+        
+        # May not want to clear empty since will likely be reseting
+        if clear_empty:
+            cls.all_empty_nodes.clear()
+        
         cls.all_open_nodes.clear()
         cls.all_open_nodes_2.clear()
         cls.all_open_nodes_3.clear()
@@ -491,6 +525,7 @@ class Square:
         cls.all_end_nodes.clear()
         cls.all_wall_nodes.clear()
         cls.all_path_nodes.clear()
+        cls.all_history_nodes.clear()
 
     @classmethod
     def clear_history_nodes(cls) -> None:
