@@ -64,6 +64,7 @@ if __name__ == "__main__":
 # Rewrite node.py (Test with python for speed up?)
 # Add algo timer to c++ functions?
 # algorithms.py into C++
+# Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
