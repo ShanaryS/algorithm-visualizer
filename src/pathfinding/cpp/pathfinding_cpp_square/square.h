@@ -102,7 +102,7 @@ public:
     static void s_clear_all_node_lists();
 
     // Handle changing track_node_history
-    static void s_toggle_track_node_history(bool x) { s_track_node_history = x; }
+    static void s_set_track_node_history(bool x) { s_track_node_history = x; }
 
 private:
     // Member variables assigned from constructor arguments
