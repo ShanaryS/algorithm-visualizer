@@ -29,8 +29,8 @@ class Square:
     _START_COLOR = (0, 255, 0)
     _MID_COLOR = (255, 165, 0)
     _END_COLOR = (255, 0, 0)
-    _WALL_COLOR = (0, 0, 0)
-    _WALL_COLOR_MAP = (0, 0, 0)
+    __WALL_COLOR = (0, 0, 0)  # To avoid using over self.wall_color
+    __WALL_COLOR_MAP = (0, 0, 0)  # To avoid using over self.wall_color
     _PATH_COLOR = (255, 255, 0)
     _HISTORY_COLOR = (106, 13, 173)
 
@@ -66,7 +66,7 @@ class Square:
         self.y: float = self.col * self.square_size
         self.neighbours: dict = {}
         self.color = Square._DEFAULT_COLOR
-        self.wall_color = Square._WALL_COLOR
+        self.wall_color = Square.__WALL_COLOR
         self.color_history = None
         self.is_highway = False
 
@@ -349,18 +349,18 @@ class Square:
         if self.is_start() or self.is_mid() or self.is_end() or self.is_path():
             return
 
+        # Don't discard node from list as will be immediately revert color
+        # Also don't add to nodes_to_update as it is handled differently
         self.color_history = self.color
         self.color = Square._HISTORY_COLOR
         Square.all_history_nodes.add(self)
     
+    def set_history_rollback(self) -> None:
+        """Set square to previous color before setting to history"""
+        self.color = self.color_history
+    
     def update_neighbours(self, gph) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
-
-        self.neighbours["Left"] = None
-        self.neighbours["Up"] = None
-        self.neighbours["Right"] = None
-        self.neighbours["Down"] = None
-
         if self.col > 0:
             self.neighbours["Left"] = gph.graph[self.row][self.col - 1]
         if self.row > 0:
@@ -372,11 +372,11 @@ class Square:
 
     def reset_wall_color(self) -> None:
         """Resets wall color to default"""
-        self.wall_color = Square._WALL_COLOR
+        self.wall_color = Square.__WALL_COLOR
 
     def set_wall_color_map(self) -> None:
         """Resets wall color for map to default"""
-        self.wall_color = Square._WALL_COLOR_MAP
+        self.wall_color = Square.__WALL_COLOR_MAP
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""

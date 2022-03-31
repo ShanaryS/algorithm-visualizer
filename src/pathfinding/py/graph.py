@@ -225,8 +225,7 @@ def draw(
 
     # Used to reset squares to previous color like nothing happened
     for square in Square.get_all_history_nodes():
-        square.color = square.color_history
-        square.color_history = None
+        square.set_history_rollback()
 
     # Clear update queues
     Square.clear_nodes_to_update()
