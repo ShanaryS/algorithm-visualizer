@@ -3,7 +3,6 @@
 #include <pybind11/operators.h>
 
 #include "square.h"
-#include <iostream>
 
 
 std::vector<Square> Square::get_neighbours(bool include_walls) const
@@ -286,11 +285,10 @@ void Square::s_clear_all_node_lists()
 
 void Square::update_neighbours(std::vector<std::vector<Square>>& graph)
 {
-    std::cout << "Hey\n";
-    //if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
-    //if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
-    //if (m_col < m_rows - 1) { m_neighbours["Right"] = graph[m_row][m_col + 1]; }
-    //if (m_row < m_rows - 1) { m_neighbours["Down"] = graph[m_row + 1][m_col]; }
+    if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
+    if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
+    if (m_col < m_rows - 1) { m_neighbours["Right"] = graph[m_row][m_col + 1]; }
+    if (m_row < m_rows - 1) { m_neighbours["Down"] = graph[m_row + 1][m_col]; }
 }
 
 void Square::discard_node(bool remove_wall)
