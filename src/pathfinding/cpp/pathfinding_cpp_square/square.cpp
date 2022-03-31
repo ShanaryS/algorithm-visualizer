@@ -254,12 +254,12 @@ void Square::set_history()
     s_all_history_nodes.insert(*this);
 }
 
-void Square::update_neighbours(auto gph)
+void Square::update_neighbours(std::vector<std::vector<Square>> graph)
 {
-    if (m_col > 0) { m_neighbours["Left"] = gph.graph[m_row][m_col - 1]; }
-    if (m_row > 0) { m_neighbours["Up"] = gph.graph[m_row - 1][m_col]; }
-    if (m_col < m_rows - 1) { m_neighbours["Right"] = gph.graph[m_row][m_col + 1]; }
-    if (m_row < m_rows - 1) { m_neighbours["Down"] = gph.graph[m_row + 1][m_col]; }
+    if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
+    if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
+    if (m_col < m_rows - 1) { m_neighbours["Right"] = graph[m_row][m_col + 1]; }
+    if (m_row < m_rows - 1) { m_neighbours["Down"] = graph[m_row + 1][m_col]; }
 }
 
 void Square::s_clear_all_node_lists()

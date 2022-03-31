@@ -68,7 +68,7 @@ public:
     void set_history_rollback() { m_color = m_color_history; }
 
     // Define square's neighbours
-    void update_neighbours(auto gph);
+    void update_neighbours(std::vector<std::vector<Square>> graph);
 
     // Handle changing wall color
 
