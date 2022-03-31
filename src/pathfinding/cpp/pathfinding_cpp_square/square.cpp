@@ -255,12 +255,15 @@ void Square::set_history()
     s_all_history_nodes.insert(*this);
 }
 
-void Square::update_neighbours(std::vector<std::vector<Square>>& graph)
+void Square::s_update_neighbours(std::vector<std::vector<Square>>& graph)
 {
-    if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
-    if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
-    if (m_col < m_rows - 1) { m_neighbours["Right"] = graph[m_row][m_col + 1]; }
-    if (m_row < m_rows - 1) { m_neighbours["Down"] = graph[m_row + 1][m_col]; }
+    for (auto& row : graph)
+    {
+        for (auto& square : row)
+        {
+            square.update_neighbours(graph);
+        }
+    }
 }
 
 void Square::s_clear_all_node_lists()
@@ -278,6 +281,14 @@ void Square::s_clear_all_node_lists()
     s_all_wall_nodes.clear();
     s_all_path_nodes.clear();
     s_all_history_nodes.clear();
+}
+
+void Square::update_neighbours(std::vector<std::vector<Square>>& graph)
+{
+    if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
+    if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
+    if (m_col < m_rows - 1) { m_neighbours["Right"] = graph[m_row][m_col + 1]; }
+    if (m_row < m_rows - 1) { m_neighbours["Down"] = graph[m_row + 1][m_col]; }
 }
 
 void Square::discard_node(bool remove_wall)
@@ -341,7 +352,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_path", &Square::set_path)
         .def("set_history", &Square::set_history)
         .def("set_history_rollback", &Square::set_history_rollback)
-        .def("update_neighbours", &Square::update_neighbours)
+        .def("update_neighbours", &Square::s_update_neighbours)
         .def("reset_wall_color", &Square::reset_wall_color)
         .def("set_wall_color_map", &Square::set_wall_color_map)
         .def("get_all_empty_nodes", &Square::s_get_all_empty_nodes)

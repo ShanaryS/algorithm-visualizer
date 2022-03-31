@@ -67,9 +67,6 @@ public:
     void set_history();
     void set_history_rollback() { m_color = m_color_history; }
 
-    // Define square's neighbours
-    void update_neighbours(std::vector<std::vector<Square>>& graph);
-
     // Handle changing wall color
 
     void reset_wall_color() { m_wall_color = s__wall_color; }
@@ -92,6 +89,9 @@ public:
     static std::set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
     static std::set<Square> s_get_all_nodes_to_update() { return s_nodes_to_update; }
     static std::set<Square> s_get_node_history() { return s_node_history; }
+
+    // Updates all the neighbours for all the squares
+    static void s_update_neighbours(std::vector<std::vector<Square>>& graph);
 
     // Change node containers of the class
 
@@ -124,6 +124,9 @@ private:
 
     std::array<int, 3> m_color_history{-1, -1, -1}; // Initialize to invalid rgb
     std::unordered_map<const char*, Square> m_neighbours;
+
+    // Setup square's neighbours
+    void update_neighbours(std::vector<std::vector<Square>>& graph);
     
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);

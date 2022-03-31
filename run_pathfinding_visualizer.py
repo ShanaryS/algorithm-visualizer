@@ -75,6 +75,7 @@ if __name__ == "__main__":
 # Try to remove external cacert.pem dependency (also lib folder)
 
 # (Optimization Station: Things to test to see if faster)
+# Rewrite update_neighbours to only passed need squares to instance
 # Use unordered_set for node lists, add hash to class
 # Reserve m_neighbours
 # Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
