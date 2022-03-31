@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
 #include "square.h"
@@ -254,7 +255,7 @@ void Square::set_history()
     s_all_history_nodes.insert(*this);
 }
 
-void Square::update_neighbours(std::vector<std::vector<Square>> graph)
+void Square::update_neighbours(std::vector<std::vector<Square>>& graph)
 {
     if (m_col > 0) { m_neighbours["Left"] = graph[m_row][m_col - 1]; }
     if (m_row > 0) { m_neighbours["Up"] = graph[m_row - 1][m_col]; }
