@@ -670,12 +670,12 @@ def _get_address_from_user(
 def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
     """Visualize the changed parts of the screen between toggles"""
     # Stop tracking node history and display it
-    if Square.track_node_history:
-        Square.track_node_history = False
+    if Square.get_track_node_history():
+        Square.set_track_node_history(False)
         gph.visualize_node_history = True
     # Start tracking node history
     else:
-        Square.track_node_history = True
+        Square.set_track_node_history(True)
 
     gph.update_legend = True
     draw(gph, txt, legend=True)

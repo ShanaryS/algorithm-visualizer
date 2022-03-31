@@ -360,7 +360,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             ),
         )
         draw_algo_timer(gph, txt)
-        if Square.track_node_history:
+        if Square.get_track_node_history():
             gph.window.blit(
                 txt.legend_node_history_show,
                 (
@@ -394,7 +394,7 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 CENTER_LEGEND_AREA - txt.legend_convert_map.get_height() // 2,
             ),
         )
-        if Square.track_node_history:
+        if Square.get_track_node_history():
             gph.window.blit(
                 txt.legend_node_history_show,
                 (

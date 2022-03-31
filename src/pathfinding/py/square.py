@@ -516,6 +516,11 @@ class Square:
         if copy:
             return cls.node_history.copy()
         return cls.node_history
+
+    @classmethod
+    def get_track_node_history(cls) -> bool:
+        """Get track node history"""
+        return cls.track_node_history
     
     @classmethod
     def update_neighbours(cls, graph) -> None:
@@ -556,3 +561,8 @@ class Square:
     def clear_node_history(cls) -> None:
         """Clears node history"""
         cls.node_history.clear()
+    
+    @classmethod
+    def set_track_node_history(cls, x: bool) -> None:
+        """Sets track node history to true or false"""
+        cls.track_node_history = x
