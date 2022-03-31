@@ -87,7 +87,7 @@ public:
     static std::set<Square> s_get_all_wall_nodes() { return s_all_wall_nodes; }
     static std::set<Square> s_get_all_path_nodes() { return s_all_path_nodes; }
     static std::set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
-    static std::set<Square> s_get_all_nodes_to_update() { return s_nodes_to_update; }
+    static std::set<Square> s_get_nodes_to_update() { return s_nodes_to_update; }
     static std::set<Square> s_get_node_history() { return s_node_history; }
     static bool s_get_track_node_history() { return s_track_node_history; }
 
