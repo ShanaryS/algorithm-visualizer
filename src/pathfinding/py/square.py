@@ -382,36 +382,35 @@ class Square:
         """Discard the node from corresponding set when changed"""
         
         # Ordinal nodes should not remove wall to reinstate after dragging
-        if self.color == self.wall_color and not remove_wall:
+        if not remove_wall and self.color == self.wall_color:
             return
         
-        match self.color:
-            case Square._DEFAULT_COLOR:
-                Square.all_empty_nodes.discard(self)
-            case Square._OPEN_COLOR:
-                Square.all_open_nodes.discard(self)
-            case Square._OPEN2_COLOR:
-                Square.all_open2_nodes.discard(self)
-            case Square._OPEN3_COLOR:
-                Square.all_open3_nodes.discard(self)
-            case Square._CLOSED_COLOR:
-                Square.all_closed_nodes.discard(self)
-            case Square._CLOSED2_COLOR:
-                Square.all_closed2_nodes.discard(self)
-            case Square._CLOSED3_COLOR:
-                Square.all_closed3_nodes.discard(self)
-            case Square._START_COLOR:
-                Square.all_start_nodes.discard(self)
-            case Square._MID_COLOR:
-                Square.all_mid_nodes.discard(self)
-            case Square._END_COLOR:
-                Square.all_end_nodes.discard(self)
-            case self.wall_color:  # Can be changed
-                Square.all_wall_nodes.discard(self)
-            case Square._PATH_COLOR:
-                Square.all_path_nodes.discard(self)
-            case Square._HISTORY_COLOR:
-                Square.all_history_nodes.discard(self)
+        if self.color == Square._DEFAULT_COLOR:
+            Square.all_empty_nodes.discard(self)
+        elif self.color == Square._OPEN_COLOR:
+            Square.all_open_nodes.discard(self)
+        elif self.color == Square._OPEN2_COLOR:
+            Square.all_open2_nodes.discard(self)
+        elif self.color == Square._OPEN3_COLOR:
+            Square.all_open3_nodes.discard(self)
+        elif self.color == Square._CLOSED_COLOR:
+            Square.all_closed_nodes.discard(self)
+        elif self.color == Square._CLOSED2_COLOR:
+            Square.all_closed2_nodes.discard(self)
+        elif self.color == Square._CLOSED3_COLOR:
+            Square.all_closed3_nodes.discard(self)
+        elif self.color == Square._START_COLOR:
+            Square.all_start_nodes.discard(self)
+        elif self.color == Square._MID_COLOR:
+            Square.all_mid_nodes.discard(self)
+        elif self.color == Square._END_COLOR:
+            Square.all_end_nodes.discard(self)
+        elif self.color == self.wall_color:  # Can be changed
+            Square.all_wall_nodes.discard(self)
+        elif self.color == Square._PATH_COLOR:
+            Square.all_path_nodes.discard(self)
+        elif self.color == Square._HISTORY_COLOR:
+            Square.all_history_nodes.discard(self)
 
     @classmethod
     def get_all_empty_nodes(cls, copy=False) -> set:
@@ -524,13 +523,9 @@ class Square:
         cls.nodes_to_update.clear()
 
     @classmethod
-    def clear_all_node_lists(cls, clear_empty=True) -> None:
+    def clear_all_node_lists(cls) -> None:
         """Clears the list of all nodes for recreating graph"""
-        
-        # May not want to clear empty since will likely be reseting
-        if clear_empty:
-            cls.all_empty_nodes.clear()
-        
+        cls.all_empty_nodes.clear()
         cls.all_open_nodes.clear()
         cls.all_open2_nodes.clear()
         cls.all_open3_nodes.clear()
