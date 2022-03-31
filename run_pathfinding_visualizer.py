@@ -53,14 +53,13 @@ if __name__ == "__main__":
     main()
 
 # --- C++ Performance Rewrite ---
-# Rewrite node.py, algorithms.py into C++
+# Rewrite node.py (Test with python for speed up?)
+# Add algo timer to c++ functions?
+# algorithms.py into C++
 # May need to write hash for square.cpp
-# Write gph.graph as a single list to optimize cache hits
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
-# Rewrite all code that iterates through gph.graph, slow when max graph size (Using maps)
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
-# Add algo timer to c++ functions?
 # Use -p tag in pyinstaller?
 # - https://github.com/pyinstaller/pyinstaller/issues/4073
 # - https://stackoverflow.com/a/51992944
@@ -72,6 +71,8 @@ if __name__ == "__main__":
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
 # Define the size of containers using number of rows^2
+# Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_node using switch statement and color ids.
+# Write gph.graph as a single list to optimize cache hits
 
 
 
