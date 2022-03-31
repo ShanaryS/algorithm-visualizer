@@ -52,6 +52,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Passing gph into update_neighbours or just stay with vector
+
 # --- C++ Performance Rewrite ---
 # Rewrite node.py (Test with python for speed up?)
 # Add algo timer to c++ functions?
