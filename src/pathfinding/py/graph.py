@@ -164,11 +164,8 @@ def set_graph(gph: GraphState) -> None:
             square = Square(row, col, gph.rows, gph.square_size)
             gph.graph[row].append(square)
 
-    # Updates neighbours
-    square: Square
-    for row in gph.graph:
-        for square in row:
-            square.update_neighbours(gph.graph)
+    # Update neighbours
+    Square.update_neighbours(gph.graph)
 
 
 def draw(

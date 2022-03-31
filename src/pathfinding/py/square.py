@@ -358,8 +358,16 @@ class Square:
     def set_history_rollback(self) -> None:
         """Set square to previous color before setting to history"""
         self.color = self.color_history
+
+    def reset_wall_color(self) -> None:
+        """Resets wall color to default"""
+        self.wall_color = Square.__WALL_COLOR
+
+    def set_wall_color_map(self) -> None:
+        """Resets wall color for map to default"""
+        self.wall_color = Square.__WALL_COLOR_MAP
     
-    def update_neighbours(self, graph) -> None:
+    def _update_neighbours(self, graph) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
         if self.col > 0:
             self.neighbours["Left"] = graph[self.row][self.col - 1]
@@ -369,14 +377,6 @@ class Square:
             self.neighbours["Right"] = graph[self.row][self.col + 1]
         if self.row < self.rows - 1:
             self.neighbours["Down"] = graph[self.row + 1][self.col]
-
-    def reset_wall_color(self) -> None:
-        """Resets wall color to default"""
-        self.wall_color = Square.__WALL_COLOR
-
-    def set_wall_color_map(self) -> None:
-        """Resets wall color for map to default"""
-        self.wall_color = Square.__WALL_COLOR_MAP
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
@@ -516,6 +516,14 @@ class Square:
         if copy:
             return cls.node_history.copy()
         return cls.node_history
+    
+    @classmethod
+    def update_neighbours(cls, graph) -> None:
+        """Updates all the nieghbours for all the squares"""
+        square: Square
+        for row in graph:
+            for square in row:
+                square._update_neighbours(graph)
 
     @classmethod
     def clear_nodes_to_update(cls) -> None:
