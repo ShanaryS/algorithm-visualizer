@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
 
 #include "square.h"
 
@@ -305,7 +306,62 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(pathfinding_cpp_node, m) {
     py::class_<Square>(m, "Square")
-        .def("reset", &Square::reset);
+        .def(py::init<int, int, int, float>())
+        .def(py::self == py::self)
+        .def(py::self != py::self)
+        .def("get_pos", &Square::get_pos)
+        .def("get_color", &Square::get_color)
+        .def("get_neighbours", &Square::get_neighbours)
+        .def("draw_square", &Square::draw_square)
+        .def("is_empty", &Square::is_empty)
+        .def("is_open", &Square::is_open)
+        .def("is_open2", &Square::is_open2)
+        .def("is_open3", &Square::is_open3)
+        .def("is_closed", &Square::is_closed)
+        .def("is_closed2", &Square::is_closed2)
+        .def("is_closed3", &Square::is_closed3)
+        .def("is_start", &Square::is_start)
+        .def("is_mid", &Square::is_mid)
+        .def("is_end", &Square::is_end)
+        .def("is_wall", &Square::is_wall)
+        .def("is_path", &Square::is_path)
+        .def("is_history", &Square::is_history)
+        .def("reset", &Square::reset)
+        .def("set_open", &Square::set_open)
+        .def("set_open2", &Square::set_open2)
+        .def("set_open3", &Square::set_open3)
+        .def("set_closed", &Square::set_closed)
+        .def("set_closed2", &Square::set_closed2)
+        .def("set_closed3", &Square::set_closed3)
+        .def("set_start", &Square::set_start)
+        .def("set_mid", &Square::set_mid)
+        .def("set_end", &Square::set_end)
+        .def("set_wall", &Square::set_wall)
+        .def("set_path", &Square::set_path)
+        .def("set_history", &Square::set_history)
+        .def("set_history_rollback", &Square::set_history_rollback)
+        .def("update_neighbours", &Square::update_neighbours)
+        .def("reset_wall_color", &Square::reset_wall_color)
+        .def("set_wall_color_map", &Square::set_wall_color_map)
+        .def("s_get_all_empty_nodes", &Square::s_get_all_empty_nodes)
+        .def("s_get_all_open_nodes", &Square::s_get_all_open_nodes)
+        .def("s_get_all_open2_nodes", &Square::s_get_all_open2_nodes)
+        .def("s_get_all_open3_nodes", &Square::s_get_all_open3_nodes)
+        .def("s_get_all_closed_nodes", &Square::s_get_all_closed_nodes)
+        .def("s_get_all_closed2_nodes", &Square::s_get_all_closed2_nodes)
+        .def("s_get_all_closed3_nodes", &Square::s_get_all_closed3_nodes)
+        .def("s_get_all_start_nodes", &Square::s_get_all_start_nodes)
+        .def("s_get_all_mid_nodes", &Square::s_get_all_mid_nodes)
+        .def("s_get_all_end_nodes", &Square::s_get_all_end_nodes)
+        .def("s_get_all_wall_nodes", &Square::s_get_all_wall_nodes)
+        .def("s_get_all_path_nodes", &Square::s_get_all_path_nodes)
+        .def("s_get_all_history_nodes", &Square::s_get_all_history_nodes)
+        .def("s_get_all_nodes_to_update", &Square::s_get_all_nodes_to_update)
+        .def("s_get_node_history", &Square::s_get_node_history)
+        .def("s_clear_nodes_to_update", &Square::s_clear_nodes_to_update)
+        .def("s_clear_history_nodes", &Square::s_clear_history_nodes)
+        .def("s_clear_node_history", &Square::s_clear_node_history)
+        .def("s_clear_all_node_lists", &Square::s_clear_all_node_lists);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
