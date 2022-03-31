@@ -1,3 +1,4 @@
+/*
 #include "algorithms.h"
 
 #include <pybind11/pybind11.h>
@@ -95,3 +96,4 @@ PYBIND11_MODULE(pathfinding_cpp_algorithms, m) {
     m.attr("__version__") = "dev";
 #endif
 }
+*/

@@ -4,7 +4,7 @@
 #include "square.h"
 
 
-std::vector<Square> Square::get_neighbours(bool include_walls = false) const
+std::vector<Square> Square::get_neighbours(bool include_walls) const
 {
     std::vector<Square> neighbours;
     for (const auto& direction : m_neighbours)
@@ -279,7 +279,7 @@ void Square::s_clear_all_node_lists()
     s_all_history_nodes.clear();
 }
 
-void Square::discard_node(bool remove_wall = true)
+void Square::discard_node(bool remove_wall)
 {
     // Ordinal nodes should not remove wall to reinstate after dragging
     if (!remove_wall && m_color == m_wall_color) { return; }

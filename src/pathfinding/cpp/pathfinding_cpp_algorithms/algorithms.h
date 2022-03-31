@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "square.h"
@@ -38,3 +39,4 @@ std::unordered_map<Square, Square> bi_dijkstra(
 
 // Main algo for reconstructing path
 void best_path(const std::unordered_map<Square, Square>& came_from, const Square& end, bool visualize);
+*/

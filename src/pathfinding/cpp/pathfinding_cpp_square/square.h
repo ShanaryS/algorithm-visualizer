@@ -3,7 +3,7 @@
 #include <array>
 #include <tuple>
 #include <unordered_map>
-#include <unordered_set>
+#include <set>
 #include <vector>
 
 
@@ -77,21 +77,21 @@ public:
 
     // Get get info about nodes from class
 
-    static std::unordered_set<Square> s_get_all_empty_nodes() { return s_all_empty_nodes; }
-    static std::unordered_set<Square> s_get_all_open_nodes() { return s_all_open_nodes; }
-    static std::unordered_set<Square> s_get_all_open2_nodes() { return s_all_open2_nodes; }
-    static std::unordered_set<Square> s_get_all_open3_nodes() { return s_all_open3_nodes; }
-    static std::unordered_set<Square> s_get_all_closed_nodes() { return s_all_closed_nodes; }
-    static std::unordered_set<Square> s_get_all_closed2_nodes() { return s_all_closed2_nodes; }
-    static std::unordered_set<Square> s_get_all_closed3_nodes() { return s_all_closed3_nodes; }
-    static std::unordered_set<Square> s_get_all_start_nodes() { return s_all_start_nodes; }
-    static std::unordered_set<Square> s_get_all_mid_nodes() { return s_all_mid_nodes; }
-    static std::unordered_set<Square> s_get_all_end_nodes() { return s_all_end_nodes; }
-    static std::unordered_set<Square> s_get_all_wall_nodes() { return s_all_wall_nodes; }
-    static std::unordered_set<Square> s_get_all_path_nodes() { return s_all_path_nodes; }
-    static std::unordered_set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
-    static std::unordered_set<Square> s_get_all_nodes_to_update() { return s_nodes_to_update; }
-    static std::unordered_set<Square> s_get_node_history() { return s_node_history; }
+    static std::set<Square> s_get_all_empty_nodes() { return s_all_empty_nodes; }
+    static std::set<Square> s_get_all_open_nodes() { return s_all_open_nodes; }
+    static std::set<Square> s_get_all_open2_nodes() { return s_all_open2_nodes; }
+    static std::set<Square> s_get_all_open3_nodes() { return s_all_open3_nodes; }
+    static std::set<Square> s_get_all_closed_nodes() { return s_all_closed_nodes; }
+    static std::set<Square> s_get_all_closed2_nodes() { return s_all_closed2_nodes; }
+    static std::set<Square> s_get_all_closed3_nodes() { return s_all_closed3_nodes; }
+    static std::set<Square> s_get_all_start_nodes() { return s_all_start_nodes; }
+    static std::set<Square> s_get_all_mid_nodes() { return s_all_mid_nodes; }
+    static std::set<Square> s_get_all_end_nodes() { return s_all_end_nodes; }
+    static std::set<Square> s_get_all_wall_nodes() { return s_all_wall_nodes; }
+    static std::set<Square> s_get_all_path_nodes() { return s_all_path_nodes; }
+    static std::set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
+    static std::set<Square> s_get_all_nodes_to_update() { return s_nodes_to_update; }
+    static std::set<Square> s_get_node_history() { return s_node_history; }
 
     // Change node containers of the class
 
@@ -122,9 +122,8 @@ private:
 
     // Member variables assigned in member functions
 
-    std::array<int, 3> m_color_history;
+    std::array<int, 3> m_color_history{-1, -1, -1}; // Initialize to invalid rgb
     std::unordered_map<const char*, Square> m_neighbours;
-    m_neighbours.reserve(4);
     
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);
@@ -148,25 +147,25 @@ private:
 
     // Class containers for node types
 
-    static std::unordered_set<Square> s_all_empty_nodes;
-    static std::unordered_set<Square> s_all_open_nodes;
-    static std::unordered_set<Square> s_all_open2_nodes;
-    static std::unordered_set<Square> s_all_open3_nodes;
-    static std::unordered_set<Square> s_all_closed_nodes;
-    static std::unordered_set<Square> s_all_closed2_nodes;
-    static std::unordered_set<Square> s_all_closed3_nodes;
-    static std::unordered_set<Square> s_all_start_nodes;
-    static std::unordered_set<Square> s_all_mid_nodes;
-    static std::unordered_set<Square> s_all_end_nodes;
-    static std::unordered_set<Square> s_all_wall_nodes;
-    static std::unordered_set<Square> s_all_path_nodes;
-    static std::unordered_set<Square> s_all_history_nodes;
+    static std::set<Square> s_all_empty_nodes;
+    static std::set<Square> s_all_open_nodes;
+    static std::set<Square> s_all_open2_nodes;
+    static std::set<Square> s_all_open3_nodes;
+    static std::set<Square> s_all_closed_nodes;
+    static std::set<Square> s_all_closed2_nodes;
+    static std::set<Square> s_all_closed3_nodes;
+    static std::set<Square> s_all_start_nodes;
+    static std::set<Square> s_all_mid_nodes;
+    static std::set<Square> s_all_end_nodes;
+    static std::set<Square> s_all_wall_nodes;
+    static std::set<Square> s_all_path_nodes;
+    static std::set<Square> s_all_history_nodes;
 
     // Container that gets check from outside class to know what nodes have changed
-    static std::unordered_set<Square> s_nodes_to_update;
+    static std::set<Square> s_nodes_to_update;
 
     // Handle tracking nodes that has been changed for visualization
 
-    static std::unordered_set<Square> s_node_history;
+    static std::set<Square> s_node_history;
     static inline bool s_track_node_history = false;
 };
