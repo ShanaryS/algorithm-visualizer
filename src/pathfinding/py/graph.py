@@ -1,10 +1,17 @@
 """Draws and updates graph for visualization"""
 
 
-from dataclasses import dataclass
-import pygame
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_square_h
+if use_square_h:
+    from pathfinding_cpp_square import Square
+else:
+    from src.pathfinding.py.square import Square
+
 from src.pathfinding.py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
-from src.pathfinding.py.square import Square
+
+import pygame
+from dataclasses import dataclass
 from typing import Optional
 
 

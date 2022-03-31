@@ -1,12 +1,19 @@
 """Contains pathfinding and maze generation algorithms"""
 
 
-from dataclasses import dataclass
-import pygame
-from src.pathfinding.py.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_square_h
+if use_square_h:
+    from pathfinding_cpp_square import Square
+else:
+    from src.pathfinding.py.square import Square
+
 from src.pathfinding.py.utils.values import get_random_sample, get_randrange
+from src.pathfinding.py.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
+
+import pygame
+from dataclasses import dataclass
 from queue import PriorityQueue
-from src.pathfinding.py.square import Square
 from time import perf_counter
 
 

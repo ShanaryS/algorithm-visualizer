@@ -1,12 +1,18 @@
 """Run pathfinding visualizer. Must be '__main__'."""
 
 
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_algorithms_h
+if use_algorithms_h:
+    from pathfinding_cpp_algorithms import AlgoState
+else:
+    from src.pathfinding.py.algorithms import AlgoState
+
+from src.pathfinding.py.graph import GraphState, VisText
+from src.pathfinding.py.logic import LogicState, run_pathfinding
+
 import sys
 import os
-
-from src.pathfinding.py.logic import LogicState, run_pathfinding
-from src.pathfinding.py.graph import GraphState, VisText
-from src.pathfinding.py.algorithms import AlgoState
 
 
 def overide_where():

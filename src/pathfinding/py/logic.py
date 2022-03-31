@@ -1,32 +1,30 @@
 """Handles inputs from user"""
 
 
-from dataclasses import dataclass
-import pygame
-from src.pathfinding.py.algorithms import (
-    dijkstra,
-    a_star,
-    bi_dijkstra,
-    start_mid_end,
-    algo_no_vis,
-    draw_recursive_maze,
-    AlgoState,
-)
-from src.pathfinding.py.graph import (
-    GraphState,
-    VisText,
-    set_graph,
-    draw,
-    reset_graph,
-    reset_algo,
-    change_graph_size,
-    set_squares_to_roads,
-    draw_vis_text,
-    HEIGHT,
-)
-from src.pathfinding.py.square import Square
-from typing import Optional
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_square_h
+if use_square_h:
+    from pathfinding_cpp_square import Square
+else:
+    from src.pathfinding.py.square import Square
+
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_algorithms_h
+if use_algorithms_h:
+    from pathfinding_cpp_algorithms import (AlgoState, dijkstra, a_star,
+        bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
+else:
+    from src.pathfinding.py.algorithms import (AlgoState, dijkstra, a_star,
+        bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
+
 from src.pathfinding.py.utils.maps import get_img_base, get_img_clean
+from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
+    reset_graph, reset_algo, change_graph_size, set_squares_to_roads,
+    draw_vis_text, HEIGHT)
+
+import pygame
+from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass(slots=True)
