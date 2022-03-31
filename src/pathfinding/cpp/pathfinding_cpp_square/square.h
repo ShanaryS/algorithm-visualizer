@@ -123,10 +123,10 @@ private:
     std::array<int, 3> m_color{ s_default_color };
     std::array<int, 3> m_wall_color{ s__wall_color };
     bool m_is_highway{ false };
+    std::array<int, 3> m_color_history{-1, -1, -1}; // Initialize to invalid rgb
 
     // Member variables assigned in member functions
 
-    std::array<int, 3> m_color_history{-1, -1, -1}; // Initialize to invalid rgb
     std::unordered_map<const char*, Square> m_neighbours;
 
     // Setup square's neighbours
