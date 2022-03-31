@@ -359,16 +359,16 @@ class Square:
         """Set square to previous color before setting to history"""
         self.color = self.color_history
     
-    def update_neighbours(self, gph) -> None:
+    def update_neighbours(self, graph) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
         if self.col > 0:
-            self.neighbours["Left"] = gph.graph[self.row][self.col - 1]
+            self.neighbours["Left"] = graph[self.row][self.col - 1]
         if self.row > 0:
-            self.neighbours["Up"] = gph.graph[self.row - 1][self.col]
+            self.neighbours["Up"] = graph[self.row - 1][self.col]
         if self.col < self.rows - 1:
-            self.neighbours["Right"] = gph.graph[self.row][self.col + 1]
+            self.neighbours["Right"] = graph[self.row][self.col + 1]
         if self.row < self.rows - 1:
-            self.neighbours["Down"] = gph.graph[self.row + 1][self.col]
+            self.neighbours["Down"] = graph[self.row + 1][self.col]
 
     def reset_wall_color(self) -> None:
         """Resets wall color to default"""
