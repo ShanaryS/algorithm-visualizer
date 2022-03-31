@@ -52,7 +52,7 @@ public:
     bool is_end() const { return m_color == s_end_color; }
     bool is_wall() const { return m_color == s_wall_color; }
     bool is_path() const { return m_color == s_path_color; }
-    bool is_history() const { return m_color == s_node_history_color; }
+    bool is_history() const { return m_color == s_history_color; }
 
     // Set square type
 
@@ -142,7 +142,7 @@ private:
     static constexpr std::array<int, 3> s_wall_color{ 0, 0, 0 };
     static constexpr std::array<int, 3> s_wall_color_map{ 0, 0, 0 };
     static constexpr std::array<int, 3> s_path_color{ 255, 255, 0 };
-    static constexpr std::array<int, 3> s_node_history_color{ 106, 13, 173 };
+    static constexpr std::array<int, 3> s_history_color{ 106, 13, 173 };
 
     // Class containers for node types
 

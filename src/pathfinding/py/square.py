@@ -167,7 +167,8 @@ class Square:
             Square.node_history.add(self)
 
         self._discard_node()
-        self.color, self.is_highway = Square._DEFAULT_COLOR, False
+        self.color = Square._DEFAULT_COLOR
+        self.is_highway = False
         Square.nodes_to_update.add(self)
         Square.all_empty_nodes.add(self)
 

@@ -68,7 +68,10 @@ if __name__ == "__main__":
 
 # (Optimization Station: Things to test to see if faster)
 # Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
-
+# In set methods either remove guard statement or use something faster than a set (array, vector)
+# In set_history impletement switch statement
+# In algorithms check if not closed first when setting open
+# Define the size of containers using number of rows^2
 
 
 
