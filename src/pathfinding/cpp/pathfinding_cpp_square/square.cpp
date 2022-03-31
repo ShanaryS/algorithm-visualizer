@@ -304,7 +304,7 @@ void Square::discard_node(bool remove_wall)
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(pathfinding_cpp_node, m) {
+PYBIND11_MODULE(pathfinding_cpp_square, m) {
     py::class_<Square>(m, "Square")
         .def(py::init<int, int, int, float>())
         .def(py::self == py::self)

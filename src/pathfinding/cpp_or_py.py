@@ -7,7 +7,7 @@ C++ imports are optional but program will always depend on python.
 """
 
 ######################################################################
-_include = ".py"  # <----- ONLY CHANGE THIS!!! #
+_include = "square.h"  # <----- ONLY CHANGE THIS!!! #
 ######################################################################
 """ --- Import Tree: Choose One ---
     "algorithms.h"

@@ -61,6 +61,7 @@ if __name__ == "__main__":
 # Passing gph into update_neighbours or just stay with vector
 
 # --- C++ Performance Rewrite ---
+# Change title of pygame to show what is in c++
 # Rewrite node.py (Test with python for speed up?)
 # Add algo timer to c++ functions?
 # algorithms.py into C++
