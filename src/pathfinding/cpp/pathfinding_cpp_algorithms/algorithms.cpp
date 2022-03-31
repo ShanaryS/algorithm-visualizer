@@ -26,9 +26,9 @@ std::unordered_map<Square, Square> dijkstra(
 
     // Determine what is the best square to check
     std::unordered_map<Square, int> g_score{};
-    for (std::vector row : graph)
+    for (const auto& row : graph)
     {
-        for (Square square : row)
+        for (const auto& square : row)
         {
             g_score[square] = std::numeric_limits<int>::max();
         }
@@ -57,7 +57,7 @@ std::unordered_map<Square, Square> dijkstra(
         }
 
         // Decides the order of neighbours to check
-        for (Square nei : curr_square.get_neighbours())
+        for (const auto& nei : curr_square.get_neighbours())
         {
             int temp_g_score{ g_score[curr_square] + 1 };
             if (temp_g_score < g_score[nei])

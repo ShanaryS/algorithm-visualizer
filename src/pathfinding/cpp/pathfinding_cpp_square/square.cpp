@@ -6,7 +6,7 @@
 std::vector<Square> Square::get_neighbours(bool include_walls = false) const
 {
     std::vector<Square> neighbours;
-    for (std::pair<const std::string&, Square> direction : m_neighbours)
+    for (const auto& direction : m_neighbours)
     {
         Square nei{ direction.second };
         if (static_cast<bool>(nei))
@@ -246,25 +246,57 @@ void Square::set_history()
         s_node_history.insert(*this);
     }
 
-    discard_node();
+    // Don't discard node from list as will be immediately revert color
+    // Also don't add to nodes_to_update as it is handled differently
+    m_color_history = m_color;
     m_color = s_history_color;
-    s_nodes_to_update.insert(*this);
     s_all_history_nodes.insert(*this);
 }
 
 void Square::update_neighbours(auto gph)
 {
-
+    if (m_col > 0) { m_neighbours["Left"] = gph.graph[m_row][m_col - 1]; }
+    if (m_row > 0) { m_neighbours["Up"] = gph.graph[m_row - 1][m_col]; }
+    if (m_col < m_rows - 1) { m_neighbours["Right"] = gph.graph[m_row][m_col + 1]; }
+    if (m_row < m_rows - 1) { m_neighbours["Down"] = gph.graph[m_row + 1][m_col]; }
 }
 
 void Square::s_clear_all_node_lists()
 {
-
+    s_all_empty_nodes.clear();
+    s_all_open_nodes.clear();
+    s_all_open2_nodes.clear();
+    s_all_open3_nodes.clear();
+    s_all_closed_nodes.clear();
+    s_all_closed2_nodes.clear();
+    s_all_closed3_nodes.clear();
+    s_all_start_nodes.clear();
+    s_all_mid_nodes.clear();
+    s_all_end_nodes.clear();
+    s_all_wall_nodes.clear();
+    s_all_path_nodes.clear();
+    s_all_history_nodes.clear();
 }
 
 void Square::discard_node(bool remove_wall = true)
 {
-
+    // Ordinal nodes should not remove wall to reinstate after dragging
+    if (!remove_wall && m_color == m_wall_color) { return; }
+    
+    // Remove this squares color from corresponding list
+    if (m_color == s_default_color) { s_all_empty_nodes.erase(*this); }
+    else if (m_color == s_open_color) { s_all_open_nodes.erase(*this); }
+    else if (m_color == s_open2_color) { s_all_open2_nodes.erase(*this); }
+    else if (m_color == s_open3_color) { s_all_open3_nodes.erase(*this); }
+    else if (m_color == s_closed_color) { s_all_closed_nodes.erase(*this); }
+    else if (m_color == s_closed2_color) { s_all_closed2_nodes.erase(*this); }
+    else if (m_color == s_closed3_color) { s_all_closed3_nodes.erase(*this); }
+    else if (m_color == s_start_color) { s_all_start_nodes.erase(*this); }
+    else if (m_color == s_mid_color) { s_all_mid_nodes.erase(*this); }
+    else if (m_color == s_end_color) { s_all_end_nodes.erase(*this); }
+    else if (m_color == m_wall_color) { s_all_wall_nodes.erase(*this); }
+    else if (m_color == s_path_color) { s_all_path_nodes.erase(*this); }
+    else if (m_color == s_history_color) { s_all_history_nodes.erase(*this); }
 }
 
 // Allow code to be imported into python using pybind11

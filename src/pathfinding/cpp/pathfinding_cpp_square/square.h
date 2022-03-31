@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <string>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
@@ -15,12 +14,9 @@ public:
     Square(int row, int col, int rows, float square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
-        m_valid = true;  // If casted to bool, return true
+        m_is_valid = true;  // If casted to bool, return true
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
-        m_color = s_default_color;
-        m_wall_color = s_wall_color;
-        m_is_highway = false;
     }
 
     // Allow these operators
@@ -29,7 +25,7 @@ public:
     bool operator!= (const Square& other) const { return !(operator==(other)); }
     
     // False if instanced using default constructor
-    operator bool() const { return m_valid; }
+    operator bool() const { return m_is_valid; }
 
     // Info about square
 
@@ -50,7 +46,7 @@ public:
     bool is_start() const { return m_color == s_start_color; }
     bool is_mid() const { return m_color == s_mid_color; }
     bool is_end() const { return m_color == s_end_color; }
-    bool is_wall() const { return m_color == s_wall_color; }
+    bool is_wall() const { return m_color == m_wall_color; }
     bool is_path() const { return m_color == s_path_color; }
     bool is_history() const { return m_color == s_history_color; }
 
@@ -69,14 +65,15 @@ public:
     void set_wall();
     void set_path();
     void set_history();
+    void set_history_rollback() { m_color = m_color_history; }
 
     // Define square's neighbours
     void update_neighbours(auto gph);
 
     // Handle changing wall color
 
-    void reset_wall_color() { m_wall_color = s_wall_color; }
-    void set_wall_color_map() { m_wall_color = s_wall_color_map; }
+    void reset_wall_color() { m_wall_color = s__wall_color; }
+    void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
     // Get get info about nodes from class
 
@@ -104,10 +101,7 @@ public:
     static void s_clear_all_node_lists();
 
 private:
-    // Used to check if instance is valid for casting to bool
-    bool m_valid{ false };
-
-    // Member variables assigned from outside class
+    // Member variables assigned from constructor arguments
 
     int m_row;
     int m_col;
@@ -118,12 +112,20 @@ private:
 
     float m_x;
     float m_y;
-    std::unordered_map<const std::string&, Square> m_neighbours;
-    std::array<int, 3> m_color;
-    std::array<int, 3> m_wall_color;
-    std::array<int, 3> m_color_history;
-    bool m_is_highway;
+    
+    // Member variables with default values
 
+    bool m_is_valid{ false }; // Set to true for non default constructor
+    std::array<int, 3> m_color{ s_default_color };
+    std::array<int, 3> m_wall_color{ s__wall_color };
+    bool m_is_highway{ false };
+
+    // Member variables assigned in member functions
+
+    std::array<int, 3> m_color_history;
+    std::unordered_map<const char*, Square> m_neighbours;
+    m_neighbours.reserve(4);
+    
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);
 
@@ -139,8 +141,8 @@ private:
     static constexpr std::array<int, 3> s_start_color{ 0, 255, 0 };
     static constexpr std::array<int, 3> s_mid_color{ 255, 165, 0 };
     static constexpr std::array<int, 3> s_end_color{ 255, 0, 0 };
-    static constexpr std::array<int, 3> s_wall_color{ 0, 0, 0 };
-    static constexpr std::array<int, 3> s_wall_color_map{ 0, 0, 0 };
+    static constexpr std::array<int, 3> s__wall_color{ 0, 0, 0 };  // To avoid using over m_wall_color
+    static constexpr std::array<int, 3> s__wall_color_map{ 0, 0, 0 };  // To avoid using over m_wall_color
     static constexpr std::array<int, 3> s_path_color{ 255, 255, 0 };
     static constexpr std::array<int, 3> s_history_color{ 106, 13, 173 };
 
