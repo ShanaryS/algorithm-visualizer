@@ -89,6 +89,7 @@ public:
     static std::set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
     static std::set<Square> s_get_all_nodes_to_update() { return s_nodes_to_update; }
     static std::set<Square> s_get_node_history() { return s_node_history; }
+    static bool s_get_track_node_history() { return s_track_node_history; }
 
     // Updates all the neighbours for all the squares
     static void s_update_neighbours(std::vector<std::vector<Square>>& graph);
@@ -99,6 +100,9 @@ public:
     static void s_clear_history_nodes() { s_all_history_nodes.clear(); }
     static void s_clear_node_history() { s_node_history.clear(); }
     static void s_clear_all_node_lists();
+
+    // Handle changing track_node_history
+    static void s_toggle_track_node_history(bool x) { s_track_node_history = x; }
 
 private:
     // Member variables assigned from constructor arguments
@@ -170,5 +174,5 @@ private:
     // Handle tracking nodes that has been changed for visualization
 
     static inline std::set<Square> s_node_history;
-    static inline bool s_track_node_history;
+    static inline bool s_track_node_history = false;
 };

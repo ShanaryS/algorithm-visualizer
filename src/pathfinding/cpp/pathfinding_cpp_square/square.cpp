@@ -370,10 +370,12 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("get_all_history_nodes", &Square::s_get_all_history_nodes)
         .def("get_all_nodes_to_update", &Square::s_get_all_nodes_to_update)
         .def("get_node_history", &Square::s_get_node_history)
+        .def("get_track_node_history", &Square::s_get_track_node_history)
         .def("clear_nodes_to_update", &Square::s_clear_nodes_to_update)
         .def("clear_history_nodes", &Square::s_clear_history_nodes)
         .def("clear_node_history", &Square::s_clear_node_history)
-        .def("clear_all_node_lists", &Square::s_clear_all_node_lists);
+        .def("clear_all_node_lists", &Square::s_clear_all_node_lists)
+        .def("toggle_track_node_history", &Square::s_toggle_track_node_history);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
