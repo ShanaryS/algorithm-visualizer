@@ -73,10 +73,7 @@ if __name__ == "__main__":
 # Define the size of containers using number of rows^2
 # Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_node using switch statement and color ids.
 # Write gph.graph as a single list to optimize cache hits
-
-
-
-
+# Passing node containers by pointers rather than copy
 
 
 
