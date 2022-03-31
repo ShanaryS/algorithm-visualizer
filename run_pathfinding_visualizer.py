@@ -58,7 +58,6 @@ if __name__ == "__main__":
 # Rewrite node.py (Test with python for speed up?)
 # Add algo timer to c++ functions?
 # algorithms.py into C++
-# May need to write hash for unordered_set
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
@@ -68,6 +67,7 @@ if __name__ == "__main__":
 # Try to remove external cacert.pem dependency (also lib folder)
 
 # (Optimization Station: Things to test to see if faster)
+# Use unordered_set for node lists, add hash to classh
 # Reserve m_neighbours
 # Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
 # In set methods either remove guard statement or use something faster than a set (array, vector)
