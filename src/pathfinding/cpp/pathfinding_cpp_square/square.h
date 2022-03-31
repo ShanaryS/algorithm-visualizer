@@ -147,25 +147,25 @@ private:
 
     // Class containers for node types
 
-    static std::set<Square> s_all_empty_nodes;
-    static std::set<Square> s_all_open_nodes;
-    static std::set<Square> s_all_open2_nodes;
-    static std::set<Square> s_all_open3_nodes;
-    static std::set<Square> s_all_closed_nodes;
-    static std::set<Square> s_all_closed2_nodes;
-    static std::set<Square> s_all_closed3_nodes;
-    static std::set<Square> s_all_start_nodes;
-    static std::set<Square> s_all_mid_nodes;
-    static std::set<Square> s_all_end_nodes;
-    static std::set<Square> s_all_wall_nodes;
-    static std::set<Square> s_all_path_nodes;
-    static std::set<Square> s_all_history_nodes;
+    static inline std::set<Square> s_all_empty_nodes;
+    static inline std::set<Square> s_all_open_nodes;
+    static inline std::set<Square> s_all_open2_nodes;
+    static inline std::set<Square> s_all_open3_nodes;
+    static inline std::set<Square> s_all_closed_nodes;
+    static inline std::set<Square> s_all_closed2_nodes;
+    static inline std::set<Square> s_all_closed3_nodes;
+    static inline std::set<Square> s_all_start_nodes;
+    static inline std::set<Square> s_all_mid_nodes;
+    static inline std::set<Square> s_all_end_nodes;
+    static inline std::set<Square> s_all_wall_nodes;
+    static inline std::set<Square> s_all_path_nodes;
+    static inline std::set<Square> s_all_history_nodes;
 
     // Container that gets check from outside class to know what nodes have changed
-    static std::set<Square> s_nodes_to_update;
+    static inline std::set<Square> s_nodes_to_update;
 
     // Handle tracking nodes that has been changed for visualization
 
-    static std::set<Square> s_node_history;
-    static inline bool s_track_node_history = false;
+    static inline std::set<Square> s_node_history;
+    static inline bool s_track_node_history;
 };
