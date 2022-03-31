@@ -3,8 +3,8 @@
 
 from dataclasses import dataclass
 import pygame
-from py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
-from py.square import Square
+from src.pathfinding.py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
+from src.pathfinding.py.square import Square
 from typing import Optional
 
 

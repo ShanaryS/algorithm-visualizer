@@ -1,7 +1,7 @@
 """Package for sorting visualizer"""
 
 
-import sys
+"""import sys
 from src.package_paths import package_paths
 
 
@@ -15,4 +15,4 @@ other_packages = package_paths.copy()  # To prevent changing actual variable
 other_packages.pop(curr_package)
 for package in other_packages:
     if package in sys.path:
-        raise ImportError("Cannot run two visualizers at the same time.")
+        raise ImportError("Cannot run two visualizers at the same time.")"""

@@ -1,10 +1,10 @@
 """Contains searching algorithms"""
 
 
-from py.utils.colors import *
+from src.searching.py.utils.colors import *
 import matplotlib.pyplot as plt
 import numpy as np
-from py.utils.values import get_sqrt
+from src.searching.py.utils.values import get_sqrt
 
 
 def linear(vis: plt.bar,

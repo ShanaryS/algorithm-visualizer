@@ -78,7 +78,7 @@ if __name__ == "__main__":
 # Write gph.graph as a single list to optimize cache hits
 # Passing node containers by pointers rather than copy
 
-
+# Update requirements.txt to latest versions
 
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that

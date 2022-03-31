@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 import pygame
-from py.algorithms import (
+from src.pathfinding.py.algorithms import (
     dijkstra,
     a_star,
     bi_dijkstra,
@@ -12,7 +12,7 @@ from py.algorithms import (
     draw_recursive_maze,
     AlgoState,
 )
-from py.graph import (
+from src.pathfinding.py.graph import (
     GraphState,
     VisText,
     set_graph,
@@ -24,9 +24,9 @@ from py.graph import (
     draw_vis_text,
     HEIGHT,
 )
-from py.square import Square
+from src.pathfinding.py.square import Square
 from typing import Optional
-from py.utils.maps import get_img_base, get_img_clean
+from src.pathfinding.py.utils.maps import get_img_base, get_img_clean
 
 
 @dataclass(slots=True)
