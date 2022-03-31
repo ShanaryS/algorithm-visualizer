@@ -85,6 +85,11 @@ if __name__ == "__main__":
 # Write gph.graph as a single list to optimize cache hits
 # Passing node containers by pointers rather than copy
 
+# --- Build Systems ---
+# https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cppimport
+# https://pybind11.readthedocs.io/en/stable/compiling.html#generating-binding-code-automatically
+# https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cmake
+
 # Update requirements.txt to latest versions
 
 # --- Mutltithreading/Multiprocessing ---
