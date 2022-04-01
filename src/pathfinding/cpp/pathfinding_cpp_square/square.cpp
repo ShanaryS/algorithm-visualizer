@@ -5,6 +5,19 @@
 #include "square.h"
 
 
+// Allow hashing using row and col position
+template<>
+struct std::hash<Square>
+{
+    size_t operator()(const Square& square) const
+    {
+        std::array<int, 2> pos = square.get_pos();
+        std::size_t row_hash = std::hash<int>()(pos[0]);
+        std::size_t col_hash = std::hash<int>()(pos[1]) << 1;
+        return row_hash ^ col_hash;
+    }
+};
+
 std::vector<Square> Square::get_neighbours(bool include_walls) const
 {
     std::vector<Square> neighbours;
@@ -321,6 +334,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def(py::init<int, int, int, float>())
         .def(py::self == py::self)
         .def(py::self != py::self)
+        .def(hash(py::self))
         .def("get_pos", &Square::get_pos)
         .def("get_color", &Square::get_color)
         .def("get_neighbours", &Square::get_neighbours)
