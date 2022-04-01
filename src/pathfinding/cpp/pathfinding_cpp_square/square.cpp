@@ -336,7 +336,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
     py::class_<std::unordered_set<Square, Square::hash>>(m, "unordered_set_square")
         .def(py::init<>())
-        .def("add", [](std::unordered_set<Square, Square::hash>& self, Square square) { self.insert(square); })
+        .def("add", [](std::unordered_set<Square, Square::hash>& self, const Square& square) { self.insert(square); }, py::return_value_policy::reference_internal)
         .def("__len__", [](const std::unordered_set<Square, Square::hash>& self) { return self.size(); })
         .def("__iter__", [](std::unordered_set<Square, Square::hash>& self) { return py::make_iterator(self.begin(), self.end()); }, py::keep_alive<0, 1>());
 
