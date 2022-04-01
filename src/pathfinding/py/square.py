@@ -34,6 +34,15 @@ class Square:
     _PATH_COLOR = (255, 255, 0)
     _HISTORY_COLOR = (106, 13, 173)
 
+    # Extend set class and remove ability to call .copy() to
+    # force use of copy module. This is for seamless compatibility
+    # with the C++ square implementation of this class
+    class set(set):
+        def copy(self):
+            s = """Use the copy module for copying. This ensures a consistent
+ API for the C++ Square class implentation."""
+            raise NotImplementedError(s)
+
     # Keeps track of all the nodes of each type for easy manipulation
     all_empty_nodes = set()
     all_open_nodes = set()
