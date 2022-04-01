@@ -58,7 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Passing gph into update_neighbours or just stay with vector
+# Rewrite static functions to take copy parameter (kwarg gives issues?)
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
