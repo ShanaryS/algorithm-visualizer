@@ -247,10 +247,11 @@ def _draw_square_borders(gph: GraphState) -> None:
 
     square: Square
     for square in Square.get_nodes_to_update():
-        top_left = square.x, square.y
-        top_right = square.x, square.y + gph.square_size
-        bottom_left = square.x + gph.square_size, square.y
-        bottom_right = square.x + gph.square_size, square.y + gph.square_size
+        x, y, *_ = square.draw_square()[1]
+        top_left = x, y
+        top_right = x, y + gph.square_size
+        bottom_left = x + gph.square_size, y
+        bottom_right = x + gph.square_size, y + gph.square_size
 
         # Top
         pygame.draw.line(gph.window, LINE_COLOR, top_left, top_right)
@@ -286,18 +287,19 @@ def set_squares_to_roads(gph: GraphState) -> None:
     for x in range(len(gph.graph)):
         for y in range(len(gph.graph[0])):
             square: Square = gph.graph[x][y]
+            row, col = square.get_pos()
             square.set_wall_color_map()  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
 
             # These two loops i,j get each pixel in each square. Time Complexity is O(n) in regards to pixels.
             for i in range(
-                square.row * int(gph.square_size),
-                (square.row + 1) * int(gph.square_size),
+                row * int(gph.square_size),
+                (row + 1) * int(gph.square_size),
             ):
                 for j in range(
-                    square.col * int(gph.square_size),
-                    (square.col + 1) * int(gph.square_size),
+                    col * int(gph.square_size),
+                    (col + 1) * int(gph.square_size),
                 ):
                     r, g, b, a = gph.window.get_at((i, j))
                     tot += r + g + b
