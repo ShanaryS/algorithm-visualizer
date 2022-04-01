@@ -1,8 +1,8 @@
+#include "square.h"
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
-
-#include "square.h"
 
 
 // Allow hashing using row and col position
@@ -327,9 +327,19 @@ void Square::discard_node(bool remove_wall)
 
 // Allow code to be imported into python using pybind11
 
+// Prevent copies being made when passing these types around
+PYBIND11_MAKE_OPAQUE(std::unordered_set<Square, Square::hash>);
+
 namespace py = pybind11;
 
 PYBIND11_MODULE(pathfinding_cpp_square, m) {
+    // Define Python API for opaque types
+    py::class_<std::unordered_set<Square, Square::hash>>(m, "unordered_set_square")
+        .def(py::init<>())
+        .def("__len__", [](const std::unordered_set<Square, Square::hash>& s) { return s.size(); })
+        .def("__iter__", [](std::unordered_set<Square, Square::hash>& s) { return py::make_iterator(s.begin(), s.end()); }, py::keep_alive<0, 1>());
+
+    // Define Python API for Square class
     py::class_<Square>(m, "Square")
         .def(py::init<int, int, int, float>())
         .def(py::self == py::self)
@@ -366,30 +376,30 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_path", &Square::set_path)
         .def("set_history", &Square::set_history)
         .def("set_history_rollback", &Square::set_history_rollback)
-        .def("update_neighbours", &Square::s_update_neighbours)
+        .def_static("update_neighbours", &Square::s_update_neighbours)
         .def("reset_wall_color", &Square::reset_wall_color)
         .def("set_wall_color_map", &Square::set_wall_color_map)
-        .def("get_all_empty_nodes", &Square::s_get_all_empty_nodes)
-        .def("get_all_open_nodes", &Square::s_get_all_open_nodes)
-        .def("get_all_open2_nodes", &Square::s_get_all_open2_nodes)
-        .def("get_all_open3_nodes", &Square::s_get_all_open3_nodes)
-        .def("get_all_closed_nodes", &Square::s_get_all_closed_nodes)
-        .def("get_all_closed2_nodes", &Square::s_get_all_closed2_nodes)
-        .def("get_all_closed3_nodes", &Square::s_get_all_closed3_nodes)
-        .def("get_all_start_nodes", &Square::s_get_all_start_nodes)
-        .def("get_all_mid_nodes", &Square::s_get_all_mid_nodes)
-        .def("get_all_end_nodes", &Square::s_get_all_end_nodes)
-        .def("get_all_wall_nodes", &Square::s_get_all_wall_nodes)
-        .def("get_all_path_nodes", &Square::s_get_all_path_nodes)
-        .def("get_all_history_nodes", &Square::s_get_all_history_nodes)
-        .def("get_nodes_to_update", &Square::s_get_nodes_to_update)
-        .def("get_node_history", &Square::s_get_node_history)
-        .def("get_track_node_history", &Square::s_get_track_node_history)
-        .def("clear_nodes_to_update", &Square::s_clear_nodes_to_update)
-        .def("clear_history_nodes", &Square::s_clear_history_nodes)
-        .def("clear_node_history", &Square::s_clear_node_history)
-        .def("clear_all_node_lists", &Square::s_clear_all_node_lists)
-        .def("set_track_node_history", &Square::s_set_track_node_history);
+        .def_static("get_all_empty_nodes", &Square::s_get_all_empty_nodes)
+        .def_static("get_all_open_nodes", &Square::s_get_all_open_nodes)
+        .def_static("get_all_open2_nodes", &Square::s_get_all_open2_nodes)
+        .def_static("get_all_open3_nodes", &Square::s_get_all_open3_nodes)
+        .def_static("get_all_closed_nodes", &Square::s_get_all_closed_nodes)
+        .def_static("get_all_closed2_nodes", &Square::s_get_all_closed2_nodes)
+        .def_static("get_all_closed3_nodes", &Square::s_get_all_closed3_nodes)
+        .def_static("get_all_start_nodes", &Square::s_get_all_start_nodes)
+        .def_static("get_all_mid_nodes", &Square::s_get_all_mid_nodes)
+        .def_static("get_all_end_nodes", &Square::s_get_all_end_nodes)
+        .def_static("get_all_wall_nodes", &Square::s_get_all_wall_nodes)
+        .def_static("get_all_path_nodes", &Square::s_get_all_path_nodes)
+        .def_static("get_all_history_nodes", &Square::s_get_all_history_nodes)
+        .def_static("get_nodes_to_update", &Square::s_get_nodes_to_update)
+        .def_static("get_node_history", &Square::s_get_node_history)
+        .def_static("get_track_node_history", &Square::s_get_track_node_history)
+        .def_static("clear_nodes_to_update", &Square::s_clear_nodes_to_update)
+        .def_static("clear_history_nodes", &Square::s_clear_history_nodes)
+        .def_static("clear_node_history", &Square::s_clear_node_history)
+        .def_static("clear_all_node_lists", &Square::s_clear_all_node_lists)
+        .def_static("set_track_node_history", &Square::s_set_track_node_history);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
