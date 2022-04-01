@@ -1,9 +1,6 @@
 """Creates square objects that drives the visualizations"""
 
 
-import copy as cpy
-
-
 class Square:
     """Defines the properties needed for each node on graph"""
 
@@ -425,108 +422,78 @@ class Square:
             Square.all_history_nodes.discard(self)
 
     @classmethod
-    def get_all_empty_nodes(cls, copy=False) -> set:
+    def get_all_empty_nodes(cls) -> set:
         """Gets all empty nodes"""
-        if copy:
-            return cpy.copy(cls.all_empty_nodes)
         return cls.all_empty_nodes
 
     @classmethod
-    def get_all_open_nodes(cls, copy=False) -> set:
+    def get_all_open_nodes(cls) -> set:
         """Gets all open nodes"""
-        if copy:
-            return cpy.copy(cls.all_open_nodes)
         return cls.all_open_nodes
 
     @classmethod
-    def get_all_open2_nodes(cls, copy=False) -> set:
+    def get_all_open2_nodes(cls) -> set:
         """Gets all open_2 nodes"""
-        if copy:
-            return cpy.copy(cls.all_open2_nodes)
         return cls.all_open2_nodes
 
     @classmethod
-    def get_all_open3_nodes(cls, copy=False) -> set:
+    def get_all_open3_nodes(cls) -> set:
         """Gets all open_3 nodes"""
-        if copy:
-            return cpy.copy(cls.all_open3_nodes)
         return cls.all_open3_nodes
 
     @classmethod
-    def get_all_closed_nodes(cls, copy=False) -> set:
+    def get_all_closed_nodes(cls) -> set:
         """Gets all closed nodes"""
-        if copy:
-            return cpy.copy(cls.all_closed_nodes)
         return cls.all_closed_nodes
 
     @classmethod
-    def get_all_closed2_nodes(cls, copy=False) -> set:
+    def get_all_closed2_nodes(cls) -> set:
         """Gets all closed_2 nodes"""
-        if copy:
-            return cpy.copy(cls.all_closed2_nodes)
         return cls.all_closed2_nodes
 
     @classmethod
-    def get_all_closed3_nodes(cls, copy=False) -> set:
+    def get_all_closed3_nodes(cls) -> set:
         """Gets all closed_3 nodes"""
-        if copy:
-            return cpy.copy(cls.all_closed3_nodes)
         return cls.all_closed3_nodes
 
     @classmethod
-    def get_all_start_nodes(cls, copy=False) -> set:
+    def get_all_start_nodes(cls) -> set:
         """Gets all start nodes"""
-        if copy:
-            return cpy.copy(cls.all_start_nodes)
         return cls.all_start_nodes
 
     @classmethod
-    def get_all_mid_nodes(cls, copy=False) -> set:
+    def get_all_mid_nodes(cls) -> set:
         """Gets all mid nodes"""
-        if copy:
-            return cpy.copy(cls.all_mid_nodes)
         return cls.all_mid_nodes
 
     @classmethod
-    def get_all_end_nodes(cls, copy=False) -> set:
+    def get_all_end_nodes(cls) -> set:
         """Gets all end nodes"""
-        if copy:
-            return cpy.copy(cls.all_end_nodes)
         return cls.all_end_nodes
 
     @classmethod
-    def get_all_wall_nodes(cls, copy=False) -> set:
+    def get_all_wall_nodes(cls) -> set:
         """Gets all wall nodes"""
-        if copy:
-            return cpy.copy(cls.all_wall_nodes)
         return cls.all_wall_nodes
 
     @classmethod
-    def get_all_path_nodes(cls, copy=False) -> set:
+    def get_all_path_nodes(cls) -> set:
         """Gets all path nodes"""
-        if copy:
-            return cpy.copy(cls.all_path_nodes)
         return cls.all_path_nodes
 
     @classmethod
-    def get_all_history_nodes(cls, copy=False) -> set:
+    def get_all_history_nodes(cls) -> set:
         """Gets all history nodes"""
-        if copy:
-            return cpy.copy(cls.all_history_nodes)
         return cls.all_history_nodes
 
     @classmethod
-    def get_nodes_to_update(cls, copy=False) -> set:
+    def get_nodes_to_update(cls) -> set:
         """Gets nodes to update"""
-        if copy:
-            return cpy.copy(cls.nodes_to_update)
         return cls.nodes_to_update
 
     @classmethod
-    def get_node_history(cls, copy=False) -> set:
+    def get_node_history(cls) -> set:
         """Get node history"""
-        if copy:
-            return cpy.copy(cls.node_history)
         return cls.node_history
 
     @classmethod
