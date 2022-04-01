@@ -18,7 +18,7 @@ try:
 except (FileNotFoundError, json.JSONDecodeError):
     with open(json_name, 'w', encoding='utf-8') as json_file:
         _use_cpp = {
-            "#include": ".py",
+            "#include": "algorithms.h",
             "How to Use": [
                 "Use python or C++ implementation for certain parts of code",
                 "For pure python, choose '.py'. For maximum C++ usage, choose highest item.",
