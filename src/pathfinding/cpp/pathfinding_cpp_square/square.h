@@ -3,7 +3,7 @@
 #include <array>
 #include <tuple>
 #include <unordered_map>
-#include <set>
+#include <unordered_set>
 #include <vector>
 
 
@@ -22,6 +22,17 @@ public:
 
     bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
     bool operator!= (const Square& other) const { return !(operator==(other)); }
+
+    // Allow hashing using row and col position
+    struct hash
+    {
+        std::size_t operator()(const Square& square) const
+        {
+            std::size_t row_hash = std::hash<int>()(square.m_row);
+            std::size_t col_hash = std::hash<int>()(square.m_col) << 1;
+            return row_hash ^ col_hash;
+        }
+    };
     
     // False if instanced using default constructor
     operator bool() const { return m_is_valid; }
@@ -73,21 +84,21 @@ public:
 
     // Get get info about nodes from class
 
-    static std::set<Square> s_get_all_empty_nodes() { return s_all_empty_nodes; }
-    static std::set<Square> s_get_all_open_nodes() { return s_all_open_nodes; }
-    static std::set<Square> s_get_all_open2_nodes() { return s_all_open2_nodes; }
-    static std::set<Square> s_get_all_open3_nodes() { return s_all_open3_nodes; }
-    static std::set<Square> s_get_all_closed_nodes() { return s_all_closed_nodes; }
-    static std::set<Square> s_get_all_closed2_nodes() { return s_all_closed2_nodes; }
-    static std::set<Square> s_get_all_closed3_nodes() { return s_all_closed3_nodes; }
-    static std::set<Square> s_get_all_start_nodes() { return s_all_start_nodes; }
-    static std::set<Square> s_get_all_mid_nodes() { return s_all_mid_nodes; }
-    static std::set<Square> s_get_all_end_nodes() { return s_all_end_nodes; }
-    static std::set<Square> s_get_all_wall_nodes() { return s_all_wall_nodes; }
-    static std::set<Square> s_get_all_path_nodes() { return s_all_path_nodes; }
-    static std::set<Square> s_get_all_history_nodes() { return s_all_history_nodes; }
-    static std::set<Square> s_get_nodes_to_update() { return s_nodes_to_update; }
-    static std::set<Square> s_get_node_history() { return s_node_history; }
+    static std::unordered_set<Square, Square::hash> s_get_all_empty_nodes() { return s_all_empty_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_open_nodes() { return s_all_open_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_open2_nodes() { return s_all_open2_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_open3_nodes() { return s_all_open3_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_closed_nodes() { return s_all_closed_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_closed2_nodes() { return s_all_closed2_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_closed3_nodes() { return s_all_closed3_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_start_nodes() { return s_all_start_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_mid_nodes() { return s_all_mid_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_end_nodes() { return s_all_end_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_wall_nodes() { return s_all_wall_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_path_nodes() { return s_all_path_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_all_history_nodes() { return s_all_history_nodes; }
+    static std::unordered_set<Square, Square::hash> s_get_nodes_to_update() { return s_nodes_to_update; }
+    static std::unordered_set<Square, Square::hash> s_get_node_history() { return s_node_history; }
     static bool s_get_track_node_history() { return s_track_node_history; }
 
     // Updates all the neighbours for all the squares
@@ -153,25 +164,25 @@ private:
 
     // Class containers for node types
 
-    static inline std::set<Square> s_all_empty_nodes;
-    static inline std::set<Square> s_all_open_nodes;
-    static inline std::set<Square> s_all_open2_nodes;
-    static inline std::set<Square> s_all_open3_nodes;
-    static inline std::set<Square> s_all_closed_nodes;
-    static inline std::set<Square> s_all_closed2_nodes;
-    static inline std::set<Square> s_all_closed3_nodes;
-    static inline std::set<Square> s_all_start_nodes;
-    static inline std::set<Square> s_all_mid_nodes;
-    static inline std::set<Square> s_all_end_nodes;
-    static inline std::set<Square> s_all_wall_nodes;
-    static inline std::set<Square> s_all_path_nodes;
-    static inline std::set<Square> s_all_history_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_empty_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_open_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_open2_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_open3_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_closed_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_closed2_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_closed3_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_start_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_mid_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_end_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_wall_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_path_nodes;
+    static inline std::unordered_set<Square, Square::hash> s_all_history_nodes;
 
     // Container that gets check from outside class to know what nodes have changed
-    static inline std::set<Square> s_nodes_to_update;
+    static inline std::unordered_set<Square, Square::hash> s_nodes_to_update;
 
     // Handle tracking nodes that has been changed for visualization
 
-    static inline std::set<Square> s_node_history;
+    static inline std::unordered_set<Square, Square::hash> s_node_history;
     static inline bool s_track_node_history = false;
 };
