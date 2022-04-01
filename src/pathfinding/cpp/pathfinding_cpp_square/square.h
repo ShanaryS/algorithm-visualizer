@@ -10,7 +10,6 @@
 class Square
 {
 public:
-    Square() = default;
     Square(int row, int col, int rows, float square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
@@ -127,7 +126,7 @@ private:
 
     // Member variables assigned in member functions
 
-    std::unordered_map<const char*, Square> m_neighbours;
+    std::unordered_map<const char*, Square&> m_neighbours;
 
     // Setup square's neighbours
     void update_neighbours(std::vector<std::vector<Square>>& graph);
