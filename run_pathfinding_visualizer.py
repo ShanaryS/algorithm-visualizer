@@ -63,6 +63,7 @@ if __name__ == "__main__":
 # Rewrite node.py (Test with python for speed up?)
 # Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
 # Use Opaque where possible for speed improvements
+# Return type based on func return type? e.g copy for bool
 # Add algo timer to c++ functions?
 # algorithms.py into C++
 # Create new project and use submodules to separate square and algorithm
