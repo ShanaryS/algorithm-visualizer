@@ -23,15 +23,6 @@ std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_s
         }
     }
 
-    // Update the neighbours once graph is done
-    for (auto& row : Square::graph)
-    {
-        for (auto& square : row)
-        {
-            square.update_neighbours();
-        }
-    }
-
     // Return a copy for outside the class
     return Square::graph;
 }
