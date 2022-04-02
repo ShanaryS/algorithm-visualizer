@@ -78,6 +78,7 @@ if __name__ == "__main__":
 # Add conditional cpp include from json file in readme
 
 # (Optimization Station: Things to test to see if faster)
+# Store graph in std::array and not nested for a signle block of memory
 # Rewrite update_neighbours to only passed need squares to instance
 # Use unordered_set for node lists, add hash to class
 # Reserve m_neighbours
