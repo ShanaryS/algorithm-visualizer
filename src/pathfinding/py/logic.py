@@ -260,21 +260,21 @@ def _left_click_button(
 
                 # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
-                    if lgc.start in Square.all_wall_nodes:
+                    if lgc.start in Square.get_all_wall_nodes():
                         lgc.start.set_wall()
                     else:
                         lgc.start.reset()
                     lgc.start = square
                     square.set_start()
                 elif last_square == "mid":
-                    if lgc.mid in Square.all_wall_nodes:
+                    if lgc.mid in Square.get_all_wall_nodes():
                         lgc.mid.set_wall()
                     else:
                         lgc.mid.reset()
                     lgc.mid = square
                     square.set_mid()
                 elif last_square == "end":
-                    if lgc.end in Square.all_wall_nodes:
+                    if lgc.end in Square.get_all_wall_nodes():
                         lgc.end.set_wall()
                     else:
                         lgc.end.reset()
