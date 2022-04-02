@@ -11,18 +11,17 @@ std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_s
 {
     // Reset class
     Square::s_clear_all_node_lists();
-    Square::graph = {};
+    Square::graph.clear();
 
     // Create each square
     for (int row{ 0 }; row < rows; ++row)
     {
         Square::graph.push_back({});
-        for (int col{ 0 }; col < cols; ++col)
+        for (int col{ 1 }; col < cols; ++col)
         {
             Square(row, col, rows, square_size);
         }
     }
-
     // Return a copy for outside the class
     return Square::graph;
 }
