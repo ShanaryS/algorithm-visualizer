@@ -100,17 +100,13 @@ class Square:
         """Gets color of square"""
         return self.color
     
-    def get_neighbours(self, include_walls=False) -> list:
+    def get_neighbours(self) -> list:
         """Gets list of neighbours"""
         neighbours = []
         for direction in self.neighbours:
             nei: Square = self.neighbours[direction]
-            # Append walls to list if include_walls and nei exists
-            if nei:
-                if not nei.is_wall():
-                    neighbours.append(nei)
-                elif include_walls:
-                    neighbours.append(nei)
+            # Append walls to list if nei exists
+            neighbours.append(nei)
         return neighbours
 
     def draw_square(self) -> tuple:
