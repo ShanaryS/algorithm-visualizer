@@ -5,6 +5,7 @@
 #include <pybind11/operators.h>
 
 #include <stdexcept>
+#include <iostream>
 
 
 std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_size)
@@ -96,6 +97,7 @@ std::vector<Square> Square::get_neighbours(bool include_walls) const
 
 std::array<float, 4> Square::draw_square() const
 {
+    std::cout << "(" << m_row << ", " << m_col << "): " << m_x << " | " << m_y << " | " << m_square_size << '\n';
     std::array<float, 4> square_pos{ m_x, m_y, static_cast<int>(m_square_size), static_cast<int>(m_square_size) };
     return square_pos;
 }
