@@ -53,19 +53,52 @@ struct std::hash<Square>
 std::vector<Square> Square::get_neighbours(bool include_walls) const
 {
     std::vector<Square> neighbours;
-    for (const auto& direction : m_neighbours)
-    {
-        Square nei{ direction.second };
-        if (static_cast<bool>(nei))
+    if (m_col > 0)
+    { 
+        Square& nei = Square::graph[m_row][m_col - 1];
+        if (!nei.is_wall()) 
         {
-            if (!nei.is_wall())
-            {
-                neighbours.push_back(nei);
-            }
-            else if (include_walls)
-            {
-                neighbours.push_back(nei);
-            }
+            neighbours.push_back(nei);
+        }
+        else if (include_walls)
+        {
+            neighbours.push_back(nei);
+        }
+    }
+    if (m_row > 0)
+    {
+        Square& nei = Square::graph[m_row - 1][m_col];
+        if (!nei.is_wall())
+        {
+            neighbours.push_back(nei);
+        }
+        else if (include_walls)
+        {
+            neighbours.push_back(nei);
+        }
+    }
+    if (m_col < m_rows - 1)
+    {
+        Square& nei = Square::graph[m_row][m_col + 1];
+        if (!nei.is_wall())
+        {
+            neighbours.push_back(nei);
+        }
+        else if (include_walls)
+        {
+            neighbours.push_back(nei);
+        }
+    }
+    if (m_row < m_rows - 1)
+    {
+        Square& nei = Square::graph[m_row + 1][m_col];
+        if (!nei.is_wall())
+        {
+            neighbours.push_back(nei);
+        }
+        else if (include_walls)
+        {
+            neighbours.push_back(nei);
         }
     }
     return neighbours;
