@@ -155,7 +155,6 @@ def set_graph(gph: GraphState) -> None:
 
     # Everything square related is handle in here
     gph.graph = Square.init(gph.rows, gph.rows, gph.square_size)
-    print(gph.graph[0][0].get_neighbours())
 
 
 def draw(
