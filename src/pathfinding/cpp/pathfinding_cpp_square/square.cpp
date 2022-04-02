@@ -333,6 +333,7 @@ void Square::discard_node(bool remove_wall)
 PYBIND11_MAKE_OPAQUE(std::unordered_set<Square, Square::hash>);
 
 namespace py = pybind11;
+using namespace pybind11::literals;
 
 PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
@@ -350,7 +351,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def(hash(py::self))
         .def("get_pos", &Square::get_pos, py::return_value_policy::reference)
         .def("get_color", &Square::get_color, py::return_value_policy::reference)
-        .def("get_neighbours", &Square::get_neighbours, py::return_value_policy::reference)
+        .def("get_neighbours", &Square::get_neighbours, "inclue_walls"_a=false, py::return_value_policy::reference)
         .def("draw_square", &Square::draw_square, py::return_value_policy::reference)
         .def("is_empty", &Square::is_empty, py::return_value_policy::reference)
         .def("is_open", &Square::is_open, py::return_value_policy::reference)
