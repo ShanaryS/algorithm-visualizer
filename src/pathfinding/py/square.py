@@ -45,6 +45,9 @@ class Square:
             e = """Use the copy module for copying. This ensures a consistent
  API for the C++ Square class implentation."""
             raise NotImplementedError(e)
+    
+    # Stores the instances of all the nodes
+    graph = []
 
     # Keeps track of all the nodes of each type for easy manipulation
     # These are copied when accessed from outside class to match C++
@@ -71,6 +74,7 @@ class Square:
     track_node_history = False
 
     def __init__(self, row: int, col: int, rows: int, square_size: float) -> None:
+        Square.graph[row].append(self)
         self.row = row
         self.col = col
         self.rows = rows
@@ -381,16 +385,16 @@ class Square:
         """Resets wall color for map to default"""
         self.wall_color = Square.__WALL_COLOR_MAP
     
-    def _update_neighbours(self, graph) -> None:
+    def _update_neighbours(self) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
         if self.col > 0:
-            self.neighbours["Left"] = graph[self.row][self.col - 1]
+            self.neighbours["Left"] = Square.graph[self.row][self.col - 1]
         if self.row > 0:
-            self.neighbours["Up"] = graph[self.row - 1][self.col]
+            self.neighbours["Up"] = Square.graph[self.row - 1][self.col]
         if self.col < self.rows - 1:
-            self.neighbours["Right"] = graph[self.row][self.col + 1]
+            self.neighbours["Right"] = Square.graph[self.row][self.col + 1]
         if self.row < self.rows - 1:
-            self.neighbours["Down"] = graph[self.row + 1][self.col]
+            self.neighbours["Down"] = Square.graph[self.row + 1][self.col]
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
@@ -505,14 +509,28 @@ class Square:
     def get_track_node_history(cls) -> bool:
         """Get track node history"""
         return cls.track_node_history
-    
+
     @classmethod
-    def update_neighbours(cls, graph) -> None:
-        """Updates all the nieghbours for all the squares"""
+    def init(cls, rows, cols, square_size) -> list:
+        """Initializes the graph for the class"""
+        # Reset class
+        cls.clear_all_node_lists()
+        cls.graph = []
+        
+        # Create each square
+        for row in range(rows):
+            cls.graph.append([])
+            for col in range(cols):
+                Square(row, col, rows, square_size)
+        
+        # Update neighbours once graph is done
         square: Square
-        for row in graph:
+        for row in cls.graph:
             for square in row:
-                square._update_neighbours(graph)
+                square._update_neighbours()
+        
+        # Return a copy for outside use
+        return cls.graph.copy()
 
     @classmethod
     def clear_nodes_to_update(cls) -> None:

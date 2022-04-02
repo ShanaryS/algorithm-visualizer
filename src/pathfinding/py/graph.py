@@ -153,19 +153,8 @@ def set_graph(gph: GraphState) -> None:
     # technically created upon a set_* method.
     gph.update_entire_screen = True
 
-    # Clear lists from previous graph
-    Square.clear_all_node_lists()
-
-    gph.graph = []
-    for row in range(gph.rows):
-        gph.graph.append([])
-        for col in range(gph.rows):
-            # Uses Square class to create square object with necessary attributes
-            square = Square(row, col, gph.rows, gph.square_size)
-            gph.graph[row].append(square)
-
-    # Update neighbours
-    Square.update_neighbours(gph.graph)
+    # Everything square related is handle in here
+    gph.graph = Square.init(gph.rows, gph.rows, gph.square_size)
 
 
 def draw(
