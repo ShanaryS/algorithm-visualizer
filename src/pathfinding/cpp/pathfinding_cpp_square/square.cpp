@@ -20,7 +20,7 @@ struct std::hash<Square>
     }
 };
 
-std::vector<Square>& Square::get_neighbours(bool include_walls) const
+std::vector<Square> Square::get_neighbours(bool include_walls) const
 {
     std::vector<Square> neighbours;
     for (const auto& direction : m_neighbours)
