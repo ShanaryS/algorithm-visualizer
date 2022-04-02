@@ -46,7 +46,7 @@ public:
     std::array<int, 2> get_pos() const { return std::array<int, 2>{ m_row, m_col }; }
     std::array<int, 3>& get_color() { return m_color; }
     std::vector<Square> get_neighbours(bool include_walls = false) const;
-    std::tuple<std::array<int, 3>, std::tuple<float, float, int, int>> draw_square() const;
+    std::tuple<std::array<int, 3>, std::array<float, 4>> draw_square() const;
 
     // Check square type
 
