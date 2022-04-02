@@ -58,8 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Rewrite static functions to return references, what does this actually return???
-# return_value_policy and other things: https://pybind11.readthedocs.io/en/stable/advanced/functions.html
+# Use Opaque where possible for speed improvements
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
