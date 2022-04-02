@@ -78,6 +78,7 @@ if __name__ == "__main__":
 # - https://github.com/pyinstaller/pyinstaller/issues/4073
 # - https://stackoverflow.com/a/51992944
 # Try to remove external cacert.pem dependency (also lib folder)
+# Put json in lib folder
 # Add conditional cpp include from json file in readme
 
 # (Optimization Station: Things to test to see if faster)
