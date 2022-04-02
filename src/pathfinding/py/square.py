@@ -115,12 +115,7 @@ class Square:
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
-        return self.color, (
-            self.x,
-            self.y,
-            int(self.square_size),
-            int(self.square_size),
-        )
+        return (self.x, self.y, int(self.square_size), int(self.square_size))
 
     def is_empty(self) -> bool:
         """Checks if blank node"""

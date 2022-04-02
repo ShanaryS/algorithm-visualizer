@@ -69,7 +69,8 @@ class GraphState:
         """Adds rect to update, converts non rects to rect"""
 
         if isinstance(obj, Square):
-            square_color, square_pos = obj.draw_square()
+            square_color = obj.get_color()
+            square_pos = obj.draw_square()
             obj = _draw_square(self, square_color, square_pos)
 
         self.rects_to_update.append(obj)
@@ -236,7 +237,7 @@ def _draw_square_borders(gph: GraphState) -> None:
 
     square: Square
     for square in Square.get_nodes_to_update():
-        x, y, *_ = square.draw_square()[1]
+        x, y, *temp = square.draw_square()
         top_left = x, y
         top_right = x, y + gph.square_size
         bottom_left = x + gph.square_size, y

@@ -94,10 +94,10 @@ std::vector<Square> Square::get_neighbours(bool include_walls) const
     return neighbours;
 }
 
-std::tuple<std::array<int, 3>, std::array<float, 4>> Square::draw_square() const
+std::array<float, 4> Square::draw_square() const
 {
     std::array<float, 4> square_pos{ m_x, m_y, static_cast<int>(m_square_size), static_cast<int>(m_square_size) };
-    return std::make_tuple(m_color, square_pos);
+    return square_pos;
 }
 
 void Square::reset()
