@@ -61,6 +61,7 @@ if __name__ == "__main__":
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
 # Rewrite node.py (Test with python for speed up?)
+# Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
 # Use Opaque where possible for speed improvements
 # Add algo timer to c++ functions?
 # algorithms.py into C++
