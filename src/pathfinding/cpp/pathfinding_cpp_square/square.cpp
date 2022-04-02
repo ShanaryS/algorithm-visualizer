@@ -350,14 +350,6 @@ void Square::s_clear_all_node_lists()
     s_all_history_nodes.clear();
 }
 
-void Square::update_neighbours()
-{
-    if (m_col > 0) { m_neighbours.insert({ "Left", Square::graph[m_row][m_col - 1] }); }
-    if (m_row > 0) { m_neighbours.insert({ "Up", Square::graph[m_row - 1][m_col] }); }
-    if (m_col < m_rows - 1) { m_neighbours.insert({ "Right", Square::graph[m_row][m_col + 1] }); }
-    if (m_row < m_rows - 1) { m_neighbours.insert({ "Down", Square::graph[m_row + 1][m_col] }); }
-}
-
 void Square::discard_node(bool remove_wall)
 {
     // Ordinal nodes should not remove wall to reinstate after dragging

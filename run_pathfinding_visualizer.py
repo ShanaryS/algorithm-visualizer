@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Weird bug with C++ where squares are off
+
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
 # Rewrite node.py (Test with python for speed up?)

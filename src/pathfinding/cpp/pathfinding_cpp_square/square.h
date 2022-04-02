@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <iostream>
 
 
 class Square
@@ -144,9 +143,6 @@ private:
 
     std::unordered_map<const char*, Square&> m_neighbours;
 
-    // Setup square's neighbours
-    void update_neighbours();
-    
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);
 
