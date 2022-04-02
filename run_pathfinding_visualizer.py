@@ -58,11 +58,10 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Use Opaque where possible for speed improvements
-
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
 # Rewrite node.py (Test with python for speed up?)
+# Use Opaque where possible for speed improvements
 # Add algo timer to c++ functions?
 # algorithms.py into C++
 # Create new project and use submodules to separate square and algorithm
