@@ -40,56 +40,29 @@ struct std::hash<Square>
     }
 };
 
-std::vector<Square> Square::get_neighbours(bool include_walls) const
+std::vector<Square> Square::get_neighbours() const
 {
     std::vector<Square> neighbours;
+    neighbours.clear();
     if (m_col > 0)
     { 
         Square& nei = Square::graph[m_row][m_col - 1];
-        if (!nei.is_wall()) 
-        {
-            neighbours.push_back(nei);
-        }
-        else if (include_walls)
-        {
-            neighbours.push_back(nei);
-        }
+        neighbours.push_back(nei);
     }
     if (m_row > 0)
     {
         Square& nei = Square::graph[m_row - 1][m_col];
-        if (!nei.is_wall())
-        {
-            neighbours.push_back(nei);
-        }
-        else if (include_walls)
-        {
-            neighbours.push_back(nei);
-        }
+        neighbours.push_back(nei);
     }
     if (m_col < m_rows - 1)
     {
         Square& nei = Square::graph[m_row][m_col + 1];
-        if (!nei.is_wall())
-        {
-            neighbours.push_back(nei);
-        }
-        else if (include_walls)
-        {
-            neighbours.push_back(nei);
-        }
+        neighbours.push_back(nei);
     }
     if (m_row < m_rows - 1)
     {
         Square& nei = Square::graph[m_row + 1][m_col];
-        if (!nei.is_wall())
-        {
-            neighbours.push_back(nei);
-        }
-        else if (include_walls)
-        {
-            neighbours.push_back(nei);
-        }
+        neighbours.push_back(nei);
     }
     return neighbours;
 }
@@ -385,7 +358,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def(hash(py::self))
         .def("get_pos", &Square::get_pos, py::return_value_policy::automatic_reference)
         .def("get_color", &Square::get_color, py::return_value_policy::automatic_reference)
-        .def("get_neighbours", &Square::get_neighbours, "include_walls"_a=false, py::return_value_policy::automatic_reference)
+        .def("get_neighbours", &Square::get_neighbours, py::return_value_policy::automatic_reference)
         .def("draw_square", &Square::draw_square, py::return_value_policy::automatic_reference)
         .def("is_empty", &Square::is_empty, py::return_value_policy::automatic_reference)
         .def("is_open", &Square::is_open, py::return_value_policy::automatic_reference)
