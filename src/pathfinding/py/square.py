@@ -1,6 +1,9 @@
 """Creates square objects that drives the visualizations"""
 
 
+import copy as cpy
+
+
 class Square:
     """Defines the properties needed for each node on graph"""
 
@@ -33,9 +36,18 @@ class Square:
     __WALL_COLOR_MAP = (0, 0, 0)  # To avoid using over self.wall_color
     _PATH_COLOR = (255, 255, 0)
     _HISTORY_COLOR = (106, 13, 173)
+    
+    # Extend set class and remove ability to .copy() to
+    # force use of copy module. This is for seamless compatibility
+    # with the C++ square implementation of this class
+    class set(set):
+        def copy(self):
+            e = """Use the copy module for copying. This ensures a consistent
+ API for the C++ Square class implentation."""
+            raise NotImplementedError(e)
 
     # Keeps track of all the nodes of each type for easy manipulation
-    # These are copied when access from outside class to match C++
+    # These are copied when accessed from outside class to match C++
     # implementation behaviour as it can only return by value. 10us -> 350us
     all_empty_nodes = set()
     all_open_nodes = set()
@@ -417,77 +429,77 @@ class Square:
     @classmethod
     def get_all_empty_nodes(cls) -> set:
         """Gets all empty nodes"""
-        return cls.all_empty_nodes.copy()
+        return cpy.copy(cls.all_empty_nodes)
 
     @classmethod
     def get_all_open_nodes(cls) -> set:
         """Gets all open nodes"""
-        return cls.all_open_nodes.copy()
+        return cpy.copy(cls.all_open_nodes)
 
     @classmethod
     def get_all_open2_nodes(cls) -> set:
         """Gets all open_2 nodes"""
-        return cls.all_open2_nodes.copy()
+        return cpy.copy(cls.all_open2_nodes)
 
     @classmethod
     def get_all_open3_nodes(cls) -> set:
         """Gets all open_3 nodes"""
-        return cls.all_open3_nodes.copy()
+        return cpy.copy(cls.all_open3_nodes)
 
     @classmethod
     def get_all_closed_nodes(cls) -> set:
         """Gets all closed nodes"""
-        return cls.all_closed_nodes.copy()
+        return cpy.copy(cls.all_closed_nodes)
 
     @classmethod
     def get_all_closed2_nodes(cls) -> set:
         """Gets all closed_2 nodes"""
-        return cls.all_closed2_nodes.copy()
+        return cpy.copy(cls.all_closed2_nodes)
 
     @classmethod
     def get_all_closed3_nodes(cls) -> set:
         """Gets all closed_3 nodes"""
-        return cls.all_closed3_nodes.copy()
+        return cpy.copy(cls.all_closed3_nodes)
 
     @classmethod
     def get_all_start_nodes(cls) -> set:
         """Gets all start nodes"""
-        return cls.all_start_nodes.copy()
+        return cpy.copy(cls.all_start_nodes)
 
     @classmethod
     def get_all_mid_nodes(cls) -> set:
         """Gets all mid nodes"""
-        return cls.all_mid_nodes.copy()
+        return cpy.copy(cls.all_mid_nodes)
 
     @classmethod
     def get_all_end_nodes(cls) -> set:
         """Gets all end nodes"""
-        return cls.all_end_nodes.copy()
+        return cpy.copy(cls.all_end_nodes)
 
     @classmethod
     def get_all_wall_nodes(cls) -> set:
         """Gets all wall nodes"""
-        return cls.all_wall_nodes.copy()
+        return cpy.copy(cls.all_wall_nodes)
 
     @classmethod
     def get_all_path_nodes(cls) -> set:
         """Gets all path nodes"""
-        return cls.all_path_nodes.copy()
+        return cpy.copy(cls.all_path_nodes)
 
     @classmethod
     def get_all_history_nodes(cls) -> set:
         """Gets all history nodes"""
-        return cls.all_history_nodes.copy()
+        return cpy.copy(cls.all_history_nodes)
 
     @classmethod
     def get_nodes_to_update(cls) -> set:
         """Gets nodes to update"""
-        return cls.nodes_to_update.copy()
+        return cpy.copy(cls.nodes_to_update)
 
     @classmethod
     def get_node_history(cls) -> set:
         """Get node history"""
-        return cls.node_history.copy()
+        return cpy.copy(cls.node_history)
 
     @classmethod
     def get_track_node_history(cls) -> bool:
