@@ -270,17 +270,6 @@ void Square::set_history()
     s_all_history_nodes.insert(*this);
 }
 
-void Square::s_update_neighbours(std::vector<std::vector<Square>>& graph)
-{
-    for (auto& row : graph)
-    {
-        for (auto& square : row)
-        {
-            square.update_neighbours(graph);
-        }
-    }
-}
-
 void Square::s_clear_all_node_lists()
 {
     s_all_empty_nodes.clear();
@@ -298,12 +287,12 @@ void Square::s_clear_all_node_lists()
     s_all_history_nodes.clear();
 }
 
-void Square::update_neighbours(std::vector<std::vector<Square>>& graph)
+void Square::update_neighbours()
 {
-    if (m_col > 0) { m_neighbours.insert({ "Left", graph[m_row][m_col - 1] }); }
-    if (m_row > 0) { m_neighbours.insert({ "Up", graph[m_row - 1][m_col] }); }
-    if (m_col < m_rows - 1) { m_neighbours.insert({ "Right", graph[m_row][m_col + 1] }); }
-    if (m_row < m_rows - 1) { m_neighbours.insert({ "Down", graph[m_row + 1][m_col] }); }
+    if (m_col > 0) { m_neighbours.insert({ "Left", Square::graph[m_row][m_col - 1] }); }
+    if (m_row > 0) { m_neighbours.insert({ "Up", Square::graph[m_row - 1][m_col] }); }
+    if (m_col < m_rows - 1) { m_neighbours.insert({ "Right", Square::graph[m_row][m_col + 1] }); }
+    if (m_row < m_rows - 1) { m_neighbours.insert({ "Down", Square::graph[m_row + 1][m_col] }); }
 }
 
 void Square::discard_node(bool remove_wall)
@@ -346,6 +335,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for Square class
     py::class_<Square>(m, "Square")
         .def(py::init<int, int, int, float>())
+        .def("init", &Square::init, py::return_value_policy::copy)
         .def(py::self == py::self)
         .def(py::self != py::self)
         .def(hash(py::self))
@@ -380,7 +370,6 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_path", &Square::set_path, py::return_value_policy::reference)
         .def("set_history", &Square::set_history, py::return_value_policy::reference)
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::reference)
-        .def_static("update_neighbours", &Square::s_update_neighbours, py::return_value_policy::reference)
         .def("reset_wall_color", &Square::reset_wall_color, py::return_value_policy::reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::reference)
         .def_static("get_all_empty_nodes", &Square::s_get_all_empty_nodes, py::return_value_policy::reference)

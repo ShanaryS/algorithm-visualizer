@@ -13,9 +13,40 @@ public:
     Square(int row, int col, int rows, float square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
+        Square::graph[m_row][m_col] = *this;
         m_is_valid = true;  // If casted to bool, return true
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
+    }
+
+    // Initialize the graph for the class
+    static std::vector<std::vector<Square>> init(int rows, int cols, float square_size)
+    {
+        // Reset class
+        Square::s_clear_all_node_lists();
+        Square::graph.reserve(rows);
+
+        // Create each square
+        for ( int row{ 0 }; row < rows; ++row)
+        {
+            Square::graph[row].reserve(cols);
+            for (int col{ 0 }; col < cols; ++col)
+            {
+                Square _ = Square(row, col, rows, square_size);
+            }
+        }
+
+        // Update the neighbours once graph is done
+        for (auto& row : Square::graph)
+        {
+            for (auto& square : row)
+            {
+                square.update_neighbours();
+            }
+        }
+
+        // Return a copy for outside the class
+        return Square::graph;
     }
 
     // Allow these operators
@@ -101,9 +132,6 @@ public:
     static std::unordered_set<Square, Square::hash>& s_get_node_history() { return s_node_history; }
     static bool s_get_track_node_history() { return s_track_node_history; }
 
-    // Updates all the neighbours for all the squares
-    static void s_update_neighbours(std::vector<std::vector<Square>>& graph);
-
     // Change node containers of the class
 
     static void s_clear_nodes_to_update() { s_nodes_to_update.clear(); }
@@ -115,6 +143,9 @@ public:
     static void s_set_track_node_history(bool x) { s_track_node_history = x; }
 
 private:
+    // Stores the instances of all the nodes
+    static inline std::vector<std::vector<Square>> graph;
+    
     // Member variables assigned from constructor arguments
 
     int m_row;
@@ -140,7 +171,7 @@ private:
     std::unordered_map<const char*, Square&> m_neighbours;
 
     // Setup square's neighbours
-    void update_neighbours(std::vector<std::vector<Square>>& graph);
+    void update_neighbours();
     
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);
