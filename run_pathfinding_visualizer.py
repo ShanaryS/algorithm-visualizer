@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# C++ algo drawing over walls. Colors not being set.
+# In general it doesn't seem like instance varaibles are being saved into class.
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
