@@ -7,6 +7,36 @@
 #include <stdexcept>
 
 
+std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_size)
+{
+    // Reset class
+    Square::s_clear_all_node_lists();
+    Square::graph = {};
+
+    // Create each square
+    for (int row{ 0 }; row < rows; ++row)
+    {
+        Square::graph.push_back({});
+        for (int col{ 0 }; col < cols; ++col)
+        {
+            Square(row, col, rows, square_size);
+        }
+    }
+
+    // Update the neighbours once graph is done
+    for (auto& row : Square::graph)
+    {
+        for (auto& square : row)
+        {
+            square.update_neighbours();
+        }
+    }
+
+    // Return a copy for outside the class
+    return Square::graph;
+}
+
+
 // Allow hashing using row and col position
 template<>
 struct std::hash<Square>

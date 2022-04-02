@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <iostream>
 
 
 class Square
@@ -13,41 +14,14 @@ public:
     Square(int row, int col, int rows, float square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
-        Square::graph[m_row][m_col] = *this;
+        Square::graph[m_row].push_back(*this);
         m_is_valid = true;  // If casted to bool, return true
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
     }
 
     // Initialize the graph for the class
-    static std::vector<std::vector<Square>> init(int rows, int cols, float square_size)
-    {
-        // Reset class
-        Square::s_clear_all_node_lists();
-        Square::graph.reserve(rows);
-
-        // Create each square
-        for ( int row{ 0 }; row < rows; ++row)
-        {
-            Square::graph[row].reserve(cols);
-            for (int col{ 0 }; col < cols; ++col)
-            {
-                Square _ = Square(row, col, rows, square_size);
-            }
-        }
-
-        // Update the neighbours once graph is done
-        for (auto& row : Square::graph)
-        {
-            for (auto& square : row)
-            {
-                square.update_neighbours();
-            }
-        }
-
-        // Return a copy for outside the class
-        return Square::graph;
-    }
+    static std::vector<std::vector<Square>> init(int rows, int cols, float square_size);
 
     // Allow these operators
 
