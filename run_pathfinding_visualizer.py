@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
-# Rewrite node.py (Test with python for speed up?)
+# Rewrite node.py (Test with python for speed up? Both debug and release.)
 # Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
 # Use Opaque where possible for speed improvements
 # Optimise return types. Use correct return value policy for each function.
@@ -80,6 +80,7 @@ if __name__ == "__main__":
 # Try to remove external cacert.pem dependency (also lib folder)
 # Put json in lib folder
 # Add conditional cpp include from json file in readme
+# Test debug and release
 
 # (Optimization Station: Things to test to see if faster)
 # Store graph in std::array and not nested for a signle block of memory
@@ -94,6 +95,7 @@ if __name__ == "__main__":
 # Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_node using switch statement and color ids.
 # Write gph.graph as a single list to optimize cache hits
 # Passing node containers by pointers rather than copy
+# Test debug and release
 
 # --- Build Systems ---
 # https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cppimport
