@@ -71,7 +71,9 @@ std::vector<Square> Square::get_neighbours() const
 
 std::array<float, 4> Square::draw_square() const
 {
-    std::array<float, 4> square_pos{ m_x, m_y, static_cast<int>(m_square_size), static_cast<int>(m_square_size) };
+    // Cast to int to truncate square size. Cast back to float to avoid errors.
+    float square_size = static_cast<float>(static_cast<int>(m_square_size));
+    std::array<float, 4> square_pos{ m_x, m_y, square_size, square_size };
     return square_pos;
 }
 
