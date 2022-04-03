@@ -74,7 +74,6 @@ class Square:
     track_node_history = False
 
     def __init__(self, row: int, col: int, rows: int, square_size: float) -> None:
-        Square.graph[row].append(self)
         self.row = row
         self.col = col
         self.rows = rows
@@ -422,6 +421,39 @@ class Square:
             Square.all_history_nodes.discard(self)
 
     @classmethod
+    def init(cls, rows, cols, square_size) -> list:
+        """Initializes the graph for the class"""
+        # Reset class
+        cls.clear_all_node_lists()
+        cls.graph = []
+        
+        # Create each square
+        for row in range(rows):
+            cls.graph.append([])
+            for col in range(cols):
+                square: Square = Square(row, col, rows, square_size)
+                Square.graph[row].append(square)
+        
+        # Update neighbours once graph is done
+        square: Square
+        for row in cls.graph:
+            for square in row:
+                square._update_neighbours()
+        
+        # Return for outside use
+        return cls.graph
+    
+    @classmethod
+    def get_graph(cls) -> list:
+        """Returns the graph of squares"""
+        return cls.graph
+    
+    @classmethod
+    def get_square(cls, row, col):
+        """Get a square by row and col"""
+        return cls.graph[row][col]
+
+    @classmethod
     def get_all_empty_nodes(cls) -> set:
         """Gets all empty nodes"""
         return cpy.copy(cls.all_empty_nodes)
@@ -500,28 +532,6 @@ class Square:
     def get_track_node_history(cls) -> bool:
         """Get track node history"""
         return cls.track_node_history
-
-    @classmethod
-    def init(cls, rows, cols, square_size) -> list:
-        """Initializes the graph for the class"""
-        # Reset class
-        cls.clear_all_node_lists()
-        cls.graph = []
-        
-        # Create each square
-        for row in range(rows):
-            cls.graph.append([])
-            for col in range(cols):
-                Square(row, col, rows, square_size)
-        
-        # Update neighbours once graph is done
-        square: Square
-        for row in cls.graph:
-            for square in row:
-                square._update_neighbours()
-        
-        # Return a copy for outside use
-        return cls.graph.copy()
 
     @classmethod
     def clear_nodes_to_update(cls) -> None:
