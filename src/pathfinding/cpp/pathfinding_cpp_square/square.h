@@ -15,7 +15,7 @@ public:
         m_is_valid = true;  // If casted to bool, return true
         m_x = m_row * m_square_size;
         m_y = m_col * m_square_size;
-        Square::graph[m_row].push_back(*this);
+        Square::graph[m_row].push_back(std::move(*this));
     }
 
     // Initialize the graph for the class
