@@ -24,7 +24,7 @@ std::vector<std::vector<Square>>* Square::init(int rows, int cols, float square_
             Square::graph[row].push_back(std::move(square));
         }
     }
-    // Return a copy for outside the class
+    // Return a pointer to the graph
     return &Square::graph;
 }
 
