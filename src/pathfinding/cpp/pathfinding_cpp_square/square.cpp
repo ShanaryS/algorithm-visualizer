@@ -389,6 +389,8 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::automatic_reference)
         .def("reset_wall_color", &Square::reset_wall_color, py::return_value_policy::automatic_reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::automatic_reference)
+        .def_static("get_graph", &Square::s_get_graph, py::return_value_policy::automatic_reference)
+        .def_static("get_square", &Square::s_get_square, py::return_value_policy::automatic_reference)
         .def_static("get_all_empty_nodes", &Square::s_get_all_empty_nodes, py::return_value_policy::automatic_reference)
         .def_static("get_all_open_nodes", &Square::s_get_all_open_nodes, py::return_value_policy::automatic_reference)
         .def_static("get_all_open2_nodes", &Square::s_get_all_open2_nodes, py::return_value_policy::automatic_reference)

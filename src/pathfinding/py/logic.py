@@ -232,7 +232,7 @@ def _get_square_clicked(gph: GraphState) -> Square:
     """Gets the the square that was clicked"""
     pos = pygame.mouse.get_pos()
     row, col = _get_clicked_pos(gph, pos)
-    square: Square = gph.graph[row][col]
+    square: Square = Square.get_square(row, col)
     return square
 
 

@@ -87,6 +87,8 @@ public:
 
     // Get get info about nodes from class
 
+    static std::vector<std::vector<Square>>& s_get_graph() { return graph; }
+    static Square& s_get_square(int row, int col) { return graph[row][col]; }
     static std::unordered_set<Square, Square::hash>& s_get_all_empty_nodes() { return s_all_empty_nodes; }
     static std::unordered_set<Square, Square::hash>& s_get_all_open_nodes() { return s_all_open_nodes; }
     static std::unordered_set<Square, Square::hash>& s_get_all_open2_nodes() { return s_all_open2_nodes; }
