@@ -19,7 +19,8 @@ std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_s
         Square::graph.push_back({});
         for (int col{ 0 }; col < cols; ++col)
         {
-            Square(row, col, rows, square_size);
+            Square square = Square(row, col, rows, square_size);
+            Square::graph[row].push_back(std::move(square));
         }
     }
     // Return a copy for outside the class
