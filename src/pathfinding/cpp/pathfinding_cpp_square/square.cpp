@@ -355,6 +355,10 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("__iter__", [](std::unordered_set<Square, Square::hash>& self) { return py::make_iterator(self.begin(), self.end()); }, py::keep_alive<0, 1>());
 
     // Define Python API for Square class
+    // Default to automatic_reference return policy.
+    // Return pointers to return a reference to python. Must make container opaque to prevent pybind11 from copying.
+    // Use reference_internal if C++ might delete data while python is using it (should be rare)
+    // Use take_ownership when C++ will have no use and python should call the destructor.
     py::class_<Square>(m, "Square")
         .def(py::init<int, int, int, float>())
         .def(py::self == py::self)
