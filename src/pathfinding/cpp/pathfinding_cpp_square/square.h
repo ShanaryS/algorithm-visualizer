@@ -18,7 +18,7 @@ public:
     }
 
     // Initialize the graph for the class
-    static std::vector<std::vector<Square>> init(int rows, int cols, float square_size);
+    static std::vector<std::vector<Square>>* init(int rows, int cols, float square_size);
 
     // Allow these operators
 

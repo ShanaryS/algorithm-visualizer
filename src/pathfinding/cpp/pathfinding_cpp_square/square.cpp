@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 
-std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_size)
+std::vector<std::vector<Square>>* Square::init(int rows, int cols, float square_size)
 {
     // Reset class
     Square::s_clear_all_node_lists();
@@ -24,7 +24,7 @@ std::vector<std::vector<Square>> Square::init(int rows, int cols, float square_s
         }
     }
     // Return a copy for outside the class
-    return Square::graph;
+    return &Square::graph;
 }
 
 
