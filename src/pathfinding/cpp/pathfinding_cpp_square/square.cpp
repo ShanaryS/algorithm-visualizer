@@ -2,6 +2,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <pybind11/operators.h>
 
 #include <stdexcept>
@@ -337,6 +338,7 @@ void Square::discard_node(bool remove_wall)
 // Allow code to be imported into python using pybind11
 
 // Prevent copies being made when passing these types around
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Square>>);
 PYBIND11_MAKE_OPAQUE(std::unordered_set<Square, Square::hash>);
 
 namespace py = pybind11;
@@ -344,7 +346,9 @@ using namespace pybind11::literals;
 
 PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
-    py::class_<std::unordered_set<Square, Square::hash>>(m, "unordered_set_square")
+    py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
+
+    py::class_<std::unordered_set<Square, Square::hash>>(m, "UnorderedSetSquare")
         .def(py::init<>())
         .def("copy", [](std::unordered_set<Square, Square::hash>& self) { throw std::runtime_error("Use the copy module in python to copy."); })
         .def("__len__", [](const std::unordered_set<Square, Square::hash>& self) { return self.size(); })
