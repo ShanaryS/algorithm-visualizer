@@ -17,9 +17,6 @@ public:
         m_y = m_col * m_square_size;
     }
 
-    // Initialize the graph for the class
-    static std::vector<std::vector<Square>>* init(int rows, int cols, float square_size);
-
     // Allow these operators
 
     bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
@@ -84,9 +81,12 @@ public:
     void reset_wall_color() { m_wall_color = s__wall_color; }
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
+    // Initialize the graph for the class
+    static std::vector<std::vector<Square>>* init(int rows, int cols, float square_size);
+    
     // Get get info about nodes from class
 
-    static std::vector<std::vector<Square>>& s_get_graph() { return graph; }
+    static std::vector<std::vector<Square>>* s_get_graph() { return &graph; }
     static Square& s_get_square(int row, int col) { return graph[row][col]; }
     static std::unordered_set<Square, Square::hash>& s_get_all_empty_nodes() { return s_all_empty_nodes; }
     static std::unordered_set<Square, Square::hash>& s_get_all_open_nodes() { return s_all_open_nodes; }
@@ -116,9 +116,6 @@ public:
     static void s_set_track_node_history(bool x) { s_track_node_history = x; }
 
 private:
-    // Stores the instances of all the nodes
-    static inline std::vector<std::vector<Square>> graph;
-    
     // Member variables assigned from constructor arguments
 
     int m_row;
@@ -146,6 +143,9 @@ private:
     // Remove node from corresponding container
     void discard_node(bool remove_wall = true);
 
+    // Stores the instances of all the nodes
+    static inline std::vector<std::vector<Square>> graph;
+    
     // Colors for different states
 
     static constexpr std::array<int, 3> s_default_color{ 255, 255, 255 };

@@ -357,7 +357,6 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for Square class
     py::class_<Square>(m, "Square")
         .def(py::init<int, int, int, float>())
-        .def("init", &Square::init, py::return_value_policy::automatic_reference)
         .def(py::self == py::self)
         .def(py::self != py::self)
         .def(hash(py::self))
@@ -394,6 +393,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::automatic_reference)
         .def("reset_wall_color", &Square::reset_wall_color, py::return_value_policy::automatic_reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::automatic_reference)
+        .def("init", &Square::init, py::return_value_policy::automatic_reference)
         .def_static("get_graph", &Square::s_get_graph, py::return_value_policy::automatic_reference)
         .def_static("get_square", &Square::s_get_square, py::return_value_policy::automatic_reference)
         .def_static("get_all_empty_nodes", &Square::s_get_all_empty_nodes, py::return_value_policy::automatic_reference)
