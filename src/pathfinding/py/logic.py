@@ -215,7 +215,7 @@ def run_pathfinding(
     pygame.quit()
 
 
-def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
+def _get_clicked_pos(pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
     y, x = pos
     row = int(y / Square.get_square_length())
@@ -228,10 +228,10 @@ def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     return row, col
 
 
-def _get_square_clicked(gph: GraphState) -> Square:
+def _get_square_clicked() -> Square:
     """Gets the the square that was clicked"""
     pos = pygame.mouse.get_pos()
-    row, col = _get_clicked_pos(gph, pos)
+    row, col = _get_clicked_pos(pos)
     square: Square = Square.get_square(row, col)
     return square
 
@@ -241,7 +241,7 @@ def _left_click_button(
 ) -> None:
     """Handles mouse left click"""
 
-    square = _get_square_clicked(gph)
+    square = _get_square_clicked()
 
     # Checks if algo is completed, used for dragging algo
     if (
@@ -391,7 +391,7 @@ def _left_click_button(
 def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Handles mouse right click"""
 
-    square = _get_square_clicked(gph)
+    square = _get_square_clicked()
 
     # Reset square and ordinal node if it was any
     square.reset()
@@ -421,7 +421,7 @@ def _middle_click_button(
 ) -> None:
     """Handles mouse wheel click"""
 
-    square = _get_square_clicked(gph)
+    square = _get_square_clicked()
 
     # Set square to mid if no square is already mid, and not currently ordinal node.
     if not lgc.mid and square != lgc.start and square != lgc.end:
