@@ -13,6 +13,7 @@ class Square:
         "rows",
         "x",
         "y",
+        "square_dim",
         "neighbours",
         "color",
         "wall_color",
@@ -83,6 +84,7 @@ class Square:
 
         self.x: float = self.row * Square.square_length
         self.y: float = self.col * Square.square_length
+        self.square_dim = (self.x, self.y, int(Square.square_length), int(Square.square_length))
         self.neighbours: dict = {}
         self.color = Square._DEFAULT_COLOR
         self.wall_color = Square.__WALL_COLOR
@@ -112,7 +114,7 @@ class Square:
 
     def draw_square(self) -> tuple:
         """Updates the square with square type"""
-        return (self.x, self.y, int(Square.square_length), int(Square.square_length))
+        return self.square_dim
 
     def is_empty(self) -> bool:
         """Checks if blank square"""
