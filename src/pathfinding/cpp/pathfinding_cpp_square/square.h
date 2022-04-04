@@ -76,9 +76,7 @@ public:
     void set_history();
     void set_history_rollback() { m_color = m_color_history; }
 
-    // Handle changing wall color
-
-    void reset_wall_color() { m_wall_color = s__wall_color; }
+    // Set wall color to the version for the map
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
     // Initialize the graph for the class
@@ -110,6 +108,8 @@ public:
 
     // Change node containers of the class
 
+    static void s_reset_algo_squares();
+    static void s_reset_all_squares();
     static void s_clear_nodes_to_update() { s_nodes_to_update.clear(); }
     static void s_clear_history_nodes() { s_all_history_nodes.clear(); }
     static void s_clear_node_history() { s_node_history.clear(); }
@@ -144,7 +144,9 @@ private:
 
     std::unordered_map<const char*, Square&> m_neighbours;
 
-    // Remove node from corresponding container
+    // Member functions
+
+    void reset_wall_color() { m_wall_color = s__wall_color; }
     void discard_node(bool remove_wall = true);
 
     // Stores the instances of all the nodes

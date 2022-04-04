@@ -369,10 +369,6 @@ class Square:
         """Set square to previous color before setting to history"""
         self.color = self.color_history
 
-    def reset_wall_color(self) -> None:
-        """Resets wall color to default"""
-        self.wall_color = Square.__WALL_COLOR
-
     def set_wall_color_map(self) -> None:
         """Resets wall color for map to default"""
         self.wall_color = Square.__WALL_COLOR_MAP
@@ -387,6 +383,10 @@ class Square:
             self.neighbours["Right"] = Square.graph[self.row][self.col + 1]
         if self.row < Square.num_rows - 1:
             self.neighbours["Down"] = Square.graph[self.row + 1][self.col]
+
+    def _reset_wall_color(self) -> None:
+        """Resets wall color to default"""
+        self.wall_color = Square.__WALL_COLOR
 
     def _discard_node(self, remove_wall=True) -> None:
         """Discard the node from corresponding set when changed"""
@@ -549,6 +549,46 @@ class Square:
     def get_track_node_history(cls) -> bool:
         """Get track node history"""
         return cls.track_node_history
+
+    @classmethod
+    def reset_algo_squares(cls) -> None:
+        """Reset algo squares"""
+        nodes_to_reset = [
+            cls.get_all_open_nodes(),
+            cls.get_all_open2_nodes(),
+            cls.get_all_open3_nodes(),
+            cls.get_all_closed_nodes(),
+            cls.get_all_closed2_nodes(),
+            cls.get_all_closed3_nodes(),
+            cls.get_all_path_nodes()
+        ]
+        square: Square
+        for type_set in nodes_to_reset:
+            for square in type_set:
+                square.reset()
+    
+    @classmethod
+    def reset_all_squares(cls) -> None:
+        """Reset all squares"""
+        nodes_to_reset = [
+            cls.get_all_open_nodes(),
+            cls.get_all_open2_nodes(),
+            cls.get_all_open3_nodes(),
+            cls.get_all_closed_nodes(),
+            cls.get_all_closed2_nodes(),
+            cls.get_all_closed3_nodes(),
+            cls.get_all_start_nodes(),
+            cls.get_all_mid_nodes(),
+            cls.get_all_end_nodes(),
+            cls.get_all_wall_nodes(),
+            cls.get_all_path_nodes(),
+            cls.get_all_history_nodes()
+        ]
+        square: Square
+        for type_set in nodes_to_reset:
+            for square in type_set:
+                square._reset_wall_color()
+                square.reset()
 
     @classmethod
     def clear_nodes_to_update(cls) -> None:

@@ -588,25 +588,7 @@ def reset_graph(
             return
 
         # Default case
-        nodes_to_reset = [
-            Square.get_all_open_nodes(),
-            Square.get_all_open2_nodes(),
-            Square.get_all_open3_nodes(),
-            Square.get_all_closed_nodes(),
-            Square.get_all_closed2_nodes(),
-            Square.get_all_closed3_nodes(),
-            Square.get_all_start_nodes(),
-            Square.get_all_mid_nodes(),
-            Square.get_all_end_nodes(),
-            Square.get_all_wall_nodes(),
-            Square.get_all_path_nodes(),
-            Square.get_all_history_nodes(),
-        ]
-        square: Square
-        for type_list in nodes_to_reset:
-            for square in type_list:
-                square.reset_wall_color()
-                square.reset()
+        Square.reset_all_squares()
 
 
 def reset_algo(algo) -> None:
@@ -618,19 +600,7 @@ def reset_algo(algo) -> None:
     algo.bi_dijkstra_finished = False
 
     # Resets only certain colors
-    nodes_to_reset = [
-        Square.get_all_open_nodes(),
-        Square.get_all_open2_nodes(),
-        Square.get_all_open3_nodes(),
-        Square.get_all_closed_nodes(),
-        Square.get_all_closed2_nodes(),
-        Square.get_all_closed3_nodes(),
-        Square.get_all_path_nodes(),
-    ]
-    square: Square
-    for type_list in nodes_to_reset:
-        for square in type_list:
-            square.reset()
+    Square.reset_algo_squares()
 
 
 def change_graph_size(

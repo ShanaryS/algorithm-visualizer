@@ -301,6 +301,54 @@ void Square::set_history()
     s_all_history_nodes.insert(*this);
 }
 
+void Square::s_reset_algo_squares()
+{
+    std::array<std::unordered_set<Square, Square::hash>, 7> nodes_to_reset{
+        s_get_all_open_nodes(),
+        s_get_all_open2_nodes(),
+        s_get_all_open3_nodes(),
+        s_get_all_closed_nodes(),
+        s_get_all_closed2_nodes(),
+        s_get_all_closed3_nodes(),
+        s_get_all_path_nodes()
+    };
+
+    for (std::unordered_set<Square, Square::hash> type_set : nodes_to_reset)
+    {
+        for (Square square : type_set)
+        {
+            square.reset();
+        }
+    }
+}
+
+void Square::s_reset_all_squares()
+{
+    std::array<std::unordered_set<Square, Square::hash>, 12> nodes_to_reset{
+        s_get_all_open_nodes(),
+        s_get_all_open2_nodes(),
+        s_get_all_open3_nodes(),
+        s_get_all_closed_nodes(),
+        s_get_all_closed2_nodes(),
+        s_get_all_closed3_nodes(),
+        s_get_all_start_nodes(),
+        s_get_all_mid_nodes(),
+        s_get_all_end_nodes(),
+        s_get_all_wall_nodes(),
+        s_get_all_path_nodes(),
+        s_get_all_history_nodes()
+    };
+
+    for (std::unordered_set<Square, Square::hash> type_set : nodes_to_reset)
+    {
+        for (Square square : type_set)
+        {
+            square.reset_wall_color();
+            square.reset();
+        }
+    }
+}
+
 void Square::s_clear_all_node_lists()
 {
     s_all_empty_nodes.clear();
@@ -399,7 +447,6 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_path", &Square::set_path, py::return_value_policy::automatic_reference)
         .def("set_history", &Square::set_history, py::return_value_policy::automatic_reference)
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::automatic_reference)
-        .def("reset_wall_color", &Square::reset_wall_color, py::return_value_policy::automatic_reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::automatic_reference)
         .def("init", &Square::init, "pixel_offset"_a=0, py::return_value_policy::automatic_reference)
         .def_static("get_graph", &Square::s_get_graph, py::return_value_policy::automatic_reference)
@@ -423,6 +470,8 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def_static("get_nodes_to_update", &Square::s_get_nodes_to_update, py::return_value_policy::automatic_reference)
         .def_static("get_node_history", &Square::s_get_node_history, py::return_value_policy::automatic_reference)
         .def_static("get_track_node_history", &Square::s_get_track_node_history, py::return_value_policy::automatic_reference)
+        .def_static("reset_algo_squares", &Square::s_reset_algo_squares, py::return_value_policy::automatic_reference)
+        .def_static("reset_all_squares", &Square::s_reset_all_squares, py::return_value_policy::automatic_reference)
         .def_static("clear_nodes_to_update", &Square::s_clear_nodes_to_update, py::return_value_policy::automatic_reference)
         .def_static("clear_history_nodes", &Square::s_clear_history_nodes, py::return_value_policy::automatic_reference)
         .def_static("clear_node_history", &Square::s_clear_node_history, py::return_value_policy::automatic_reference)
