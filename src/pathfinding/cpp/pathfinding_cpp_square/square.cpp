@@ -70,14 +70,6 @@ std::vector<Square> Square::get_neighbours() const
     return neighbours;
 }
 
-std::array<double, 4> Square::draw_square() const
-{
-    // Cast to int to truncate square size. Cast back to double to avoid errors.
-    double square_length = static_cast<double>(static_cast<int>(s_square_length));
-    std::array<double, 4> square_pos{ m_x, m_y, square_length, square_length };
-    return square_pos;
-}
-
 void Square::reset()
 {
     // Don't do anything if already set correctly
