@@ -86,8 +86,8 @@ public:
     
     // Get get info about nodes from class
 
-    static std::vector<std::vector<Square>>* s_get_graph() { return &graph; }
-    static Square& s_get_square(int row, int col) { return graph[row][col]; }
+    static std::vector<std::vector<Square>>* s_get_graph() { return &s_graph; }
+    static Square& s_get_square(int row, int col) { return s_graph[row][col]; }
     static int s_get_num_rows() { return s_num_rows; }
     static int s_get_num_cols() { return s_num_cols; }
     static double s_get_square_length() { return s_square_length; }
@@ -148,7 +148,7 @@ private:
     void discard_node(bool remove_wall = true);
 
     // Stores the instances of all the nodes
-    static inline std::vector<std::vector<Square>> graph;
+    static inline std::vector<std::vector<Square>> s_graph;
 
     // Info about the nodes
     static inline int s_num_rows = 46;  // Defualt value

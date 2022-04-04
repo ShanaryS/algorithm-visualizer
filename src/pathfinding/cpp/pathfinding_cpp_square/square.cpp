@@ -12,7 +12,7 @@ void Square::init(int graph_width, int pixel_offset)
 {
     // Reset class
     s_clear_all_node_lists();
-    graph.clear();
+    s_graph.clear();
 
     // Update values
     s_update_square_length(graph_width, pixel_offset);
@@ -20,11 +20,11 @@ void Square::init(int graph_width, int pixel_offset)
     // Create each square
     for (int row{ 0 }; row < s_num_rows; ++row)
     {
-        graph.push_back({});
+        s_graph.push_back({});
         for (int col{ 0 }; col < s_num_cols; ++col)
         {
             Square square = Square(row, col);
-            graph[row].push_back(std::move(square));
+            s_graph[row].push_back(std::move(square));
         }
     }
 }
@@ -49,22 +49,22 @@ std::vector<Square> Square::get_neighbours() const
     neighbours.clear();
     if (m_col > 0)
     { 
-        Square& nei = graph[m_row][m_col - 1];
+        Square& nei = s_graph[m_row][m_col - 1];
         neighbours.push_back(nei);
     }
     if (m_row > 0)
     {
-        Square& nei = graph[m_row - 1][m_col];
+        Square& nei = s_graph[m_row - 1][m_col];
         neighbours.push_back(nei);
     }
     if (m_col < s_num_cols - 1)
     {
-        Square& nei = graph[m_row][m_col + 1];
+        Square& nei = s_graph[m_row][m_col + 1];
         neighbours.push_back(nei);
     }
     if (m_row < s_num_rows - 1)
     {
-        Square& nei = graph[m_row + 1][m_col];
+        Square& nei = s_graph[m_row + 1][m_col];
         neighbours.push_back(nei);
     }
     return neighbours;
