@@ -88,6 +88,7 @@ void Square::reset()
     {
         s_node_history.insert(*this);
     }
+
     discard_node();
     m_color = s_default_color;
     m_is_highway = false;
