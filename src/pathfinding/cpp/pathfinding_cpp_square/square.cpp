@@ -426,7 +426,8 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def_static("clear_history_nodes", &Square::s_clear_history_nodes, py::return_value_policy::automatic_reference)
         .def_static("clear_node_history", &Square::s_clear_node_history, py::return_value_policy::automatic_reference)
         .def_static("clear_all_node_lists", &Square::s_clear_all_node_lists, py::return_value_policy::automatic_reference)
-        .def_static("set_track_node_history", &Square::s_set_track_node_history, py::return_value_policy::automatic_reference);
+        .def_static("set_track_node_history", &Square::s_set_track_node_history, py::return_value_policy::automatic_reference)
+        .def_static("update_num_rows_cols", &Square::s_update_num_rows_cols, py::return_value_policy::automatic_reference);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
