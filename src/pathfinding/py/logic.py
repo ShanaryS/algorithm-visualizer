@@ -17,7 +17,7 @@ else:
     from src.pathfinding.py.algorithms import (AlgoState, dijkstra, a_star,
         bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
 
-from src.pathfinding.py.utils.maps import get_img_base, get_img_clean
+from src.pathfinding.py.maps import get_img_base, get_img_clean
 from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
     reset_graph, reset_algo, change_graph_size, set_squares_to_roads,
     draw_vis_text, HEIGHT)
@@ -146,7 +146,7 @@ def run_pathfinding(
                 and event.key == pygame.K_g
                 and not gph.has_img
             ):
-                if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
+                if Square.get_num_rows() not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
                     )
@@ -158,7 +158,7 @@ def run_pathfinding(
                 and event.key == pygame.K_i
                 and not gph.has_img
             ):
-                if gph.rows not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
+                if Square.get_num_rows() not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
                     _graph_size_buttons(
                         gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
                     )
@@ -168,7 +168,7 @@ def run_pathfinding(
             if (
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_s
-                and gph.rows != lgc.GRAPH_SMALL
+                and Square.get_num_rows() != lgc.GRAPH_SMALL
                 and not gph.has_img
             ):
                 _graph_size_buttons(
@@ -179,7 +179,7 @@ def run_pathfinding(
             if (
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_m
-                and gph.rows != lgc.GRAPH_MEDIUM
+                and Square.get_num_rows() != lgc.GRAPH_MEDIUM
                 and not gph.has_img
             ):
                 _graph_size_buttons(
@@ -190,7 +190,7 @@ def run_pathfinding(
             if (
                 event.type == pygame.KEYDOWN
                 and event.key == pygame.K_l
-                and gph.rows != lgc.GRAPH_LARGE
+                and Square.get_num_rows() != lgc.GRAPH_LARGE
                 and not gph.has_img
             ):
                 _graph_size_buttons(
@@ -218,11 +218,11 @@ def run_pathfinding(
 def _get_clicked_pos(gph: GraphState, pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
     y, x = pos
-    row = int(y / gph.square_size)
-    col = int(x / gph.square_size)
+    row = int(y / Square.get_square_length())
+    col = int(x / Square.get_square_length())
     
     # Fix clicking past square boundaries.
-    square_max = gph.rows-1
+    square_max = Square.get_num_rows()-1
     row = square_max if row > square_max else row
     col = square_max if col > square_max else col
     return row, col

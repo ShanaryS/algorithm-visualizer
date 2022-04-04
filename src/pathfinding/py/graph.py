@@ -8,8 +8,6 @@ if use_square_h:
 else:
     from src.pathfinding.py.square import Square
 
-from src.pathfinding.py.utils.values import calc_square_size, ROWS, SQUARE_SIZE, WIDTH_HEIGHT
-
 import pygame
 from dataclasses import dataclass
 from typing import Optional
@@ -25,8 +23,8 @@ VIS_COLOR = (255, 0, 0)
 # Defining window properties as well as graph size
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 879
-WIDTH = WIDTH_HEIGHT
-HEIGHT = WIDTH_HEIGHT
+WIDTH = WINDOW_WIDTH
+HEIGHT = WINDOW_WIDTH
 GRAPH_RECT = pygame.Rect(0, 0, WINDOW_WIDTH, HEIGHT)
 LEGEND_RECT = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
 pygame.display.set_caption(
@@ -49,8 +47,6 @@ class GraphState:
     base_drawn: bool = False
     update_legend: bool = False
     update_entire_screen: bool = False
-    rows: int = ROWS
-    square_size: float = SQUARE_SIZE
     has_img: bool = False
     img: Optional[bytes] = None
     visualize_node_history: bool = False
@@ -150,11 +146,11 @@ def set_graph(gph: GraphState) -> None:
 
     # Not actually creating nodes on screen so need to update screen manually
     # This function just draws lines over a white back ground, nodes are
-    # technically created upon a set_* method.
+    # technically created upon a set_* method from the graph's prespective.
     gph.update_entire_screen = True
 
     # Everything square related is handle in here
-    Square.init(gph.rows, gph.rows, gph.square_size)
+    Square.init(WIDTH)
 
 
 def draw(
@@ -238,9 +234,9 @@ def _draw_square_borders(gph: GraphState) -> None:
     for square in Square.get_nodes_to_update():
         x, y, *_ = square.draw_square()
         top_left = x, y
-        top_right = x, y + gph.square_size
-        bottom_left = x + gph.square_size, y
-        bottom_right = x + gph.square_size, y + gph.square_size
+        top_right = x, y + Square.get_square_length()
+        bottom_left = x + Square.get_square_length(), y
+        bottom_right = x + Square.get_square_length(), y + Square.get_square_length()
 
         # Top
         pygame.draw.line(gph.window, LINE_COLOR, top_left, top_right)
@@ -255,8 +251,8 @@ def _draw_square_borders(gph: GraphState) -> None:
 def _draw_lines(gph: GraphState) -> None:
     """Helper function to define the properties of the horizontal and vertical graph lines"""
 
-    for i in range(gph.rows):
-        row = col = i * gph.square_size
+    for i in range(Square.get_num_rows()):
+        row = col = i * Square.get_square_length()
 
         # Horizonatal lines
         pygame.draw.line(gph.window, LINE_COLOR, (0, row), (WIDTH, row))
@@ -283,18 +279,18 @@ def set_squares_to_roads(gph: GraphState) -> None:
 
             # These two loops i,j get each pixel in each square. Time Complexity is O(n) in regards to pixels.
             for i in range(
-                row * int(gph.square_size),
-                (row + 1) * int(gph.square_size),
+                row * int(Square.get_square_length()),
+                (row + 1) * int(Square.get_square_length()),
             ):
                 for j in range(
-                    col * int(gph.square_size),
-                    (col + 1) * int(gph.square_size),
+                    col * int(Square.get_square_length()),
+                    (col + 1) * int(Square.get_square_length()),
                 ):
                     r, g, b, a = gph.window.get_at((i, j))
                     tot += r + g + b
                     tot_b += b
-            avg_tot = tot / gph.square_size ** 2 / 3  # Gets the average of each square
-            avg_b = tot_b / gph.square_size ** 2
+            avg_tot = tot / Square.get_square_length() ** 2 / 3  # Gets the average of each square
+            avg_b = tot_b / Square.get_square_length() ** 2
             cutoff = 1  # Any color with value above this will be set as a viable path
 
             # If the square's color is above cutoff, set it as path. Else wall node
@@ -586,7 +582,7 @@ def reset_graph(
     # Resets each square
     if reset:
         # If reseting graph from map, not a circular call
-        if gph.rows == graph_max:
+        if Square.get_num_rows() == graph_max:
             change_graph_size(gph, algo, txt, graph_default)
             return
 
@@ -637,7 +633,7 @@ def reset_algo(algo) -> None:
 
 
 def change_graph_size(
-    gph: GraphState, algo, txt: VisText, new_row_size, to_draw=True
+    gph: GraphState, algo, txt: VisText, new_num_rows_cols, to_draw=True
 ) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
@@ -648,8 +644,7 @@ def change_graph_size(
 
     # Updates rows and square size with new values
     reset_graph(gph, algo, txt, reset=False)
-    gph.rows = new_row_size
-    gph.square_size = calc_square_size(WIDTH, gph.rows)
+    Square.update_num_rows_cols(new_num_rows_cols)
 
     # Recreates graph with new values
     set_graph(gph)

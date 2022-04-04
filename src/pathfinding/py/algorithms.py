@@ -8,7 +8,6 @@ if use_square_h:
 else:
     from src.pathfinding.py.square import Square
 
-from src.pathfinding.py.utils.values import get_random_sample, get_randrange
 from src.pathfinding.py.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
 
 import pygame
@@ -910,7 +909,7 @@ def draw_recursive_maze(
     num_gaps: int = 3
 
     # Prevents drawing wall over gaps
-    gaps_to_offset: list = [x for x in range(num_gaps - 1, gph.rows, num_gaps)]
+    gaps_to_offset: list = [x for x in range(num_gaps - 1, Square.rows, num_gaps)]
 
     # End timer here to resume in loop
     algo.timer_end(count=False)
@@ -929,8 +928,8 @@ def draw_recursive_maze(
                     x -= 1
                 else:
                     x += 1
-            if x >= gph.rows:
-                x = gph.rows - 1
+            if x >= Square.rows:
+                x = Square.rows - 1
         else:
             x = wall[0]
             y = get_randrange(wall[1], wall[1] + wall[3])
@@ -939,8 +938,8 @@ def draw_recursive_maze(
                     y -= 1
                 else:
                     y += 1
-            if y >= gph.rows:
-                y = gph.rows - 1
+            if y >= Square.rows:
+                y = Square.rows - 1
         square: Square = Square.get_graph()[x][y]
         square.reset()
 
@@ -955,3 +954,13 @@ def draw_recursive_maze(
     # Recursively divides chambers
     for chamber in chambers:
         draw_recursive_maze(gph, algo, txt, chamber, visualize=visualize)
+
+
+def get_random_sample(population: tuple, k: int) -> list:
+    """Returns a k length list of unique elements from population"""
+    return random.sample(population, k)
+
+
+def get_randrange(start: int, stop: int) -> int:
+    """Return a random int within a range"""
+    return random.randrange(start, stop)
