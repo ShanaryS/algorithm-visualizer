@@ -46,7 +46,7 @@ def main() -> None:
 
     gph = GraphState(rects_to_update=[])
 
-    algo = AlgoState(ordinal_node_clicked=[])
+    algo = AlgoState(ordinal_square_clicked=[])
 
     lgc = LogicState()
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
-# Rewrite node.py (Test with python for speed up? Both debug and release.)
+# Rewrite square.py (Test with python for speed up? Both debug and release.)
 # Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
 # Use Opaque where possible for speed improvements
 # Optimise return types. Use correct return value policy for each function.
@@ -89,16 +89,16 @@ if __name__ == "__main__":
 # (Optimization Station: Things to test to see if faster)
 # Store graph in std::array and not nested for a signle block of memory
 # Rewrite update_neighbours to only passed need squares to instance
-# Use unordered_set for node lists, add hash to class
+# Use unordered_set for square lists, add hash to class
 # Reserve m_neighbours
 # Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
 # In set methods either remove guard statement or use something faster than a set (array, vector)
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
 # Define the size of containers using number of rows^2
-# Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_node using switch statement and color ids.
+# Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_square using switch statement and color ids.
 # Write gph.graph as a single list to optimize cache hits
-# Passing node containers by pointers rather than copy
+# Passing square containers by pointers rather than copy
 # Test debug and release
 
 # --- Build Systems ---
@@ -125,9 +125,9 @@ if __name__ == "__main__":
 #       - E.g algo button reset and draw calls are 80ms vs 700ms for entire algo after
 #       - No point if draw call is right before run_pathfinding or other non time critical event
 #   - run_pathfinding_visualizer.py
-#   - node.py (Not invidiually)
-#       - _discard_node
-#       - clear_all_node_lists
+#   - square.py (Not invidiually)
+#       - _discard_square
+#       - clear_all_square_lists
 #       - update_nieghbours
 #       - _update_surrounding_neighbour_pool
 #   - graph.py
@@ -145,8 +145,8 @@ if __name__ == "__main__":
 
 # --- Known Bugs ---
 # Can place walls during maze, causes crash when dragging over it
-# Bi dijk redraws open nodes
-# Bi dijk only draws best_path when edges of swarms are touching, mid node
+# Bi dijk redraws open squares
+# Bi dijk only draws best_path when edges of swarms are touching, mid square
 
 # --- Features to add ---
 # Sticky mud for patches where algo goes slowly

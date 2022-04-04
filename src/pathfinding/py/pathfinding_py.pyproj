@@ -28,13 +28,7 @@
     <Compile Include="graph.py" />
     <Compile Include="logic.py" />
     <Compile Include="square.py" />
-    <Compile Include="utils\maps.py" />
-    <Compile Include="utils\values.py" />
-    <Compile Include="utils\__init__.py" />
     <Compile Include="__init__.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="utils" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="..\..\..\venv\">

@@ -50,7 +50,7 @@ def run_pathfinding(
     # Create pygame window
     gph.create_pygame_window()
 
-    # Creates the graph nodes
+    # Creates the graph squares
     set_graph(gph)
     
     # Only allow certain events
@@ -72,9 +72,9 @@ def run_pathfinding(
 
             """Mouse buttons"""
 
-            # Used to know if no longer dragging ordinal node after algo completion
+            # Used to know if no longer dragging ordinal square after algo completion
             if not pygame.mouse.get_pressed(3)[0]:
-                algo.ordinal_node_clicked.clear()
+                algo.ordinal_square_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             if (
@@ -250,31 +250,31 @@ def _left_click_button(
         and lgc.end
     ):
 
-        # Checks if ordinal node is being dragged
-        if algo.ordinal_node_clicked:
+        # Checks if ordinal square is being dragged
+        if algo.ordinal_square_clicked:
 
-            # Checks if the mouse is currently on an ordinal node, no need to update anything
+            # Checks if the mouse is currently on an ordinal square, no need to update anything
             if square != lgc.start and square != lgc.mid and square != lgc.end:
-                # Used to move ordinal node to new pos
-                last_square = algo.ordinal_node_clicked[0]
+                # Used to move ordinal square to new pos
+                last_square = algo.ordinal_square_clicked[0]
 
-                # Checks if ordinal node was previously a wall to reinstate it after moving, else reset
+                # Checks if ordinal square was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
-                    if lgc.start in Square.get_all_wall_nodes():
+                    if lgc.start in Square.get_all_wall_squares():
                         lgc.start.set_wall()
                     else:
                         lgc.start.reset()
                     lgc.start = square
                     square.set_start()
                 elif last_square == "mid":
-                    if lgc.mid in Square.get_all_wall_nodes():
+                    if lgc.mid in Square.get_all_wall_squares():
                         lgc.mid.set_wall()
                     else:
                         lgc.mid.reset()
                     lgc.mid = square
                     square.set_mid()
                 elif last_square == "end":
-                    if lgc.end in Square.get_all_wall_nodes():
+                    if lgc.end in Square.get_all_wall_squares():
                         lgc.end.set_wall()
                     else:
                         lgc.end.reset()
@@ -329,13 +329,13 @@ def _left_click_button(
                             gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True
                         )
 
-        # If ordinal node is not being dragged, prepare it to
+        # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
-            algo.ordinal_node_clicked.append("start")
+            algo.ordinal_square_clicked.append("start")
         elif square is lgc.mid:
-            algo.ordinal_node_clicked.append("mid")
+            algo.ordinal_square_clicked.append("mid")
         elif square is lgc.end:
-            algo.ordinal_node_clicked.append("end")
+            algo.ordinal_square_clicked.append("end")
 
         # On algo completion, add wall and update algo
         else:
@@ -350,7 +350,7 @@ def _left_click_button(
             elif algo.bi_dijkstra_finished:
                 _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
-    # If start node does not exist, create it. If not currently ordinal node.
+    # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
         lgc.start = square
         square.set_start()
@@ -363,8 +363,8 @@ def _left_click_button(
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
             _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
-    # If end node does not exist, and start node does exist, create end node.
-    # If not currently ordinal node.
+    # If end square does not exist, and start square does exist, create end square.
+    # If not currently ordinal square.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
         lgc.end = square
         square.set_end()
@@ -377,8 +377,8 @@ def _left_click_button(
         elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
             _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
 
-    # If start and end node exists, create wall. If not currently ordinal node.
-    # Saves pos of wall to be able to reinstate it after dragging ordinal node past it.
+    # If start and end square exists, create wall. If not currently ordinal square.
+    # Saves pos of wall to be able to reinstate it after dragging ordinal square past it.
     elif (
         square != lgc.start
         and square != lgc.mid
@@ -393,7 +393,7 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
 
     square = _get_square_clicked()
 
-    # Reset square and ordinal node if it was any
+    # Reset square and ordinal square if it was any
     square.reset()
     was_ordinal = False
     if square == lgc.start:
@@ -423,7 +423,7 @@ def _middle_click_button(
 
     square = _get_square_clicked()
 
-    # Set square to mid if no square is already mid, and not currently ordinal node.
+    # Set square to mid if no square is already mid, and not currently ordinal square.
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
         square.set_mid()
@@ -464,8 +464,8 @@ def _middle_click_button(
             )
 
 
-def _reset_ordinal_nodes(lgc: LogicState) -> None:
-    """Resets the ordinal nodes"""
+def _reset_ordinal_squares(lgc: LogicState) -> None:
+    """Resets the ordinal squares"""
     lgc.start = lgc.mid = lgc.end = None
 
 
@@ -474,7 +474,7 @@ def _reset_graph_button(
 ) -> None:
     """Resets the graph"""
     reset_graph(gph, algo, txt, graph_max=lgc.GRAPH_MAX, graph_default=lgc.GRAPH_MEDIUM)
-    _reset_ordinal_nodes(lgc)
+    _reset_ordinal_squares(lgc)
 
 
 def _dijkstra_button(
@@ -482,11 +482,11 @@ def _dijkstra_button(
 ) -> None:
     """Run the dijkstra algorithm"""
 
-    # Resets algo visualizations without removing ordinal nodes or walls
+    # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
-    # Necessary to for dragging nodes on completion
+    # Necessary to for dragging squares on completion
     algo.dijkstra_finished = True
 
     # Handles whether or not mid exists
@@ -513,11 +513,11 @@ def _a_star_button(
 ) -> None:
     """Runs the A* algorithm"""
 
-    # Resets algo visualizations without removing ordinal nodes or walls
+    # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
-    # Necessary to for dragging nodes on completion
+    # Necessary to for dragging squares on completion
     algo.a_star_finished = True
 
     # Handles whether or not mid exists
@@ -544,11 +544,11 @@ def _bi_dijkstra_button(
 ) -> None:
     """Runs the Bi-Directional Dijkstra algorithm"""
 
-    # Resets algo visualizations without removing ordinal nodes or walls
+    # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
     draw(gph, txt, clear_legend=True, algo_running=True)
 
-    # Necessary to for dragging nodes on completion
+    # Necessary to for dragging squares on completion
     algo.bi_dijkstra_finished = True
 
     # Handles whether or not mid exists
@@ -582,7 +582,7 @@ def _recursive_maze_buttons(
     draw_recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
     gph.update_legend = True
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
-    _reset_ordinal_nodes(lgc)
+    _reset_ordinal_squares(lgc)
 
 
 def _graph_size_buttons(
@@ -597,7 +597,7 @@ def _graph_size_buttons(
     algo.best_path_sleep = best_path_sleep
     gph.has_img = False
     change_graph_size(gph, algo, txt, new_graph_size)
-    _reset_ordinal_nodes(lgc)
+    _reset_ordinal_squares(lgc)
 
 
 def _load_img_to_graph(
@@ -611,11 +611,11 @@ def _load_img_to_graph(
     gph.img = pygame.image.load(get_img_base(txt.address))
     gph.has_img = True
     draw(gph, txt)
-    _reset_ordinal_nodes(lgc)
+    _reset_ordinal_squares(lgc)
 
 
 def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
-    """Coverts the map data into nodes the algorithms can use"""
+    """Coverts the map data into squares the algorithms can use"""
 
     draw_vis_text(gph, txt, is_clean_img=True)
 
@@ -669,13 +669,13 @@ def _get_address_from_user(
 
 def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
     """Visualize the changed parts of the screen between toggles"""
-    # Stop tracking node history and display it
-    if Square.get_track_node_history():
-        Square.set_track_node_history(False)
-        gph.visualize_node_history = True
-    # Start tracking node history
+    # Stop tracking square history and display it
+    if Square.get_track_square_history():
+        Square.set_track_square_history(False)
+        gph.visualize_square_history = True
+    # Start tracking square history
     else:
-        Square.set_track_node_history(True)
+        Square.set_track_square_history(True)
 
     gph.update_legend = True
     draw(gph, txt, legend=True)

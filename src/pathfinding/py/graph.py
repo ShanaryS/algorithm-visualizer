@@ -49,7 +49,7 @@ class GraphState:
     update_entire_screen: bool = False
     has_img: bool = False
     img: Optional[bytes] = None
-    visualize_node_history: bool = False
+    visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
@@ -80,11 +80,11 @@ class VisText:
 
     FONT = pygame.font.SysFont("Comic Sans MS", 12)
 
-    legend_add_node = FONT.render(
-        "Left Click - Add Node (Start -> End -> Walls)", True, LEGEND_COLOR
+    legend_add_square = FONT.render(
+        "Left Click - Add square (Start -> End -> Walls)", True, LEGEND_COLOR
     )
-    legend_add_mid_node = FONT.render("Middle Click - Add mid node", True, LEGEND_COLOR)
-    legend_remove_node = FONT.render("Right Click - Remove Node", True, LEGEND_COLOR)
+    legend_add_mid_square = FONT.render("Middle Click - Add mid square", True, LEGEND_COLOR)
+    legend_remove_square = FONT.render("Right Click - Remove square", True, LEGEND_COLOR)
     legend_clear_graph = FONT.render("Press 'SPACE' - Clear graph", True, LEGEND_COLOR)
     legend_graph_size = FONT.render(
         "Press 'S', 'M', 'L' - Change graph size", True, LEGEND_COLOR
@@ -104,11 +104,11 @@ class VisText:
     legend_convert_map = FONT.render(
         "Press 'C' to convert location into the graph", True, LEGEND_COLOR
     )
-    legend_node_history = FONT.render(
+    legend_square_history = FONT.render(
         "Track changes on graph - Press 'V'", True, LEGEND_COLOR
     )
-    legend_node_history_show = FONT.render(
-        "Storing changes for node history... Press 'V' to show", True, VIS_COLOR
+    legend_square_history_show = FONT.render(
+        "Storing changes for square history... Press 'V' to show", True, VIS_COLOR
     )
 
     vis_text_dijkstra = FONT.render("Visualizing Dijkstra...", True, VIS_COLOR)
@@ -144,8 +144,8 @@ class VisText:
 def set_graph(gph: GraphState) -> None:
     """Creates the graph object that stores the location of all the squares"""
 
-    # Not actually creating nodes on screen so need to update screen manually
-    # This function just draws lines over a white back ground, nodes are
+    # Not actually creating squares on screen so need to update screen manually
+    # This function just draws lines over a white back ground, squares are
     # technically created upon a set_* method from the graph's prespective.
     gph.update_entire_screen = True
 
@@ -191,16 +191,16 @@ def draw(
         _draw_legend(gph, txt)
 
     # Queues all changed squares to visualize change
-    if gph.visualize_node_history:
-        gph.visualize_node_history = False
-        for square in Square.get_node_history():
+    if gph.visualize_square_history:
+        gph.visualize_square_history = False
+        for square in Square.get_square_history():
             square.set_history()
             gph.add_to_update_queue(square)
-        Square.clear_node_history()
+        Square.clear_square_history()
     # Queues all changed squares to update
     else:
         square: Square
-        for square in Square.get_nodes_to_update():
+        for square in Square.get_squares_to_update():
             gph.add_to_update_queue(square)
 
     # It's faster to update entire screen if number of rects is greater than 20
@@ -214,12 +214,12 @@ def draw(
         pygame.display.update(gph.rects_to_update)
 
     # Used to reset squares to previous color like nothing happened
-    for square in Square.get_all_history_nodes():
+    for square in Square.get_all_history_squares():
         square.set_history_rollback()
 
     # Clear update queues
-    Square.clear_nodes_to_update()
-    Square.clear_history_nodes()
+    Square.clear_squares_to_update()
+    Square.clear_history_squares()
     gph.rects_to_update.clear()
 
 
@@ -232,7 +232,7 @@ def _draw_square_borders(gph: GraphState) -> None:
     """Draws the lines surrounding the updating squares"""
 
     square: Square
-    for square in Square.get_nodes_to_update():
+    for square in Square.get_squares_to_update():
         x, y, *_ = square.draw_square()
         top_left = x, y
         top_right = x, y + Square.get_square_length()
@@ -294,7 +294,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
             avg_b = tot_b / Square.get_square_length() ** 2
             cutoff = 1  # Any color with value above this will be set as a viable path
 
-            # If the square's color is above cutoff, set it as path. Else wall node
+            # If the square's color is above cutoff, set it as path. Else wall square
             if avg_tot > cutoff:
                 # If b is greater, then it is white.
                 if avg_b > 225:
@@ -311,9 +311,9 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
 
     if not gph.has_img:
         # Left legend
-        gph.window.blit(txt.legend_add_node, (2, 15 * 53.1 + 3))
-        gph.window.blit(txt.legend_add_mid_node, (2, 15 * 54.1 + 3))
-        gph.window.blit(txt.legend_remove_node, (2, 15 * 55.1 + 3))
+        gph.window.blit(txt.legend_add_square, (2, 15 * 53.1 + 3))
+        gph.window.blit(txt.legend_add_mid_square, (2, 15 * 54.1 + 3))
+        gph.window.blit(txt.legend_remove_square, (2, 15 * 55.1 + 3))
         gph.window.blit(txt.legend_clear_graph, (2, 15 * 56.1 + 3))
         gph.window.blit(txt.legend_graph_size, (2, 15 * 57.1 + 3))
 
@@ -348,22 +348,22 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
             ),
         )
         draw_algo_timer(gph, txt)
-        if Square.get_track_node_history():
+        if Square.get_track_square_history():
             gph.window.blit(
-                txt.legend_node_history_show,
+                txt.legend_square_history_show,
                 (
-                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                    WIDTH // 2 - txt.legend_square_history_show.get_width() // 2,
                     CENTER_LEGEND_AREA
-                    - txt.legend_node_history_show.get_height() // 2
+                    - txt.legend_square_history_show.get_height() // 2
                     + 30,
                 ),
             )
         else:
             gph.window.blit(
-                txt.legend_node_history,
+                txt.legend_square_history,
                 (
-                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 30,
+                    WIDTH // 2 - txt.legend_square_history.get_width() // 2,
+                    CENTER_LEGEND_AREA - txt.legend_square_history.get_height() // 2 + 30,
                 ),
             )
 
@@ -382,22 +382,22 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
                 CENTER_LEGEND_AREA - txt.legend_convert_map.get_height() // 2,
             ),
         )
-        if Square.get_track_node_history():
+        if Square.get_track_square_history():
             gph.window.blit(
-                txt.legend_node_history_show,
+                txt.legend_square_history_show,
                 (
-                    WIDTH // 2 - txt.legend_node_history_show.get_width() // 2,
+                    WIDTH // 2 - txt.legend_square_history_show.get_width() // 2,
                     CENTER_LEGEND_AREA
-                    - txt.legend_node_history_show.get_height() // 2
+                    - txt.legend_square_history_show.get_height() // 2
                     + 15,
                 ),
             )
         else:
             gph.window.blit(
-                txt.legend_node_history,
+                txt.legend_square_history,
                 (
-                    WIDTH // 2 - txt.legend_node_history.get_width() // 2,
-                    CENTER_LEGEND_AREA - txt.legend_node_history.get_height() // 2 + 15,
+                    WIDTH // 2 - txt.legend_square_history.get_width() // 2,
+                    CENTER_LEGEND_AREA - txt.legend_square_history.get_height() // 2 + 15,
                 ),
             )
 
@@ -592,7 +592,7 @@ def reset_graph(
 
 
 def reset_algo(algo) -> None:
-    """Resets algo colors while keeping ordinal nodes and walls"""
+    """Resets algo colors while keeping ordinal squares and walls"""
 
     # Need to update these values
     algo.dijkstra_finished = False

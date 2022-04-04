@@ -21,7 +21,7 @@ import random
 class AlgoState:
     """Stores the state of the algorithms, whether they are finished or not"""
 
-    ordinal_node_clicked: list
+    ordinal_square_clicked: list
     dijkstra_finished: bool = False
     a_star_finished: bool = False
     bi_dijkstra_finished: bool = False
@@ -56,7 +56,7 @@ class AlgoState:
 
     def timer_to_string(self) -> str:
         """Get string of current state of timer"""
-        s = f"Time: {self.timer_total:.3f}s - # Nodes: {self.timer_count:,}"
+        s = f"Time: {self.timer_total:.3f}s - # squares: {self.timer_count:,}"
         return s
 
     def timer_reset(self) -> None:
@@ -75,7 +75,7 @@ def dijkstra(
     txt: VisText,
     start: Square,
     end: Square,
-    ignore_node: Square = None,
+    ignore_square: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
 ) -> dict:
@@ -95,17 +95,17 @@ def dijkstra(
     g_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
     g_score[start] = 0
 
-    # Keeps track of next node for every node in graph. A linked list basically.
+    # Keeps track of next square for every square in graph. A linked list basically.
     came_from: dict = {}
 
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
-    # Continues until every node has been checked or best path found
+    # Continues until every square has been checked or best path found
     i = 0
     while not open_set.empty():
 
-        # Time increments for each node being checked
+        # Time increments for each square being checked
         algo.timer_start()
 
         # If uses closes window the program terminates
@@ -141,19 +141,19 @@ def dijkstra(
                 g_score[nei] = temp_g_score
                 queue_pos += 1
                 open_set.put((g_score[nei], queue_pos, nei))
-                if nei != end and not nei.is_closed() and nei != ignore_node:
+                if nei != end and not nei.is_closed() and nei != ignore_square:
                     nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
-        if curr_square != start and curr_square != ignore_node:
+        if curr_square != start and curr_square != ignore_square:
             curr_square.set_closed()
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
 
-        # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
@@ -170,7 +170,7 @@ def a_star(
     txt: VisText,
     start: Square,
     end: Square,
-    ignore_node: Square = None,
+    ignore_square: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
 ) -> dict:
@@ -192,17 +192,17 @@ def a_star(
     f_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
     f_score[start] = heuristic(start.get_pos(), end.get_pos())
 
-    # Keeps track of next node for every node in graph. A linked list basically.
+    # Keeps track of next square for every square in graph. A linked list basically.
     came_from: dict = {}
 
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
-    # Continues until every node has been checked or best path found
+    # Continues until every square has been checked or best path found
     i = 0  # Used to speed up graph if using map
     while not open_set.empty():
 
-        # Time increments for each node being checked
+        # Time increments for each square being checked
         algo.timer_start()
 
         # If uses closes window the program terminates
@@ -239,19 +239,19 @@ def a_star(
                 f_score[nei] = temp_g_score + heuristic(nei.get_pos(), end.get_pos())
                 queue_pos += 1
                 open_set.put((f_score[nei], queue_pos, nei))
-                if nei != end and not nei.is_closed() and nei != ignore_node:
+                if nei != end and not nei.is_closed() and nei != ignore_square:
                     nei.set_open()
 
         # Sets square to closed after finished checking
         already_closed = curr_square.is_closed()
-        if curr_square != start and curr_square != ignore_node:
+        if curr_square != start and curr_square != ignore_square:
             curr_square.set_closed()
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
 
-        # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
@@ -263,7 +263,7 @@ def a_star(
 
 
 def heuristic(pos1: tuple, pos2: tuple) -> int:
-    """Used by A* to prioritize traveling towards next node"""
+    """Used by A* to prioritize traveling towards next square"""
 
     x1, y1 = pos1
     x2, y2 = pos2
@@ -277,7 +277,7 @@ def bi_dijkstra(
     start: Square,
     end: Square,
     alt_color: bool = False,
-    ignore_node: Square = None,
+    ignore_square: Square = None,
     draw_best_path: bool = True,
     visualize: bool = True,
 ) -> dict:
@@ -300,18 +300,18 @@ def bi_dijkstra(
     g_score[start] = 0
     g_score[end] = 0
 
-    # Keeps track of next node for every node in graph. A linked list basically.
+    # Keeps track of next square for every square in graph. A linked list basically.
     came_from_start: dict = {}
     came_from_end: dict = {}
 
     # End timer here to start it again in loop
     algo.timer_end(count=False)
 
-    # Continues until every node has been checked or best path found
+    # Continues until every square has been checked or best path found
     i = 0
     while not open_set.empty():
 
-        # Time increments for each node being checked
+        # Time increments for each square being checked
         algo.timer_start()
 
         # If uses closes window the program terminates
@@ -333,7 +333,7 @@ def bi_dijkstra(
             if nei.is_wall():
                 continue
 
-            # Start swarm reaching mid (end node if no mid) swarm
+            # Start swarm reaching mid (end square if no mid) swarm
             if curr_square.is_open() and nei.is_open2():
                 if draw_best_path:
                     best_path_bi_dijkstra(
@@ -416,7 +416,7 @@ def bi_dijkstra(
                     g_score[nei] = temp_g_score
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "start"))
-                    if nei != end and not nei.is_closed() and nei != ignore_node:
+                    if nei != end and not nei.is_closed() and nei != ignore_square:
                         if alt_color:
                             nei.set_open2()
                         else:
@@ -434,7 +434,7 @@ def bi_dijkstra(
                     g_score[nei] = temp_g_score
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "end"))
-                    if nei != start and not nei.is_closed() and nei != ignore_node:
+                    if nei != start and not nei.is_closed() and nei != ignore_square:
                         if alt_color:
                             nei.set_open3()
                         else:
@@ -448,7 +448,7 @@ def bi_dijkstra(
                 curr_square.is_closed3(),
             )
         )
-        if curr_square != start and curr_square != end and curr_square != ignore_node:
+        if curr_square != start and curr_square != end and curr_square != ignore_square:
             # Set square to proper closed value based on it's open value
             if curr_square.is_open():
                 curr_square.set_closed()
@@ -461,7 +461,7 @@ def bi_dijkstra(
         algo.timer_end()
         txt.algo_timer = algo.timer_to_string()
 
-        # Only visualize if called. Checks if square is closed to not repeat when mid node included.
+        # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
             i += 1
             if i % gph.algo_speed_multiplier == 0:
@@ -478,28 +478,28 @@ def best_path_bi_dijkstra(
     txt: VisText,
     came_from_start: dict,
     came_from_end: dict,
-    first_meet_node: Square,
-    second_meet_node: Square,
+    first_meet_square: Square,
+    second_meet_square: Square,
     visualize: bool = True,
 ) -> None:
 
     """Used by bi_dijkstra to draw best path from in two parts"""
 
     # Draws best path for first swarm
-    best_path(gph, algo, txt, came_from_start, first_meet_node, visualize=visualize)
+    best_path(gph, algo, txt, came_from_start, first_meet_square, visualize=visualize)
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
-    first_meet_node.set_path()
+    first_meet_square.set_path()
     # To not skip the last two at once, need a draw, draw_vis_text, and sleep here
 
     # Draws best path for second swarm
-    second_meet_node.set_path()
+    second_meet_square.set_path()
     # To not skip the last two at once, need a draw and draw_vis_text here
     best_path(
         gph,
         algo,
         txt,
         came_from_end,
-        second_meet_node,
+        second_meet_square,
         reverse=True,
         visualize=visualize,
     )
@@ -518,7 +518,7 @@ def best_path(
 
     """Main algo for reconstructing path"""
 
-    # Puts node path into list so it's easier to traverse in either direction and choose start and end points
+    # Puts square path into list so it's easier to traverse in either direction and choose start and end points
     path: list = []
     while curr_square in came_from:
         curr_square = came_from[curr_square]
@@ -563,16 +563,16 @@ def start_mid_end(
     visualize: bool = True,
 ) -> None:
 
-    """Used if algos need to reach mid node first"""
+    """Used if algos need to reach mid square first"""
 
     # Selects the correct algo to use
     if is_dijkstra:
         if visualize:
             start_to_mid = dijkstra(
-                gph, algo, txt, start, mid, ignore_node=end, draw_best_path=False
+                gph, algo, txt, start, mid, ignore_square=end, draw_best_path=False
             )
             mid_to_end = dijkstra(
-                gph, algo, txt, mid, end, ignore_node=start, draw_best_path=False
+                gph, algo, txt, mid, end, ignore_square=start, draw_best_path=False
             )
         else:
             start_to_mid = algo_no_vis(
@@ -582,7 +582,7 @@ def start_mid_end(
                 start,
                 mid,
                 is_dijkstra=True,
-                ignore_node=end,
+                ignore_square=end,
                 draw_best_path=False,
             )
             mid_to_end = algo_no_vis(
@@ -592,12 +592,12 @@ def start_mid_end(
                 mid,
                 end,
                 is_dijkstra=True,
-                ignore_node=start,
+                ignore_square=start,
                 draw_best_path=False,
                 reset=False,
             )
 
-            # Fixes nodes disappearing when dragging
+            # Fixes squares disappearing when dragging
             start.set_start()
             mid.set_mid()
             end.set_end()
@@ -607,10 +607,10 @@ def start_mid_end(
     elif is_a_star:
         if visualize:
             start_to_mid = a_star(
-                gph, algo, txt, start, mid, ignore_node=end, draw_best_path=False
+                gph, algo, txt, start, mid, ignore_square=end, draw_best_path=False
             )
             mid_to_end = a_star(
-                gph, algo, txt, mid, end, ignore_node=start, draw_best_path=False
+                gph, algo, txt, mid, end, ignore_square=start, draw_best_path=False
             )
         else:
             start_to_mid = algo_no_vis(
@@ -620,7 +620,7 @@ def start_mid_end(
                 start,
                 mid,
                 is_a_star=True,
-                ignore_node=end,
+                ignore_square=end,
                 draw_best_path=False,
             )
             mid_to_end = algo_no_vis(
@@ -630,12 +630,12 @@ def start_mid_end(
                 mid,
                 end,
                 is_a_star=True,
-                ignore_node=start,
+                ignore_square=start,
                 draw_best_path=False,
                 reset=False,
             )
 
-            # Fixes nodes disappearing when dragging
+            # Fixes squares disappearing when dragging
             start.set_start()
             mid.set_mid()
             end.set_end()
@@ -645,7 +645,7 @@ def start_mid_end(
     elif is_bi_dijkstra:
         if visualize:
             start_to_mid = bi_dijkstra(
-                gph, algo, txt, start, mid, ignore_node=end, draw_best_path=False
+                gph, algo, txt, start, mid, ignore_square=end, draw_best_path=False
             )
             mid_to_end = bi_dijkstra(
                 gph,
@@ -654,7 +654,7 @@ def start_mid_end(
                 mid,
                 end,
                 alt_color=True,
-                ignore_node=start,
+                ignore_square=start,
                 draw_best_path=False,
             )
         else:
@@ -665,7 +665,7 @@ def start_mid_end(
                 start,
                 mid,
                 is_bi_dijkstra=True,
-                ignore_node=end,
+                ignore_square=end,
                 draw_best_path=False,
             )
             mid_to_end = algo_no_vis(
@@ -676,12 +676,12 @@ def start_mid_end(
                 end,
                 alt_color=True,
                 is_bi_dijkstra=True,
-                ignore_node=start,
+                ignore_square=start,
                 draw_best_path=False,
                 reset=False,
             )
 
-            # Fixes nodes disappearing when dragging
+            # Fixes squares disappearing when dragging
             start.set_start()
             mid.set_mid()
             end.set_end()
@@ -718,12 +718,12 @@ def algo_no_vis(
     is_a_star: bool = False,
     is_bi_dijkstra: bool = False,
     alt_color: bool = False,
-    ignore_node: Square = None,
+    ignore_square: Square = None,
     draw_best_path: bool = True,
     reset: bool = True,
 ) -> dict:
 
-    """Skip steps to end when visualizing algo. Used when dragging ordinal node once finished"""
+    """Skip steps to end when visualizing algo. Used when dragging ordinal square once finished"""
 
     # Selects the correct algo to use
     if is_dijkstra:
@@ -732,7 +732,7 @@ def algo_no_vis(
             reset_algo(algo)
         algo.dijkstra_finished = True
 
-        # Separates calling algo_no_vis with mid node or not
+        # Separates calling algo_no_vis with mid square or not
         if draw_best_path:
             dijkstra(gph, algo, txt, start, end, visualize=False)
         else:
@@ -742,7 +742,7 @@ def algo_no_vis(
                 txt,
                 start,
                 end,
-                ignore_node=ignore_node,
+                ignore_square=ignore_square,
                 draw_best_path=False,
                 visualize=False,
             )
@@ -752,7 +752,7 @@ def algo_no_vis(
             reset_algo(algo)
         algo.a_star_finished = True
 
-        # Separates calling algo_no_vis with mid node or not
+        # Separates calling algo_no_vis with mid square or not
         if draw_best_path:
             a_star(gph, algo, txt, start, end, visualize=False)
         else:
@@ -762,7 +762,7 @@ def algo_no_vis(
                 txt,
                 start,
                 end,
-                ignore_node=ignore_node,
+                ignore_square=ignore_square,
                 draw_best_path=False,
                 visualize=False,
             )
@@ -772,7 +772,7 @@ def algo_no_vis(
             reset_algo(algo)
         algo.bi_dijkstra_finished = True
 
-        # Separates calling algo_no_vis with mid node or not
+        # Separates calling algo_no_vis with mid square or not
         if draw_best_path:
             bi_dijkstra(
                 gph, algo, txt, start, end, alt_color=alt_color, visualize=False
@@ -785,7 +785,7 @@ def algo_no_vis(
                 start,
                 end,
                 alt_color=alt_color,
-                ignore_node=ignore_node,
+                ignore_square=ignore_square,
                 draw_best_path=False,
                 visualize=False,
             )
