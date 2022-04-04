@@ -14,6 +14,7 @@ import pygame
 from dataclasses import dataclass
 from queue import PriorityQueue
 from time import perf_counter
+import random
 
 
 @dataclass(slots=True)
@@ -909,7 +910,7 @@ def draw_recursive_maze(
     num_gaps: int = 3
 
     # Prevents drawing wall over gaps
-    gaps_to_offset: list = [x for x in range(num_gaps - 1, Square.rows, num_gaps)]
+    gaps_to_offset: list = [x for x in range(num_gaps - 1, Square.get_num_rows(), num_gaps)]
 
     # End timer here to resume in loop
     algo.timer_end(count=False)
@@ -928,8 +929,8 @@ def draw_recursive_maze(
                     x -= 1
                 else:
                     x += 1
-            if x >= Square.rows:
-                x = Square.rows - 1
+            if x >= Square.get_num_rows():
+                x = Square.get_num_rows() - 1
         else:
             x = wall[0]
             y = get_randrange(wall[1], wall[1] + wall[3])
@@ -938,8 +939,8 @@ def draw_recursive_maze(
                     y -= 1
                 else:
                     y += 1
-            if y >= Square.rows:
-                y = Square.rows - 1
+            if y >= Square.get_num_rows():
+                y = Square.get_num_rows() - 1
         square: Square = Square.get_graph()[x][y]
         square.reset()
 

@@ -9,12 +9,12 @@
 class Square
 {
 public:
-    Square(int row, int col, int rows, double square_size)
-        : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
+    Square(int row, int col)
+        : m_row{ row }, m_col{ col }
     {
         m_is_valid = true;  // If casted to bool, return true
-        m_x = m_row * m_square_size;
-        m_y = m_col * m_square_size;
+        m_x = m_row * s_square_length;
+        m_y = m_col * s_square_length;
     }
 
     // Allow these operators
@@ -82,12 +82,15 @@ public:
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
     // Initialize the graph for the class
-    static std::vector<std::vector<Square>>* init(int rows, int cols, double square_size);
+    static void init(int graph_width, int pixel_offset = 0);
     
     // Get get info about nodes from class
 
     static std::vector<std::vector<Square>>* s_get_graph() { return &graph; }
     static Square& s_get_square(int row, int col) { return graph[row][col]; }
+    static int s_get_num_rows() { return s_num_rows; }
+    static int s_get_num_cols() { return s_num_cols; }
+    static double s_get_square_length() { return s_square_length; }
     static std::unordered_set<Square, Square::hash>& s_get_all_empty_nodes() { return s_all_empty_nodes; }
     static std::unordered_set<Square, Square::hash>& s_get_all_open_nodes() { return s_all_open_nodes; }
     static std::unordered_set<Square, Square::hash>& s_get_all_open2_nodes() { return s_all_open2_nodes; }
@@ -115,13 +118,14 @@ public:
     // Handle changing track_node_history
     static void s_set_track_node_history(bool x) { s_track_node_history = x; }
 
+    // Update values
+    static void s_update_num_rows_cols(int new_num) { s_num_rows = s_num_cols = new_num; }
+
 private:
     // Member variables assigned from constructor arguments
 
     int m_row;
     int m_col;
-    int m_rows;
-    double m_square_size;
 
     // Member variables assigned in constructor
 
@@ -145,6 +149,11 @@ private:
 
     // Stores the instances of all the nodes
     static inline std::vector<std::vector<Square>> graph;
+
+    // Info about the nodes
+    static inline int s_num_rows = 46;  // Defualt value
+    static inline int s_num_cols = 46;  // Default value
+    static inline double s_square_length = 0;  // Assigned in init function
     
     // Colors for different states
 
@@ -186,4 +195,7 @@ private:
 
     static inline std::unordered_set<Square, Square::hash> s_node_history;
     static inline bool s_track_node_history = false;
+
+    // Update square lengths
+    static void s_update_square_length(int graph_width, int pixel_offset) { s_square_length = static_cast<double>(graph_width - pixel_offset) / s_num_rows; }
 };

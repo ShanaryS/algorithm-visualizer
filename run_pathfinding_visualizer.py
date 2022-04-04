@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# C++ algo ignores drawn squares but not maze
+
 # C++ algo drawing over walls. Colors not being set.
 # In general it doesn't seem like instance varaibles are being saved into class.
 # Check if get_square for C++ returns a copy. More generally if copies are only forced for containers.

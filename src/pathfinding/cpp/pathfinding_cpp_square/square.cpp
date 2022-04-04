@@ -8,24 +8,25 @@
 #include <stdexcept>
 
 
-std::vector<std::vector<Square>>* Square::init(int rows, int cols, double square_size)
+void Square::init(int graph_width, int pixel_offset)
 {
     // Reset class
-    Square::s_clear_all_node_lists();
-    Square::graph.clear();
+    s_clear_all_node_lists();
+    graph.clear();
+
+    // Update values
+    s_update_square_length(graph_width, pixel_offset);
 
     // Create each square
-    for (int row{ 0 }; row < rows; ++row)
+    for (int row{ 0 }; row < s_num_rows; ++row)
     {
-        Square::graph.push_back({});
-        for (int col{ 0 }; col < cols; ++col)
+        graph.push_back({});
+        for (int col{ 0 }; col < s_num_cols; ++col)
         {
-            Square square = Square(row, col, rows, square_size);
-            Square::graph[row].push_back(std::move(square));
+            Square square = Square(row, col);
+            graph[row].push_back(std::move(square));
         }
     }
-    // Return a pointer to the graph
-    return &Square::graph;
 }
 
 
@@ -48,22 +49,22 @@ std::vector<Square> Square::get_neighbours() const
     neighbours.clear();
     if (m_col > 0)
     { 
-        Square& nei = Square::graph[m_row][m_col - 1];
+        Square& nei = graph[m_row][m_col - 1];
         neighbours.push_back(nei);
     }
     if (m_row > 0)
     {
-        Square& nei = Square::graph[m_row - 1][m_col];
+        Square& nei = graph[m_row - 1][m_col];
         neighbours.push_back(nei);
     }
-    if (m_col < m_rows - 1)
+    if (m_col < s_num_cols - 1)
     {
-        Square& nei = Square::graph[m_row][m_col + 1];
+        Square& nei = graph[m_row][m_col + 1];
         neighbours.push_back(nei);
     }
-    if (m_row < m_rows - 1)
+    if (m_row < s_num_rows - 1)
     {
-        Square& nei = Square::graph[m_row + 1][m_col];
+        Square& nei = graph[m_row + 1][m_col];
         neighbours.push_back(nei);
     }
     return neighbours;
@@ -72,8 +73,8 @@ std::vector<Square> Square::get_neighbours() const
 std::array<double, 4> Square::draw_square() const
 {
     // Cast to int to truncate square size. Cast back to double to avoid errors.
-    double square_size = static_cast<double>(static_cast<int>(m_square_size));
-    std::array<double, 4> square_pos{ m_x, m_y, square_size, square_size };
+    double square_length = static_cast<double>(static_cast<int>(s_square_length));
+    std::array<double, 4> square_pos{ m_x, m_y, square_length, square_length };
     return square_pos;
 }
 
@@ -362,7 +363,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Use reference_internal if C++ might delete data while python is using it (should be rare)
     // Use take_ownership when C++ will have no use and python should call the destructor.
     py::class_<Square>(m, "Square")
-        .def(py::init<int, int, int, double>())
+        .def(py::init<int, int>())
         .def(py::self == py::self)
         .def(py::self != py::self)
         .def(hash(py::self))
@@ -399,9 +400,12 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::automatic_reference)
         .def("reset_wall_color", &Square::reset_wall_color, py::return_value_policy::automatic_reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::automatic_reference)
-        .def("init", &Square::init, py::return_value_policy::automatic_reference)
+        .def("init", &Square::init, "pixel_offset"_a=0, py::return_value_policy::automatic_reference)
         .def_static("get_graph", &Square::s_get_graph, py::return_value_policy::automatic_reference)
         .def_static("get_square", &Square::s_get_square, py::return_value_policy::automatic_reference)
+        .def_static("get_num_rows", &Square::s_get_num_rows, py::return_value_policy::automatic_reference)
+        .def_static("get_num_cols", &Square::s_get_num_cols, py::return_value_policy::automatic_reference)
+        .def_static("get_square_length", &Square::s_get_square_length, py::return_value_policy::automatic_reference)
         .def_static("get_all_empty_nodes", &Square::s_get_all_empty_nodes, py::return_value_policy::automatic_reference)
         .def_static("get_all_open_nodes", &Square::s_get_all_open_nodes, py::return_value_policy::automatic_reference)
         .def_static("get_all_open2_nodes", &Square::s_get_all_open2_nodes, py::return_value_policy::automatic_reference)

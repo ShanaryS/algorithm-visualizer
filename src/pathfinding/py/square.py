@@ -11,7 +11,6 @@ class Square:
         "row",
         "col",
         "rows",
-        "square_size",
         "x",
         "y",
         "neighbours",
@@ -48,6 +47,11 @@ class Square:
     
     # Stores the instances of all the nodes
     graph = []
+    
+    # Info about the nodes
+    num_rows = 46  # Default value.
+    num_cols = 46  # Default value.
+    square_length = 0  # Assigned in init() method
 
     # Keeps track of all the nodes of each type for easy manipulation
     # These are copied when accessed from outside class to match C++
@@ -73,14 +77,12 @@ class Square:
     node_history = set()
     track_node_history = False
 
-    def __init__(self, row: int, col: int, rows: int, square_size: float) -> None:
+    def __init__(self, row: int, col: int) -> None:
         self.row = row
         self.col = col
-        self.rows = rows
-        self.square_size = square_size
 
-        self.x: float = self.row * self.square_size
-        self.y: float = self.col * self.square_size
+        self.x: float = self.row * Square.square_length
+        self.y: float = self.col * Square.square_length
         self.neighbours: dict = {}
         self.color = Square._DEFAULT_COLOR
         self.wall_color = Square.__WALL_COLOR
@@ -110,7 +112,7 @@ class Square:
 
     def draw_square(self) -> tuple:
         """Updates the square with node type"""
-        return (self.x, self.y, int(self.square_size), int(self.square_size))
+        return (self.x, self.y, int(Square.square_length), int(Square.square_length))
 
     def is_empty(self) -> bool:
         """Checks if blank node"""
@@ -381,9 +383,9 @@ class Square:
             self.neighbours["Left"] = Square.graph[self.row][self.col - 1]
         if self.row > 0:
             self.neighbours["Up"] = Square.graph[self.row - 1][self.col]
-        if self.col < self.rows - 1:
+        if self.col < Square.num_cols - 1:
             self.neighbours["Right"] = Square.graph[self.row][self.col + 1]
-        if self.row < self.rows - 1:
+        if self.row < Square.num_rows - 1:
             self.neighbours["Down"] = Square.graph[self.row + 1][self.col]
 
     def _discard_node(self, remove_wall=True) -> None:
@@ -421,17 +423,20 @@ class Square:
             Square.all_history_nodes.discard(self)
 
     @classmethod
-    def init(cls, rows, cols, square_size) -> list:
+    def init(cls, graph_width, pixel_offset=0) -> None:
         """Initializes the graph for the class"""
         # Reset class
         cls.clear_all_node_lists()
         cls.graph = []
         
+        # Update values
+        cls._update_square_length(graph_width, pixel_offset)
+        
         # Create each square
-        for row in range(rows):
+        for row in range(Square.num_rows):
             cls.graph.append([])
-            for col in range(cols):
-                square: Square = Square(row, col, rows, square_size)
+            for col in range(Square.num_cols):
+                square: Square = Square(row, col)
                 Square.graph[row].append(square)
         
         # Update neighbours once graph is done
@@ -439,9 +444,6 @@ class Square:
         for row in cls.graph:
             for square in row:
                 square._update_neighbours()
-        
-        # Return for outside use
-        return cls.graph
     
     @classmethod
     def get_graph(cls) -> list:
@@ -449,9 +451,29 @@ class Square:
         return cls.graph
     
     @classmethod
-    def get_square(cls, row, col):
+    def get_square(cls, row, col) -> 'Square':
         """Get a square by row and col"""
         return cls.graph[row][col]
+
+    @classmethod
+    def get_num_rows(cls) -> int:
+        """Get number of rows in graph"""
+        return cls.num_rows
+
+    @classmethod
+    def get_num_cols(cls) -> int:
+        """Get number of rows in graph"""
+        return cls.num_cols
+
+    @classmethod
+    def get_square_length(cls) -> float:
+        """Get square size of a single dimension"""
+        return cls.square_length
+    
+    @classmethod
+    def update_num_rows_cols(cls, new_num) -> None:
+        """Updates the num of rows and cols"""
+        cls.num_rows = cls.num_cols = new_num
 
     @classmethod
     def get_all_empty_nodes(cls) -> set:
@@ -569,3 +591,8 @@ class Square:
     def set_track_node_history(cls, x: bool) -> None:
         """Sets track node history to true or false"""
         cls.track_node_history = x
+    
+    @classmethod
+    def _update_square_length(cls, graph_width, pixel_offset) -> None:
+        """Calculates square size with an optional offset"""
+        cls.square_length = (graph_width - pixel_offset) / cls.num_rows
