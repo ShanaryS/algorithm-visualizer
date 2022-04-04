@@ -9,7 +9,7 @@
 class Square
 {
 public:
-    Square(int row, int col, int rows, float square_size)
+    Square(int row, int col, int rows, double square_size)
         : m_row{ row }, m_col{ col }, m_rows{ rows }, m_square_size{ square_size }
     {
         m_is_valid = true;  // If casted to bool, return true
@@ -41,7 +41,7 @@ public:
     std::array<int, 2> get_pos() const { return std::array<int, 2>{ m_row, m_col }; }
     std::array<int, 3>& get_color() { return m_color; }
     std::vector<Square> get_neighbours() const;
-    std::array<float, 4> draw_square() const;
+    std::array<double, 4> draw_square() const;
 
     // Check square type
 
@@ -82,7 +82,7 @@ public:
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
     // Initialize the graph for the class
-    static std::vector<std::vector<Square>>* init(int rows, int cols, float square_size);
+    static std::vector<std::vector<Square>>* init(int rows, int cols, double square_size);
     
     // Get get info about nodes from class
 
@@ -121,12 +121,12 @@ private:
     int m_row;
     int m_col;
     int m_rows;
-    float m_square_size;
+    double m_square_size;
 
     // Member variables assigned in constructor
 
-    float m_x;
-    float m_y;
+    double m_x;
+    double m_y;
     
     // Member variables with default values
 

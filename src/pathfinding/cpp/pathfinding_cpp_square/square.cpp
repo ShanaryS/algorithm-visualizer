@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 
-std::vector<std::vector<Square>>* Square::init(int rows, int cols, float square_size)
+std::vector<std::vector<Square>>* Square::init(int rows, int cols, double square_size)
 {
     // Reset class
     Square::s_clear_all_node_lists();
@@ -69,11 +69,11 @@ std::vector<Square> Square::get_neighbours() const
     return neighbours;
 }
 
-std::array<float, 4> Square::draw_square() const
+std::array<double, 4> Square::draw_square() const
 {
-    // Cast to int to truncate square size. Cast back to float to avoid errors.
-    float square_size = static_cast<float>(static_cast<int>(m_square_size));
-    std::array<float, 4> square_pos{ m_x, m_y, square_size, square_size };
+    // Cast to int to truncate square size. Cast back to double to avoid errors.
+    double square_size = static_cast<double>(static_cast<int>(m_square_size));
+    std::array<double, 4> square_pos{ m_x, m_y, square_size, square_size };
     return square_pos;
 }
 
@@ -362,7 +362,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Use reference_internal if C++ might delete data while python is using it (should be rare)
     // Use take_ownership when C++ will have no use and python should call the destructor.
     py::class_<Square>(m, "Square")
-        .def(py::init<int, int, int, float>())
+        .def(py::init<int, int, int, double>())
         .def(py::self == py::self)
         .def(py::self != py::self)
         .def(hash(py::self))
