@@ -471,11 +471,6 @@ class Square:
         return cls.square_length
     
     @classmethod
-    def update_num_rows_cols(cls, new_num) -> None:
-        """Updates the num of rows and cols"""
-        cls.num_rows = cls.num_cols = new_num
-
-    @classmethod
     def get_all_empty_nodes(cls) -> set:
         """Gets all empty nodes"""
         return cpy.copy(cls.all_empty_nodes)
@@ -596,3 +591,8 @@ class Square:
     def _update_square_length(cls, graph_width, pixel_offset) -> None:
         """Calculates square size with an optional offset"""
         cls.square_length = (graph_width - pixel_offset) / cls.num_rows
+    
+    @classmethod
+    def update_num_rows_cols(cls, new_num) -> None:
+        """Updates the num of rows and cols"""
+        cls.num_rows = cls.num_cols = new_num
