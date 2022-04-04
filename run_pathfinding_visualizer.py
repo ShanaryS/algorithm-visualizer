@@ -59,8 +59,9 @@ if __name__ == "__main__":
     main()
 
 # Have all unordered set funcs return pointers (Creates memory issues)
-# Have get neighbours return pointer (set that as opaque as well, move nei)
+# Have get neighbours return pointer (set that as opaque as well, std::move nei)
 # Update neighbours once in cpp class
+# std::move insert(*this)
 # Offload any reasonable functionality into square class
 # Multiple maze generation does look right
 # Initalize variables
