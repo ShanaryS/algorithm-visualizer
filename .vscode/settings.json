@@ -1,6 +1,0 @@
-{
-    "python.formatting.provider": "black",
-    "python.defaultInterpreterPath": "venv/Scripts/python",
-    "austin.interval": 1,
-    "editor.tabCompletion": "on"
-}
