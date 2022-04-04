@@ -58,7 +58,13 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# C++ algo ignores drawn squares but not maze
+# Have all unordered set funcs return pointers
+# Have get neighbours return pointer (set that as opaque as well, move nei)
+# Move into vectors
+# Update neighbours once in cpp class
+# Initalize variables
+# Multiple maze generation does look right
+# Offload any reasonable functionality into square class
 
 # C++ algo drawing over walls. Colors not being set.
 # In general it doesn't seem like instance varaibles are being saved into class.
