@@ -58,13 +58,12 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Have all unordered set funcs return pointers
+# Have all unordered set funcs return pointers (Creates memory issues)
 # Have get neighbours return pointer (set that as opaque as well, move nei)
-# Move into vectors
 # Update neighbours once in cpp class
-# Initalize variables
-# Multiple maze generation does look right
 # Offload any reasonable functionality into square class
+# Multiple maze generation does look right
+# Initalize variables
 
 # C++ algo drawing over walls. Colors not being set.
 # In general it doesn't seem like instance varaibles are being saved into class.
