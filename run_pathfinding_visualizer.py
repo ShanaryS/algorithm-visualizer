@@ -44,7 +44,7 @@ def main() -> None:
 
     overide_where()
 
-    gph = GraphState(graph=[], rects_to_update=[])
+    gph = GraphState(rects_to_update=[])
 
     algo = AlgoState(ordinal_node_clicked=[])
 

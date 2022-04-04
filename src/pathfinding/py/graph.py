@@ -44,7 +44,6 @@ CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 class GraphState:
     """Stores the state of the graph. Changes with graph size."""
 
-    graph: list
     rects_to_update: list
     window: pygame.Surface = None
     base_drawn: bool = False
@@ -155,7 +154,7 @@ def set_graph(gph: GraphState) -> None:
     gph.update_entire_screen = True
 
     # Everything square related is handle in here
-    gph.graph = Square.init(gph.rows, gph.rows, gph.square_size)
+    Square.init(gph.rows, gph.rows, gph.square_size)
 
 
 def draw(
@@ -237,7 +236,7 @@ def _draw_square_borders(gph: GraphState) -> None:
 
     square: Square
     for square in Square.get_nodes_to_update():
-        x, y, *temp = square.draw_square()
+        x, y, *_ = square.draw_square()
         top_left = x, y
         top_right = x, y + gph.square_size
         bottom_left = x + gph.square_size, y
@@ -274,9 +273,9 @@ def set_squares_to_roads(gph: GraphState) -> None:
     """Sets squares to the color of a single pixel"""
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
-    for x in range(len(gph.graph)):
-        for y in range(len(gph.graph[0])):
-            square: Square = gph.graph[x][y]
+    for x in range(len(Square.get_graph())):
+        for y in range(len(Square.get_graph()[0])):
+            square: Square = Square.get_square(x, y)
             row, col = square.get_pos()
             square.set_wall_color_map()  # Change wall color for easy visibility
             tot = 0
