@@ -39,7 +39,7 @@ public:
     // Info about square
 
     std::array<int, 2> get_pos() const { return std::array<int, 2>{ m_row, m_col }; }
-    std::array<int, 3>& get_color() { return m_color; }
+    std::array<int, 3>* get_color() { return &m_color; }
     std::vector<Square> get_neighbours() const;
     std::array<double, 4> draw_square() const;
 
