@@ -76,7 +76,7 @@ class Square:
     squares_to_update = set()
 
     # Used for checking if only changed squares are being updated
-    square_history = set()
+    future_history_squares = set()
     track_square_history = False
 
     def __init__(self, row: int, col: int) -> None:
@@ -178,7 +178,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._DEFAULT_COLOR
@@ -194,7 +194,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._OPEN_COLOR
@@ -209,7 +209,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._OPEN2_COLOR
@@ -226,7 +226,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._OPEN3_COLOR
@@ -241,7 +241,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._CLOSED_COLOR
@@ -256,7 +256,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._CLOSED2_COLOR
@@ -271,7 +271,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._CLOSED3_COLOR
@@ -286,7 +286,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square(remove_wall=False)
         self.color = Square._START_COLOR
@@ -301,7 +301,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square(remove_wall=False)
         self.color = Square._MID_COLOR
@@ -316,7 +316,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square(remove_wall=False)
         self.color = Square._END_COLOR
@@ -331,7 +331,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = self.wall_color
@@ -346,7 +346,7 @@ class Square:
 
         # Add to square history if user requests to track
         if Square.track_square_history:
-            Square.square_history.add(self)
+            Square.future_history_squares.add(self)
 
         self._discard_square()
         self.color = Square._PATH_COLOR
@@ -545,9 +545,9 @@ class Square:
         return cpy.copy(cls.squares_to_update)
 
     @classmethod
-    def get_square_history(cls) -> set:
+    def get_future_history_squares(cls) -> set:
         """Get square history"""
-        return cpy.copy(cls.square_history)
+        return cpy.copy(cls.future_history_squares)
 
     @classmethod
     def get_track_square_history(cls) -> bool:
@@ -622,9 +622,9 @@ class Square:
         cls.all_history_squares.clear()
 
     @classmethod
-    def clear_square_history(cls) -> None:
+    def clear_future_history_squares(cls) -> None:
         """Clears square history"""
-        cls.square_history.clear()
+        cls.future_history_squares.clear()
     
     @classmethod
     def set_track_square_history(cls, x: bool) -> None:
