@@ -94,21 +94,21 @@ public:
     static int s_get_num_rows() { return s_num_rows; }
     static int s_get_num_cols() { return s_num_cols; }
     static double s_get_square_length() { return s_square_length; }
-    static std::unordered_set<Square, Square::hash> s_get_all_empty_squares() { return s_all_empty_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_open_squares() { return s_all_open_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_open2_squares() { return s_all_open2_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_open3_squares() { return s_all_open3_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_closed_squares() { return s_all_closed_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_closed2_squares() { return s_all_closed2_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_closed3_squares() { return s_all_closed3_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_start_squares() { return s_all_start_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_mid_squares() { return s_all_mid_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_end_squares() { return s_all_end_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_wall_squares() { return s_all_wall_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_path_squares() { return s_all_path_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_all_history_squares() { return s_all_history_squares; }
-    static std::unordered_set<Square, Square::hash> s_get_squares_to_update() { return s_squares_to_update; }
-    static std::unordered_set<Square, Square::hash> s_get_square_history() { return s_square_history; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_empty_squares() { return &s_all_empty_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_open_squares() { return &s_all_open_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_open2_squares() { return &s_all_open2_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_open3_squares() { return &s_all_open3_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_closed_squares() { return &s_all_closed_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_closed2_squares() { return &s_all_closed2_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_closed3_squares() { return &s_all_closed3_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_start_squares() { return &s_all_start_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_mid_squares() { return &s_all_mid_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_end_squares() { return &s_all_end_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_wall_squares() { return &s_all_wall_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_path_squares() { return &s_all_path_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_all_history_squares() { return &s_all_history_squares; }
+    static std::unordered_set<Square, Square::hash>* s_get_squares_to_update() { return &s_squares_to_update; }
+    static std::unordered_set<Square, Square::hash>* s_get_square_history() { return &s_square_history; }
     static bool s_get_track_square_history() { return s_track_square_history; }
 
     // Change square containers of the class

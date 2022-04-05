@@ -59,7 +59,7 @@ if __name__ == "__main__":
     main()
 
 # Have all unordered set funcs return pointers (Creates memory issues)
-# Multiple maze generation does look right
+# Multiple maze generation does look right, walls aren't being removed though visually they are
 # Dragging nodes has a bug
 # Initalize variables
 
