@@ -287,13 +287,13 @@ void Square::set_history()
 void Square::s_reset_algo_squares()
 {
     std::array<std::unordered_set<Square, Square::hash>, 7> squares_to_reset{
-        s_get_all_open_squares(),
-        s_get_all_open2_squares(),
-        s_get_all_open3_squares(),
-        s_get_all_closed_squares(),
-        s_get_all_closed2_squares(),
-        s_get_all_closed3_squares(),
-        s_get_all_path_squares()
+        *s_get_all_open_squares(),
+        *s_get_all_open2_squares(),
+        *s_get_all_open3_squares(),
+        *s_get_all_closed_squares(),
+        *s_get_all_closed2_squares(),
+        *s_get_all_closed3_squares(),
+        *s_get_all_path_squares()
     };
 
     for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
@@ -308,18 +308,18 @@ void Square::s_reset_algo_squares()
 void Square::s_reset_all_squares()
 {
     std::array<std::unordered_set<Square, Square::hash>, 12> squares_to_reset{
-        s_get_all_open_squares(),
-        s_get_all_open2_squares(),
-        s_get_all_open3_squares(),
-        s_get_all_closed_squares(),
-        s_get_all_closed2_squares(),
-        s_get_all_closed3_squares(),
-        s_get_all_start_squares(),
-        s_get_all_mid_squares(),
-        s_get_all_end_squares(),
-        s_get_all_wall_squares(),
-        s_get_all_path_squares(),
-        s_get_all_history_squares()
+        *s_get_all_open_squares(),
+        *s_get_all_open2_squares(),
+        *s_get_all_open3_squares(),
+        *s_get_all_closed_squares(),
+        *s_get_all_closed2_squares(),
+        *s_get_all_closed3_squares(),
+        *s_get_all_start_squares(),
+        *s_get_all_mid_squares(),
+        *s_get_all_end_squares(),
+        *s_get_all_wall_squares(),
+        *s_get_all_path_squares(),
+        *s_get_all_history_squares()
     };
 
     for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
