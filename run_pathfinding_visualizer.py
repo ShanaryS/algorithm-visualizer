@@ -59,8 +59,6 @@ if __name__ == "__main__":
     main()
 
 # Have all unordered set funcs return pointers (Creates memory issues)
-# For loop by reference
-# std::move insert(*this)
 # Offload any reasonable functionality into square class
 # Multiple maze generation does look right
 # Initalize variables
