@@ -297,7 +297,7 @@ void Square::s_reset_algo_squares()
         s_get_all_path_squares()
     };
 
-    for (std::unordered_set<Square, Square::hash> type_set : squares_to_reset)
+    for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
     {
         for (Square square : type_set)
         {
@@ -323,7 +323,7 @@ void Square::s_reset_all_squares()
         s_get_all_history_squares()
     };
 
-    for (std::unordered_set<Square, Square::hash> type_set : squares_to_reset)
+    for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
     {
         for (Square square : type_set)
         {
