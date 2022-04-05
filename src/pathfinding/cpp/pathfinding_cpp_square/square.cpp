@@ -23,8 +23,7 @@ void Square::init(int graph_width, int pixel_offset)
         s_graph.push_back({});
         for (int col{ 0 }; col < s_num_cols; ++col)
         {
-            Square square = Square(row, col);
-            s_graph[row].push_back(std::move(square));
+            s_graph[row].emplace_back(Square(row, col));
         }
     }
 
