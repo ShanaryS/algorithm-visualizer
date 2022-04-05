@@ -58,9 +58,11 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Have all unordered set funcs return pointers (Creates memory issues)
-# Multiple maze generation does look right, walls aren't being removed though visually they are
+# Multiple maze generation does not look right, walls aren't being removed though visually they are
 # Dragging nodes has a bug
+# Maybe keys being const is why there is a seg fault when passing to python by reference
+# Might need to use shared pointer for squares
+# Use std::string instead of c strings, maybe reason why map is so weird
 # Initalize variables
 
 # C++ algo drawing over walls. Colors not being set.
