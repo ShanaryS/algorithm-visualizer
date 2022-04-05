@@ -82,6 +82,8 @@ public:
     // Set wall color to the version for the map
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
 
+    //////////////////////Static Below//////////////////////
+
     // Initialize the graph for the class
     static void init(int graph_width, int pixel_offset = 0);
     
@@ -150,8 +152,11 @@ private:
 
     // Member functions
 
+    void update_neighbours();
     void reset_wall_color() { m_wall_color = s__wall_color; }
     void discard_square(bool remove_wall = true);
+
+    //////////////////////Static Below//////////////////////
 
     // Stores the instances of all the squares
     static inline std::vector<std::vector<Square>> s_graph;

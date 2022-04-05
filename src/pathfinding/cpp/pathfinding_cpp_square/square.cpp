@@ -27,6 +27,15 @@ void Square::init(int graph_width, int pixel_offset)
             s_graph[row].push_back(std::move(square));
         }
     }
+
+    // Update neighours after all squares are created
+    for (std::vector<Square>& row : s_graph)
+    {
+        for (Square& square : row)
+        {
+            square.update_neighbours();
+        }
+    }
 }
 
 
@@ -46,25 +55,8 @@ struct std::hash<Square>
 std::vector<Square> Square::get_neighbours() const
 {
     std::vector<Square> neighbours;
-    neighbours.clear();
-    if (m_col > 0)
-    { 
-        Square& nei = s_graph[m_row][m_col - 1];
-        neighbours.push_back(nei);
-    }
-    if (m_row > 0)
+    for (auto&[direction, nei] : m_neighbours)
     {
-        Square& nei = s_graph[m_row - 1][m_col];
-        neighbours.push_back(nei);
-    }
-    if (m_col < s_num_cols - 1)
-    {
-        Square& nei = s_graph[m_row][m_col + 1];
-        neighbours.push_back(nei);
-    }
-    if (m_row < s_num_rows - 1)
-    {
-        Square& nei = s_graph[m_row + 1][m_col];
         neighbours.push_back(nei);
     }
     return neighbours;
@@ -358,6 +350,26 @@ void Square::s_clear_all_square_lists()
     s_all_history_squares.clear();
 }
 
+void Square::update_neighbours()
+{
+    if (m_col > 0)
+    {
+        m_neighbours.insert({ "Left", s_graph[m_row][m_col - 1] });
+    }
+    if (m_row > 0)
+    {
+        m_neighbours.insert({ "Up", s_graph[m_row - 1][m_col] });
+    }
+    if (m_col < s_num_cols - 1)
+    {
+        m_neighbours.insert({ "Right", s_graph[m_row][m_col + 1] });
+    }
+    if (m_row < s_num_rows - 1)
+    {
+        m_neighbours.insert({ "Down", s_graph[m_row + 1][m_col] });
+    }
+}
+
 void Square::discard_square(bool remove_wall)
 {
     // Ordinal squares should not remove wall to reinstate after dragging
@@ -383,6 +395,7 @@ void Square::discard_square(bool remove_wall)
 
 // Prevent copies being made when passing these types around
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Square>>);
+PYBIND11_MAKE_OPAQUE(std::vector<Square>);
 PYBIND11_MAKE_OPAQUE(std::unordered_set<Square, Square::hash>);
 
 namespace py = pybind11;
@@ -391,6 +404,7 @@ using namespace pybind11::literals;
 PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
     py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
+    py::bind_vector<std::vector<Square>>(m, "VectorSquare");
 
     py::class_<std::unordered_set<Square, Square::hash>>(m, "UnorderedSetSquare")
         .def(py::init<>())
