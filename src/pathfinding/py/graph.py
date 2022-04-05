@@ -150,7 +150,6 @@ def set_graph(gph: GraphState) -> None:
     gph.update_entire_screen = True
 
     # Everything square related is handle in here
-
     Square.init(WIDTH)
 
 

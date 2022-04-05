@@ -59,8 +59,8 @@ if __name__ == "__main__":
     main()
 
 # Have all unordered set funcs return pointers (Creates memory issues)
-# Offload any reasonable functionality into square class
 # Multiple maze generation does look right
+# Dragging nodes has a bug
 # Initalize variables
 
 # C++ algo drawing over walls. Colors not being set.

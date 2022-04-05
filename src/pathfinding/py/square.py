@@ -429,7 +429,7 @@ class Square:
         """Initializes the graph for the class"""
         # Reset class
         cls.clear_all_square_lists()
-        cls.graph = []
+        cls.graph.clear()
         
         # Update values
         cls._update_square_length(graph_width, pixel_offset)

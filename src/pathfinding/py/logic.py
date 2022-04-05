@@ -217,9 +217,9 @@ def run_pathfinding(
 
 def _get_clicked_pos(pos) -> tuple[int, int]:
     """Turns the location data of the mouse into location of squares"""
-    y, x = pos
-    row = int(y / Square.get_square_length())
-    col = int(x / Square.get_square_length())
+    x, y = pos
+    row = int(x / Square.get_square_length())
+    col = int(y / Square.get_square_length())
     
     # Fix clicking past square boundaries.
     square_max = Square.get_num_rows()-1
