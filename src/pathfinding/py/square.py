@@ -10,6 +10,7 @@ class Square:
     __slots__ = (
         "row",
         "col",
+        "pos",
         "rows",
         "x",
         "y",
@@ -557,13 +558,13 @@ class Square:
     def reset_algo_squares(cls) -> None:
         """Reset algo squares"""
         squares_to_reset = [
-            cls.all_open_squares,
-            cls.all_open2_squares,
-            cls.all_open3_squares,
-            cls.all_closed_squares,
-            cls.all_closed2_squares,
-            cls.all_closed3_squares,
-            cls.all_path_squares
+            cls.get_all_open_squares(),
+            cls.get_all_open2_squares(),
+            cls.get_all_open3_squares(),
+            cls.get_all_closed_squares(),
+            cls.get_all_closed2_squares(),
+            cls.get_all_closed3_squares(),
+            cls.get_all_path_squares()
         ]
         square: Square
         for type_set in squares_to_reset:
@@ -574,18 +575,18 @@ class Square:
     def reset_all_squares(cls) -> None:
         """Reset all squares"""
         squares_to_reset = [
-            cls.all_open_squares,
-            cls.all_open2_squares,
-            cls.all_open3_squares,
-            cls.all_closed_squares,
-            cls.all_closed2_squares,
-            cls.all_closed3_squares,
-            cls.all_start_squares,
-            cls.all_mid_squares,
-            cls.all_end_squares,
-            cls.all_wall_squares,
-            cls.all_path_squares,
-            cls.all_history_squares
+            cls.get_all_open_squares(),
+            cls.get_all_open2_squares(),
+            cls.get_all_open3_squares(),
+            cls.get_all_closed_squares(),
+            cls.get_all_closed2_squares(),
+            cls.get_all_closed3_squares(),
+            cls.get_all_start_squares(),
+            cls.get_all_mid_squares(),
+            cls.get_all_end_squares(),
+            cls.get_all_wall_squares(),
+            cls.get_all_path_squares(),
+            cls.get_all_history_squares()
         ]
         square: Square
         for type_set in squares_to_reset:

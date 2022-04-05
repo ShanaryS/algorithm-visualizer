@@ -92,7 +92,8 @@ def dijkstra(
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
-    g_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
+    graph = Square.get_graph()
+    g_score: dict = {square: float("inf") for row in graph for square in row}
     g_score[start] = 0
 
     # Keeps track of next square for every square in graph. A linked list basically.
@@ -187,9 +188,10 @@ def a_star(
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
-    g_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
+    graph = Square.get_graph()
+    g_score: dict = {square: float("inf") for row in graph for square in row}
     g_score[start] = 0
-    f_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
+    f_score: dict = {square: float("inf") for row in graph for square in row}
     f_score[start] = heuristic(start.get_pos(), end.get_pos())
 
     # Keeps track of next square for every square in graph. A linked list basically.
@@ -296,7 +298,8 @@ def bi_dijkstra(
     open_set.put((0, queue_pos, end, "end"))
 
     # Determine what is the best square to check
-    g_score: dict = {square: float("inf") for row in Square.get_graph() for square in row}
+    graph = Square.get_graph()
+    g_score: dict = {square: float("inf") for row in graph for square in row}
     g_score[start] = 0
     g_score[end] = 0
 
@@ -796,6 +799,7 @@ def draw_recursive_maze(
     algo: AlgoState,
     txt: VisText,
     chamber: tuple = None,
+    graph: list = None,
     visualize: bool = True,
 ) -> None:
 
@@ -810,14 +814,18 @@ def draw_recursive_maze(
         algo.timer_reset()
     # Start timer here to include setup in timer
     algo.timer_start()
+    
+    # Only get graph once then use it for recursive calls
+    if not graph:
+        graph = Square.get_graph()
 
     # Sets min size for division
     division_limit: int = 3
 
     # Creates chambers to divide into
     if chamber is None:
-        chamber_width: int = len(Square.get_graph())
-        chamber_height: int = len(Square.get_graph()[1])
+        chamber_width: int = len(graph)
+        chamber_height: int = len(graph[1])
         chamber_left: int = 0
         chamber_top: int = 0
     else:
@@ -837,7 +845,7 @@ def draw_recursive_maze(
     if chamber_width >= division_limit:
         for y in range(chamber_height):
             algo.timer_start()
-            square: Square = Square.get_graph()[chamber_left + x_divide][chamber_top + y]
+            square: Square = graph[chamber_left + x_divide][chamber_top + y]
             square.set_wall()
             algo.timer_end()
             txt.algo_timer = algo.timer_to_string()
@@ -849,7 +857,7 @@ def draw_recursive_maze(
     if chamber_height >= division_limit:
         for x in range(chamber_width):
             algo.timer_start()
-            square: Square = Square.get_graph()[chamber_left + x][chamber_top + y_divide]
+            square: Square = graph[chamber_left + x][chamber_top + y_divide]
             square.set_wall()
             algo.timer_end()
             txt.algo_timer = algo.timer_to_string()
@@ -941,7 +949,7 @@ def draw_recursive_maze(
                     y += 1
             if y >= Square.get_num_rows():
                 y = Square.get_num_rows() - 1
-        square: Square = Square.get_graph()[x][y]
+        square: Square = graph[x][y]
         square.reset()
 
         # End timer before visualizing
@@ -954,7 +962,7 @@ def draw_recursive_maze(
 
     # Recursively divides chambers
     for chamber in chambers:
-        draw_recursive_maze(gph, algo, txt, chamber, visualize=visualize)
+        draw_recursive_maze(gph, algo, txt, chamber, graph=graph, visualize=visualize)
 
 
 def get_random_sample(population: tuple, k: int) -> list:
