@@ -82,6 +82,7 @@ class Square:
         self.row = row
         self.col = col
 
+        self.pos = row, col
         self.x: float = self.row * Square.square_length
         self.y: float = self.col * Square.square_length
         self.square_dim = (self.x, self.y, int(Square.square_length), int(Square.square_length))
@@ -97,7 +98,7 @@ class Square:
 
     def get_pos(self) -> tuple[int, int]:
         """Returns the square location"""
-        return self.row, self.col
+        return self.pos
 
     def get_color(self) -> tuple:
         """Gets color of square"""

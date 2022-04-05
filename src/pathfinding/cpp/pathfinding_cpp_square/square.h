@@ -13,6 +13,7 @@ public:
         : m_row{ row }, m_col{ col }
     {
         m_is_valid = true;  // If casted to bool, return true
+        m_pos = std::array<int, 2>{ m_row, m_col };
         m_x = m_row * s_square_length;
         m_y = m_col * s_square_length;
 
@@ -41,7 +42,7 @@ public:
 
     // Info about square
 
-    std::array<int, 2> get_pos() const { return std::array<int, 2>{ m_row, m_col }; }
+    std::array<int, 2> get_pos() const { return m_pos; }
     std::array<int, 3>* get_color() { return &m_color; }
     std::vector<Square> get_neighbours() const;
     std::array<double, 4>* draw_square() { return &m_square_dim; }
@@ -134,6 +135,7 @@ private:
 
     // Member variables assigned in constructor
 
+    std::array<int, 2> m_pos;
     double m_x;
     double m_y;
     std::array<double, 4> m_square_dim;  // x, y, x_length, y_length
