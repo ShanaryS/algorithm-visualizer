@@ -231,7 +231,7 @@ def _draw_square_borders(gph: GraphState) -> None:
     """Draws the lines surrounding the updating squares"""
 
     square: Square
-    square_length = get_square_length()
+    square_length = Square.get_square_length()
     for square in Square.get_squares_to_update():
         x, y, *_ = square.draw_square()
         top_left = x, y
