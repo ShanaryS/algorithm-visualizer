@@ -430,7 +430,7 @@ class Square:
     def init(cls, graph_width, pixel_offset=0) -> None:
         """Initializes the graph for the class"""
         # Reset class
-        cls.clear_all_square_lists()
+        cls._clear_all_square_lists()
         cls.graph.clear()
         
         # Update values
@@ -600,7 +600,7 @@ class Square:
         cls.squares_to_update.clear()
 
     @classmethod
-    def clear_all_square_lists(cls) -> None:
+    def _clear_all_square_lists(cls) -> None:
         """Clears the list of all squares for recreating graph"""
         cls.all_empty_squares.clear()
         cls.all_open_squares.clear()
