@@ -58,13 +58,15 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Raw this pointer for square sets and neighbours (get methods many need to dereference each)
+
 # Each square has a unique ptr varible that gets assigned in class init function to corressponding std::array element
 # Add unique_ptr in set methods rather than *this
 # Create some way to auto dereference?
 # Might need to use shared pointer with weak pointers?
 
+# Use nested unordered_map to store row col
 # Use strings like "00,00" for row col as key
-# Use std::string instead of c strings, maybe reason why map is so weird
 
 # Multiple maze generation does not look right, walls aren't being removed though visually they are
 # Dragging nodes has a bug

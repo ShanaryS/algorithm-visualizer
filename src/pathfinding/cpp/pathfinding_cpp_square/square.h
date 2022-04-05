@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -150,7 +151,7 @@ private:
 
     // Member variables assigned in member functions
 
-    std::unordered_map<const char*, Square&> m_neighbours;
+    std::unordered_map<std::string, Square&> m_neighbours;
 
     // Member functions
 
