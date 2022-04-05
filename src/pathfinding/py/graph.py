@@ -231,12 +231,13 @@ def _draw_square_borders(gph: GraphState) -> None:
     """Draws the lines surrounding the updating squares"""
 
     square: Square
+    square_length = get_square_length()
     for square in Square.get_squares_to_update():
         x, y, *_ = square.draw_square()
         top_left = x, y
-        top_right = x, y + Square.get_square_length()
-        bottom_left = x + Square.get_square_length(), y
-        bottom_right = x + Square.get_square_length(), y + Square.get_square_length()
+        top_right = x, y + square_length
+        bottom_left = x + square_length, y
+        bottom_right = x + square_length, y + square_length
 
         # Top
         pygame.draw.line(gph.window, LINE_COLOR, top_left, top_right)
@@ -269,28 +270,30 @@ def set_squares_to_roads(gph: GraphState) -> None:
     """Sets squares to the color of a single pixel"""
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
-    for x in range(len(Square.get_graph())):
-        for y in range(len(Square.get_graph()[0])):
-            square: Square = Square.get_square(x, y)
+    graph = Square.get_graph()
+    for x in range(len(graph)):
+        for y in range(len(graph[0])):
+            square: Square = graph[x][y]
             row, col = square.get_pos()
             square.set_wall_color_map()  # Change wall color for easy visibility
             tot = 0
             tot_b = 0  # Used to check if highway since they are yellow.
 
             # These two loops i,j get each pixel in each square. Time Complexity is O(n) in regards to pixels.
+            square_length = Square.get_square_length()
             for i in range(
-                row * int(Square.get_square_length()),
-                (row + 1) * int(Square.get_square_length()),
+                row * int(square_length),
+                (row + 1) * int(square_length),
             ):
                 for j in range(
-                    col * int(Square.get_square_length()),
-                    (col + 1) * int(Square.get_square_length()),
+                    col * int(square_length),
+                    (col + 1) * int(square_length),
                 ):
                     r, g, b, a = gph.window.get_at((i, j))
                     tot += r + g + b
                     tot_b += b
-            avg_tot = tot / Square.get_square_length() ** 2 / 3  # Gets the average of each square
-            avg_b = tot_b / Square.get_square_length() ** 2
+            avg_tot = tot / square_length ** 2 / 3  # Gets the average of each square
+            avg_b = tot_b / square_length ** 2
             cutoff = 1  # Any color with value above this will be set as a viable path
 
             # If the square's color is above cutoff, set it as path. Else wall square
