@@ -56,7 +56,7 @@ std::vector<Square> Square::get_neighbours() const
     std::vector<Square> neighbours;
     for (auto&[direction, nei] : m_neighbours)
     {
-        neighbours.push_back(nei);
+        neighbours.push_back(*nei);
     }
     return neighbours;
 }
@@ -353,19 +353,19 @@ void Square::update_neighbours()
 {
     if (m_col > 0)
     {
-        m_neighbours.insert({ std::string("Left"), s_graph[m_row][m_col - 1]});
+        m_neighbours.insert({ std::string("Left"), &s_graph[m_row][m_col - 1]});
     }
     if (m_row > 0)
     {
-        m_neighbours.insert({ std::string("Up"), s_graph[m_row - 1][m_col] });
+        m_neighbours.insert({ std::string("Up"), &s_graph[m_row - 1][m_col] });
     }
     if (m_col < s_num_cols - 1)
     {
-        m_neighbours.insert({ std::string("Right"), s_graph[m_row][m_col + 1] });
+        m_neighbours.insert({ std::string("Right"), &s_graph[m_row][m_col + 1] });
     }
     if (m_row < s_num_rows - 1)
     {
-        m_neighbours.insert({ std::string("Down"), s_graph[m_row + 1][m_col] });
+        m_neighbours.insert({ std::string("Down"), &s_graph[m_row + 1][m_col] });
     }
 }
 

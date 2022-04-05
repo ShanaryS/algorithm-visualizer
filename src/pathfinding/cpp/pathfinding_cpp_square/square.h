@@ -151,7 +151,7 @@ private:
 
     // Member variables assigned in member functions
 
-    std::unordered_map<std::string, Square&> m_neighbours;
+    std::unordered_map<std::string, Square*> m_neighbours;
 
     // Member functions
 
