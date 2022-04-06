@@ -192,10 +192,10 @@ def draw(
     # Queues all changed squares to visualize change
     if gph.visualize_square_history:
         gph.visualize_square_history = False
-        for square in Square.get_square_history():
+        for square in Square.get_future_history_squares():
             square.set_history()
             gph.add_to_update_queue(square)
-        Square.clear_square_history()
+        Square.clear_future_history_squares()
     # Queues all changed squares to update
     else:
         square: Square
