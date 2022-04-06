@@ -96,21 +96,21 @@ public:
     static int s_get_num_rows() { return s_num_rows; }
     static int s_get_num_cols() { return s_num_cols; }
     static double s_get_square_length() { return s_square_length; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_empty_squares() { return &s_all_empty_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_open_squares() { return &s_all_open_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_open2_squares() { return &s_all_open2_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_open3_squares() { return &s_all_open3_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_closed_squares() { return &s_all_closed_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_closed2_squares() { return &s_all_closed2_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_closed3_squares() { return &s_all_closed3_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_start_squares() { return &s_all_start_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_mid_squares() { return &s_all_mid_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_end_squares() { return &s_all_end_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_wall_squares() { return &s_all_wall_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_path_squares() { return &s_all_path_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_all_history_squares() { return &s_all_history_squares; }
-    static std::unordered_set<Square, Square::hash>* s_get_squares_to_update() { return &s_squares_to_update; }
-    static std::unordered_set<Square, Square::hash>* s_get_square_history() { return &s_square_history; }
+    static std::vector<Square> s_get_all_empty_squares();
+    static std::vector<Square> s_get_all_open_squares();
+    static std::vector<Square> s_get_all_open2_squares();
+    static std::vector<Square> s_get_all_open3_squares();
+    static std::vector<Square> s_get_all_closed_squares();
+    static std::vector<Square> s_get_all_closed2_squares();
+    static std::vector<Square> s_get_all_closed3_squares();
+    static std::vector<Square> s_get_all_start_squares();
+    static std::vector<Square> s_get_all_mid_squares();
+    static std::vector<Square> s_get_all_end_squares();
+    static std::vector<Square> s_get_all_wall_squares();
+    static std::vector<Square> s_get_all_path_squares();
+    static std::vector<Square> s_get_all_history_squares();
+    static std::vector<Square> s_get_squares_to_update();
+    static std::vector<Square> s_get_future_history_squares();
     static bool s_get_track_square_history() { return s_track_square_history; }
 
     // Change square containers of the class
@@ -119,8 +119,7 @@ public:
     static void s_reset_all_squares();
     static void s_clear_squares_to_update() { s_squares_to_update.clear(); }
     static void s_clear_history_squares() { s_all_history_squares.clear(); }
-    static void s_clear_square_history() { s_square_history.clear(); }
-    static void s_clear_all_square_lists();
+    static void s_clear_future_history_squares() { s_future_history_squares.clear(); }
 
     // Handle changing track_square_history
     static void s_set_track_square_history(bool x) { s_track_square_history = x; }
@@ -188,27 +187,30 @@ private:
 
     // Class containers for square types
 
-    static inline std::unordered_set<Square, Square::hash> s_all_empty_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_open_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_open2_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_open3_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_closed_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_closed2_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_closed3_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_start_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_mid_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_end_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_wall_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_path_squares;
-    static inline std::unordered_set<Square, Square::hash> s_all_history_squares;
+    static inline std::unordered_set<Square*> s_all_empty_squares;
+    static inline std::unordered_set<Square*> s_all_open_squares;
+    static inline std::unordered_set<Square*> s_all_open2_squares;
+    static inline std::unordered_set<Square*> s_all_open3_squares;
+    static inline std::unordered_set<Square*> s_all_closed_squares;
+    static inline std::unordered_set<Square*> s_all_closed2_squares;
+    static inline std::unordered_set<Square*> s_all_closed3_squares;
+    static inline std::unordered_set<Square*> s_all_start_squares;
+    static inline std::unordered_set<Square*> s_all_mid_squares;
+    static inline std::unordered_set<Square*> s_all_end_squares;
+    static inline std::unordered_set<Square*> s_all_wall_squares;
+    static inline std::unordered_set<Square*> s_all_path_squares;
+    static inline std::unordered_set<Square*> s_all_history_squares;
 
     // Container that gets check from outside class to know what squares have changed
-    static inline std::unordered_set<Square, Square::hash> s_squares_to_update;
+    static inline std::unordered_set<Square*> s_squares_to_update;
 
     // Handle tracking squares that has been changed for visualization
 
-    static inline std::unordered_set<Square, Square::hash> s_square_history;
+    static inline std::unordered_set<Square*> s_future_history_squares;
     static inline bool s_track_square_history = false;
+
+    // Clear all the square lists
+    static void s_clear_all_square_lists();
 
     // Update square lengths
     static void s_update_square_length(int graph_width, int pixel_offset) { s_square_length = static_cast<double>(graph_width - pixel_offset) / s_num_rows; }

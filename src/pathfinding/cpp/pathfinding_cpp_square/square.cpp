@@ -69,14 +69,14 @@ void Square::reset()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_default_color;
     m_is_highway = false;
-    s_squares_to_update.insert(*this);
-    s_all_empty_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_empty_squares.insert(this);
 }
 
 void Square::set_open()
@@ -87,13 +87,13 @@ void Square::set_open()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open_color;
-    s_squares_to_update.insert(*this);
-    s_all_open_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_open_squares.insert(this);
 }
 
 void Square::set_open2()
@@ -104,13 +104,13 @@ void Square::set_open2()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open2_color;
-    s_squares_to_update.insert(*this);
-    s_all_open2_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_open2_squares.insert(this);
 }
 
 void Square::set_open3()
@@ -121,13 +121,13 @@ void Square::set_open3()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open3_color;
-    s_squares_to_update.insert(*this);
-    s_all_open3_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_open3_squares.insert(this);
 }
 
 void Square::set_closed()
@@ -138,13 +138,13 @@ void Square::set_closed()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed_color;
-    s_squares_to_update.insert(*this);
-    s_all_closed_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_closed_squares.insert(this);
 }
 
 void Square::set_closed2()
@@ -155,13 +155,13 @@ void Square::set_closed2()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed2_color;
-    s_squares_to_update.insert(*this);
-    s_all_closed2_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_closed2_squares.insert(this);
 }
 
 void Square::set_closed3()
@@ -172,13 +172,13 @@ void Square::set_closed3()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed3_color;
-    s_squares_to_update.insert(*this);
-    s_all_closed3_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_closed3_squares.insert(this);
 }
 
 void Square::set_start()
@@ -189,13 +189,13 @@ void Square::set_start()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_start_color;
-    s_squares_to_update.insert(*this);
-    s_all_start_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_start_squares.insert(this);
 }
 
 void Square::set_mid()
@@ -206,13 +206,13 @@ void Square::set_mid()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_mid_color;
-    s_squares_to_update.insert(*this);
-    s_all_mid_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_mid_squares.insert(this);
 }
 
 void Square::set_end()
@@ -223,13 +223,13 @@ void Square::set_end()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_end_color;
-    s_squares_to_update.insert(*this);
-    s_all_end_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_end_squares.insert(this);
 }
 
 void Square::set_wall()
@@ -240,13 +240,13 @@ void Square::set_wall()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = m_wall_color;
-    s_squares_to_update.insert(*this);
-    s_all_wall_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_wall_squares.insert(this);
 }
 
 void Square::set_path()
@@ -257,13 +257,13 @@ void Square::set_path()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_path_color;
-    s_squares_to_update.insert(*this);
-    s_all_path_squares.insert(*this);
+    s_squares_to_update.insert(this);
+    s_all_path_squares.insert(this);
 }
 
 void Square::set_history()
@@ -274,31 +274,182 @@ void Square::set_history()
     // Add to note history if user requests to track
     if (is_path() || is_start() || is_mid() || is_end())
     {
-        s_square_history.insert(*this);
+        s_future_history_squares.insert(this);
     }
 
     // Don't discard square from list as will be immediately revert color
     // Also don't add to squares_to_update as it is handled differently
     m_color_history = m_color;
     m_color = s_history_color;
-    s_all_history_squares.insert(*this);
+    s_all_history_squares.insert(this);
 }
+
+std::vector<Square> Square::s_get_all_empty_squares()
+{ 
+    std::vector<Square> empty_squares;
+    for (Square* square : s_all_empty_squares)
+    {
+        empty_squares.push_back(*square);
+    }
+    return empty_squares;
+}
+
+std::vector<Square> Square::s_get_all_open_squares()
+{ 
+    std::vector<Square> open_squares;
+    for (Square* square : s_all_open_squares)
+    {
+        open_squares.push_back(*square);
+    }
+    return open_squares;
+}
+
+std::vector<Square> Square::s_get_all_open2_squares()
+{ 
+    std::vector<Square> open2_squares;
+    for (Square* square : s_all_open2_squares)
+    {
+        open2_squares.push_back(*square);
+    }
+    return open2_squares;
+}
+
+std::vector<Square> Square::s_get_all_open3_squares()
+{ 
+    std::vector<Square> open3_squares;
+    for (Square* square : s_all_open3_squares)
+    {
+        open3_squares.push_back(*square);
+    }
+    return open3_squares;
+}
+
+std::vector<Square> Square::s_get_all_closed_squares()
+{ 
+    std::vector<Square> closed_squares;
+    for (Square* square : s_all_closed_squares)
+    {
+        closed_squares.push_back(*square);
+    }
+    return closed_squares;
+}
+
+std::vector<Square> Square::s_get_all_closed2_squares()
+{ 
+    std::vector<Square> closed2_squares;
+    for (Square* square : s_all_closed2_squares)
+    {
+        closed2_squares.push_back(*square);
+    }
+    return closed2_squares;
+}
+
+std::vector<Square> Square::s_get_all_closed3_squares()
+{ 
+    std::vector<Square> closed3_squares;
+    for (Square* square : s_all_closed3_squares)
+    {
+        closed3_squares.push_back(*square);
+    }
+    return closed3_squares;
+}
+
+std::vector<Square> Square::s_get_all_start_squares()
+{ 
+    std::vector<Square> start_squares;
+    for (Square* square : s_all_start_squares)
+    {
+        start_squares.push_back(*square);
+    }
+    return start_squares;
+}
+
+std::vector<Square> Square::s_get_all_mid_squares()
+{ 
+    std::vector<Square> mid_squares;
+    for (Square* square : s_all_mid_squares)
+    {
+        mid_squares.push_back(*square);
+    }
+    return mid_squares;
+}
+
+std::vector<Square> Square::s_get_all_end_squares()
+{ 
+    std::vector<Square> end_squares;
+    for (Square* square : s_all_end_squares)
+    {
+        end_squares.push_back(*square);
+    }
+    return end_squares;
+}
+
+std::vector<Square> Square::s_get_all_wall_squares()
+{ 
+    std::vector<Square> wall_squares;
+    for (Square* square : s_all_wall_squares)
+    {
+        wall_squares.push_back(*square);
+    }
+    return wall_squares;
+}
+
+std::vector<Square> Square::s_get_all_path_squares()
+{ 
+    std::vector<Square> path_squares;
+    for (Square* square : s_all_path_squares)
+    {
+        path_squares.push_back(*square);
+    }
+    return path_squares;
+}
+
+std::vector<Square> Square::s_get_all_history_squares()
+{ 
+    std::vector<Square> history_squares;
+    for (Square* square : s_all_history_squares)
+    {
+        history_squares.push_back(*square);
+    }
+    return history_squares;
+}
+
+std::vector<Square> Square::s_get_squares_to_update()
+{ 
+    std::vector<Square> squares_to_update;
+    for (Square* square : s_squares_to_update)
+    {
+        squares_to_update.push_back(*square);
+    }
+    return squares_to_update;
+}
+
+std::vector<Square> Square::s_get_future_history_squares()
+{ 
+    std::vector<Square> future_history_squares;
+    for (Square* square : s_future_history_squares)
+    {
+        future_history_squares.push_back(*square);
+    }
+    return future_history_squares;
+}
+
 
 void Square::s_reset_algo_squares()
 {
-    std::array<std::unordered_set<Square, Square::hash>, 7> squares_to_reset{
-        *s_get_all_open_squares(),
-        *s_get_all_open2_squares(),
-        *s_get_all_open3_squares(),
-        *s_get_all_closed_squares(),
-        *s_get_all_closed2_squares(),
-        *s_get_all_closed3_squares(),
-        *s_get_all_path_squares()
+    std::vector<std::vector<Square>> squares_to_reset{
+        s_get_all_open_squares(),
+        s_get_all_open2_squares(),
+        s_get_all_open3_squares(),
+        s_get_all_closed_squares(),
+        s_get_all_closed2_squares(),
+        s_get_all_closed3_squares(),
+        s_get_all_path_squares()
     };
 
-    for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
+    for (std::vector<Square>& type_set : squares_to_reset)
     {
-        for (Square square : type_set)
+        for (Square& square : type_set)
         {
             square.reset();
         }
@@ -307,24 +458,24 @@ void Square::s_reset_algo_squares()
 
 void Square::s_reset_all_squares()
 {
-    std::array<std::unordered_set<Square, Square::hash>, 12> squares_to_reset{
-        *s_get_all_open_squares(),
-        *s_get_all_open2_squares(),
-        *s_get_all_open3_squares(),
-        *s_get_all_closed_squares(),
-        *s_get_all_closed2_squares(),
-        *s_get_all_closed3_squares(),
-        *s_get_all_start_squares(),
-        *s_get_all_mid_squares(),
-        *s_get_all_end_squares(),
-        *s_get_all_wall_squares(),
-        *s_get_all_path_squares(),
-        *s_get_all_history_squares()
+    std::vector<std::vector<Square>> squares_to_reset{
+        s_get_all_open_squares(),
+        s_get_all_open2_squares(),
+        s_get_all_open3_squares(),
+        s_get_all_closed_squares(),
+        s_get_all_closed2_squares(),
+        s_get_all_closed3_squares(),
+        s_get_all_start_squares(),
+        s_get_all_mid_squares(),
+        s_get_all_end_squares(),
+        s_get_all_wall_squares(),
+        s_get_all_path_squares(),
+        s_get_all_history_squares()
     };
 
-    for (std::unordered_set<Square, Square::hash>& type_set : squares_to_reset)
+    for (std::vector<Square>& type_set : squares_to_reset)
     {
-        for (Square square : type_set)
+        for (Square& square : type_set)
         {
             square.reset_wall_color();
             square.reset();
@@ -375,19 +526,19 @@ void Square::discard_square(bool remove_wall)
     if (!remove_wall && m_color == m_wall_color) { return; }
     
     // Remove this squares color from corresponding list
-    if (m_color == s_default_color) { s_all_empty_squares.erase(*this); }
-    else if (m_color == s_open_color) { s_all_open_squares.erase(*this); }
-    else if (m_color == s_open2_color) { s_all_open2_squares.erase(*this); }
-    else if (m_color == s_open3_color) { s_all_open3_squares.erase(*this); }
-    else if (m_color == s_closed_color) { s_all_closed_squares.erase(*this); }
-    else if (m_color == s_closed2_color) { s_all_closed2_squares.erase(*this); }
-    else if (m_color == s_closed3_color) { s_all_closed3_squares.erase(*this); }
-    else if (m_color == s_start_color) { s_all_start_squares.erase(*this); }
-    else if (m_color == s_mid_color) { s_all_mid_squares.erase(*this); }
-    else if (m_color == s_end_color) { s_all_end_squares.erase(*this); }
-    else if (m_color == m_wall_color) { s_all_wall_squares.erase(*this); }
-    else if (m_color == s_path_color) { s_all_path_squares.erase(*this); }
-    else if (m_color == s_history_color) { s_all_history_squares.erase(*this); }
+    if (m_color == s_default_color) { s_all_empty_squares.erase(this); }
+    else if (m_color == s_open_color) { s_all_open_squares.erase(this); }
+    else if (m_color == s_open2_color) { s_all_open2_squares.erase(this); }
+    else if (m_color == s_open3_color) { s_all_open3_squares.erase(this); }
+    else if (m_color == s_closed_color) { s_all_closed_squares.erase(this); }
+    else if (m_color == s_closed2_color) { s_all_closed2_squares.erase(this); }
+    else if (m_color == s_closed3_color) { s_all_closed3_squares.erase(this); }
+    else if (m_color == s_start_color) { s_all_start_squares.erase(this); }
+    else if (m_color == s_mid_color) { s_all_mid_squares.erase(this); }
+    else if (m_color == s_end_color) { s_all_end_squares.erase(this); }
+    else if (m_color == m_wall_color) { s_all_wall_squares.erase(this); }
+    else if (m_color == s_path_color) { s_all_path_squares.erase(this); }
+    else if (m_color == s_history_color) { s_all_history_squares.erase(this); }
 }
 
 // Allow code to be imported into python using pybind11
@@ -395,7 +546,6 @@ void Square::discard_square(bool remove_wall)
 // Prevent copies being made when passing these types around
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Square>>);
 PYBIND11_MAKE_OPAQUE(std::vector<Square>);
-PYBIND11_MAKE_OPAQUE(std::unordered_set<Square, Square::hash>);
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -404,12 +554,6 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
     py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
     py::bind_vector<std::vector<Square>>(m, "VectorSquare");
-
-    py::class_<std::unordered_set<Square, Square::hash>>(m, "UnorderedSetSquare")
-        .def(py::init<>())
-        .def("copy", [](std::unordered_set<Square, Square::hash>& self) { throw std::runtime_error("Use the copy module in python to copy."); })
-        .def("__len__", [](const std::unordered_set<Square, Square::hash>& self) { return self.size(); })
-        .def("__iter__", [](std::unordered_set<Square, Square::hash>& self) { return py::make_iterator(self.begin(), self.end()); }, py::keep_alive<0, 1>());
 
     // Define Python API for Square class
     // Default to automatic_reference return policy.
@@ -459,28 +603,27 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def_static("get_num_rows", &Square::s_get_num_rows, py::return_value_policy::automatic_reference)
         .def_static("get_num_cols", &Square::s_get_num_cols, py::return_value_policy::automatic_reference)
         .def_static("get_square_length", &Square::s_get_square_length, py::return_value_policy::automatic_reference)
-        .def_static("get_all_empty_squares", &Square::s_get_all_empty_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_open_squares", &Square::s_get_all_open_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_open2_squares", &Square::s_get_all_open2_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_open3_squares", &Square::s_get_all_open3_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_closed_squares", &Square::s_get_all_closed_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_closed2_squares", &Square::s_get_all_closed2_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_closed3_squares", &Square::s_get_all_closed3_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_start_squares", &Square::s_get_all_start_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_mid_squares", &Square::s_get_all_mid_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_end_squares", &Square::s_get_all_end_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_wall_squares", &Square::s_get_all_wall_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_path_squares", &Square::s_get_all_path_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_all_history_squares", &Square::s_get_all_history_squares, py::return_value_policy::automatic_reference)
-        .def_static("get_squares_to_update", &Square::s_get_squares_to_update, py::return_value_policy::automatic_reference)
-        .def_static("get_square_history", &Square::s_get_square_history, py::return_value_policy::automatic_reference)
+        .def_static("get_all_empty_squares", &Square::s_get_all_empty_squares, py::return_value_policy::reference)
+        .def_static("get_all_open_squares", &Square::s_get_all_open_squares, py::return_value_policy::reference)
+        .def_static("get_all_open2_squares", &Square::s_get_all_open2_squares, py::return_value_policy::reference)
+        .def_static("get_all_open3_squares", &Square::s_get_all_open3_squares, py::return_value_policy::reference)
+        .def_static("get_all_closed_squares", &Square::s_get_all_closed_squares, py::return_value_policy::reference)
+        .def_static("get_all_closed2_squares", &Square::s_get_all_closed2_squares, py::return_value_policy::reference)
+        .def_static("get_all_closed3_squares", &Square::s_get_all_closed3_squares, py::return_value_policy::reference)
+        .def_static("get_all_start_squares", &Square::s_get_all_start_squares, py::return_value_policy::reference)
+        .def_static("get_all_mid_squares", &Square::s_get_all_mid_squares, py::return_value_policy::reference)
+        .def_static("get_all_end_squares", &Square::s_get_all_end_squares, py::return_value_policy::reference)
+        .def_static("get_all_wall_squares", &Square::s_get_all_wall_squares, py::return_value_policy::reference)
+        .def_static("get_all_path_squares", &Square::s_get_all_path_squares, py::return_value_policy::reference)
+        .def_static("get_all_history_squares", &Square::s_get_all_history_squares, py::return_value_policy::reference)
+        .def_static("get_squares_to_update", &Square::s_get_squares_to_update, py::return_value_policy::reference)
+        .def_static("get_future_history_squares", &Square::s_get_future_history_squares, py::return_value_policy::reference)
         .def_static("get_track_square_history", &Square::s_get_track_square_history, py::return_value_policy::automatic_reference)
         .def_static("reset_algo_squares", &Square::s_reset_algo_squares, py::return_value_policy::automatic_reference)
         .def_static("reset_all_squares", &Square::s_reset_all_squares, py::return_value_policy::automatic_reference)
         .def_static("clear_squares_to_update", &Square::s_clear_squares_to_update, py::return_value_policy::automatic_reference)
         .def_static("clear_history_squares", &Square::s_clear_history_squares, py::return_value_policy::automatic_reference)
-        .def_static("clear_square_history", &Square::s_clear_square_history, py::return_value_policy::automatic_reference)
-        .def_static("clear_all_square_lists", &Square::s_clear_all_square_lists, py::return_value_policy::automatic_reference)
+        .def_static("clear_square_history", &Square::s_clear_future_history_squares, py::return_value_policy::automatic_reference)
         .def_static("set_track_square_history", &Square::s_set_track_square_history, py::return_value_policy::automatic_reference)
         .def_static("update_num_rows_cols", &Square::s_update_num_rows_cols, py::return_value_policy::automatic_reference);
 
