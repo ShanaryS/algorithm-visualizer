@@ -67,14 +67,14 @@ void Square::reset()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_default_color;
     m_is_highway = false;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_empty_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_empty_squares.insert(this);
 }
 
 void Square::set_open()
@@ -85,13 +85,13 @@ void Square::set_open()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_open_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_open_squares.insert(this);
 }
 
 void Square::set_open2()
@@ -102,13 +102,13 @@ void Square::set_open2()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open2_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_open2_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_open2_squares.insert(this);
 }
 
 void Square::set_open3()
@@ -119,13 +119,13 @@ void Square::set_open3()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_open3_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_open3_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_open3_squares.insert(this);
 }
 
 void Square::set_closed()
@@ -136,13 +136,13 @@ void Square::set_closed()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_closed_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_closed_squares.insert(this);
 }
 
 void Square::set_closed2()
@@ -153,13 +153,13 @@ void Square::set_closed2()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed2_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_closed2_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_closed2_squares.insert(this);
 }
 
 void Square::set_closed3()
@@ -170,13 +170,13 @@ void Square::set_closed3()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_closed3_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_closed3_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_closed3_squares.insert(this);
 }
 
 void Square::set_start()
@@ -187,14 +187,14 @@ void Square::set_start()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_start_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_start_squares.insert(m_pos_string_hash);
-    std::cout << m_pos_string_hash << '\n';
+    s_squares_to_update.insert(this);
+    s_all_start_squares.insert(this);
+    std::cout << this << '\n';
 }
 
 void Square::set_mid()
@@ -205,13 +205,13 @@ void Square::set_mid()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_mid_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_mid_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_mid_squares.insert(this);
 }
 
 void Square::set_end()
@@ -222,13 +222,13 @@ void Square::set_end()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square(false);  // Don't remove ordinal square
     m_color = s_end_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_end_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_end_squares.insert(this);
 }
 
 void Square::set_wall()
@@ -239,13 +239,13 @@ void Square::set_wall()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = m_wall_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_wall_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_wall_squares.insert(this);
 }
 
 void Square::set_path()
@@ -256,13 +256,13 @@ void Square::set_path()
     // Add to note history if user requests to track
     if (s_track_square_history)
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     discard_square();
     m_color = s_path_color;
-    s_squares_to_update.insert(m_pos_string_hash);
-    s_all_path_squares.insert(m_pos_string_hash);
+    s_squares_to_update.insert(this);
+    s_all_path_squares.insert(this);
 }
 
 void Square::set_history()
@@ -273,177 +273,162 @@ void Square::set_history()
     // Add to note history if user requests to track
     if (is_path() || is_start() || is_mid() || is_end())
     {
-        s_future_history_squares.insert(m_pos_string_hash);
+        s_future_history_squares.insert(this);
     }
 
     // Don't discard square from list as will be immediately revert color
     // Also don't add to squares_to_update as it is handled differently
     m_color_history = m_color;
     m_color = s_history_color;
-    s_all_history_squares.insert(m_pos_string_hash);
+    s_all_history_squares.insert(this);
 }
 
-std::vector<Square> Square::s_get_all_empty_squares()
+std::vector<Square*> Square::s_get_all_empty_squares()
 { 
-    std::vector<Square> empty_squares;
-    for (const std::string& string_hash : s_all_empty_squares)
+    std::vector<Square*> empty_squares;
+    for (Square* square_ptr : s_all_empty_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        empty_squares.push_back(s_graph[row][col]);
+        empty_squares.push_back(square_ptr);
     }
     return empty_squares;
 }
 
-std::vector<Square> Square::s_get_all_open_squares()
+std::vector<Square*> Square::s_get_all_open_squares()
 { 
-    std::vector<Square> open_squares;
-    for (const std::string& string_hash : s_all_open_squares)
+    std::vector<Square*> open_squares;
+    for (Square* square_ptr : s_all_open_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        open_squares.push_back(s_graph[row][col]);
+        open_squares.push_back(square_ptr);
     }
     return open_squares;
 }
 
-std::vector<Square> Square::s_get_all_open2_squares()
+std::vector<Square*> Square::s_get_all_open2_squares()
 { 
-    std::vector<Square> open2_squares;
-    for (const std::string& string_hash : s_all_open2_squares)
+    std::vector<Square*> open2_squares;
+    for (Square* square_ptr : s_all_open2_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        open2_squares.push_back(s_graph[row][col]);
+        open2_squares.push_back(square_ptr);
     }
     return open2_squares;
 }
 
-std::vector<Square> Square::s_get_all_open3_squares()
+std::vector<Square*> Square::s_get_all_open3_squares()
 { 
-    std::vector<Square> open3_squares;
-    for (const std::string& string_hash : s_all_open3_squares)
+    std::vector<Square*> open3_squares;
+    for (Square* square_ptr : s_all_open3_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        open3_squares.push_back(s_graph[row][col]);
+        open3_squares.push_back(square_ptr);
     }
     return open3_squares;
 }
 
-std::vector<Square> Square::s_get_all_closed_squares()
+std::vector<Square*> Square::s_get_all_closed_squares()
 { 
-    std::vector<Square> closed_squares;
-    for (const std::string& string_hash : s_all_closed_squares)
+    std::vector<Square*> closed_squares;
+    for (Square* square_ptr : s_all_closed_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        closed_squares.push_back(s_graph[row][col]);
+        closed_squares.push_back(square_ptr);
     }
     return closed_squares;
 }
 
-std::vector<Square> Square::s_get_all_closed2_squares()
+std::vector<Square*> Square::s_get_all_closed2_squares()
 { 
-    std::vector<Square> closed2_squares;
-    for (const std::string& string_hash : s_all_closed2_squares)
+    std::vector<Square*> closed2_squares;
+    for (Square* square_ptr : s_all_closed2_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        closed2_squares.push_back(s_graph[row][col]);
+        closed2_squares.push_back(square_ptr);
     }
     return closed2_squares;
 }
 
-std::vector<Square> Square::s_get_all_closed3_squares()
+std::vector<Square*> Square::s_get_all_closed3_squares()
 { 
-    std::vector<Square> closed3_squares;
-    for (const std::string& string_hash : s_all_closed3_squares)
+    std::vector<Square*> closed3_squares;
+    for (Square* square_ptr : s_all_closed3_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        closed3_squares.push_back(s_graph[row][col]);
+        closed3_squares.push_back(square_ptr);
     }
     return closed3_squares;
 }
 
-std::vector<Square> Square::s_get_all_start_squares()
+std::vector<Square*> Square::s_get_all_start_squares()
 { 
-    std::vector<Square> start_squares;
-    for (const std::string& string_hash : s_all_start_squares)
+    std::vector<Square*> start_squares;
+    for (Square* square_ptr : s_all_start_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        start_squares.push_back(s_graph[row][col]);
+        start_squares.push_back(square_ptr);
     }
     return start_squares;
 }
 
-std::vector<Square> Square::s_get_all_mid_squares()
+std::vector<Square*> Square::s_get_all_mid_squares()
 { 
-    std::vector<Square> mid_squares;
-    for (const std::string& string_hash : s_all_mid_squares)
+    std::vector<Square*> mid_squares;
+    for (Square* square_ptr : s_all_mid_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        mid_squares.push_back(s_graph[row][col]);
+        mid_squares.push_back(square_ptr);
     }
     return mid_squares;
 }
 
-std::vector<Square> Square::s_get_all_end_squares()
+std::vector<Square*> Square::s_get_all_end_squares()
 { 
-    std::vector<Square> end_squares;
-    for (const std::string& string_hash : s_all_end_squares)
+    std::vector<Square*> end_squares;
+    for (Square* square_ptr : s_all_end_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        end_squares.push_back(s_graph[row][col]);
+        end_squares.push_back(square_ptr);
     }
     return end_squares;
 }
 
-std::vector<Square> Square::s_get_all_wall_squares()
+std::vector<Square*> Square::s_get_all_wall_squares()
 { 
-    std::vector<Square> wall_squares;
-    for (const std::string& string_hash : s_all_wall_squares)
+    std::vector<Square*> wall_squares;
+    for (Square* square_ptr : s_all_wall_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        wall_squares.push_back(s_graph[row][col]);
+        wall_squares.push_back(square_ptr);
     }
     return wall_squares;
 }
 
-std::vector<Square> Square::s_get_all_path_squares()
+std::vector<Square*> Square::s_get_all_path_squares()
 { 
-    std::vector<Square> path_squares;
-    for (const std::string& string_hash : s_all_path_squares)
+    std::vector<Square*> path_squares;
+    for (Square* square_ptr : s_all_path_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        path_squares.push_back(s_graph[row][col]);
+        path_squares.push_back(square_ptr);
     }
     return path_squares;
 }
 
-std::vector<Square> Square::s_get_all_history_squares()
+std::vector<Square*> Square::s_get_all_history_squares()
 { 
-    std::vector<Square> history_squares;
-    for (const std::string& string_hash : s_all_history_squares)
+    std::vector<Square*> history_squares;
+    for (Square* square_ptr : s_all_history_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        history_squares.push_back(s_graph[row][col]);
+        history_squares.push_back(square_ptr);
     }
     return history_squares;
 }
 
-std::vector<Square> Square::s_get_squares_to_update()
+std::vector<Square*> Square::s_get_squares_to_update()
 { 
-    std::vector<Square> squares_to_update;
-    for (const std::string& string_hash : s_squares_to_update)
+    std::vector<Square*> squares_to_update;
+    for (Square* square_ptr : s_squares_to_update)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        squares_to_update.push_back(s_graph[row][col]);
+        squares_to_update.push_back(square_ptr);
     }
     return squares_to_update;
 }
 
-std::vector<Square> Square::s_get_future_history_squares()
+std::vector<Square*> Square::s_get_future_history_squares()
 { 
-    std::vector<Square> future_history_squares;
-    for (const std::string& string_hash : s_future_history_squares)
+    std::vector<Square*> future_history_squares;
+    for (Square* square_ptr : s_future_history_squares)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        future_history_squares.push_back(s_graph[row][col]);
+        future_history_squares.push_back(square_ptr);
     }
     return future_history_squares;
 }
@@ -451,7 +436,7 @@ std::vector<Square> Square::s_get_future_history_squares()
 
 void Square::s_reset_algo_squares()
 {
-    std::vector<std::vector<Square>> squares_to_reset{
+    std::vector<std::vector<Square*>> squares_to_reset{
         s_get_all_open_squares(),
         s_get_all_open2_squares(),
         s_get_all_open3_squares(),
@@ -461,18 +446,18 @@ void Square::s_reset_algo_squares()
         s_get_all_path_squares()
     };
 
-    for (std::vector<Square>& type_set : squares_to_reset)
+    for (std::vector<Square*>& type_set : squares_to_reset)
     {
-        for (Square& square : type_set)
+        for (Square* square : type_set)
         {
-            square.reset();
+            square->reset();
         }
     }
 }
 
 void Square::s_reset_all_squares()
 {
-    std::vector<std::vector<Square>> squares_to_reset{
+    std::vector<std::vector<Square*>> squares_to_reset{
         s_get_all_open_squares(),
         s_get_all_open2_squares(),
         s_get_all_open3_squares(),
@@ -487,12 +472,12 @@ void Square::s_reset_all_squares()
         s_get_all_history_squares()
     };
 
-    for (std::vector<Square>& type_set : squares_to_reset)
+    for (std::vector<Square*>& type_set : squares_to_reset)
     {
-        for (Square& square : type_set)
+        for (Square* square : type_set)
         {
-            square.reset_wall_color();
-            square.reset();
+            square->reset_wall_color();
+            square->reset();
         }
     }
 }
@@ -540,28 +525,29 @@ void Square::discard_square(bool remove_wall)
     if (!remove_wall && is_wall()) { return; }
     
     // Remove this squares color from corresponding list
-    if (is_empty()) { s_all_empty_squares.erase(m_pos_string_hash); }
-    else if (is_open()) { s_all_open_squares.erase(m_pos_string_hash); }
-    else if (is_open2()) { s_all_open2_squares.erase(m_pos_string_hash); }
-    else if (is_open3()) { s_all_open3_squares.erase(m_pos_string_hash); }
-    else if (is_closed()) { s_all_closed_squares.erase(m_pos_string_hash); }
-    else if (is_closed2()) { s_all_closed2_squares.erase(m_pos_string_hash); }
-    else if (is_closed3()) { s_all_closed3_squares.erase(m_pos_string_hash); }
-    else if (is_start()) { s_all_start_squares.erase(m_pos_string_hash); }
-    else if (is_mid()) { s_all_mid_squares.erase(m_pos_string_hash); }
-    else if (is_end()) { s_all_end_squares.erase(m_pos_string_hash); }
-    else if (is_wall()) { s_all_wall_squares.erase(m_pos_string_hash); }
-    else if (is_path()) { s_all_path_squares.erase(m_pos_string_hash); }
-    else if (is_history()) { s_all_history_squares.erase(m_pos_string_hash); }
+    if (is_empty()) { s_all_empty_squares.erase(this); }
+    else if (is_open()) { s_all_open_squares.erase(this); }
+    else if (is_open2()) { s_all_open2_squares.erase(this); }
+    else if (is_open3()) { s_all_open3_squares.erase(this); }
+    else if (is_closed()) { s_all_closed_squares.erase(this); }
+    else if (is_closed2()) { s_all_closed2_squares.erase(this); }
+    else if (is_closed3()) { s_all_closed3_squares.erase(this); }
+    else if (is_start()) { s_all_start_squares.erase(this); }
+    else if (is_mid()) { s_all_mid_squares.erase(this); }
+    else if (is_end()) { s_all_end_squares.erase(this); }
+    else if (is_wall()) { s_all_wall_squares.erase(this); }
+    else if (is_path()) { s_all_path_squares.erase(this); }
+    else if (is_history()) { s_all_history_squares.erase(this); }
 }
 
-std::array<int, 2> Square::s_pos_string_unhash(const std::string& pos_string_hash, const std::string& delimiter)
+// No longer being used
+/*std::array<int, 2> Square::s_pos_string_unhash(const std::string& pos_string_hash, const std::string& delimiter)
 {
     auto comma_pos = pos_string_hash.find(delimiter);
     int row = std::stoi(pos_string_hash.substr(0, comma_pos));
     int col = std::stoi(pos_string_hash.substr(comma_pos + 1));
     return std::array<int, 2>{ row, col };
-}
+}*/
 
 // Allow code to be imported into python using pybind11
 
