@@ -526,19 +526,19 @@ void Square::discard_square(bool remove_wall)
     if (!remove_wall && m_color == m_wall_color) { return; }
     
     // Remove this squares color from corresponding list
-    if (m_color == s_default_color) { s_all_empty_squares.erase(this); }
-    else if (m_color == s_open_color) { s_all_open_squares.erase(this); }
-    else if (m_color == s_open2_color) { s_all_open2_squares.erase(this); }
-    else if (m_color == s_open3_color) { s_all_open3_squares.erase(this); }
-    else if (m_color == s_closed_color) { s_all_closed_squares.erase(this); }
-    else if (m_color == s_closed2_color) { s_all_closed2_squares.erase(this); }
-    else if (m_color == s_closed3_color) { s_all_closed3_squares.erase(this); }
-    else if (m_color == s_start_color) { s_all_start_squares.erase(this); }
-    else if (m_color == s_mid_color) { s_all_mid_squares.erase(this); }
-    else if (m_color == s_end_color) { s_all_end_squares.erase(this); }
-    else if (m_color == m_wall_color) { s_all_wall_squares.erase(this); }
-    else if (m_color == s_path_color) { s_all_path_squares.erase(this); }
-    else if (m_color == s_history_color) { s_all_history_squares.erase(this); }
+    if (is_empty()) { s_all_empty_squares.erase(this); }
+    else if (is_open()) { s_all_open_squares.erase(this); }
+    else if (is_open2()) { s_all_open2_squares.erase(this); }
+    else if (is_open3()) { s_all_open3_squares.erase(this); }
+    else if (is_closed()) { s_all_closed_squares.erase(this); }
+    else if (is_closed2()) { s_all_closed2_squares.erase(this); }
+    else if (is_closed3()) { s_all_closed3_squares.erase(this); }
+    else if (is_start()) { s_all_start_squares.erase(this); }
+    else if (is_mid()) { s_all_mid_squares.erase(this); }
+    else if (is_end()) { s_all_end_squares.erase(this); }
+    else if (is_wall()) { s_all_wall_squares.erase(this); }
+    else if (is_path()) { s_all_path_squares.erase(this); }
+    else if (is_history()) { s_all_history_squares.erase(this); }
 }
 
 // Allow code to be imported into python using pybind11
