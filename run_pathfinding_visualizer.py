@@ -58,25 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Squares are getting copied and thus not being updated properly.
-# Check why this is happening compared to previous commits.
-
-# Each square has a unique ptr varible that gets assigned in class init function to corressponding std::array element
-# Add unique_ptr in set methods rather than *this
-# Can you just return the unique_ptr to python?
-# Does dereferencing into vector copy?
-# Might need to use shared pointer with weak pointers?
-
-# Use nested unordered_map to store row col
-# Use strings like "00,00" for row col as key
-
-# Update graph with only changed item in set methods (Go back to using unoredered_set and inserting *this, Just the color?)
-# Update graph with new copy of square in set methods
-
-# Maybe keys being const is why there is a seg fault when passing to python by reference
-# Set init to s_init
-# Initalize variables
-
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
 # Rewrite square.py (Test with python for speed up? Both debug and release.)
