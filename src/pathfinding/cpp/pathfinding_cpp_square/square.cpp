@@ -35,7 +35,6 @@ void Square::init(int graph_width, int pixel_offset)
     }
 }
 
-
 // Allow hashing using row and col position
 template<>
 struct std::hash<Square>
@@ -286,6 +285,7 @@ void Square::set_history()
 std::vector<Square*> Square::s_get_all_empty_squares()
 { 
     std::vector<Square*> empty_squares;
+    empty_squares.reserve(s_all_empty_squares.size());
     for (Square* square_ptr : s_all_empty_squares)
     {
         empty_squares.push_back(square_ptr);
@@ -296,6 +296,7 @@ std::vector<Square*> Square::s_get_all_empty_squares()
 std::vector<Square*> Square::s_get_all_open_squares()
 { 
     std::vector<Square*> open_squares;
+    open_squares.reserve(s_all_open_squares.size());
     for (Square* square_ptr : s_all_open_squares)
     {
         open_squares.push_back(square_ptr);
@@ -306,6 +307,7 @@ std::vector<Square*> Square::s_get_all_open_squares()
 std::vector<Square*> Square::s_get_all_open2_squares()
 { 
     std::vector<Square*> open2_squares;
+    open2_squares.reserve(s_all_open2_squares.size());
     for (Square* square_ptr : s_all_open2_squares)
     {
         open2_squares.push_back(square_ptr);
@@ -316,6 +318,7 @@ std::vector<Square*> Square::s_get_all_open2_squares()
 std::vector<Square*> Square::s_get_all_open3_squares()
 { 
     std::vector<Square*> open3_squares;
+    open3_squares.reserve(s_all_open3_squares.size());
     for (Square* square_ptr : s_all_open3_squares)
     {
         open3_squares.push_back(square_ptr);
@@ -326,6 +329,7 @@ std::vector<Square*> Square::s_get_all_open3_squares()
 std::vector<Square*> Square::s_get_all_closed_squares()
 { 
     std::vector<Square*> closed_squares;
+    closed_squares.reserve(s_all_closed_squares.size());
     for (Square* square_ptr : s_all_closed_squares)
     {
         closed_squares.push_back(square_ptr);
@@ -336,6 +340,7 @@ std::vector<Square*> Square::s_get_all_closed_squares()
 std::vector<Square*> Square::s_get_all_closed2_squares()
 { 
     std::vector<Square*> closed2_squares;
+    closed2_squares.reserve(s_all_closed2_squares.size());
     for (Square* square_ptr : s_all_closed2_squares)
     {
         closed2_squares.push_back(square_ptr);
@@ -346,6 +351,7 @@ std::vector<Square*> Square::s_get_all_closed2_squares()
 std::vector<Square*> Square::s_get_all_closed3_squares()
 { 
     std::vector<Square*> closed3_squares;
+    closed3_squares.reserve(s_all_closed3_squares.size());
     for (Square* square_ptr : s_all_closed3_squares)
     {
         closed3_squares.push_back(square_ptr);
@@ -356,6 +362,7 @@ std::vector<Square*> Square::s_get_all_closed3_squares()
 std::vector<Square*> Square::s_get_all_start_squares()
 { 
     std::vector<Square*> start_squares;
+    start_squares.reserve(s_all_start_squares.size());
     for (Square* square_ptr : s_all_start_squares)
     {
         start_squares.push_back(square_ptr);
@@ -366,6 +373,7 @@ std::vector<Square*> Square::s_get_all_start_squares()
 std::vector<Square*> Square::s_get_all_mid_squares()
 { 
     std::vector<Square*> mid_squares;
+    mid_squares.reserve(s_all_mid_squares.size());
     for (Square* square_ptr : s_all_mid_squares)
     {
         mid_squares.push_back(square_ptr);
@@ -376,6 +384,7 @@ std::vector<Square*> Square::s_get_all_mid_squares()
 std::vector<Square*> Square::s_get_all_end_squares()
 { 
     std::vector<Square*> end_squares;
+    end_squares.reserve(s_all_end_squares.size());
     for (Square* square_ptr : s_all_end_squares)
     {
         end_squares.push_back(square_ptr);
@@ -386,6 +395,7 @@ std::vector<Square*> Square::s_get_all_end_squares()
 std::vector<Square*> Square::s_get_all_wall_squares()
 { 
     std::vector<Square*> wall_squares;
+    wall_squares.reserve(s_all_wall_squares.size());
     for (Square* square_ptr : s_all_wall_squares)
     {
         wall_squares.push_back(square_ptr);
@@ -396,6 +406,7 @@ std::vector<Square*> Square::s_get_all_wall_squares()
 std::vector<Square*> Square::s_get_all_path_squares()
 { 
     std::vector<Square*> path_squares;
+    path_squares.reserve(s_all_path_squares.size());
     for (Square* square_ptr : s_all_path_squares)
     {
         path_squares.push_back(square_ptr);
@@ -406,6 +417,7 @@ std::vector<Square*> Square::s_get_all_path_squares()
 std::vector<Square*> Square::s_get_all_history_squares()
 { 
     std::vector<Square*> history_squares;
+    history_squares.reserve(s_all_history_squares.size());
     for (Square* square_ptr : s_all_history_squares)
     {
         history_squares.push_back(square_ptr);
@@ -416,6 +428,7 @@ std::vector<Square*> Square::s_get_all_history_squares()
 std::vector<Square*> Square::s_get_squares_to_update()
 { 
     std::vector<Square*> squares_to_update;
+    squares_to_update.reserve(s_squares_to_update.size());
     for (Square* square_ptr : s_squares_to_update)
     {
         squares_to_update.push_back(square_ptr);
@@ -426,6 +439,7 @@ std::vector<Square*> Square::s_get_squares_to_update()
 std::vector<Square*> Square::s_get_future_history_squares()
 { 
     std::vector<Square*> future_history_squares;
+    future_history_squares.reserve(s_future_history_squares.size());
     for (Square* square_ptr : s_future_history_squares)
     {
         future_history_squares.push_back(square_ptr);
