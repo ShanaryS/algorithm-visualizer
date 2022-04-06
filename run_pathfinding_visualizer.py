@@ -89,7 +89,7 @@ if __name__ == "__main__":
 # Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
 # Use Opaque where possible for speed improvements
 # Optimise return types. Use correct return value policy for each function.
-# Add algo timer to c++ functions?
+# Use Cmake
 # algorithms.py into C++
 # Create new project and use submodules to separate square and algorithm
 # Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
