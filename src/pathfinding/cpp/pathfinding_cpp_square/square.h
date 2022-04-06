@@ -170,7 +170,7 @@ private:
     static inline std::vector<std::vector<Square>> s_graph;
 
     // Info about the squares
-    static inline int s_num_rows = 46;  // Defualt value
+    static inline int s_num_rows = 46;  // Default value
     static inline int s_num_cols = 46;  // Default value
     static inline double s_square_length = 0;  // Assigned in init function
     

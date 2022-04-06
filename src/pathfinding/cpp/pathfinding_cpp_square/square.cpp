@@ -193,7 +193,6 @@ void Square::set_start()
     m_color = s_start_color;
     s_squares_to_update.insert(this);
     s_all_start_squares.insert(this);
-    std::cout << this << '\n';
 }
 
 void Square::set_mid()
