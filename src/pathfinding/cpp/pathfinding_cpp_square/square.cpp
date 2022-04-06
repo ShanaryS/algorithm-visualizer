@@ -49,13 +49,12 @@ struct std::hash<Square>
     }
 };
 
-std::vector<Square> Square::get_neighbours() const
+std::vector<Square*> Square::get_neighbours() const
 {
-    std::vector<Square> neighbours;
-    for (auto&[direction, string_hash] : m_neighbours)
+    std::vector<Square*> neighbours;
+    for (auto&[direction, nei_ptr] : m_neighbours)
     {
-        auto [row, col] = s_pos_string_unhash(string_hash);
-        neighbours.push_back(s_graph[row][col]);
+        neighbours.push_back(nei_ptr);
     }
     return neighbours;
 }
@@ -519,19 +518,19 @@ void Square::update_neighbours()
 {
     if (m_col > 0)
     {
-        m_neighbours.insert({ std::string("Left"), s_graph[m_row][m_col - 1].m_pos_string_hash });
+        m_neighbours.insert({ std::string("Left"), &s_graph[m_row][m_col - 1] });
     }
     if (m_row > 0)
     {
-        m_neighbours.insert({ std::string("Up"), s_graph[m_row - 1][m_col].m_pos_string_hash });
+        m_neighbours.insert({ std::string("Up"), &s_graph[m_row - 1][m_col] });
     }
     if (m_col < s_num_cols - 1)
     {
-        m_neighbours.insert({ std::string("Right"), s_graph[m_row][m_col + 1].m_pos_string_hash });
+        m_neighbours.insert({ std::string("Right"), &s_graph[m_row][m_col + 1] });
     }
     if (m_row < s_num_rows - 1)
     {
-        m_neighbours.insert({ std::string("Down"), s_graph[m_row + 1][m_col].m_pos_string_hash });
+        m_neighbours.insert({ std::string("Down"), &s_graph[m_row + 1][m_col] });
     }
 }
 
@@ -626,21 +625,21 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def_static("get_num_rows", &Square::s_get_num_rows, py::return_value_policy::automatic_reference)
         .def_static("get_num_cols", &Square::s_get_num_cols, py::return_value_policy::automatic_reference)
         .def_static("get_square_length", &Square::s_get_square_length, py::return_value_policy::automatic_reference)
-        .def_static("get_all_empty_squares", &Square::s_get_all_empty_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_open_squares", &Square::s_get_all_open_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_open2_squares", &Square::s_get_all_open2_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_open3_squares", &Square::s_get_all_open3_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_closed_squares", &Square::s_get_all_closed_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_closed2_squares", &Square::s_get_all_closed2_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_closed3_squares", &Square::s_get_all_closed3_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_start_squares", &Square::s_get_all_start_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_mid_squares", &Square::s_get_all_mid_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_end_squares", &Square::s_get_all_end_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_wall_squares", &Square::s_get_all_wall_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_path_squares", &Square::s_get_all_path_squares, py::return_value_policy::take_ownership)
-        .def_static("get_all_history_squares", &Square::s_get_all_history_squares, py::return_value_policy::take_ownership)
-        .def_static("get_squares_to_update", &Square::s_get_squares_to_update, py::return_value_policy::take_ownership)
-        .def_static("get_future_history_squares", &Square::s_get_future_history_squares, py::return_value_policy::take_ownership)
+        .def_static("get_all_empty_squares", &Square::s_get_all_empty_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_open_squares", &Square::s_get_all_open_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_open2_squares", &Square::s_get_all_open2_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_open3_squares", &Square::s_get_all_open3_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_closed_squares", &Square::s_get_all_closed_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_closed2_squares", &Square::s_get_all_closed2_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_closed3_squares", &Square::s_get_all_closed3_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_start_squares", &Square::s_get_all_start_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_mid_squares", &Square::s_get_all_mid_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_end_squares", &Square::s_get_all_end_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_wall_squares", &Square::s_get_all_wall_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_path_squares", &Square::s_get_all_path_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_all_history_squares", &Square::s_get_all_history_squares, py::return_value_policy::automatic_reference)
+        .def_static("get_squares_to_update", &Square::s_get_squares_to_update, py::return_value_policy::automatic_reference)
+        .def_static("get_future_history_squares", &Square::s_get_future_history_squares, py::return_value_policy::automatic_reference)
         .def_static("get_track_square_history", &Square::s_get_track_square_history, py::return_value_policy::automatic_reference)
         .def_static("reset_algo_squares", &Square::s_reset_algo_squares, py::return_value_policy::automatic_reference)
         .def_static("reset_all_squares", &Square::s_reset_all_squares, py::return_value_policy::automatic_reference)

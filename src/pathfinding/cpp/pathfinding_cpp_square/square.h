@@ -50,7 +50,7 @@ public:
 
     std::array<int, 2> get_pos() const { return m_pos; }
     std::array<int, 3>* get_color() { return &m_color; }
-    std::vector<Square> get_neighbours() const;
+    std::vector<Square*> get_neighbours() const;
     std::array<double, 4>* draw_square() { return &m_square_dim; }
 
     // Check square type
@@ -156,7 +156,7 @@ private:
 
     // Member variables assigned in member functions
 
-    std::unordered_map<std::string, std::string> m_neighbours;
+    std::unordered_map<std::string, Square*> m_neighbours;
 
     // Member functions
 
