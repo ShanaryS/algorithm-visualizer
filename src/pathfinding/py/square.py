@@ -388,7 +388,7 @@ class Square:
         """Discard the square from corresponding set when changed"""
         
         # Ordinal squares should not remove wall to reinstate after dragging
-        if not remove_wall and self.color == self.wall_color:
+        if not remove_wall and self.is_wall():
             return
         
         if self.is_empty():

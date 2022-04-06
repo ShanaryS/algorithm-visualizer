@@ -523,7 +523,7 @@ void Square::update_neighbours()
 void Square::discard_square(bool remove_wall)
 {
     // Ordinal squares should not remove wall to reinstate after dragging
-    if (!remove_wall && m_color == m_wall_color) { return; }
+    if (!remove_wall && is_wall()) { return; }
     
     // Remove this squares color from corresponding list
     if (is_empty()) { s_all_empty_squares.erase(this); }
