@@ -568,6 +568,7 @@ std::array<int, 2> Square::s_pos_string_unhash(const std::string& pos_string_has
 // Prevent copies being made when passing these types around
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Square>>);
 PYBIND11_MAKE_OPAQUE(std::vector<Square>);
+PYBIND11_MAKE_OPAQUE(std::vector<Square*>);
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -576,6 +577,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
     // Define Python API for opaque types
     py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
     py::bind_vector<std::vector<Square>>(m, "VectorSquare");
+    py::bind_vector<std::vector<Square*>>(m, "VectorSquare*");
 
     // Define Python API for Square class
     // Default to automatic_reference return policy.
