@@ -646,7 +646,7 @@ PYBIND11_MODULE(pathfinding_cpp_square, m) {
         .def_static("reset_all_squares", &Square::s_reset_all_squares, py::return_value_policy::automatic_reference)
         .def_static("clear_squares_to_update", &Square::s_clear_squares_to_update, py::return_value_policy::automatic_reference)
         .def_static("clear_history_squares", &Square::s_clear_history_squares, py::return_value_policy::automatic_reference)
-        .def_static("clear_square_history", &Square::s_clear_future_history_squares, py::return_value_policy::automatic_reference)
+        .def_static("clear_future_history_squares", &Square::s_clear_future_history_squares, py::return_value_policy::automatic_reference)
         .def_static("set_track_square_history", &Square::s_set_track_square_history, py::return_value_policy::automatic_reference)
         .def_static("update_num_rows_cols", &Square::s_update_num_rows_cols, py::return_value_policy::automatic_reference);
 
