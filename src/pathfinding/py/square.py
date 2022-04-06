@@ -1,9 +1,6 @@
 """Creates square objects that drives the visualizations"""
 
 
-import copy as cpy
-
-
 class Square:
     """Defines the properties needed for each square on graph"""
 
@@ -475,79 +472,79 @@ class Square:
         return cls.square_length
     
     @classmethod
-    def get_all_empty_squares(cls) -> set:
+    def get_all_empty_squares(cls) -> list:
         """Gets all empty squares"""
-        return cpy.copy(cls.all_empty_squares)
+        return list(cls.all_empty_squares)
 
     @classmethod
-    def get_all_open_squares(cls) -> set:
+    def get_all_open_squares(cls) -> list:
         """Gets all open squares"""
-        return cpy.copy(cls.all_open_squares)
+        return list(cls.all_open_squares)
 
     @classmethod
-    def get_all_open2_squares(cls) -> set:
+    def get_all_open2_squares(cls) -> list:
         """Gets all open_2 squares"""
-        return cpy.copy(cls.all_open2_squares)
+        return list(cls.all_open2_squares)
 
     @classmethod
-    def get_all_open3_squares(cls) -> set:
+    def get_all_open3_squares(cls) -> list:
         """Gets all open_3 squares"""
-        return cpy.copy(cls.all_open3_squares)
+        return list(cls.all_open3_squares)
 
     @classmethod
-    def get_all_closed_squares(cls) -> set:
+    def get_all_closed_squares(cls) -> list:
         """Gets all closed squares"""
-        return cpy.copy(cls.all_closed_squares)
+        return list(cls.all_closed_squares)
 
     @classmethod
-    def get_all_closed2_squares(cls) -> set:
+    def get_all_closed2_squares(cls) -> list:
         """Gets all closed_2 squares"""
-        return cpy.copy(cls.all_closed2_squares)
+        return list(cls.all_closed2_squares)
 
     @classmethod
-    def get_all_closed3_squares(cls) -> set:
+    def get_all_closed3_squares(cls) -> list:
         """Gets all closed_3 squares"""
-        return cpy.copy(cls.all_closed3_squares)
+        return list(cls.all_closed3_squares)
 
     @classmethod
-    def get_all_start_squares(cls) -> set:
+    def get_all_start_squares(cls) -> list:
         """Gets all start squares"""
-        return cpy.copy(cls.all_start_squares)
+        return list(cls.all_start_squares)
 
     @classmethod
-    def get_all_mid_squares(cls) -> set:
+    def get_all_mid_squares(cls) -> list:
         """Gets all mid squares"""
-        return cpy.copy(cls.all_mid_squares)
+        return list(cls.all_mid_squares)
 
     @classmethod
-    def get_all_end_squares(cls) -> set:
+    def get_all_end_squares(cls) -> list:
         """Gets all end squares"""
-        return cpy.copy(cls.all_end_squares)
+        return list(cls.all_end_squares)
 
     @classmethod
-    def get_all_wall_squares(cls) -> set:
+    def get_all_wall_squares(cls) -> list:
         """Gets all wall squares"""
-        return cpy.copy(cls.all_wall_squares)
+        return list(cls.all_wall_squares)
 
     @classmethod
-    def get_all_path_squares(cls) -> set:
+    def get_all_path_squares(cls) -> list:
         """Gets all path squares"""
-        return cpy.copy(cls.all_path_squares)
+        return list(cls.all_path_squares)
 
     @classmethod
-    def get_all_history_squares(cls) -> set:
+    def get_all_history_squares(cls) -> list:
         """Gets all history squares"""
-        return cpy.copy(cls.all_history_squares)
+        return list(cls.all_history_squares)
 
     @classmethod
-    def get_squares_to_update(cls) -> set:
+    def get_squares_to_update(cls) -> list:
         """Gets squares to update"""
-        return cpy.copy(cls.squares_to_update)
+        return list(cls.squares_to_update)
 
     @classmethod
-    def get_future_history_squares(cls) -> set:
+    def get_future_history_squares(cls) -> list:
         """Get square history"""
-        return cpy.copy(cls.future_history_squares)
+        return list(cls.future_history_squares)
 
     @classmethod
     def get_track_square_history(cls) -> bool:
