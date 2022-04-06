@@ -38,11 +38,6 @@ class Square:
     # Extend set class and remove ability to .copy() to
     # force use of copy module. This is for seamless compatibility
     # with the C++ square implementation of this class
-    class set(set):
-        def copy(self):
-            e = """Use the copy module for copying. This ensures a consistent
- API for the C++ Square class implentation."""
-            raise NotImplementedError(e)
     
     # Stores the instances of all the squares
     graph = []
@@ -396,31 +391,31 @@ class Square:
         if not remove_wall and self.color == self.wall_color:
             return
         
-        if self.color == Square._DEFAULT_COLOR:
+        if self.is_empty():
             Square.all_empty_squares.discard(self)
-        elif self.color == Square._OPEN_COLOR:
+        elif self.is_open():
             Square.all_open_squares.discard(self)
-        elif self.color == Square._OPEN2_COLOR:
+        elif self.is_open2():
             Square.all_open2_squares.discard(self)
-        elif self.color == Square._OPEN3_COLOR:
+        elif self.is_open3():
             Square.all_open3_squares.discard(self)
-        elif self.color == Square._CLOSED_COLOR:
+        elif self.is_closed():
             Square.all_closed_squares.discard(self)
-        elif self.color == Square._CLOSED2_COLOR:
+        elif self.is_closed2():
             Square.all_closed2_squares.discard(self)
-        elif self.color == Square._CLOSED3_COLOR:
+        elif self.is_closed3():
             Square.all_closed3_squares.discard(self)
-        elif self.color == Square._START_COLOR:
+        elif self.is_start():
             Square.all_start_squares.discard(self)
-        elif self.color == Square._MID_COLOR:
+        elif self.is_mid():
             Square.all_mid_squares.discard(self)
-        elif self.color == Square._END_COLOR:
+        elif self.is_end():
             Square.all_end_squares.discard(self)
-        elif self.color == self.wall_color:  # Can be changed
+        elif self.is_wall():
             Square.all_wall_squares.discard(self)
-        elif self.color == Square._PATH_COLOR:
+        elif self.is_path():
             Square.all_path_squares.discard(self)
-        elif self.color == Square._HISTORY_COLOR:
+        elif self.is_history():
             Square.all_history_squares.discard(self)
 
     @classmethod
