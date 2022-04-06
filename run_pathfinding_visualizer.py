@@ -61,27 +61,21 @@ if __name__ == "__main__":
 # Squares are getting copied and thus not being updated properly.
 # Check why this is happening compared to previous commits.
 
-# Raw this pointer for square sets and neighbours (get methods many need to dereference each)
-
 # Each square has a unique ptr varible that gets assigned in class init function to corressponding std::array element
 # Add unique_ptr in set methods rather than *this
-# Create some way to auto dereference?
+# Can you just return the unique_ptr to python?
+# Does dereferencing into vector copy?
 # Might need to use shared pointer with weak pointers?
 
 # Use nested unordered_map to store row col
 # Use strings like "00,00" for row col as key
 
-# Multiple maze generation does not look right, walls aren't being removed though visually they are
-# Dragging nodes has a bug
+# Update graph with only changed item in set methods (Go back to using unoredered_set and inserting *this, Just the color?)
+# Update graph with new copy of square in set methods
 
-# Set init to s_init
 # Maybe keys being const is why there is a seg fault when passing to python by reference
+# Set init to s_init
 # Initalize variables
-
-# C++ algo drawing over walls. Colors not being set.
-# In general it doesn't seem like instance varaibles are being saved into class.
-# Check if get_square for C++ returns a copy. More generally if copies are only forced for containers.
-# Walls don't get reset with Space
 
 # --- C++ Performance Rewrite ---
 # Change title of pygame to show what is in c++
