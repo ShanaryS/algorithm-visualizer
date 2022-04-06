@@ -58,6 +58,9 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Squares are getting copied and thus not being updated properly.
+# Check why this is happening compared to previous commits.
+
 # Raw this pointer for square sets and neighbours (get methods many need to dereference each)
 
 # Each square has a unique ptr varible that gets assigned in class init function to corressponding std::array element
