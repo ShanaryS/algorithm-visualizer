@@ -7,16 +7,18 @@ C++ imports are optional but program will always depend on python.
 """
 
 
+import os
 import json
 
 
 json_name = "include_cpp.json"
+json_path = ["lib",]  # Don't use os specific spepartors
 
 try:
-    with open(json_name, encoding='utf-8') as json_file:
+    with open(os.path.join(*json_path, json_name), encoding='utf-8') as json_file:
         _use_cpp = json.load(json_file)
 except (FileNotFoundError, json.JSONDecodeError):
-    with open(json_name, 'w', encoding='utf-8') as json_file:
+    with open(os.path.join(*json_path, json_name), 'w', encoding='utf-8') as json_file:
         _use_cpp = {
             "#include": "algorithms.h",
             "How to Use": [

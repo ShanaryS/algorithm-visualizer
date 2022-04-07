@@ -4,7 +4,7 @@
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
-    from pathfinding_cpp_algorithms import AlgoState
+    from src.pathfinding.cpp.algorithms import AlgoState
 else:
     from src.pathfinding.py.algorithms import AlgoState
 
@@ -59,9 +59,7 @@ if __name__ == "__main__":
     main()
 
 # --- C++ Performance Rewrite ---
-# Use Cmake
 # algorithms.py into C++
-# Create new project and use submodules to separate square and algorithm
 # Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
@@ -70,7 +68,6 @@ if __name__ == "__main__":
 # - https://github.com/pyinstaller/pyinstaller/issues/4073
 # - https://stackoverflow.com/a/51992944
 # Try to remove external cacert.pem dependency (also lib folder)
-# Put json in lib folder
 # Add conditional cpp include from json file in readme
 # Test debug and release
 
@@ -88,11 +85,6 @@ if __name__ == "__main__":
 # Write gph.graph as a single list to optimize cache hits
 # Passing square containers by pointers rather than copy
 # Test debug and release
-
-# --- Build Systems ---
-# https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cppimport
-# https://pybind11.readthedocs.io/en/stable/compiling.html#generating-binding-code-automatically
-# https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cmake
 
 # Update requirements.txt to latest versions
 
