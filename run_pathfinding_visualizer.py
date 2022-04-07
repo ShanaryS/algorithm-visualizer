@@ -59,11 +59,7 @@ if __name__ == "__main__":
     main()
 
 # --- C++ Performance Rewrite ---
-# Change title of pygame to show what is in c++
 # Rewrite square.py (Test with python for speed up? Both debug and release.)
-# Can potentially use bind_map for unordered_map, use unordered_map instead of unordered_set
-# Use Opaque where possible for speed improvements
-# Optimise return types. Use correct return value policy for each function.
 # Use Cmake
 # algorithms.py into C++
 # Create new project and use submodules to separate square and algorithm

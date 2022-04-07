@@ -2,7 +2,7 @@
 
 
 # Handles how much C++ the the program should use
-from src.pathfinding.cpp_or_py import use_square_h
+from src.pathfinding.cpp_or_py import use_square_h, use_algorithms_h
 if use_square_h:
     from pathfinding_cpp_square import Square
 else:
@@ -27,9 +27,6 @@ WIDTH = WINDOW_WIDTH
 HEIGHT = WINDOW_WIDTH
 GRAPH_RECT = pygame.Rect(0, 0, WINDOW_WIDTH, HEIGHT)
 LEGEND_RECT = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
-pygame.display.set_caption(
-    "Pathfinding Visualizer - github.com/ShanaryS/algorithm-visualizer"
-)
 pygame.font.init()
 
 # Other constants
@@ -58,6 +55,12 @@ class GraphState:
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
+        title = "Pathfinding Visualizer"
+        if any([use_algorithms_h, use_square_h]):
+            title += " - Using C++ Implementation For: "
+            title += "algorithms " if use_algorithms_h else ""
+            title += "square " if use_square_h else ""
+        pygame.display.set_caption(title)
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     def add_to_update_queue(self, obj) -> None:
