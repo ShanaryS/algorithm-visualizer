@@ -4,14 +4,14 @@
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_square_h
 if use_square_h:
-    from pathfinding_cpp_square import Square
+    from src.pathfinding.cpp.square import Square
 else:
     from src.pathfinding.py.square import Square
 
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
-    from pathfinding_cpp_algorithms import (AlgoState, dijkstra, a_star,
+    from src.pathfinding.cpp.algorithms import (AlgoState, dijkstra, a_star,
         bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
 else:
     from src.pathfinding.py.algorithms import (AlgoState, dijkstra, a_star,

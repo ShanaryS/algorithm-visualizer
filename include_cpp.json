@@ -1,5 +1,5 @@
 {
-    "#include": ".py",
+    "#include": "square.h",
     "How to Use": [
         "Use python or C++ implementation for certain parts of code",
         "For pure python, choose '.py'. For maximum C++ usage, choose highest item.",
