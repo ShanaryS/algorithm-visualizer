@@ -1,0 +1,12 @@
+[
+{
+  "directory": "D:/Projects/algorithm-visualizer/build",
+  "command": "D:\\MinGW\\bin\\g++.exe -Dsquare_EXPORTS @CMakeFiles/square.dir/includes_CXX.rsp -g -fvisibility=hidden -std=gnu++20 -o CMakeFiles\\square.dir\\src\\pathfinding\\cpp\\square.cpp.obj -c D:\\Projects\\algorithm-visualizer\\src\\pathfinding\\cpp\\square.cpp",
+  "file": "D:/Projects/algorithm-visualizer/src/pathfinding/cpp/square.cpp"
+},
+{
+  "directory": "D:/Projects/algorithm-visualizer/build",
+  "command": "D:\\MinGW\\bin\\g++.exe -Dalgorithms_EXPORTS @CMakeFiles/algorithms.dir/includes_CXX.rsp -g -fvisibility=hidden -std=gnu++20 -o CMakeFiles\\algorithms.dir\\src\\pathfinding\\cpp\\algorithms.cpp.obj -c D:\\Projects\\algorithm-visualizer\\src\\pathfinding\\cpp\\algorithms.cpp",
+  "file": "D:/Projects/algorithm-visualizer/src/pathfinding/cpp/algorithms.cpp"
+}
+]
