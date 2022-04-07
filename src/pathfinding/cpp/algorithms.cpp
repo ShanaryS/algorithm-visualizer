@@ -1,4 +1,3 @@
-#if 0
 #include "algorithms.h"
 
 #include <pybind11/pybind11.h>
@@ -89,11 +88,4 @@ PYBIND11_MODULE(algorithms, m) {
     m.def("dijkstra", &dijkstra);
     m.def("a_star", &a_star);
     m.def("bi_dijkstra", &bi_dijkstra);
-
-#ifdef VERSION_INFO
-    m.attr("__version__") = VERSION_INFO;
-#else
-    m.attr("__version__") = "dev";
-#endif
 }
-#endif
