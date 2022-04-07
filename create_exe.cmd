@@ -13,6 +13,7 @@ del %name%".spec"
 rmdir /s /q "__pycache__" "build"
 mkdir "bin\lib"
 copy "lib\.env" "bin\lib"
+copy "lib\include_cpp.json" "bin\lib"
 copy "venv\Lib\site-packages\certifi\cacert.pem" "bin\lib"
 
 

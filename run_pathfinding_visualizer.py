@@ -64,9 +64,6 @@ if __name__ == "__main__":
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
-# Use -p tag in pyinstaller?
-# - https://github.com/pyinstaller/pyinstaller/issues/4073
-# - https://stackoverflow.com/a/51992944
 # Try to remove external cacert.pem dependency (also lib folder)
 # Add conditional cpp include from json file in readme
 # Test debug and release
