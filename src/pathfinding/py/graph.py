@@ -57,9 +57,10 @@ class GraphState:
         """Create the pygame window."""
         title = "Pathfinding Visualizer"
         if any([use_algorithms_h, use_square_h]):
-            title += " - Using C++ Implementation For: "
-            title += "algorithms " if use_algorithms_h else ""
-            title += "square " if use_square_h else ""
+            title += " (#include "
+            title += "algorithms.h, " if use_algorithms_h else ""
+            title += "square.h" if use_square_h else ""
+            title += ")"
         pygame.display.set_caption(title)
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
