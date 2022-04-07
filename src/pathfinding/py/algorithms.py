@@ -486,7 +486,7 @@ def best_path_bi_dijkstra(
     visualize: bool = True,
 ) -> None:
 
-    """Used by bi_dijkstra to draw best path from in two parts"""
+    """Used by bi_dijkstra to draw best path in two parts"""
 
     # Draws best path for first swarm
     best_path(gph, algo, txt, came_from_start, first_meet_square, visualize=visualize)
@@ -726,7 +726,7 @@ def algo_no_vis(
     reset: bool = True,
 ) -> dict:
 
-    """Skip steps to end when visualizing algo. Used when dragging ordinal square once finished"""
+    """Skip steps to end when visualizing algo. Used when dragging ordinal squares"""
 
     # Selects the correct algo to use
     if is_dijkstra:
@@ -803,11 +803,7 @@ def draw_recursive_maze(
     visualize: bool = True,
 ) -> None:
 
-    """Creates maze using recursive division.
-    Implemented following wikipedia guidelines.
-    https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
-    Inspired by https://github.com/ChrisKneller/pygame-pathfinder
-    """
+    """Creates maze using recursive division."""
 
     # Only reset timer on first call
     if not chamber:
