@@ -2,12 +2,13 @@
 
 #include "square.h"
 
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
 
 // Code for dijkstra algorithm
-std::unordered_map<Square, Square> dijkstra(
+std::unordered_map<Square*, Square*> dijkstra(
     const std::vector<std::vector<Square>>& graph,
     const Square& start,
     const Square& end,
@@ -17,7 +18,7 @@ std::unordered_map<Square, Square> dijkstra(
 );
 
 // Code for A* algorithm
-std::unordered_map<Square, Square> a_star(
+std::unordered_map<Square*, Square*> a_star(
     const std::vector<std::vector<Square>>& graph,
     const Square& start,
     const Square& end,
@@ -27,7 +28,7 @@ std::unordered_map<Square, Square> a_star(
 );
 
 // Code for Bi-directional dijkstra. Custom algorithm.
-std::unordered_map<Square, Square> bi_dijkstra(
+std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     const std::vector<std::vector<Square>>& graph,
     const Square& start,
     const Square& end,

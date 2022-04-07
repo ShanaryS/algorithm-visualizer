@@ -4,12 +4,9 @@
 
 #include <limits>
 #include <queue>
-#include <tuple>
-#include <unordered_map>
-#include <vector>
 
 
-std::unordered_map<Square, Square> dijkstra(
+std::unordered_map<Square*, Square*> dijkstra(
     const std::vector<std::vector<Square>>& graph,
     const Square& start,
     const Square& end,
