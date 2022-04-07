@@ -59,7 +59,6 @@ if __name__ == "__main__":
     main()
 
 # --- C++ Performance Rewrite ---
-# Rewrite square.py (Test with python for speed up? Both debug and release.)
 # Use Cmake
 # algorithms.py into C++
 # Create new project and use submodules to separate square and algorithm
