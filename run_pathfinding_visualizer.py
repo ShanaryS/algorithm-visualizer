@@ -60,28 +60,22 @@ if __name__ == "__main__":
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
-# Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
 # Map takes long to start
 # Try to remove external cacert.pem dependency (also lib folder)
 # Add conditional cpp include from json file in readme
+# Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
 # Test debug and release
 
 # (Optimization Station: Things to test to see if faster)
-# Store graph in std::array and not nested for a signle block of memory
-# Rewrite update_neighbours to only passed need squares to instance
-# Use unordered_set for square lists, add hash to class
-# Reserve m_neighbours
-# Square::get_neighbours replace vector with array by first looping and counting number of neighbours then create an array with that amount. [May no longer need to include vector]
-# In set methods either remove guard statement or use something faster than a set (array, vector)
+# Return unoredered_map and unordered_set directly rather than coverting to vector
+# Store graph in std::array
+# Write graph as non nested container to optimize cache hits
+# Reserve variable containers
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
-# Define the size of containers using number of rows^2
-# Use struct for colors with two attributes, int id and array color, inititalize each into the static variable for the class. Rewrite discard_square using switch statement and color ids.
-# Write gph.graph as a single list to optimize cache hits
-# Passing square containers by pointers rather than copy
 # Test debug and release
 
 # --- Mutltithreading/Multiprocessing ---
