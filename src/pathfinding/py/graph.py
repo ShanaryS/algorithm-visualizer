@@ -307,7 +307,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
                     square.reset()
                 else:
                     square.reset()
-                    square.is_highway = True
+                    square.set_highway(True)
             else:
                 square.set_wall()
 

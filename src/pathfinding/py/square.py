@@ -16,7 +16,7 @@ class Square:
         "color",
         "wall_color",
         "color_history",
-        "is_highway"
+        "highway"
     )
     
     # Possible colors for square
@@ -83,7 +83,7 @@ class Square:
         self.color = Square._DEFAULT_COLOR
         self.wall_color = Square.__WALL_COLOR
         self.color_history = None
-        self.is_highway = False
+        self.highway = False
 
     def __lt__(self, _) -> bool:
         """Allows comparison of squares"""
@@ -161,6 +161,10 @@ class Square:
     def is_history(self) -> bool:
         """Checks if history square"""
         return self.color == Square._HISTORY_COLOR
+    
+    def is_highway() -> bool:
+        """Checks if square is a highway"""
+        return self.highway
 
     def reset(self) -> None:
         """Sets square to blank"""
@@ -174,7 +178,7 @@ class Square:
 
         self._discard_square()
         self.color = Square._DEFAULT_COLOR
-        self.is_highway = False
+        self.highway = False
         Square.squares_to_update.add(self)
         Square.all_empty_squares.add(self)
 
@@ -368,6 +372,10 @@ class Square:
     def set_wall_color_map(self) -> None:
         """Resets wall color for map to default"""
         self.wall_color = Square.__WALL_COLOR_MAP
+    
+    def set_highway(x: bool) -> None:
+        """Sets the square to highway"""
+        self.highway = x
     
     def _update_neighbours(self) -> None:
         """Updates this square's neighbours in the four cardinal directions"""

@@ -68,6 +68,7 @@ public:
     bool is_wall() const { return m_color == m_wall_color; }
     bool is_path() const { return m_color == s_path_color; }
     bool is_history() const { return m_color == s_history_color; }
+    bool is_highway() const { return m_is_highway; }
 
     // Set square type
 
@@ -85,9 +86,8 @@ public:
     void set_path();
     void set_history();
     void set_history_rollback() { m_color = m_color_history; }
-
-    // Set wall color to the version for the map
     void set_wall_color_map() { m_wall_color = s__wall_color_map; }
+    void set_highway(bool x) { m_is_highway = x; }
 
     //////////////////////Static Below//////////////////////
 
