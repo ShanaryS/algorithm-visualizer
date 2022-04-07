@@ -162,7 +162,7 @@ class Square:
         """Checks if history square"""
         return self.color == Square._HISTORY_COLOR
     
-    def is_highway() -> bool:
+    def is_highway(self) -> bool:
         """Checks if square is a highway"""
         return self.highway
 
@@ -373,7 +373,7 @@ class Square:
         """Resets wall color for map to default"""
         self.wall_color = Square.__WALL_COLOR_MAP
     
-    def set_highway(x: bool) -> None:
+    def set_highway(self, x: bool) -> None:
         """Sets the square to highway"""
         self.highway = x
     
