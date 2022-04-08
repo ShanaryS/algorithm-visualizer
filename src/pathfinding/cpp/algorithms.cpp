@@ -246,9 +246,9 @@ PYBIND11_MODULE(algorithms, m)
         .def_readonly("highway_multiplier", &AlgoState::m_highway_multiplier, py::return_value_policy::reference_internal);
 
     m.def("dijkstra", &dijkstra, "ignore_square"_a = py::none(), "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    // m.def("a_star", &a_star, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    // m.def("bi_dijkstra", &bi_dijkstra, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    // m.def("start_mid_end", &start_mid_end, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    // m.def("algo_no_vis", &algo_no_vis, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, py::return_value_policy::automatic_reference);
-    // m.def("recursive_maze", &recursive_maze, "chamber"_a = py::none, "graph"_a = py::none, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    m.def("a_star", &a_star, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    m.def("bi_dijkstra", &bi_dijkstra, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    m.def("start_mid_end", &start_mid_end, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    m.def("algo_no_vis", &algo_no_vis, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, py::return_value_policy::automatic_reference);
+    m.def("recursive_maze", &recursive_maze, "chamber"_a = py::none, "graph"_a = py::none, "visualize"_a = true, py::return_value_policy::automatic_reference);
 }
