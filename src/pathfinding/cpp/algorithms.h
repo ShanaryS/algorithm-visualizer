@@ -33,7 +33,6 @@ private:
     void timer_end();
     std::string timer_to_string();
     void timer_reset();
-    std::chro
 }
 
 
