@@ -46,9 +46,9 @@ def main() -> None:
 
     gph = GraphState(rects_to_update=[])
 
-    algo = AlgoState(ordinal_square_clicked=[])
+    algo = AlgoState()
 
-    lgc = LogicState()
+    lgc = LogicState(ordinal_square_clicked=[])
 
     txt = VisText()
 

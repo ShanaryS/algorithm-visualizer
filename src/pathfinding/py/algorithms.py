@@ -21,7 +21,6 @@ import random
 class AlgoState:
     """Stores the state of the algorithms, whether they are finished or not"""
 
-    ordinal_square_clicked: list
     dijkstra_finished: bool = False
     a_star_finished: bool = False
     bi_dijkstra_finished: bool = False
@@ -192,7 +191,7 @@ def a_star(
     g_score: dict = {square: float("inf") for row in graph for square in row}
     g_score[start] = 0
     f_score: dict = {square: float("inf") for row in graph for square in row}
-    f_score[start] = heuristic(start.get_pos(), end.get_pos())
+    f_score[start] = _heuristic(start.get_pos(), end.get_pos())
 
     # Keeps track of next square for every square in graph. A linked list basically.
     came_from: dict = {}
@@ -238,7 +237,7 @@ def a_star(
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
                 g_score[nei] = temp_g_score
-                f_score[nei] = temp_g_score + heuristic(nei.get_pos(), end.get_pos())
+                f_score[nei] = temp_g_score + _heuristic(nei.get_pos(), end.get_pos())
                 queue_pos += 1
                 open_set.put((f_score[nei], queue_pos, nei))
                 if nei != end and not nei.is_closed() and nei != ignore_square:
@@ -264,7 +263,7 @@ def a_star(
     return dict()
 
 
-def heuristic(pos1: tuple, pos2: tuple) -> int:
+def _heuristic(pos1: tuple, pos2: tuple) -> int:
     """Used by A* to prioritize traveling towards next square"""
 
     x1, y1 = pos1
@@ -794,7 +793,7 @@ def algo_no_vis(
             )
 
 
-def draw_recursive_maze(
+def recursive_maze(
     gph: GraphState,
     algo: AlgoState,
     txt: VisText,
@@ -958,7 +957,7 @@ def draw_recursive_maze(
 
     # Recursively divides chambers
     for chamber in chambers:
-        draw_recursive_maze(gph, algo, txt, chamber, graph=graph, visualize=visualize)
+        recursive_maze(gph, algo, txt, chamber, graph=graph, visualize=visualize)
 
 
 def get_random_sample(population: tuple, k: int) -> list:

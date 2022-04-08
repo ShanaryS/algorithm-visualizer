@@ -10,10 +10,9 @@
 #include <vector>
 
 
-class AlgoState
+struct AlgoState
 {
-private:
-    std::vector<Square*> m_ordinal_square_clicked;
+public:
     bool m_dijkstra_finished{ false };
     bool m_a_star_finished{ false };
     bool m_bi_dijkstra_finished{ false };
@@ -21,6 +20,12 @@ private:
     int m_best_path_sleep{ 3 };
     int m_highway_multiplier{ 3 };
 
+    void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
+    void timer_end(bool count = true);
+    std::string timer_to_string();
+    void timer_reset();
+
+private:
     // Timer for algorithm
     double m_timer_total{ 0 };
     double m_timer_avg{ 0.0 };
@@ -28,12 +33,7 @@ private:
     double m_timer_min{ std::numeric_limits<int>::max() };
     int m_timer_count{ 0 };
     double m_timer_start_time{ 0.0 };
-
-    void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
-    void timer_end();
-    std::string timer_to_string();
-    void timer_reset();
-}
+};
 
 
 // Code for dijkstra algorithm
@@ -93,7 +93,7 @@ std::unordered_map<> algo_no_vis(
 );
 
 // Creates maze using recursive division.
-void draw_recursive_maze(
+void recursive_maze(
     const auto& gph, const auto& algo, const auto& txt,
     const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph,
     bool visualize = true

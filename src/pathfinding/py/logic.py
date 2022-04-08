@@ -12,10 +12,10 @@ else:
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
     from src.pathfinding.cpp.algorithms import (AlgoState, dijkstra, a_star,
-        bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
+        bi_dijkstra, start_mid_end, algo_no_vis, recursive_maze)
 else:
     from src.pathfinding.py.algorithms import (AlgoState, dijkstra, a_star,
-        bi_dijkstra, start_mid_end, algo_no_vis, draw_recursive_maze)
+        bi_dijkstra, start_mid_end, algo_no_vis, recursive_maze)
 
 from src.pathfinding.py.maps import get_img_base, get_img_clean
 from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
@@ -31,6 +31,7 @@ from typing import Optional
 class LogicState:
     """Stores the state of the logic"""
 
+    ordinal_square_clicked: list
     start: Optional[Square] = None
     mid: Optional[Square] = None
     end: Optional[Square] = None
@@ -74,7 +75,7 @@ def run_pathfinding(
 
             # Used to know if no longer dragging ordinal square after algo completion
             if not pygame.mouse.get_pressed(3)[0]:
-                algo.ordinal_square_clicked.clear()
+                lgc.ordinal_square_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             if (
@@ -252,12 +253,12 @@ def _left_click_button(
     ):
 
         # Checks if ordinal square is being dragged
-        if algo.ordinal_square_clicked:
+        if lgc.ordinal_square_clicked:
 
             # Checks if the mouse is currently on an ordinal square, no need to update anything
             if square != lgc.start and square != lgc.mid and square != lgc.end:
                 # Used to move ordinal square to new pos
-                last_square = algo.ordinal_square_clicked[0]
+                last_square = lgc.ordinal_square_clicked[0]
 
                 # Checks if ordinal square was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
@@ -332,11 +333,11 @@ def _left_click_button(
 
         # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
-            algo.ordinal_square_clicked.append("start")
+            lgc.ordinal_square_clicked.append("start")
         elif square is lgc.mid:
-            algo.ordinal_square_clicked.append("mid")
+            lgc.ordinal_square_clicked.append("mid")
         elif square is lgc.end:
-            algo.ordinal_square_clicked.append("end")
+            lgc.ordinal_square_clicked.append("end")
 
         # On algo completion, add wall and update algo
         else:
@@ -580,7 +581,7 @@ def _recursive_maze_buttons(
     )  # Resets entire graph to prevent any unintended behaviour
     draw(gph, txt, clear_legend=True, algo_running=True)
     gph.base_drawn = False
-    draw_recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
+    recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
     gph.update_legend = True
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_squares(lgc)
