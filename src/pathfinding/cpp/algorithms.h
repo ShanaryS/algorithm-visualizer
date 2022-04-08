@@ -43,23 +43,34 @@ public:
     bool visualize{ true };
     bool alt_color{ true };
     bool reverse{ true };
-    bool reset{ true };
     bool is_dijkstra{ true };
     bool is_a_star{ true };
     bool is_bi_dijkstra{ true };
+
+    // Remove once no longer importing draw funcs
+    bool legend{ false };
+    bool clear_legend{ false };
+    bool algo_running{ false };
+    bool is_best_path{ false };
+    bool is_recursive_maze{ false };
+    bool is_graph_size{ false };
+    bool is_input{ false };
+    bool is_base_img{ false };
+    bool is_clean_img{ false };
+    bool is_converting_img{ false };
 
     Square& null_square() { return m_null_square; }
     std::array<int, 4>& null_chamber() { return m_null_chamber; }
     std::vector<std::vector<Square>>& null_graph() { return m_null_graph; }
 
     // Reset args back to default
-    void reset();
+    void args_reset();
 
 private:
     Square& m_null_square = Square::s_get_null_square();
     std::array<int, 4> m_null_chamber{};
     std::vector<std::vector<Square>> m_null_graph{};
-}
+};
 
 static Args arg;
 
@@ -70,6 +81,7 @@ std::unordered_map<Square*, Square*> dijkstra(
     bool draw_best_path = true, bool visualize = true
 );
 
+/*
 // Code for A* algorithm
 std::unordered_map<Square*, Square*> a_star(
     const auto& gph, const auto& algo, const auto& txt,
@@ -96,6 +108,7 @@ void best_path_bi_dijkstra(
     bool visualize = true
 );
 
+*/
 // Main algo for reconstructing path
 void best_path(
     const auto& gph, const auto& algo, const auto& txt,
@@ -103,6 +116,7 @@ void best_path(
     const Square* curr_square, bool reverse = false, bool visualize = true
 );
 
+/*
 // Used if algos need to reach mid square first
 void start_mid_end(
     const auto& gph, const auto& algo, const auto& txt,
@@ -116,7 +130,7 @@ std::unordered_map<> algo_no_vis(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool is_dijkstra = false,
     bool is_a_star = false, bool is_bi_dijkstra = false, bool alt_color = false,
-    const Square& ignore_square = arg.null_square(), bool draw_best_path = true, bool reset = false
+    const Square& ignore_square = arg.null_square(), bool draw_best_path = true
 );
 
 // Creates maze using recursive division.
@@ -131,3 +145,4 @@ std::vector<> get_random_sample(const std::array<>& population, int k);
 
 // Return a random int within a range
 int get_randrange(int start, int stop);
+*/

@@ -136,14 +136,15 @@ std::unordered_map<Square*, Square*> dijkstra(
             if (i % gph.algo_speed_multiplier == 0)
             {
                 i = 0;
-                draw(gph, txt, algo_running = true);
-                draw_vis_text(gph, txt, is_dijkstra = true);
+                draw(gph, txt, !arg.legend, !arg.clear_legend, arg.algo_running);
+                draw_vis_text(gph, txt, arg.is_dijkstra);
             }
         }
     }
     return came_from;
 }
 
+/*
 std::unordered_map<Square*, Square*> a_star(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, const Square& ignore_square,
@@ -169,6 +170,7 @@ void best_path_bi_dijkstra(
 )
 {}
 
+*/
 void best_path(
     const auto& gph, const auto& algo, const auto& txt,
     const std::unordered_map<Square*, Square*>& came_from,
@@ -176,6 +178,7 @@ void best_path(
 )
 {}
 
+/*
 void start_mid_end(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& mid, const Square& end,
@@ -188,7 +191,7 @@ std::unordered_map<> algo_no_vis(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool is_dijkstra,
     bool is_a_star, bool is_bi_dijkstra, bool alt_color,
-    const Square& ignore_square, bool draw_best_path, bool reset
+    const Square& ignore_square, bool draw_best_path
 )
 {}
 
@@ -198,27 +201,35 @@ void recursive_maze(
     bool visualize
 )
 {}
+*/
 
 
-void Args::reset()
+void Args::args_reset()
 {
     draw_best_path = true;
     visualize = true;
     alt_color = true;
     reverse = true;
-    reset = true;
     is_dijkstra = true;
     is_a_star = true;
     is_bi_dijkstra = true;
-    null_square = Square::s_get_null_square();
-    null_chamber = std::array<int, 4>{};
-    null_graph = std::vector<std::vector<Square>>{};
+
+    legend = true;
+    clear_legend = true;
+    algo_running = true;
+    is_best_path = true;
+    is_recursive_maze = true;
+    is_graph_size = true;
+    is_input = true;
+    is_base_img = true;
+    is_clean_img = true;
+    is_converting_img = true;
 }
 
 
-std::vector<> get_random_sample(const std::array<>& population, int k) {}
+// std::vector<> get_random_sample(const std::array<>& population, int k) {}
 
-int get_randrange(int start, int stop) {}
+// int get_randrange(int start, int stop) {}
 
 
 namespace py = pybind11;
@@ -234,10 +245,10 @@ PYBIND11_MODULE(algorithms, m)
         .def_readonly("best_path_sleep", &AlgoState::m_best_path_sleep, py::return_value_policy::reference_internal)
         .def_readonly("highway_multiplier", &AlgoState::m_highway_multiplier, py::return_value_policy::reference_internal);
 
-    m.def("dijkstra", &dijkstra, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("a_star", &a_star, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("bi_dijkstra", &bi_dijkstra, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("start_mid_end", &start_mid_end, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("algo_no_vis", &algo_no_vis, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "reset"_a = true, py::return_value_policy::automatic_reference);
-    m.def("recursive_maze", &recursive_maze, "chamber"_a = py::none, "graph"_a = py::none, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    m.def("dijkstra", &dijkstra, "ignore_square"_a = py::none(), "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    // m.def("a_star", &a_star, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    // m.def("bi_dijkstra", &bi_dijkstra, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    // m.def("start_mid_end", &start_mid_end, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "visualize"_a = true, py::return_value_policy::automatic_reference);
+    // m.def("algo_no_vis", &algo_no_vis, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, py::return_value_policy::automatic_reference);
+    // m.def("recursive_maze", &recursive_maze, "chamber"_a = py::none, "graph"_a = py::none, "visualize"_a = true, py::return_value_policy::automatic_reference);
 }
