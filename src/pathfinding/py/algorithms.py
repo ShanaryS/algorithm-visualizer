@@ -8,7 +8,7 @@ if use_square_h:
 else:
     from src.pathfinding.py.square import Square
 
-from src.pathfinding.py.graph import draw, draw_vis_text, reset_algo, GraphState, VisText
+from src.pathfinding.py.graph import draw, draw_vis_text, GraphState, VisText
 
 import pygame
 from dataclasses import dataclass
@@ -592,7 +592,6 @@ def start_mid_end(
                 is_dijkstra=True,
                 ignore_square=start,
                 draw_best_path=False,
-                reset=False,
             )
 
             # Fixes squares disappearing when dragging
@@ -630,7 +629,6 @@ def start_mid_end(
                 is_a_star=True,
                 ignore_square=start,
                 draw_best_path=False,
-                reset=False,
             )
 
             # Fixes squares disappearing when dragging
@@ -676,7 +674,6 @@ def start_mid_end(
                 is_bi_dijkstra=True,
                 ignore_square=start,
                 draw_best_path=False,
-                reset=False,
             )
 
             # Fixes squares disappearing when dragging
@@ -718,16 +715,12 @@ def algo_no_vis(
     alt_color: bool = False,
     ignore_square: Square = None,
     draw_best_path: bool = True,
-    reset: bool = True,
 ) -> dict:
 
     """Skip steps to end when visualizing algo. Used when dragging ordinal squares"""
 
     # Selects the correct algo to use
     if is_dijkstra:
-        # Used to not reset start -> mid visualizations if going from mid -> end
-        if reset:
-            reset_algo(algo)
         algo.dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid square or not
@@ -745,9 +738,6 @@ def algo_no_vis(
                 visualize=False,
             )
     elif is_a_star:
-        # Used to not reset start -> mid visualizations if going from mid -> end
-        if reset:
-            reset_algo(algo)
         algo.a_star_finished = True
 
         # Separates calling algo_no_vis with mid square or not
@@ -765,9 +755,6 @@ def algo_no_vis(
                 visualize=False,
             )
     elif is_bi_dijkstra:
-        # Used to not reset start -> mid visualizations if going from mid -> end
-        if reset:
-            reset_algo(algo)
         algo.bi_dijkstra_finished = True
 
         # Separates calling algo_no_vis with mid square or not

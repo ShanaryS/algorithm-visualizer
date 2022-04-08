@@ -286,6 +286,7 @@ def _left_click_button(
                 # Runs the algo again instantly with no visualizations, handles whether mid exists
                 if algo.dijkstra_finished:
                     if lgc.mid:
+                        reset_algo(algo)
                         start_mid_end(
                             gph,
                             algo,
@@ -297,11 +298,13 @@ def _left_click_button(
                             visualize=False,
                         )
                     else:
+                        reset_algo(algo)
                         algo_no_vis(
                             gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True
                         )
                 elif algo.a_star_finished:
                     if lgc.mid:
+                        reset_algo(algo)
                         start_mid_end(
                             gph,
                             algo,
@@ -313,9 +316,11 @@ def _left_click_button(
                             visualize=False,
                         )
                     else:
+                        reset_algo(algo)
                         algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
                 elif algo.bi_dijkstra_finished:
                     if lgc.mid:
+                        reset_algo(algo)
                         start_mid_end(
                             gph,
                             algo,
@@ -327,6 +332,7 @@ def _left_click_button(
                             visualize=False,
                         )
                     else:
+                        reset_algo(algo)
                         algo_no_vis(
                             gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True
                         )
@@ -432,6 +438,7 @@ def _middle_click_button(
 
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+            reset_algo(algo)
             start_mid_end(
                 gph,
                 algo,
@@ -443,6 +450,7 @@ def _middle_click_button(
                 visualize=False,
             )
         elif algo.a_star_finished and lgc.start and lgc.mid and lgc.end:
+            reset_algo(algo)
             start_mid_end(
                 gph,
                 algo,
@@ -454,6 +462,7 @@ def _middle_click_button(
                 visualize=False,
             )
         elif algo.bi_dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+            reset_algo(algo)
             start_mid_end(
                 gph,
                 algo,
@@ -507,6 +516,7 @@ def _dijkstra_button(
         if visualize:
             dijkstra(gph, algo, txt, lgc.start, lgc.end)
         else:
+            reset_algo(algo)
             algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
 
 
@@ -538,6 +548,7 @@ def _a_star_button(
         if visualize:
             a_star(gph, algo, txt, lgc.start, lgc.end)
         else:
+            reset_algo(algo)
             algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
 
 
@@ -569,6 +580,7 @@ def _bi_dijkstra_button(
         if visualize:
             bi_dijkstra(gph, algo, txt, lgc.start, lgc.end)
         else:
+            reset_algo(algo)
             algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
 
 
