@@ -49,14 +49,10 @@ class AlgoState:
             self.timer_count += 1
         if self.timer_count:
             self.timer_avg = self.timer_total / self.timer_count
-        self.timer_max = max(self.timer_min, total)
-        if total > 0:  # 0 min values are trivial
+        if total:  # Make it obvious for 0 max values
+            self.timer_max = max(self.timer_max, total)
+        if total:  # 0 min values are trivial
             self.timer_min = min(self.timer_min, total)
-
-    def timer_to_string(self) -> str:
-        """Get string of current state of timer"""
-        s = f"Time: {self.timer_total:.3f}s - # squares: {self.timer_count:,}"
-        return s
 
     def timer_reset(self) -> None:
         """Resets timer"""
@@ -151,7 +147,7 @@ def dijkstra(
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer = algo.timer_to_string()
+        txt.timer_to_string(algo.timer_total, algo.timer_count)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
@@ -250,7 +246,7 @@ def a_star(
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer = algo.timer_to_string()
+        txt.timer_to_string(algo.timer_total, algo.timer_count)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
@@ -461,7 +457,7 @@ def bi_dijkstra(
 
         # End timer before visualizing for better comparisons
         algo.timer_end()
-        txt.algo_timer = algo.timer_to_string()
+        txt.timer_to_string(algo.timer_total, algo.timer_count)
 
         # Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if visualize and not already_closed:
@@ -843,7 +839,7 @@ def recursive_maze(
             square: Square = graph[chamber_left + x_divide][chamber_top + y]
             square.set_wall()
             algo.timer_end()
-            txt.algo_timer = algo.timer_to_string()
+            txt.timer_to_string(algo.timer_total, algo.timer_count)
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_recursive_maze=True)
@@ -855,7 +851,7 @@ def recursive_maze(
             square: Square = graph[chamber_left + x][chamber_top + y_divide]
             square.set_wall()
             algo.timer_end()
-            txt.algo_timer = algo.timer_to_string()
+            txt.timer_to_string(algo.timer_total, algo.timer_count)
             if visualize:
                 draw(gph, txt, algo_running=True)
                 draw_vis_text(gph, txt, is_recursive_maze=True)
@@ -949,7 +945,7 @@ def recursive_maze(
 
         # End timer before visualizing
         algo.timer_end()
-        txt.algo_timer = algo.timer_to_string()
+        txt.timer_to_string(algo.timer_total, algo.timer_count)
 
         if visualize:
             draw(gph, txt, algo_running=True)

@@ -22,31 +22,30 @@ public:
 
     void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
     void timer_end(bool count = true);
-    std::string timer_to_string();
     void timer_reset();
 
 private:
     // Timer for algorithm
-    auto m_timer_total{};
-    auto m_timer_avg{ std::numeric_limits};
-    auto m_timer_max{ std::numeric_limits<int>::min() };
-    auto m_timer_min{ std::numeric_limits<int>::max() };
-    int m_timer_count{};
-    auto m_timer_start_time{};
+    std::chrono::duration<double> m_timer_total{0.0};
+    std::chrono::duration<double> m_timer_avg{ 0.0 };
+    std::chrono::duration<double> m_timer_max{ std::numeric_limits<int>::min() };
+    std::chrono::duration<double> m_timer_min{ std::numeric_limits<int>::max() };
+    int m_timer_count{0};
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
 };
 
 
 // Code for dijkstra algorithm
 std::unordered_map<Square*, Square*> dijkstra(
     const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square,
+    const Square& start, const Square& end, const Square& ignore_square = Square.s_null_square,
     bool draw_best_path = true, bool visualize = true
 );
 
 // Code for A* algorithm
 std::unordered_map<Square*, Square*> a_star(
     const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square,
+    const Square& start, const Square& end, const Square& ignore_square = Square.s_null_square,
     bool draw_best_path = true, bool visualize = true
 );
 
@@ -57,7 +56,7 @@ int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2);
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool alt_color = false,
-    const Square& ignore_square, bool draw_best_path = true, bool visualize = true
+    const Square& ignore_square = Square.s_null_square, bool draw_best_path = true, bool visualize = true
 );
 
 // Used by bi_dijkstra to draw best path in two parts
@@ -89,13 +88,13 @@ std::unordered_map<> algo_no_vis(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool is_dijkstra = false,
     bool is_a_star = false, bool is_bi_dijkstra = false, bool alt_color = false,
-    const Square& ignore_square, bool draw_best_path = true, bool reset = false
+    const Square& ignore_square = Square.s_null_square, bool draw_best_path = true, bool reset = false
 );
 
 // Creates maze using recursive division.
 void recursive_maze(
     const auto& gph, const auto& algo, const auto& txt,
-    const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph,
+    const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph = std::vector<std::vector<Square>>{},
     bool visualize = true
 );
 

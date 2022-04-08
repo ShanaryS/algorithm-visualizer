@@ -143,6 +143,10 @@ class VisText:
         self.vis_text_algo_timer = self.FONT.render(
             f"{self.algo_timer}", True, LEGEND_COLOR
         )
+    
+    def timer_to_string(self, timer_total, timer_count) -> None:
+        """Gets values from timer to display on screen"""
+        self.algo_timer = f"Time: {timer_total:.3f}s - # squares: {timer_count:,}"
 
 
 def set_graph(gph: GraphState) -> None:

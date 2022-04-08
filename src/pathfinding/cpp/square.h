@@ -91,6 +91,9 @@ public:
 
     //////////////////////Static Below//////////////////////
 
+    // A square that can never exist in the graph
+    static inline Square s_null_square = Square(-1, -1);
+
     // Initialize the graph for the class
     static void init(int graph_width, int pixel_offset = 0);
 
