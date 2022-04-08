@@ -50,31 +50,36 @@ std::unordered_map<Square*, Square*> dijkstra(
     algo.timer_reset();
     algo.timer_start();
 
+    // Get pointers to squares for consistency
+    Square* start_ptr = &start;
+    Square* end_ptr = &end;
+    Square* ignore_square_ptr = &ignore_square;
+
     // Used to determine the order of squares to check. Order of args helper decide the priority.
     int queue_pos{ 0 };
-    std::tuple<int, int, Square> queue_tuple{ std::make_tuple(0, queue_pos, start) };
-    std::priority_queue<std::tuple<int, int, Square>> open_set{}; // May need to specific vector elements and define comparison for square
+    std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
+    std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
-    graph = Square.get_graph();
-    std::unordered_map<Square, int> g_score{};
-    for (const auto& row : graph)
+    std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
+    std::unordered_map<Square*, int> g_score{};
+    for (const std::vector<Square>& row : graph)
     {
-        for (const auto& square : row)
+        for (Square* square : row)
         {
             g_score[square] = std::numeric_limits<int>::max();
         }
     }
-    g_score[start] = 0;
+    g_score[start_ptr] = 0;
 
-    // Keeps track of next node for every node in graph. A linked list basically.
-    std::unordered_map<Square, Square> came_from{};
+    // Keeps track of next square for every square in graph. A linked list basically.
+    std::unordered_map<Square*, Square*> came_from{};
 
     // End timer here to start it again in loop
     algo.timer_end(false);
 
-    // Continues until every node has been checked or best path found
+    // Continues until every square has been checked or best path found
     int i{ 0 };
     while (!open_set.empty())
     {
@@ -82,46 +87,42 @@ std::unordered_map<Square*, Square*> dijkstra(
         algo.timer_start();
 
         // Gets the square currently being checked
-        Square curr_square
-        {
-            std::get<2>(open_set.top())
-        };
-        curr_square = Square();
+        Square* curr_square_ptr{ std::get<2>(open_set.top()) };
 
         // Terminates if found the best path
-        if (curr_square == end)
+        if (curr_square_ptr == end_ptr)
         {
             if (draw_best_path)
             {
-                best_path(gph, algo, txt, came_from, end, visualize);
+                best_path(gph, algo, txt, came_from, end_ptr, visualize);
             }
             return came_from;
         }
 
         // Decides the order of neighbours to check
-        for (const auto& nei : curr_square.get_neighbours())
+        for (Square* nei_ptr : curr_square_ptr->get_neighbours())
         {
-            int temp_g_score{ g_score[curr_square] + 1 };
-            if (temp_g_score < g_score[nei])
+            int temp_g_score{ g_score[curr_square_ptr] + 1 };
+            if (temp_g_score < g_score[nei_ptr])
             {
-                came_from[nei] = curr_square;
-                g_score[nei] = temp_g_score;
+                came_from[nei_ptr] = curr_square_ptr;
+                g_score[nei_ptr] = temp_g_score;
 
                 ++queue_pos;
-                std::tuple<int, int, Square> queue_tuple{ std::make_tuple(g_score[nei], queue_pos, nei) };
+                std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score[nei_ptr], queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
-                if (nei != end && !nei.is_closed() && nei != ignore_node)
+                if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
-                    nei.set_open();
+                    nei_ptr->set_open();
                 }
             }
         }
 
         // Sets square to closed after finished checking
-        bool already_closed{ curr_square.is_closed() };
-        if (curr_square != start && curr_square != ignore_node)
+        bool already_closed{ curr_square_ptr->is_closed() };
+        if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
         {
-            curr_square.set_closed();
+            curr_square_ptr->set_closed();
         }
 
         // End timer before visualizing for better comparisions
@@ -171,7 +172,7 @@ void best_path_bi_dijkstra(
 void best_path(
     const auto& gph, const auto& algo, const auto& txt,
     const std::unordered_map<Square*, Square*>& came_from,
-    const Square& curr_square, bool reverse, bool visualize
+    const Square* curr_square, bool reverse, bool visualize
 )
 {}
 
@@ -198,9 +199,27 @@ void recursive_maze(
 )
 {}
 
+
+void Args::reset()
+{
+    draw_best_path = true;
+    visualize = true;
+    alt_color = true;
+    reverse = true;
+    reset = true;
+    is_dijkstra = true;
+    is_a_star = true;
+    is_bi_dijkstra = true;
+    null_square = Square::s_get_null_square();
+    null_chamber = std::array<int, 4>{};
+    null_graph = std::vector<std::vector<Square>>{};
+}
+
+
 std::vector<> get_random_sample(const std::array<>& population, int k) {}
 
 int get_randrange(int start, int stop) {}
+
 
 namespace py = pybind11;
 using namespace pybind11::literals;

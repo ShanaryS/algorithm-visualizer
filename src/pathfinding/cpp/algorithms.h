@@ -30,7 +30,7 @@ private:
     double m_timer_avg{ 0.0 };
     double m_timer_max{ std::numeric_limits<double>::min() };
     double m_timer_min{ std::numeric_limits<double>::max() };
-    int m_timer_count{ 0.0 };
+    int m_timer_count{ 0 };
     std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
 };
 
@@ -53,22 +53,10 @@ public:
     std::vector<std::vector<Square>>& null_graph() { return m_null_graph; }
 
     // Reset args back to default
-    void reset()
-    {
-        draw_best_path = true;
-        visualize = true;
-        alt_color = true;
-        reverse = true;
-        reset = true;
-        is_dijkstra = true;
-        is_a_star = true;
-        is_bi_dijkstra = true;
-        null_square = Square.s_get_null_square();
-        null_chamber = std::array<int, 4>{};
-        null_graph = std::vector<std::vector<Square>>{};
-    }
+    void reset();
+
 private:
-    Square& m_null_square = Square.s_get_null_square();
+    Square& m_null_square = Square::s_get_null_square();
     std::array<int, 4> m_null_chamber{};
     std::vector<std::vector<Square>> m_null_graph{};
 }
@@ -112,7 +100,7 @@ void best_path_bi_dijkstra(
 void best_path(
     const auto& gph, const auto& algo, const auto& txt,
     const std::unordered_map<Square*, Square*>& came_from,
-    const Square& curr_square, bool reverse = false, bool visualize = true
+    const Square* curr_square, bool reverse = false, bool visualize = true
 );
 
 // Used if algos need to reach mid square first

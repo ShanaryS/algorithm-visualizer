@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# May need to handle how priority queue selects next item
+
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
@@ -76,6 +78,7 @@ if __name__ == "__main__":
 # Reserve variable containers
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
+# Compare memory address instead of squares in algos
 # Test debug and release
 
 # --- Mutltithreading/Multiprocessing ---
