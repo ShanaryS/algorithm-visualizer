@@ -27,12 +27,12 @@ public:
 
 private:
     // Timer for algorithm
-    double m_timer_total{ 0 };
-    double m_timer_avg{ 0.0 };
-    double m_timer_max{ std::numeric_limits<int>::min() };
-    double m_timer_min{ std::numeric_limits<int>::max() };
-    int m_timer_count{ 0 };
-    double m_timer_start_time{ 0.0 };
+    auto m_timer_total{};
+    auto m_timer_avg{ std::numeric_limits};
+    auto m_timer_max{ std::numeric_limits<int>::min() };
+    auto m_timer_min{ std::numeric_limits<int>::max() };
+    int m_timer_count{};
+    auto m_timer_start_time{};
 };
 
 
@@ -100,7 +100,7 @@ void recursive_maze(
 );
 
 // Returns a k length vector of unique elements from population
-std::vector<> get_random_sample(const std::arrary<>& population, int k);
+std::vector<> get_random_sample(const std::array<>& population, int k);
 
 // Return a random int within a range
 int get_randrange(int start, int stop);

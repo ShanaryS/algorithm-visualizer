@@ -6,7 +6,7 @@
 
 
 // 
-Square null_square = Square(-1, -1)
+Square null_square = Square(-1, -1);
 
 
 std::unordered_map<Square*, Square*> dijkstra(
