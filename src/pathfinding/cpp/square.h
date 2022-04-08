@@ -42,7 +42,7 @@ public:
             return row_hash ^ col_hash;
         }
     };
-    
+
     // False if instanced using default constructor
     operator bool() const { return m_is_valid; }
 
@@ -93,7 +93,7 @@ public:
 
     // Initialize the graph for the class
     static void init(int graph_width, int pixel_offset = 0);
-    
+
     // Get get info about squares from class
 
     static std::vector<std::vector<Square>>* s_get_graph() { return &s_graph; }
@@ -145,14 +145,14 @@ private:
     double m_y;
     std::array<double, 4> m_square_dim;  // x, y, x_length, y_length
     //std::string m_pos_string_hash{}; No longer being used
-    
+
     // Member variables with default values
 
     bool m_is_valid{ false }; // Set to true for non default constructor
     std::array<int, 3> m_color{ s_default_color };
     std::array<int, 3> m_wall_color{ s__wall_color };
     bool m_is_highway{ false };
-    std::array<int, 3> m_color_history{-1, -1, -1}; // Initialize to invalid rgb
+    std::array<int, 3> m_color_history{ -1, -1, -1 }; // Initialize to invalid rgb
 
     // Member variables assigned in member functions
 
@@ -173,7 +173,7 @@ private:
     static inline int s_num_rows = 46;  // Default value
     static inline int s_num_cols = 46;  // Default value
     static inline double s_square_length = 0;  // Assigned in init function
-    
+
     // Colors for different states
 
     static constexpr std::array<int, 3> s_default_color{ 255, 255, 255 };

@@ -81,7 +81,8 @@ std::unordered_map<Square*, Square*> dijkstra(
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(algorithms, m) {
+PYBIND11_MODULE(algorithms, m)
+{
     m.def("dijkstra", &dijkstra);
     m.def("a_star", &a_star);
     m.def("bi_dijkstra", &bi_dijkstra);

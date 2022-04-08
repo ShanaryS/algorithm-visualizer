@@ -51,7 +51,7 @@ struct std::hash<Square>
 std::vector<Square*> Square::get_neighbours() const
 {
     std::vector<Square*> neighbours;
-    for (auto&[direction, nei_ptr] : m_neighbours)
+    for (auto& [direction, nei_ptr] : m_neighbours)
     {
         neighbours.push_back(nei_ptr);
     }
@@ -282,7 +282,7 @@ void Square::set_history()
 }
 
 std::vector<Square*> Square::s_get_all_empty_squares()
-{ 
+{
     std::vector<Square*> empty_squares;
     empty_squares.reserve(s_all_empty_squares.size());
     for (Square* square_ptr : s_all_empty_squares)
@@ -293,7 +293,7 @@ std::vector<Square*> Square::s_get_all_empty_squares()
 }
 
 std::vector<Square*> Square::s_get_all_open_squares()
-{ 
+{
     std::vector<Square*> open_squares;
     open_squares.reserve(s_all_open_squares.size());
     for (Square* square_ptr : s_all_open_squares)
@@ -304,7 +304,7 @@ std::vector<Square*> Square::s_get_all_open_squares()
 }
 
 std::vector<Square*> Square::s_get_all_open2_squares()
-{ 
+{
     std::vector<Square*> open2_squares;
     open2_squares.reserve(s_all_open2_squares.size());
     for (Square* square_ptr : s_all_open2_squares)
@@ -315,7 +315,7 @@ std::vector<Square*> Square::s_get_all_open2_squares()
 }
 
 std::vector<Square*> Square::s_get_all_open3_squares()
-{ 
+{
     std::vector<Square*> open3_squares;
     open3_squares.reserve(s_all_open3_squares.size());
     for (Square* square_ptr : s_all_open3_squares)
@@ -326,7 +326,7 @@ std::vector<Square*> Square::s_get_all_open3_squares()
 }
 
 std::vector<Square*> Square::s_get_all_closed_squares()
-{ 
+{
     std::vector<Square*> closed_squares;
     closed_squares.reserve(s_all_closed_squares.size());
     for (Square* square_ptr : s_all_closed_squares)
@@ -337,7 +337,7 @@ std::vector<Square*> Square::s_get_all_closed_squares()
 }
 
 std::vector<Square*> Square::s_get_all_closed2_squares()
-{ 
+{
     std::vector<Square*> closed2_squares;
     closed2_squares.reserve(s_all_closed2_squares.size());
     for (Square* square_ptr : s_all_closed2_squares)
@@ -348,7 +348,7 @@ std::vector<Square*> Square::s_get_all_closed2_squares()
 }
 
 std::vector<Square*> Square::s_get_all_closed3_squares()
-{ 
+{
     std::vector<Square*> closed3_squares;
     closed3_squares.reserve(s_all_closed3_squares.size());
     for (Square* square_ptr : s_all_closed3_squares)
@@ -359,7 +359,7 @@ std::vector<Square*> Square::s_get_all_closed3_squares()
 }
 
 std::vector<Square*> Square::s_get_all_start_squares()
-{ 
+{
     std::vector<Square*> start_squares;
     start_squares.reserve(s_all_start_squares.size());
     for (Square* square_ptr : s_all_start_squares)
@@ -370,7 +370,7 @@ std::vector<Square*> Square::s_get_all_start_squares()
 }
 
 std::vector<Square*> Square::s_get_all_mid_squares()
-{ 
+{
     std::vector<Square*> mid_squares;
     mid_squares.reserve(s_all_mid_squares.size());
     for (Square* square_ptr : s_all_mid_squares)
@@ -381,7 +381,7 @@ std::vector<Square*> Square::s_get_all_mid_squares()
 }
 
 std::vector<Square*> Square::s_get_all_end_squares()
-{ 
+{
     std::vector<Square*> end_squares;
     end_squares.reserve(s_all_end_squares.size());
     for (Square* square_ptr : s_all_end_squares)
@@ -392,7 +392,7 @@ std::vector<Square*> Square::s_get_all_end_squares()
 }
 
 std::vector<Square*> Square::s_get_all_wall_squares()
-{ 
+{
     std::vector<Square*> wall_squares;
     wall_squares.reserve(s_all_wall_squares.size());
     for (Square* square_ptr : s_all_wall_squares)
@@ -403,7 +403,7 @@ std::vector<Square*> Square::s_get_all_wall_squares()
 }
 
 std::vector<Square*> Square::s_get_all_path_squares()
-{ 
+{
     std::vector<Square*> path_squares;
     path_squares.reserve(s_all_path_squares.size());
     for (Square* square_ptr : s_all_path_squares)
@@ -414,7 +414,7 @@ std::vector<Square*> Square::s_get_all_path_squares()
 }
 
 std::vector<Square*> Square::s_get_all_history_squares()
-{ 
+{
     std::vector<Square*> history_squares;
     history_squares.reserve(s_all_history_squares.size());
     for (Square* square_ptr : s_all_history_squares)
@@ -425,7 +425,7 @@ std::vector<Square*> Square::s_get_all_history_squares()
 }
 
 std::vector<Square*> Square::s_get_squares_to_update()
-{ 
+{
     std::vector<Square*> squares_to_update;
     squares_to_update.reserve(s_squares_to_update.size());
     for (Square* square_ptr : s_squares_to_update)
@@ -436,7 +436,7 @@ std::vector<Square*> Square::s_get_squares_to_update()
 }
 
 std::vector<Square*> Square::s_get_future_history_squares()
-{ 
+{
     std::vector<Square*> future_history_squares;
     future_history_squares.reserve(s_future_history_squares.size());
     for (Square* square_ptr : s_future_history_squares)
@@ -536,7 +536,7 @@ void Square::discard_square(bool remove_wall)
 {
     // Ordinal squares should not remove wall to reinstate after dragging
     if (!remove_wall && is_wall()) { return; }
-    
+
     // Remove this squares color from corresponding list
     if (is_empty()) { s_all_empty_squares.erase(this); }
     else if (is_open()) { s_all_open_squares.erase(this); }
@@ -572,7 +572,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<Square*>);
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-PYBIND11_MODULE(square, m) {
+PYBIND11_MODULE(square, m)
+{
     // Define Python API for opaque types
     py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
     py::bind_vector<std::vector<Square>>(m, "VectorSquare");
@@ -622,7 +623,7 @@ PYBIND11_MODULE(square, m) {
         .def("set_history_rollback", &Square::set_history_rollback, py::return_value_policy::automatic_reference)
         .def("set_wall_color_map", &Square::set_wall_color_map, py::return_value_policy::automatic_reference)
         .def("set_highway", &Square::set_highway, py::return_value_policy::automatic_reference)
-        .def("init", &Square::init, "pixel_offset"_a=0, py::return_value_policy::automatic_reference)
+        .def("init", &Square::init, "pixel_offset"_a = 0, py::return_value_policy::automatic_reference)
         .def_static("get_graph", &Square::s_get_graph, py::return_value_policy::automatic_reference)
         .def_static("get_square", &Square::s_get_square, py::return_value_policy::automatic_reference)
         .def_static("get_num_rows", &Square::s_get_num_rows, py::return_value_policy::automatic_reference)
