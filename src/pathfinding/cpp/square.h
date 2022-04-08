@@ -176,7 +176,7 @@ private:
     static inline double s_square_length = 0;  // Assigned in init function
 
     // A square that can never exist in the graph
-    static std::vector<Square> s_null_square;
+    static inline std::vector<Square> s_null_square;
 
     // Colors for different states
 
