@@ -33,6 +33,10 @@ void Square::init(int graph_width, int pixel_offset)
             square.update_neighbours();
         }
     }
+
+    // Create a null square
+    s_null_square.clear();
+    s_null_square.emplace_back(Square(-1, -1));
 }
 
 // Allow hashing using row and col position

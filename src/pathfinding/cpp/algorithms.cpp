@@ -47,11 +47,11 @@ std::unordered_map<Square*, Square*> dijkstra(
 )
 {
     // Clear preivious and start timer here
-    algo.timer_reset()
-        algo.timer_start()
+    algo.timer_reset();
+    algo.timer_start();
 
-        // Used to determine the order of squares to check. Order of args helper decide the priority.
-        int queue_pos{ 0 };
+    // Used to determine the order of squares to check. Order of args helper decide the priority.
+    int queue_pos{ 0 };
     std::tuple<int, int, Square> queue_tuple{ std::make_tuple(0, queue_pos, start) };
     std::priority_queue<std::tuple<int, int, Square>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
@@ -71,17 +71,17 @@ std::unordered_map<Square*, Square*> dijkstra(
     std::unordered_map<Square, Square> came_from{};
 
     // End timer here to start it again in loop
-    algo.timer_end(false)
+    algo.timer_end(false);
 
-        // Continues until every node has been checked or best path found
-        int i{ 0 };
+    // Continues until every node has been checked or best path found
+    int i{ 0 };
     while (!open_set.empty())
     {
         // Time increments for each square being checked
-        algo.timer_start()
+        algo.timer_start();
 
-            // Gets the square currently being checked
-            Square curr_square
+        // Gets the square currently being checked
+        Square curr_square
         {
             std::get<2>(open_set.top())
         };
@@ -125,7 +125,7 @@ std::unordered_map<Square*, Square*> dijkstra(
 
         // End timer before visualizing for better comparisions
         algo.timer_end();
-        txt.timer_to_string(algo.timer_total, algo.timer_count)
+        txt.timer_to_string(algo.timer_total, algo.timer_count);
 
         // Only visualize if called. Checks if square is closed to not repeat when mid square included.
         if (visualize && !already_closed)

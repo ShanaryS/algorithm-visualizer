@@ -91,9 +91,6 @@ public:
 
     //////////////////////Static Below//////////////////////
 
-    // A square that can never exist in the graph
-    static inline Square s_null_square = Square(-1, -1);
-
     // Initialize the graph for the class
     static void init(int graph_width, int pixel_offset = 0);
 
@@ -120,6 +117,7 @@ public:
     static std::vector<Square*> s_get_squares_to_update();
     static std::vector<Square*> s_get_future_history_squares();
     static bool s_get_track_square_history() { return s_track_square_history; }
+    static Square& s_get_null_square() { return s_null_square[0]; }
 
     // Change square containers of the class
 
@@ -176,6 +174,9 @@ private:
     static inline int s_num_rows = 46;  // Default value
     static inline int s_num_cols = 46;  // Default value
     static inline double s_square_length = 0;  // Assigned in init function
+
+    // A square that can never exist in the graph
+    static std::vector<Square> s_null_square;
 
     // Colors for different states
 
