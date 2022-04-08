@@ -26,26 +26,66 @@ public:
 
 private:
     // Timer for algorithm
-    std::chrono::duration<double> m_timer_total{0.0};
-    std::chrono::duration<double> m_timer_avg{ 0.0 };
-    std::chrono::duration<double> m_timer_max{ std::numeric_limits<int>::min() };
-    std::chrono::duration<double> m_timer_min{ std::numeric_limits<int>::max() };
-    int m_timer_count{0};
+    double m_timer_total{ 0.0 };
+    double m_timer_avg{ 0.0 };
+    double m_timer_max{ std::numeric_limits<double>::min() };
+    double m_timer_min{ std::numeric_limits<double>::max() };
+    int m_timer_count{ 0.0 };
     std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
 };
 
 
+// Organize the arguments to functions.
+struct Args
+{
+public:
+    bool draw_best_path{ true };
+    bool visualize{ true };
+    bool alt_color{ true };
+    bool reverse{ true };
+    bool reset{ true };
+    bool is_dijkstra{ true };
+    bool is_a_star{ true };
+    bool is_bi_dijkstra{ true };
+
+    Square& null_square() { return m_null_square; }
+    std::array<int, 4>& null_chamber() { return m_null_chamber; }
+    std::vector<std::vector<Square>>& null_graph() { return m_null_graph; }
+
+    // Reset args back to default
+    void reset()
+    {
+        draw_best_path = true;
+        visualize = true;
+        alt_color = true;
+        reverse = true;
+        reset = true;
+        is_dijkstra = true;
+        is_a_star = true;
+        is_bi_dijkstra = true;
+        null_square = Square.s_get_null_square();
+        null_chamber = std::array<int, 4>{};
+        null_graph = std::vector<std::vector<Square>>{};
+    }
+private:
+    Square& m_null_square = Square.s_get_null_square();
+    std::array<int, 4> m_null_chamber{};
+    std::vector<std::vector<Square>> m_null_graph{};
+}
+
+static Args arg;
+
 // Code for dijkstra algorithm
 std::unordered_map<Square*, Square*> dijkstra(
     const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square = Square.s_get_null_square(),
+    const Square& start, const Square& end, const Square& ignore_square = arg.null_square(),
     bool draw_best_path = true, bool visualize = true
 );
 
 // Code for A* algorithm
 std::unordered_map<Square*, Square*> a_star(
     const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square = Square.s_get_null_square(),
+    const Square& start, const Square& end, const Square& ignore_square = arg.null_square(),
     bool draw_best_path = true, bool visualize = true
 );
 
@@ -56,7 +96,7 @@ int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2);
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool alt_color = false,
-    const Square& ignore_square = Square.s_get_null_square(), bool draw_best_path = true, bool visualize = true
+    const Square& ignore_square = arg.null_square(), bool draw_best_path = true, bool visualize = true
 );
 
 // Used by bi_dijkstra to draw best path in two parts
@@ -88,13 +128,13 @@ std::unordered_map<> algo_no_vis(
     const auto& gph, const auto& algo, const auto& txt,
     const Square& start, const Square& end, bool is_dijkstra = false,
     bool is_a_star = false, bool is_bi_dijkstra = false, bool alt_color = false,
-    const Square& ignore_square = Square.s_get_null_square(), bool draw_best_path = true, bool reset = false
+    const Square& ignore_square = arg.null_square(), bool draw_best_path = true, bool reset = false
 );
 
 // Creates maze using recursive division.
 void recursive_maze(
     const auto& gph, const auto& algo, const auto& txt,
-    const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph = std::vector<std::vector<Square>>{},
+    const std::array<int, 4>& chamber = arg.null_chamber, const std::vector<std::vector<Square>>& graph = arg.null_graph,
     bool visualize = true
 );
 

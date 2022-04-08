@@ -13,13 +13,13 @@ public:
     Square(int row, int col)
         : m_row{ row }, m_col{ col }
     {
-        m_is_valid = true;  // If casted to bool, return true
         m_pos = std::array<int, 2>{ m_row, m_col };
         m_x = m_row * s_square_length;
         m_y = m_col * s_square_length;
 
         double square_length_trunc = static_cast<int>(s_square_length);
         m_square_dim = { m_x, m_y, square_length_trunc, square_length_trunc };
+        m_is_valid = (m_row >= 0 || m_col >= 0) ? true : false;
 
         // Create string hash using the square pos. No longer being used
         /*m_pos_string_hash += std::to_string(m_row);
@@ -149,7 +149,7 @@ private:
 
     // Member variables with default values
 
-    bool m_is_valid{ false }; // Set to true for non default constructor
+    bool m_is_valid{ false }; // Set to true for non default constructor and positive pos
     std::array<int, 3> m_color{ s_default_color };
     std::array<int, 3> m_wall_color{ s__wall_color };
     bool m_is_highway{ false };

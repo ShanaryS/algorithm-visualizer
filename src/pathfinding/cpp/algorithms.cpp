@@ -9,7 +9,7 @@
 void AlgoState::timer_end(bool count)
 {
     auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> total = end - m_timer_start_time;
+    double total = std::chrono::duration<double>(end - m_timer_start_time).count();
     m_timer_total += total;
     if (count)
     {
@@ -36,7 +36,7 @@ void AlgoState::timer_reset()
     m_timer_max = std::numeric_limits<int>::min();
     m_timer_min = std::numeric_limits<int>::max();
     m_timer_count = 0;
-    m_timer_start_time = 0;
+    m_timer_start_time = std::chrono::high_resolution_clock::now();
 }
 
 
@@ -57,6 +57,7 @@ std::unordered_map<Square*, Square*> dijkstra(
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
+    graph = Square.get_graph();
     std::unordered_map<Square, int> g_score{};
     for (const auto& row : graph)
     {
@@ -92,7 +93,7 @@ std::unordered_map<Square*, Square*> dijkstra(
         {
             if (draw_best_path)
             {
-                best_path(came_from, end, visualize);
+                best_path(gph, algo, txt, came_from, end, visualize);
             }
             return came_from;
         }
