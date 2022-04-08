@@ -2,12 +2,39 @@
 
 #include "square.h"
 
+#include <chrono>
+#include <limits>
+#include <string>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
 
 
-class AlgoState;
+class AlgoState
+{
+private:
+    std::vector<Square*> m_ordinal_square_clicked;
+    bool m_dijkstra_finished{ false };
+    bool m_a_star_finished{ false };
+    bool m_bi_dijkstra_finished{ false };
+    bool m_maze{ false };
+    int m_best_path_sleep{ 3 };
+    int m_highway_multiplier{ 3 };
+
+    // Timer for algorithm
+    double m_timer_total{ 0 };
+    double m_timer_avg{ 0.0 };
+    double m_timer_max{ std::numeric_limits<int>::min() };
+    double m_timer_min{ std::numeric_limits<int>::max() };
+    int m_timer_count{ 0 };
+    double m_timer_start_time{ 0.0 };
+
+    void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
+    void timer_end();
+    std::string timer_to_string();
+    void timer_reset();
+    std::chro
+}
 
 
 // Code for dijkstra algorithm
