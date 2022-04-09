@@ -41,10 +41,8 @@ void AlgoState::timer_reset()
 
 
 std::unordered_map<Square*, Square*> dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square,
-    bool draw_best_path, bool visualize
-)
+    const auto& algo, const Square& start, const Square& end,
+    const Square& ignore_square, bool draw_best_path)
 {
     // Clear preivious and start timer here
     algo.timer_reset();
@@ -80,7 +78,6 @@ std::unordered_map<Square*, Square*> dijkstra(
     algo.timer_end(false);
 
     // Continues until every square has been checked or best path found
-    int i{ 0 };
     while (!open_set.empty())
     {
         // Time increments for each square being checked
@@ -119,7 +116,6 @@ std::unordered_map<Square*, Square*> dijkstra(
         }
 
         // Sets square to closed after finished checking
-        bool already_closed{ curr_square_ptr->is_closed() };
         if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
         {
             curr_square_ptr->set_closed();
@@ -127,19 +123,6 @@ std::unordered_map<Square*, Square*> dijkstra(
 
         // End timer before visualizing for better comparisions
         algo.timer_end();
-        txt.timer_to_string(algo.timer_total, algo.timer_count);
-
-        // Only visualize if called. Checks if square is closed to not repeat when mid square included.
-        if (visualize && !already_closed)
-        {
-            i += 1;
-            if (i % gph.algo_speed_multiplier == 0)
-            {
-                i = 0;
-                draw(gph, txt, !arg.legend, !arg.clear_legend, arg.algo_running);
-                draw_vis_text(gph, txt, arg.is_dijkstra);
-            }
-        }
     }
     return came_from;
 }
