@@ -60,7 +60,10 @@ if __name__ == "__main__":
 
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
+# Need to use lock (update only 60fps?)
+# Have algo yeild after each set of neighbours for update?
 
+# Multiple threads for algorithm?
 # Ability to set algo speed
 # Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item
