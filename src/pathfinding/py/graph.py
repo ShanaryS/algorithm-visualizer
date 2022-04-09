@@ -2,11 +2,18 @@
 
 
 # Handles how much C++ the the program should use
-from src.pathfinding.cpp_or_py import use_square_h, use_algorithms_h
+from src.pathfinding.cpp_or_py import use_square_h
 if use_square_h:
     from src.pathfinding.cpp.square import Square
 else:
     from src.pathfinding.py.square import Square
+
+# Handles how much C++ the the program should use
+from src.pathfinding.cpp_or_py import use_algorithms_h
+if use_algorithms_h:
+    from src.pathfinding.cpp.algorithms import AlgoState
+else:
+    from src.pathfinding.py.algorithms import AlgoState
 
 import pygame
 from dataclasses import dataclass
@@ -158,13 +165,7 @@ def set_graph(gph: GraphState) -> None:
     Square.init(WIDTH)
 
 
-def draw(
-    gph: GraphState,
-    txt: VisText,
-    legend=False,
-    clear_legend=False,
-    algo_running=False,
-) -> None:
+def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_legend=False) -> None:
     """Main function to update the window. Called by all operations that updates the window."""
 
     if clear_legend:
@@ -186,7 +187,7 @@ def draw(
 
         gph.base_drawn = True
     else:
-        if not legend and not algo_running:
+        if not legend and not algo.phase == algo.PHASE_ALGO:
             gph.base_drawn = False
 
     if gph.update_legend:
@@ -411,12 +412,8 @@ def _draw_legend(gph: GraphState, txt: VisText) -> None:
 
 def draw_vis_text(
     gph: GraphState,
+    algo: AlgoState,
     txt: VisText,
-    is_dijkstra=False,
-    is_a_star=False,
-    is_bi_dijkstra=False,
-    is_best_path=False,
-    is_recursive_maze=False,
     is_graph_size=False,
     is_input=False,
     is_base_img=False,
@@ -432,7 +429,7 @@ def draw_vis_text(
     text_rects = []  # Used to only update text area
 
     # Text to be shown depending on operation
-    if is_dijkstra:
+    if algo.algo == algo.ALGO_DIJKSTRA:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -443,7 +440,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif is_a_star:
+    elif algo.algo == algo.ALGO_A_STAR:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -454,7 +451,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif is_bi_dijkstra:
+    elif algo.algo == algo.ALGO_BI_DIJKSTRA:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -467,7 +464,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif is_best_path:
+    elif algo.phase == algo.PHASE_PATH:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -478,7 +475,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif is_recursive_maze:
+    elif algo.phase == algo.PHASE_MAZE:
         text_rects.append(
             gph.window.blit(
                 txt.vis_text_recursive_maze,
@@ -573,19 +570,14 @@ def draw_algo_timer(gph: GraphState, txt: VisText) -> pygame.Rect:
     )
 
 
-def reset_graph(
-    gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None, reset=True
-) -> None:
+def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None, reset=True) -> None:
     """Resets entire graph removing every square"""
-
     # Need to update these values
     algo.algo_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
     algo.path_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
+    algo.set_phase(algo.NULL)
+    algo.set_algo(algo.NULL)
     gph.has_img = False
-    algo.dijkstra_finished = False
-    algo.a_star_finished = False
-    algo.bi_dijkstra_finished = False
-    algo.maze = False
 
     # Resets each square
     if reset:
@@ -600,26 +592,14 @@ def reset_graph(
 
 def reset_algo(algo) -> None:
     """Resets algo colors while keeping ordinal squares and walls"""
-
-    # Need to update these values
-    algo.dijkstra_finished = False
-    algo.a_star_finished = False
-    algo.bi_dijkstra_finished = False
-
     # Resets only certain colors
     Square.reset_algo_squares()
 
 
-def change_graph_size(
-    gph: GraphState, algo, txt: VisText, new_num_rows_cols, to_draw=True
-) -> None:
+def change_graph_size(gph: GraphState, algo: AlgoState, txt: VisText, new_num_rows_cols, to_draw=True) -> None:
     """Changes graph size and updates squares and their locations as well.
     Restricted to certain sizes as recursive maze breaks otherwise
     """
-
-    # Displays text that size is changing
-    # draw_vis_text(txt, is_graph_size=True)  # So fast now it's not worth it.
-
     # Updates rows and square size with new values
     reset_graph(gph, algo, txt, reset=False)
     Square.update_num_rows_cols(new_num_rows_cols)
@@ -627,4 +607,4 @@ def change_graph_size(
     # Recreates graph with new values
     set_graph(gph)
     if to_draw:
-        draw(gph, txt)
+        draw(gph, algo, txt)

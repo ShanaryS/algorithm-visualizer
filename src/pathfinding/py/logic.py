@@ -24,7 +24,6 @@ from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
 
 import pygame
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass(slots=True)
@@ -32,9 +31,9 @@ class LogicState:
     """Stores the state of the logic"""
 
     ordinal_square_clicked: list
-    start: Optional[Square] = None
-    mid: Optional[Square] = None
-    end: Optional[Square] = None
+    start: Square = None
+    mid: Square = None
+    end: Square = None
     run: bool = True
     GRAPH_SMALL: int = 22
     GRAPH_MEDIUM: int = 46
@@ -61,7 +60,7 @@ def run_pathfinding(
     clock = pygame.time.Clock()
 
     while lgc.run:
-        draw(gph, txt, legend=True)  # Draws the graph with all the necessary updates
+        draw(gph, algo, txt, legend=True)  # Draws the graph with all the necessary updates
 
         for event in pygame.event.get():
 
@@ -78,125 +77,58 @@ def run_pathfinding(
                 lgc.ordinal_square_clicked.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            if (
-                pygame.mouse.get_pressed(3)[0]
-                and pygame.mouse.get_pos()[1] < HEIGHT
-                and not gph.has_img
-            ):
+            if (pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
                 _left_click_button(gph, algo, lgc, txt)
 
             # RIGHT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif (
-                pygame.mouse.get_pressed(3)[2]
-                and pygame.mouse.get_pos()[1] < HEIGHT
-                and not gph.has_img
-            ):
+            elif (pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
                 _right_click_button(gph, algo, lgc, txt)
 
             # MIDDLE MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
-            elif (
-                pygame.mouse.get_pressed(3)[1]
-                and pygame.mouse.get_pos()[1] < HEIGHT
-                and not gph.has_img
-            ):
-                _middle_click_button(gph, algo, lgc, txt)
+            elif (pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
+                _middle_click_button(algo, lgc)
 
             """Keyboard buttons"""
 
             # Reset graph with "SPACE" on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_SPACE
-                and not gph.has_img
-            ):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not gph.has_img):
                 _reset_graph_button(gph, algo, lgc, txt)
 
             # Run Dijkstra with "D" key on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_d
-                and lgc.start
-                and lgc.end
-                and not gph.has_img
-            ):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_d and lgc.start and lgc.end and not gph.has_img):
                 _dijkstra_button(gph, algo, lgc, txt)
 
             # Run A* with "A" key on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_a
-                and lgc.start
-                and lgc.end
-                and not gph.has_img
-            ):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_a and lgc.start and lgc.end and not gph.has_img):
                 _a_star_button(gph, algo, lgc, txt)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_b
-                and lgc.start
-                and lgc.end
-                and not gph.has_img
-            ):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_b and lgc.start and lgc.end and not gph.has_img):
                 _bi_dijkstra_button(gph, algo, lgc, txt)
 
             # Draw recursive maze with "G" key on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_g
-                and not gph.has_img
-            ):
-                if Square.get_num_rows() not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
-                    _graph_size_buttons(
-                        gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
-                    )
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img):
+                if Square.get_num_rows() == lgc.GRAPH_MAX:
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_i
-                and not gph.has_img
-            ):
-                if Square.get_num_rows() not in {lgc.GRAPH_SMALL, lgc.GRAPH_MEDIUM, lgc.GRAPH_LARGE}:
-                    _graph_size_buttons(
-                        gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
-                    )
-                _recursive_maze_buttons(gph, algo, lgc, txt, visualize=False)
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_i and not gph.has_img):
+                if Square.get_num_rows() == lgc.GRAPH_MAX:
+                    _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
+                _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Redraw small maze with "S" key on keyboard if not currently small
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_s
-                and Square.get_num_rows() != lgc.GRAPH_SMALL
-                and not gph.has_img
-            ):
-                _graph_size_buttons(
-                    gph, algo, lgc, txt, lgc.GRAPH_SMALL, lgc.BEST_PATH_SLEEP
-                )
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_s and Square.get_num_rows() != lgc.GRAPH_SMALL and not gph.has_img):
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_SMALL, lgc.BEST_PATH_SLEEP)
 
             # Redraw medium maze with "M" key on keyboard if not currently medium
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_m
-                and Square.get_num_rows() != lgc.GRAPH_MEDIUM
-                and not gph.has_img
-            ):
-                _graph_size_buttons(
-                    gph, algo, lgc, txt, lgc.GRAPH_MEDIUM, lgc.BEST_PATH_SLEEP
-                )
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_m and Square.get_num_rows() != lgc.GRAPH_MEDIUM and not gph.has_img):
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_MEDIUM, lgc.BEST_PATH_SLEEP)
 
             # Redraw large maze with "L" key on keyboard if not currently large
-            if (
-                event.type == pygame.KEYDOWN
-                and event.key == pygame.K_l
-                and Square.get_num_rows() != lgc.GRAPH_LARGE
-                and not gph.has_img
-            ):
-                _graph_size_buttons(
-                    gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP
-                )
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_l and Square.get_num_rows() != lgc.GRAPH_LARGE and not gph.has_img):
+                _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE, lgc.BEST_PATH_SLEEP)
 
             # Enter an address with the "ENTER" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
@@ -204,11 +136,11 @@ def run_pathfinding(
 
             # Convert map into grid with "C" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c and gph.has_img:
-                _convert_img_to_squares(gph, txt)
+                _convert_img_to_squares(gph, algo, txt)
 
             # Visualize changes with the "V" key
             if event.type == pygame.KEYDOWN and event.key == pygame.K_v:
-                _visualize_changes_button(gph, txt)
+                _visualize_changes_button(gph, algo, txt)
 
         clock.tick(gph.FPS)
 
@@ -238,20 +170,12 @@ def _get_square_clicked() -> Square:
     return square
 
 
-def _left_click_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Handles mouse left click"""
-
     square = _get_square_clicked()
-
     # Checks if algo is completed, used for dragging algo
-    if (
-        (algo.dijkstra_finished or algo.a_star_finished or algo.bi_dijkstra_finished)
-        and lgc.start
-        and lgc.end
-    ):
-
+    if ((algo.algo == algo.ALGO_DIJKSTRA or algo.algo == algo.ALGO_A_STAR or algo.algo == algo.ALGO_BI_DIJKSTRA)
+        and lgc.start and lgc.end):
         # Checks if ordinal square is being dragged
         if lgc.ordinal_square_clicked:
 
@@ -284,58 +208,12 @@ def _left_click_button(
                     square.set_end()
 
                 # Runs the algo again instantly with no visualizations, handles whether mid exists
-                if algo.dijkstra_finished:
-                    if lgc.mid:
-                        reset_algo(algo)
-                        start_mid_end(
-                            gph,
-                            algo,
-                            txt,
-                            lgc.start,
-                            lgc.mid,
-                            lgc.end,
-                            is_dijkstra=True,
-                            visualize=False,
-                        )
-                    else:
-                        reset_algo(algo)
-                        algo_no_vis(
-                            gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True
-                        )
-                elif algo.a_star_finished:
-                    if lgc.mid:
-                        reset_algo(algo)
-                        start_mid_end(
-                            gph,
-                            algo,
-                            txt,
-                            lgc.start,
-                            lgc.mid,
-                            lgc.end,
-                            is_a_star=True,
-                            visualize=False,
-                        )
-                    else:
-                        reset_algo(algo)
-                        algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
-                elif algo.bi_dijkstra_finished:
-                    if lgc.mid:
-                        reset_algo(algo)
-                        start_mid_end(
-                            gph,
-                            algo,
-                            txt,
-                            lgc.start,
-                            lgc.mid,
-                            lgc.end,
-                            is_bi_dijkstra=True,
-                            visualize=False,
-                        )
-                    else:
-                        reset_algo(algo)
-                        algo_no_vis(
-                            gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True
-                        )
+                if algo.algo == algo.ALGO_DIJKSTRA:
+                    _dijkstra_button(gph, algo, lgc, txt)
+                elif algo.algo == algo.ALGO_A_STAR:
+                    _a_star_button(gph, algo, lgc, txt)
+                elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+                    _bi_dijkstra_button(gph, algo, lgc, txt)
 
         # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
@@ -351,12 +229,12 @@ def _left_click_button(
             square.set_wall()
 
             # Updates algo
-            if algo.dijkstra_finished:
-                _dijkstra_button(gph, algo, lgc, txt, visualize=False)
-            elif algo.a_star_finished:
-                _a_star_button(gph, algo, lgc, txt, visualize=False)
-            elif algo.bi_dijkstra_finished:
-                _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
+            if algo.algo == algo.ALGO_DIJKSTRA:
+                _dijkstra_button(gph, algo, lgc, txt)
+            elif algo.algo == algo.ALGO_A_STAR:
+                _a_star_button(gph, algo, lgc, txt)
+            elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+                _bi_dijkstra_button(gph, algo, lgc, txt)
 
     # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
@@ -364,12 +242,12 @@ def _left_click_button(
         square.set_start()
 
         # Handles removing and adding start manually instead of dragging on algo completion.
-        if algo.dijkstra_finished and lgc.start and lgc.end:
-            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.a_star_finished and lgc.start and lgc.end:
-            _a_star_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
+        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.end:
+            _dijkstra_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.end:
+            _a_star_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.end:
+            _bi_dijkstra_button(gph, algo, lgc, txt)
 
     # If end square does not exist, and start square does exist, create end square.
     # If not currently ordinal square.
@@ -378,29 +256,23 @@ def _left_click_button(
         square.set_end()
 
         # Handles removing and adding end manually instead of dragging on algo completion.
-        if algo.dijkstra_finished and lgc.start and lgc.end:
-            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.a_star_finished and lgc.start and lgc.end:
-            _a_star_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.bi_dijkstra_finished and lgc.start and lgc.end:
-            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
+        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.end:
+            _dijkstra_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.end:
+            _a_star_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.end:
+            _bi_dijkstra_button(gph, algo, lgc, txt)
 
     # If start and end square exists, create wall. If not currently ordinal square.
     # Saves pos of wall to be able to reinstate it after dragging ordinal square past it.
-    elif (
-        square != lgc.start
-        and square != lgc.mid
-        and square != lgc.end
-        and algo.maze is False
-    ):
+    elif (square != lgc.start and square != lgc.mid and square != lgc.end 
+          and algo.phase != algo.PHASE_MAZE):
         square.set_wall()
 
 
 def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Handles mouse right click"""
-
     square = _get_square_clicked()
-
     # Reset square and ordinal square if it was any
     square.reset()
     was_ordinal = False
@@ -416,63 +288,32 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
         
     # Updates algo
     if not was_ordinal:
-        if algo.dijkstra_finished:
-            _dijkstra_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.a_star_finished:
-            _a_star_button(gph, algo, lgc, txt, visualize=False)
-        elif algo.bi_dijkstra_finished:
-            _bi_dijkstra_button(gph, algo, lgc, txt, visualize=False)
+        if algo.algo == algo.ALGO_DIJKSTRA:
+            _dijkstra_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_A_STAR:
+            _a_star_button(gph, algo, lgc, txt)
+        elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+            _bi_dijkstra_button(gph, algo, lgc, txt)
 
 
-def _middle_click_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
     """Handles mouse wheel click"""
-
     square = _get_square_clicked()
-
     # Set square to mid if no square is already mid, and not currently ordinal square.
     if not lgc.mid and square != lgc.start and square != lgc.end:
         lgc.mid = square
         square.set_mid()
-
+        
         # Handles removing and adding mid manually instead of dragging on algo completion.
-        if algo.dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
-            start_mid_end(
-                gph,
-                algo,
-                txt,
-                lgc.start,
-                lgc.mid,
-                lgc.end,
-                is_dijkstra=True,
-                visualize=False,
-            )
-        elif algo.a_star_finished and lgc.start and lgc.mid and lgc.end:
+            start_mid_end(algo, lgc.start, lgc.mid, lgc.end,)
+        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
-            start_mid_end(
-                gph,
-                algo,
-                txt,
-                lgc.start,
-                lgc.mid,
-                lgc.end,
-                is_a_star=True,
-                visualize=False,
-            )
-        elif algo.bi_dijkstra_finished and lgc.start and lgc.mid and lgc.end:
+            start_mid_end(algo, lgc.start, lgc.mid, lgc.end,)
+        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
-            start_mid_end(
-                gph,
-                algo,
-                txt,
-                lgc.start,
-                lgc.mid,
-                lgc.end,
-                is_bi_dijkstra=True,
-                visualize=False,
-            )
+            start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
 
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
@@ -480,133 +321,63 @@ def _reset_ordinal_squares(lgc: LogicState) -> None:
     lgc.start = lgc.mid = lgc.end = None
 
 
-def _reset_graph_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Resets the graph"""
     reset_graph(gph, algo, txt, graph_max=lgc.GRAPH_MAX, graph_default=lgc.GRAPH_MEDIUM)
     _reset_ordinal_squares(lgc)
 
 
-def _dijkstra_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
-) -> None:
+def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Run the dijkstra algorithm"""
-
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, txt, clear_legend=True, algo_running=True)
-
-    # Necessary to for dragging squares on completion
-    algo.dijkstra_finished = True
+    draw(gph, algo, txt, clear_legend=True, algo_running=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(
-            gph,
-            algo,
-            txt,
-            lgc.start,
-            lgc.mid,
-            lgc.end,
-            is_dijkstra=True,
-            visualize=visualize,
-        )
+        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
     else:
-        if visualize:
-            dijkstra(gph, algo, txt, lgc.start, lgc.end)
-        else:
-            reset_algo(algo)
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_dijkstra=True)
+        dijkstra(algo, lgc.start, lgc.end)
 
 
-def _a_star_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
-) -> None:
+def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Runs the A* algorithm"""
-
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, txt, clear_legend=True, algo_running=True)
-
-    # Necessary to for dragging squares on completion
-    algo.a_star_finished = True
+    draw(gph, algo, txt, clear_legend=True, algo_running=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(
-            gph,
-            algo,
-            txt,
-            lgc.start,
-            lgc.mid,
-            lgc.end,
-            is_a_star=True,
-            visualize=visualize,
-        )
+        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
     else:
-        if visualize:
-            a_star(gph, algo, txt, lgc.start, lgc.end)
-        else:
-            reset_algo(algo)
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_a_star=True)
+        a_star(algo, lgc.start, lgc.end)
 
 
-def _bi_dijkstra_button(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
-) -> None:
+def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Runs the Bi-Directional Dijkstra algorithm"""
-
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, txt, clear_legend=True, algo_running=True)
-
-    # Necessary to for dragging squares on completion
-    algo.bi_dijkstra_finished = True
+    draw(gph, algo, txt, clear_legend=True, algo_running=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
-        start_mid_end(
-            gph,
-            algo,
-            txt,
-            lgc.start,
-            lgc.mid,
-            lgc.end,
-            is_bi_dijkstra=True,
-            visualize=visualize,
-        )
+        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
     else:
-        if visualize:
-            bi_dijkstra(gph, algo, txt, lgc.start, lgc.end)
-        else:
-            reset_algo(algo)
-            algo_no_vis(gph, algo, txt, lgc.start, lgc.end, is_bi_dijkstra=True)
+        bi_dijkstra(algo, lgc.start, lgc.end)
 
 
-def _recursive_maze_buttons(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize=True
-) -> None:
+def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Draws recursive maze"""
-    reset_graph(
-        gph, algo, txt
-    )  # Resets entire graph to prevent any unintended behaviour
-    draw(gph, txt, clear_legend=True, algo_running=True)
+    reset_graph(gph, algo, txt)
+    draw(gph, algo, txt, clear_legend=True, algo_running=True)
     gph.base_drawn = False
-    recursive_maze(gph, algo, txt, visualize=visualize)  # Draw maze
+    recursive_maze(gph, algo, txt)  # Draw maze
     gph.update_legend = True
     algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_squares(lgc)
 
 
-def _graph_size_buttons(
-    gph: GraphState,
-    algo: AlgoState,
-    lgc: LogicState,
-    txt: VisText,
-    new_graph_size,
-    best_path_sleep,
-) -> None:
+def _graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, new_graph_size, best_path_sleep) -> None:
     """Changes the size of the graph"""
     algo.best_path_sleep = best_path_sleep
     gph.has_img = False
@@ -614,50 +385,43 @@ def _graph_size_buttons(
     _reset_ordinal_squares(lgc)
 
 
-def _load_img_to_graph(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _load_img_to_graph(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Loads the image onto the graph"""
-
-    draw_vis_text(gph, txt, is_base_img=True)
+    draw_vis_text(gph, algo, txt, is_base_img=True)
     change_graph_size(gph, algo, txt, lgc.GRAPH_MAX, to_draw=False)
 
     gph.img = pygame.image.load(get_img_base(txt.address))
     gph.has_img = True
-    draw(gph, txt)
+    draw(gph, algo, txt)
     _reset_ordinal_squares(lgc)
 
 
-def _convert_img_to_squares(gph: GraphState, txt: VisText) -> None:
+def _convert_img_to_squares(gph: GraphState, algo: AlgoState, txt: VisText) -> None:
     """Coverts the map data into squares the algorithms can use"""
-
-    draw_vis_text(gph, txt, is_clean_img=True)
+    draw_vis_text(gph, algo, txt, is_clean_img=True)
 
     gph.img = pygame.image.load(get_img_clean(txt.address))
 
     gph.base_drawn = False
-    draw(gph, txt)
-    draw_vis_text(gph, txt, is_converting_img=True)
+    draw(gph, algo, txt)
+    draw_vis_text(gph, algo, txt, is_converting_img=True)
 
     gph.update_legend = True
     gph.has_img = False
-    gph.algo_speed_multiplier = 500
-    gph.path_speed_multiplier = 1
+    algo.algo_speed_multiplier = 500
+    algo.path_speed_multiplier = 1
 
     set_squares_to_roads(gph)
 
 
-def _get_address_from_user(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Gets the address from the user"""
-
     # Used to get rid of commas inserted by url encoding.
     txt.address = txt.address.replace(",", "")
 
     gph.base_drawn = False
-    draw(gph, txt)
-    draw_vis_text(gph, txt, is_input=True)
+    draw(gph, algo, txt)
+    draw_vis_text(gph, algo, txt, is_input=True)
 
     while lgc.run:
         for event in pygame.event.get():
@@ -676,12 +440,12 @@ def _get_address_from_user(
                     _load_img_to_graph(gph, algo, lgc, txt)
                     return
 
-                draw_vis_text(gph, txt, is_input=True)
+                draw_vis_text(gph, algo, txt, is_input=True)
 
     pygame.quit()
 
 
-def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
+def _visualize_changes_button(gph: GraphState, algo: AlgoState, txt: VisText) -> None:
     """Visualize the changed parts of the screen between toggles"""
     # Stop tracking square history and display it
     if Square.get_track_square_history():
@@ -692,4 +456,4 @@ def _visualize_changes_button(gph: GraphState, txt: VisText) -> None:
         Square.set_track_square_history(True)
 
     gph.update_legend = True
-    draw(gph, txt, legend=True)
+    draw(gph, algo, txt, legend=True)

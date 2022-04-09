@@ -76,7 +76,7 @@ class AlgoState:
         self.phase = phase
     
     def set_algo(self, algo: str) -> str:
-        """Change the algo. Use ALGO constants. Set to NULL when finished."""
+        """Change the algo. Use ALGO constants. Don't set to NULL when finished"""
         self.algo = algo
     
     def _timer_start(self) -> None:
@@ -151,10 +151,9 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square 
         if curr_square == end:
             # Clean up
             algo.set_phase(algo.NULL)
-            algo.set_algo(algo.NULL)
             
             if draw_best_path:
-                best_path(algo, came_from, end)
+                _best_path(algo, came_from, end)
                 return dict()
 
             return came_from
@@ -185,7 +184,6 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square 
     
     # Clean up
     algo.set_phase(algo.NULL)
-    algo.set_algo(algo.NULL)
     return dict()
 
 
@@ -230,10 +228,9 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square = 
         if curr_square == end:
             # Clean up
             algo.set_phase(algo.NULL)
-            algo.set_algo(algo.NULL)
             
             if draw_best_path:
-                best_path(algo, came_from, end)
+                _best_path(algo, came_from, end)
                 return dict()
 
             return came_from
@@ -265,7 +262,6 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square = 
 
     # Clean up
     algo.set_phase(algo.NULL)
-    algo.set_algo(algo.NULL)
     return dict()
 
 
@@ -327,10 +323,9 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = F
             if curr_square.is_open() and nei.is_open2():
                 # Clean up
                 algo.set_phase(algo.NULL)
-                algo.set_algo(algo.NULL)
                             
                 if draw_best_path:
-                    best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
+                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
                     return dict()
 
                 return came_from_start, came_from_end, curr_square, nei
@@ -339,10 +334,9 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = F
             elif curr_square.is_open2() and nei.is_open() and not alt_color:
                 # Clean up
                 algo.set_phase(algo.NULL)
-                algo.set_algo(algo.NULL)
                 
                 if draw_best_path:
-                    best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
+                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
                     return dict()
 
                 return came_from_start, came_from_end, nei, curr_square
@@ -351,10 +345,9 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = F
             elif curr_square.is_open2() and nei.is_open3():
                 # Clean up
                 algo.set_phase(algo.NULL)
-                algo.set_algo(algo.NULL)
                 
                 if draw_best_path:
-                    best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
+                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
                     return dict()
 
                 return came_from_start, came_from_end, curr_square, nei
@@ -363,10 +356,9 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = F
             elif curr_square.is_open3() and nei.is_open2():
                 # Clean up
                 algo.set_phase(algo.NULL)
-                algo.set_algo(algo.NULL)
                 
                 if draw_best_path:
-                    best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
+                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
                     return dict()
 
                 return came_from_start, came_from_end, nei, curr_square
@@ -425,22 +417,21 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = F
     
     # Clean up
     algo.set_phase(algo.NULL)
-    algo.set_algo(algo.NULL)
     return dict()
 
 
-def best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end: dict, first_meet_square: Square, second_meet_square: Square) -> None:
+def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end: dict, first_meet_square: Square, second_meet_square: Square) -> None:
     """Used by bi_dijkstra to draw best path in two parts"""
     # Draws best path for first swarm
-    best_path(algo, came_from_start, first_meet_square)
+    _best_path(algo, came_from_start, first_meet_square)
     first_meet_square.set_path()
 
     # Draws best path for second swarm
     second_meet_square.set_path()
-    best_path(algo, came_from_end, second_meet_square, reverse=True)
+    _best_path(algo, came_from_end, second_meet_square, reverse=True)
 
 
-def best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
+def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
     """Main algo for reconstructing path"""
     # Set phase
     algo.set_phase(algo.PHASE_PATH)
@@ -476,8 +467,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid.set_mid()
         end.set_end()
 
-        best_path(algo, start_to_mid, mid)
-        best_path(algo, mid_to_end, end)
+        _best_path(algo, start_to_mid, mid)
+        _best_path(algo, mid_to_end, end)
     elif algo.algo == algo.ALGO_A_STAR:
         start_to_mid = a_star(algo, start, mid, ignore_square=end, draw_best_path=False)
         mid_to_end = a_star(algo, mid, end, ignore_square=start, draw_best_path=False)
@@ -487,8 +478,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid.set_mid()
         end.set_end()
 
-        best_path(algo, start_to_mid, mid)
-        best_path(algo, mid_to_end, end)
+        _best_path(algo, start_to_mid, mid)
+        _best_path(algo, mid_to_end, end)
     elif algo.algo == algo.ALGO_BI_DIJKSTRA:
         start_to_mid = bi_dijkstra(algo, start, mid, ignore_square=end, draw_best_path=False)
         mid_to_end = bi_dijkstra(algo, mid, end, alt_color=True, ignore_square=start, draw_best_path=False)
@@ -498,8 +489,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid.set_mid()
         end.set_end()
 
-        best_path_bi_dijkstra(algo, start_to_mid[0], start_to_mid[1], start_to_mid[2], start_to_mid[3])
-        best_path_bi_dijkstra(algo, mid_to_end[0], mid_to_end[1], mid_to_end[2], mid_to_end[3])
+        _best_path_bi_dijkstra(algo, start_to_mid[0], start_to_mid[1], start_to_mid[2], start_to_mid[3])
+        _best_path_bi_dijkstra(algo, mid_to_end[0], mid_to_end[1], mid_to_end[2], mid_to_end[3])
 
 
 def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -> None:
@@ -613,13 +604,13 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
     algo._timer_end(count=False)
 
     # Draws the gaps into the walls
-    for wall in get_random_sample(walls, num_gaps):
+    for wall in _get_random_sample(walls, num_gaps):
 
         # Continue timer here
         algo._timer_start()
 
         if wall[3] == 1:
-            x = get_randrange(wall[0], wall[0] + wall[2])
+            x = _get_randrange(wall[0], wall[0] + wall[2])
             y = wall[1]
             if x in gaps_to_offset and y in gaps_to_offset:
                 if wall[2] == x_divide:
@@ -630,7 +621,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
                 x = Square.get_num_rows() - 1
         else:
             x = wall[0]
-            y = get_randrange(wall[1], wall[1] + wall[3])
+            y = _get_randrange(wall[1], wall[1] + wall[3])
             if y in gaps_to_offset and x in gaps_to_offset:
                 if wall[3] == y_divide:
                     y -= 1
@@ -653,11 +644,11 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
         algo.set_phase(algo.NULL)
 
 
-def get_random_sample(population: tuple, k: int) -> list:
+def _get_random_sample(population: tuple, k: int) -> list:
     """Returns a k length list of unique elements from population"""
     return random.sample(population, k)
 
 
-def get_randrange(start: int, stop: int) -> int:
+def _get_randrange(start: int, stop: int) -> int:
     """Return a random int within a range"""
     return random.randrange(start, stop)
