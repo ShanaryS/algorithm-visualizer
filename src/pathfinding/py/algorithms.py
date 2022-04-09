@@ -60,8 +60,8 @@ class AlgoState:
         self.ALGO_BI_DIJKSTRA = self._next_int()
         self.phase = self.NULL
         self.algo = self.NULL
-        algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
-        path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+        self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+        self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
     
     def watch_phase(self) -> str:
         """Checks the phase"""
