@@ -328,7 +328,7 @@ def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: Vis
     """Run the dijkstra algorithm"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True, algo_running=True)
+    draw(gph, algo, txt, clear_legend=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
@@ -341,7 +341,7 @@ def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisTe
     """Runs the A* algorithm"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True, algo_running=True)
+    draw(gph, algo, txt, clear_legend=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
@@ -354,7 +354,7 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     """Runs the Bi-Directional Dijkstra algorithm"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True, algo_running=True)
+    draw(gph, algo, txt, clear_legend=True)
 
     # Handles whether or not mid exists
     if lgc.mid:
@@ -366,7 +366,7 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
 def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Draws recursive maze"""
     reset_graph(gph, algo, txt)
-    draw(gph, algo, txt, clear_legend=True, algo_running=True)
+    draw(gph, algo, txt, clear_legend=True)
     gph.base_drawn = False
     recursive_maze(gph, algo, txt)  # Draw maze
     gph.update_legend = True
