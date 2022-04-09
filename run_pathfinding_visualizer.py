@@ -48,7 +48,7 @@ def main() -> None:
 
     algo = AlgoState()
 
-    lgc = LogicState(ordinal_square_clicked=[])
+    lgc = LogicState(ordinal_square_clicked_last_tick=[])
 
     txt = VisText()
 
@@ -58,6 +58,11 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Add visualize call to graph that disables it until next algo update
+# Call .update_legend after best path finishes
+
+# Ability to set algo speed
+# Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item
 
 # --- C++ Performance Rewrite ---
