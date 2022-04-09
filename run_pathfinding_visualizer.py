@@ -68,7 +68,7 @@ if __name__ == "__main__":
 # Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item
 # Rewrite sections of code into separate functions (eg draw() into multiple parts)
-# Implement threading in square access methods
+# Implement threading in square access methods. Separate locks for square and algo?
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
