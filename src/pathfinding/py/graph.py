@@ -17,7 +17,6 @@ else:
 
 import pygame
 from dataclasses import dataclass
-from typing import Optional
 
 
 # Colors
@@ -51,7 +50,7 @@ class GraphState:
     update_legend: bool = False
     update_entire_screen: bool = False
     has_img: bool = False
-    img: Optional[bytes] = None
+    img: bytes = None
     visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
