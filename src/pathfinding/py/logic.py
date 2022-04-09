@@ -42,9 +42,7 @@ class LogicState:
     BEST_PATH_SLEEP: int = 3
 
 
-def run_pathfinding(
-    gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText
-) -> None:
+def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
     
     # Create pygame window
