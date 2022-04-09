@@ -572,10 +572,7 @@ def draw_algo_timer(gph: GraphState, txt: VisText) -> pygame.Rect:
 def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_default=None, reset=True) -> None:
     """Resets entire graph removing every square"""
     # Need to update these values
-    algo.algo_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
-    algo.path_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
-    algo.set_phase(algo.NULL)
-    algo.set_algo(algo.NULL)
+    algo.reset()
     gph.has_img = False
 
     # Resets each square

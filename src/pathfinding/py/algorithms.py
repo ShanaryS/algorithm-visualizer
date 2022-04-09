@@ -8,6 +8,7 @@ if use_square_h:
 else:
     from src.pathfinding.py.square import Square
 
+import threading
 from dataclasses import dataclass, field
 from queue import PriorityQueue
 from time import perf_counter
@@ -30,17 +31,24 @@ class AlgoState:
     # The current phase and current/last algorithm.
     phase: int = field(init=False)
     algo: int = field(init=False)
+    finished: bool = False  # Cobination with PHASE and ALGO preserves past
     
     # Special variables
     NULL: int = 0  # Value is 0 which return false when casted to bool
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
     DEFAULT_SPEED_MULTIPLIER = 1
+
+    # Run options
+    start: Square = None
+    mid: Square = None
+    end: Square = None
+    ignore_square: Square = None
     
     # Control the speed of algorithms
-    best_path_sleep: int = 3
-    highway_multiplier: int = 3
     algo_speed_multiplier: int = field(init=False)
     path_speed_multiplier: int = field(init=False)
+    best_path_sleep: int = 3
+    highway_multiplier: int = 3
 
     # Timer for algorithm
     timer_total: float = 0
@@ -62,6 +70,24 @@ class AlgoState:
         self.algo = self.NULL
         self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
         self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+
+    def start_loop(self) -> None:
+        """Starts the algo loop on a daemon thread that runs forever."""
+        threading.Thread(target=self._algo_loop, args=(), daemon=True).start()
+    
+    def run(self, phase, algo) -> None:
+        """Start an algorithm using PHASE and ALGO, NULL where applicable."""
+        with threading.Lock():
+            self.set_phase(phase)
+            if self.watch_phase() == self.PHASE_ALGO:
+                self.set_algo(algo)
+
+    def run_options(self, start, mid, end, ignore_square) -> None:
+        """Set the options that will be performed on run"""
+        self.start = start
+        self.mid = mid
+        self.end = end
+        self.ignore_square = ignore_square
     
     def watch_phase(self) -> str:
         """Checks the phase"""
@@ -70,7 +96,7 @@ class AlgoState:
     def watch_algo(self) -> str:
         """Checks the algo"""
         return self.algo
-    
+
     def set_phase(self, phase: str) -> None:
         """Change the phase. Use PHASE constants. Set to NULL when finished."""
         self.phase = phase
@@ -78,7 +104,40 @@ class AlgoState:
     def set_algo(self, algo: str) -> str:
         """Change the algo. Use ALGO constants. Don't set to NULL when finished"""
         self.algo = algo
-    
+
+    def reset(self) -> None:
+        """Resets options to their default values"""
+        self.set_phase(self.NULL)
+        self.set_algo(self.NULL)
+        self.start = None
+        self.mid = None
+        self.end = None
+        self.ignore_square = None
+        self.finished = False
+        self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+        self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+
+    def _algo_loop(self) -> None:
+        """This loop is placed on a daemon thread and broadcasts its state."""
+        while True:
+            # Check if algo
+            if self.watch_phase() == self.PHASE_ALGO:
+                if not self.mid:
+                    if self.watch_algo() == self.ALGO_DIJKSTRA:
+                        dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                    elif self.watch_algo() == self.ALGO_A_STAR:
+                        a_star(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                    elif self.watch_algo() == self.ALGO_BI_DIJKSTRA:
+                        bi_dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                else:
+                    start_mid_end(self, self.start, self.mid, self.end)
+                self.finished = True
+
+            # Check if maze
+            elif self.watch_phase() == self.PHASE_MAZE:
+                recursive_maze(self)
+                self.finished = True
+
     def _timer_start(self) -> None:
         """Start timer for algo. Not for general use."""
         self.timer_start_time = perf_counter()
@@ -112,7 +171,7 @@ class AlgoState:
         return self._unique_int
 
 
-def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square = None, draw_best_path: bool = True) -> dict:
+def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict:
     """Code for the dijkstra algorithm"""
     # Set phase and algo
     algo.set_phase(algo.PHASE_ALGO)
@@ -187,7 +246,7 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square 
     return dict()
 
 
-def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square = None, draw_best_path: bool = True) -> dict:
+def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict:
     """Code for the A* algorithm"""
     # Set phase and algo
     algo.set_phase(algo.PHASE_ALGO)
@@ -272,7 +331,7 @@ def _heuristic(pos1: tuple, pos2: tuple) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool = False, ignore_square: Square = None, draw_best_path: bool = True) -> dict:
+def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ignore_square: Square, draw_best_path: bool) -> dict:
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
     # Set phase and algo
     algo.set_phase(algo.PHASE_ALGO)

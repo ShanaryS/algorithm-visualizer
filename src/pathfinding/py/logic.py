@@ -11,17 +11,16 @@ else:
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
-    from src.pathfinding.cpp.algorithms import (AlgoState, dijkstra, a_star,
-        bi_dijkstra, start_mid_end, recursive_maze)
+    from src.pathfinding.cpp.algorithms import AlgoState
 else:
-    from src.pathfinding.py.algorithms import (AlgoState, dijkstra, a_star,
-        bi_dijkstra, start_mid_end, recursive_maze)
+    from src.pathfinding.py.algorithms import AlgoState
 
 from src.pathfinding.py.maps import get_img_base, get_img_clean
 from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
     reset_graph, reset_algo, change_graph_size, set_squares_to_roads,
     draw_vis_text, HEIGHT)
 
+import threading
 import pygame
 from dataclasses import dataclass
 
@@ -30,7 +29,7 @@ from dataclasses import dataclass
 class LogicState:
     """Stores the state of the logic"""
 
-    ordinal_square_clicked: list
+    ordinal_square_clicked_last_tick: list
     start: Square = None
     mid: Square = None
     end: Square = None
@@ -53,10 +52,20 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
     
     # Only allow certain events
     pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN])
+    
+    # thread_logic = threading.Thread(target=logic_loop, args=(gph, algo, lgc, txt))
+    # thread_logic.run()
+    logic_loop(gph, algo, lgc, txt)
+ 
 
+def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+    """Main loop that handles logic, inputs, and GUI on a single thread."""
+    # Start other loops
+    algo.start_loop()
+    
     # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
     clock = pygame.time.Clock()
-
+    
     while lgc.run:
         draw(gph, algo, txt, legend=True)  # Draws the graph with all the necessary updates
 
@@ -72,7 +81,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
 
             # Used to know if no longer dragging ordinal square after algo completion
             if not pygame.mouse.get_pressed(3)[0]:
-                lgc.ordinal_square_clicked.clear()
+                lgc.ordinal_square_clicked_last_tick.clear()
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             if (pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
@@ -172,15 +181,14 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     """Handles mouse left click"""
     square = _get_square_clicked()
     # Checks if algo is completed, used for dragging algo
-    if ((algo.algo == algo.ALGO_DIJKSTRA or algo.algo == algo.ALGO_A_STAR or algo.algo == algo.ALGO_BI_DIJKSTRA)
-        and lgc.start and lgc.end):
+    if algo.finished and lgc.start and lgc.end:
         # Checks if ordinal square is being dragged
-        if lgc.ordinal_square_clicked:
+        if lgc.ordinal_square_clicked_last_tick:
 
             # Checks if the mouse is currently on an ordinal square, no need to update anything
             if square != lgc.start and square != lgc.mid and square != lgc.end:
                 # Used to move ordinal square to new pos
-                last_square = lgc.ordinal_square_clicked[0]
+                last_square = lgc.ordinal_square_clicked_last_tick[0]
 
                 # Checks if ordinal square was previously a wall to reinstate it after moving, else reset
                 if last_square == "start":
@@ -205,61 +213,63 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                     lgc.end = square
                     square.set_end()
 
-                # Runs the algo again instantly with no visualizations, handles whether mid exists
-                if algo.algo == algo.ALGO_DIJKSTRA:
+                # Runs the algo again instantly with no visualizations.
+                if algo.watch_algo() == algo.ALGO_DIJKSTRA:
                     _dijkstra_button(gph, algo, lgc, txt)
-                elif algo.algo == algo.ALGO_A_STAR:
+                elif algo.watch_algo() == algo.ALGO_A_STAR:
                     _a_star_button(gph, algo, lgc, txt)
-                elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+                elif algo.watch_algo() == algo.ALGO_BI_DIJKSTRA:
                     _bi_dijkstra_button(gph, algo, lgc, txt)
 
         # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
-            lgc.ordinal_square_clicked.append("start")
+            lgc.ordinal_square_clicked_last_tick.append("start")
         elif square is lgc.mid:
-            lgc.ordinal_square_clicked.append("mid")
+            lgc.ordinal_square_clicked_last_tick.append("mid")
         elif square is lgc.end:
-            lgc.ordinal_square_clicked.append("end")
+            lgc.ordinal_square_clicked_last_tick.append("end")
 
         # On algo completion, add wall and update algo
         else:
             # Add wall
             square.set_wall()
 
-            # Updates algo
-            if algo.algo == algo.ALGO_DIJKSTRA:
-                _dijkstra_button(gph, algo, lgc, txt)
-            elif algo.algo == algo.ALGO_A_STAR:
-                _a_star_button(gph, algo, lgc, txt)
-            elif algo.algo == algo.ALGO_BI_DIJKSTRA:
-                _bi_dijkstra_button(gph, algo, lgc, txt)
+            # Update algo
+            if algo.finished:
+                if algo.watch_algo() == algo.ALGO_DIJKSTRA:
+                    _dijkstra_button(gph, algo, lgc, txt)
+                elif algo.watch_algo() == algo.ALGO_A_STAR:
+                    _a_star_button(gph, algo, lgc, txt)
+                elif algo.watch_algo() == algo.ALGO_BI_DIJKSTRA:
+                    _bi_dijkstra_button(gph, algo, lgc, txt)
 
     # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
         lgc.start = square
         square.set_start()
 
-        # Handles removing and adding start manually instead of dragging on algo completion.
-        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.end:
-            _dijkstra_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.end:
-            _a_star_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.end:
-            _bi_dijkstra_button(gph, algo, lgc, txt)
+        # Handles removing and adding end manually instead of dragging on algo completion.
+        if algo.finished and lgc.end:
+            if algo.watch_algo() == algo.ALGO_DIJKSTRA:
+                _dijkstra_button(gph, algo, lgc, txt)
+            elif algo.watch_algo() == algo.ALGO_A_STAR:
+                _a_star_button(gph, algo, lgc, txt)
+            elif algo.watch_algo() == algo.ALGO_BI_DIJKSTRA:
+                _bi_dijkstra_button(gph, algo, lgc, txt)
 
-    # If end square does not exist, and start square does exist, create end square.
-    # If not currently ordinal square.
+   # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
         lgc.end = square
         square.set_end()
 
         # Handles removing and adding end manually instead of dragging on algo completion.
-        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.end:
-            _dijkstra_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.end:
-            _a_star_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.end:
-            _bi_dijkstra_button(gph, algo, lgc, txt)
+        if algo.finished:
+            if algo.watch_algo() == algo.ALGO_DIJKSTRA:
+                _dijkstra_button(gph, algo, lgc, txt)
+            elif algo.watch_algo() == algo.ALGO_A_STAR:
+                _a_star_button(gph, algo, lgc, txt)
+            elif algo.watch_algo() == algo.ALGO_BI_DIJKSTRA:
+                _bi_dijkstra_button(gph, algo, lgc, txt)
 
     # If start and end square exists, create wall. If not currently ordinal square.
     # Saves pos of wall to be able to reinstate it after dragging ordinal square past it.
@@ -272,24 +282,20 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     square = _get_square_clicked()
     # Reset square and ordinal square if it was any
     square.reset()
-    was_ordinal = False
     if square == lgc.start:
         lgc.start = None
-        was_ordinal = True
     elif square == lgc.mid:
         lgc.mid = None
-        was_ordinal = True
     elif square == lgc.end:
         lgc.end = None
-        was_ordinal = True
         
     # Updates algo
-    if not was_ordinal:
-        if algo.algo == algo.ALGO_DIJKSTRA:
+    if algo.finished and lgc.start and lgc.end:
+        if algo.watch_algo() == algo.ALGO_DIJKSTRA:
             _dijkstra_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_A_STAR:
+        elif algo.watch_algo() == algo.ALGO_A_STAR:
             _a_star_button(gph, algo, lgc, txt)
-        elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+        elif algo.watch_algo() == algo.ALGO_BI_DIJKSTRA:
             _bi_dijkstra_button(gph, algo, lgc, txt)
 
 
@@ -302,15 +308,10 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
         square.set_mid()
         
         # Handles removing and adding mid manually instead of dragging on algo completion.
-        if algo.algo == algo.ALGO_DIJKSTRA and lgc.start and lgc.mid and lgc.end:
+        if algo.finished and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
-            start_mid_end(algo, lgc.start, lgc.mid, lgc.end,)
-        elif algo.algo == algo.ALGO_A_STAR and lgc.start and lgc.mid and lgc.end:
-            reset_algo(algo)
-            start_mid_end(algo, lgc.start, lgc.mid, lgc.end,)
-        elif algo.algo == algo.ALGO_BI_DIJKSTRA and lgc.start and lgc.mid and lgc.end:
-            reset_algo(algo)
-            start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
+            algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+            algo.run(algo.PHASE_ALGO, algo.watch_algo)
 
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
@@ -330,11 +331,9 @@ def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: Vis
     reset_algo(algo)
     draw(gph, algo, txt, clear_legend=True)
 
-    # Handles whether or not mid exists
-    if lgc.mid:
-        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
-    else:
-        dijkstra(algo, lgc.start, lgc.end)
+    # Set algorithm to run
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run(algo.PHASE_ALGO, algo.ALGO_DIJKSTRA)
 
 
 def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -343,11 +342,9 @@ def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisTe
     reset_algo(algo)
     draw(gph, algo, txt, clear_legend=True)
 
-    # Handles whether or not mid exists
-    if lgc.mid:
-        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
-    else:
-        a_star(algo, lgc.start, lgc.end)
+    # Set algorithm to run
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run(algo.PHASE_ALGO, algo.ALGO_A_STAR)
 
 
 def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -356,11 +353,9 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     reset_algo(algo)
     draw(gph, algo, txt, clear_legend=True)
 
-    # Handles whether or not mid exists
-    if lgc.mid:
-        start_mid_end(algo, lgc.start, lgc.mid, lgc.end)
-    else:
-        bi_dijkstra(algo, lgc.start, lgc.end)
+    # Set algorithm to run
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run(algo.PHASE_ALGO, algo.ALGO_BI_DIJKSTRA)
 
 
 def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
