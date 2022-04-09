@@ -265,8 +265,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
     # If start and end square exists, create wall. If not currently ordinal square.
     # Saves pos of wall to be able to reinstate it after dragging ordinal square past it.
-    elif (square != lgc.start and square != lgc.mid and square != lgc.end 
-          and algo.phase != algo.PHASE_MAZE):
+    elif square != lgc.start and square != lgc.mid and square != lgc.end:
         square.set_wall()
 
 
@@ -373,7 +372,6 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     gph.base_drawn = False
     recursive_maze(gph, algo, txt)  # Draw maze
     gph.update_legend = True
-    algo.maze = True  # Necessary for handling dragging over barriers if in maze
     _reset_ordinal_squares(lgc)
 
 
