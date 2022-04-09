@@ -143,7 +143,7 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
         clock.tick(gph.FPS)
 
     # Only reached if while loop ends, which happens if window is closed. Program terminates.
-    pygame.quit()
+    quit_program()
 
 
 def _get_clicked_pos(pos) -> tuple[int, int]:
@@ -438,7 +438,7 @@ def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, tx
 
                 draw_vis_text(gph, algo, txt, is_input=True)
 
-    pygame.quit()
+    quit_program()
 
 
 def _visualize_changes_button(gph: GraphState, algo: AlgoState, txt: VisText) -> None:
@@ -453,3 +453,10 @@ def _visualize_changes_button(gph: GraphState, algo: AlgoState, txt: VisText) ->
 
     gph.update_legend = True
     draw(gph, algo, txt, legend=True)
+
+
+def quit_program() -> None:
+    """Quits the program"""
+    pygame.quit()
+    import sys
+    sys.exit()
