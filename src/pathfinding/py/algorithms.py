@@ -37,6 +37,7 @@ class AlgoState:
     NULL: int = 0  # Value is 0 which return false when casted to bool
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
     DEFAULT_SPEED_MULTIPLIER = 1
+    lock: threading.Lock  = threading.Lock()
 
     # Run options
     start: Square = None
@@ -77,10 +78,9 @@ class AlgoState:
     
     def run(self, phase, algo) -> None:
         """Start an algorithm using PHASE and ALGO, NULL where applicable."""
-        with threading.Lock():
-            self.set_phase(phase)
-            if self.watch_phase() == self.PHASE_ALGO:
-                self.set_algo(algo)
+        self.set_phase(phase)
+        if self.watch_phase() == self.PHASE_ALGO:
+            self.set_algo(algo)
 
     def run_options(self, start, mid, end, ignore_square) -> None:
         """Set the options that will be performed on run"""
@@ -89,39 +89,55 @@ class AlgoState:
         self.end = end
         self.ignore_square = ignore_square
     
-    def watch_phase(self) -> str:
+    def watch_phase(self) -> int:
         """Checks the phase"""
-        return self.phase
+        with self.lock:
+            return self.phase
 
-    def watch_algo(self) -> str:
+    def watch_algo(self) -> int:
         """Checks the algo"""
-        return self.algo
+        with self.lock:
+            return self.algo
 
-    def set_phase(self, phase: str) -> None:
+    def watch_finished(self) -> bool:
+        """Checks if algo is finished"""
+        with self.lock:
+            return self.finished
+
+    def set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants. Set to NULL when finished."""
-        self.phase = phase
+        with self.lock:
+            self.phase = phase
     
-    def set_algo(self, algo: str) -> str:
+    def set_algo(self, algo: int) -> None:
         """Change the algo. Use ALGO constants. Don't set to NULL when finished"""
-        self.algo = algo
+        with self.lock:
+            self.algo = algo
+
+    def set_finished(self, x: bool) -> None:
+        """Set finshed to true or false"""
+        with self.lock:
+            self.finished = x
 
     def reset(self) -> None:
         """Resets options to their default values"""
-        self.set_phase(self.NULL)
-        self.set_algo(self.NULL)
-        self.start = None
-        self.mid = None
-        self.end = None
-        self.ignore_square = None
-        self.finished = False
-        self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
-        self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+        with self.lock:
+            self.set_phase(self.NULL)
+            self.set_algo(self.NULL)
+            self.start = None
+            self.mid = None
+            self.end = None
+            self.ignore_square = None
+            self.set_finished(False)
+            self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+            self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
 
     def _algo_loop(self) -> None:
         """This loop is placed on a daemon thread and broadcasts its state."""
         while True:
             # Check if algo
             if self.watch_phase() == self.PHASE_ALGO:
+                self.set_finished(False)
                 if not self.mid:
                     if self.watch_algo() == self.ALGO_DIJKSTRA:
                         dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
@@ -131,12 +147,13 @@ class AlgoState:
                         bi_dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
-                self.finished = True
+                self.set_finished(True)
 
             # Check if maze
             elif self.watch_phase() == self.PHASE_MAZE:
+                self.reset()
                 recursive_maze(self)
-                self.finished = True
+                self.set_finished(True)
 
     def _timer_start(self) -> None:
         """Start timer for algo. Not for general use."""
@@ -232,11 +249,13 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
                 queue_pos += 1
                 open_set.put((g_score[nei], queue_pos, nei))
                 if nei != end and not nei.is_closed() and nei != ignore_square:
-                    nei.set_open()
+                    with algo.lock:
+                        nei.set_open()
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != ignore_square:
-            curr_square.set_closed()
+            with algo.lock:
+                curr_square.set_closed()
 
         # End timer before visualizing for better comparisons
         algo._timer_end()
@@ -310,11 +329,13 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
                 queue_pos += 1
                 open_set.put((f_score[nei], queue_pos, nei))
                 if nei != end and not nei.is_closed() and nei != ignore_square:
-                    nei.set_open()
+                    with algo.lock:
+                        nei.set_open()
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != ignore_square:
-            curr_square.set_closed()
+            with algo.lock:
+                curr_square.set_closed()
 
         # End timer before visualizing for better comparisons
         algo._timer_end()
@@ -438,10 +459,11 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "start"))
                     if nei != end and not nei.is_closed() and nei != ignore_square:
-                        if alt_color:
-                            nei.set_open2()
-                        else:
-                            nei.set_open()
+                        with algo.lock:
+                            if alt_color:
+                                nei.set_open2()
+                            else:
+                                nei.set_open()
         elif temp[3] == "end":
             for nei in curr_square.get_neighbours():
                 # Ignore walls
@@ -456,20 +478,22 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
                     queue_pos += 1
                     open_set.put((g_score[nei], queue_pos, nei, "end"))
                     if nei != start and not nei.is_closed() and nei != ignore_square:
-                        if alt_color:
-                            nei.set_open3()
-                        else:
-                            nei.set_open2()
+                        with algo.lock:
+                            if alt_color:
+                                nei.set_open3()
+                            else:
+                                nei.set_open2()
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_square:
             # Set square to proper closed value based on it's open value
-            if curr_square.is_open():
-                curr_square.set_closed()
-            elif curr_square.is_open2():
-                curr_square.set_closed2()
-            elif curr_square.is_open3():
-                curr_square.set_closed3()
+            with algo.lock:
+                if curr_square.is_open():
+                    curr_square.set_closed()
+                elif curr_square.is_open2():
+                    curr_square.set_closed2()
+                elif curr_square.is_open3():
+                    curr_square.set_closed3()
 
         # End timer before visualizing for better comparisons
         algo._timer_end()
@@ -483,10 +507,10 @@ def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end
     """Used by bi_dijkstra to draw best path in two parts"""
     # Draws best path for first swarm
     _best_path(algo, came_from_start, first_meet_square)
-    first_meet_square.set_path()
-
-    # Draws best path for second swarm
-    second_meet_square.set_path()
+    with algo.lock:
+        first_meet_square.set_path()
+        # Draws best path for second swarm
+        second_meet_square.set_path()
     _best_path(algo, came_from_end, second_meet_square, reverse=True)
 
 
@@ -503,12 +527,13 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
 
     # Need to traverse in reverse depending on what part of algo
     square: Square
-    if reverse:
-        for square in path[:-1]:
-            square.set_path()
-    else:
-        for square in path[len(path) - 2 :: -1]:
-            square.set_path()
+    with algo.lock:
+        if reverse:
+            for square in path[:-1]:
+                square.set_path()
+        else:
+            for square in path[len(path) - 2 :: -1]:
+                square.set_path()
     
     # Clean up
     algo.set_phase(algo.NULL)
@@ -522,9 +547,10 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid_to_end = dijkstra(algo, mid, end, ignore_square=start, draw_best_path=False)
         
         # Fixes squares disappearing when dragging
-        start.set_start()
-        mid.set_mid()
-        end.set_end()
+        with algo.lock:
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
@@ -533,9 +559,10 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid_to_end = a_star(algo, mid, end, ignore_square=start, draw_best_path=False)
 
         # Fixes squares disappearing when dragging
-        start.set_start()
-        mid.set_mid()
-        end.set_end()
+        with algo.lock:
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
@@ -544,9 +571,10 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         mid_to_end = bi_dijkstra(algo, mid, end, alt_color=True, ignore_square=start, draw_best_path=False)
         
         # Fixes squares disappearing when dragging
-        start.set_start()
-        mid.set_mid()
-        end.set_end()
+        with algo.lock:
+            start.set_start()
+            mid.set_mid()
+            end.set_end()
 
         _best_path_bi_dijkstra(algo, start_to_mid[0], start_to_mid[1], start_to_mid[2], start_to_mid[3])
         _best_path_bi_dijkstra(algo, mid_to_end[0], mid_to_end[1], mid_to_end[2], mid_to_end[3])
@@ -593,7 +621,8 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
         for y in range(chamber_height):
             algo._timer_start()
             square: Square = graph[chamber_left + x_divide][chamber_top + y]
-            square.set_wall()
+            with algo.lock:
+                square.set_wall()
             algo._timer_end()
 
     # Draws horizontal maze line within chamber
@@ -601,7 +630,8 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
         for x in range(chamber_width):
             algo._timer_start()
             square: Square = graph[chamber_left + x][chamber_top + y_divide]
-            square.set_wall()
+            with algo.lock:
+                square.set_wall()
             algo._timer_end()
 
     # Terminates if below division limit
@@ -689,7 +719,8 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             if y >= Square.get_num_rows():
                 y = Square.get_num_rows() - 1
         square: Square = graph[x][y]
-        square.reset()
+        with algo.lock:
+            square.reset()
 
         # End timer before visualizing
         algo._timer_end()

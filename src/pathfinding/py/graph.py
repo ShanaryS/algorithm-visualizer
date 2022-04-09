@@ -15,6 +15,7 @@ if use_algorithms_h:
 else:
     from src.pathfinding.py.algorithms import AlgoState
 
+import threading
 import pygame
 from dataclasses import dataclass
 
@@ -54,7 +55,7 @@ class GraphState:
     visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
-    FPS: int = 240
+    FPS: int = 60
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
@@ -194,19 +195,27 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
         gph.add_to_update_queue(gph.window.fill(LEGEND_AREA_COLOR, LEGEND_RECT))
         _draw_legend(gph, txt)
 
-    # Queues all changed squares to visualize change
-    if gph.visualize_square_history:
-        gph.visualize_square_history = False
-        for square in Square.get_future_history_squares():
-            square.set_history()
-            gph.add_to_update_queue(square)
-        Square.clear_future_history_squares()
-    # Queues all changed squares to update
-    else:
-        square: Square
-        for square in Square.get_squares_to_update():
-            gph.add_to_update_queue(square)
+    # Get squares to draw
+    with algo.lock:
+        if gph.visualize_square_history:
+            gph.visualize_square_history = False
+            for square in Square.get_future_history_squares():
+                square.set_history()
+                gph.add_to_update_queue(square)
+            Square.clear_future_history_squares()
+        # Queues all changed squares to update
+        else:
+            square: Square
+            for square in Square.get_squares_to_update():
+                gph.add_to_update_queue(square)
+            Square.clear_squares_to_update()
 
+        # Used to reset squares to previous color like nothing happened
+        for square in Square.get_all_history_squares():
+            square.set_history_rollback()
+        Square.clear_history_squares()
+
+    # Update the pygame display
     # It's faster to update entire screen if number of rects is greater than 20
     # 40x speedup
     if len(gph.rects_to_update) > 20 or gph.update_entire_screen:
@@ -216,14 +225,6 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
     else:
         _draw_square_borders(gph)
         pygame.display.update(gph.rects_to_update)
-
-    # Used to reset squares to previous color like nothing happened
-    for square in Square.get_all_history_squares():
-        square.set_history_rollback()
-
-    # Clear update queues
-    Square.clear_squares_to_update()
-    Square.clear_history_squares()
     gph.rects_to_update.clear()
 
 

@@ -181,7 +181,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
     """Handles mouse left click"""
     square = _get_square_clicked()
     # Checks if algo is completed, used for dragging algo
-    if algo.finished and lgc.start and lgc.end:
+    if algo.watch_finished() and lgc.start and lgc.end:
         # Checks if ordinal square is being dragged
         if lgc.ordinal_square_clicked_last_tick:
 
@@ -235,7 +235,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
             square.set_wall()
 
             # Update algo
-            if algo.finished:
+            if algo.watch_finished():
                 if algo.watch_algo() == algo.ALGO_DIJKSTRA:
                     _dijkstra_button(gph, algo, lgc, txt)
                 elif algo.watch_algo() == algo.ALGO_A_STAR:
@@ -249,7 +249,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
         square.set_start()
 
         # Handles removing and adding end manually instead of dragging on algo completion.
-        if algo.finished and lgc.end:
+        if algo.watch_finished() and lgc.end:
             if algo.watch_algo() == algo.ALGO_DIJKSTRA:
                 _dijkstra_button(gph, algo, lgc, txt)
             elif algo.watch_algo() == algo.ALGO_A_STAR:
@@ -263,7 +263,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
         square.set_end()
 
         # Handles removing and adding end manually instead of dragging on algo completion.
-        if algo.finished:
+        if algo.watch_finished():
             if algo.watch_algo() == algo.ALGO_DIJKSTRA:
                 _dijkstra_button(gph, algo, lgc, txt)
             elif algo.watch_algo() == algo.ALGO_A_STAR:
@@ -290,7 +290,7 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
         lgc.end = None
         
     # Updates algo
-    if algo.finished and lgc.start and lgc.end:
+    if algo.watch_finished() and lgc.start and lgc.end:
         if algo.watch_algo() == algo.ALGO_DIJKSTRA:
             _dijkstra_button(gph, algo, lgc, txt)
         elif algo.watch_algo() == algo.ALGO_A_STAR:
@@ -308,7 +308,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
         square.set_mid()
         
         # Handles removing and adding mid manually instead of dragging on algo completion.
-        if algo.finished and lgc.start and lgc.mid and lgc.end:
+        if algo.watch_finished() and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
             algo.run_options(lgc.start, lgc.mid, lgc.end, None)
             algo.run(algo.PHASE_ALGO, algo.watch_algo)
@@ -363,7 +363,7 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     reset_graph(gph, algo, txt)
     draw(gph, algo, txt, clear_legend=True)
     gph.base_drawn = False
-    recursive_maze(gph, algo, txt)  # Draw maze
+    algo.set_phase(algo.PHASE_MAZE)
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
 
