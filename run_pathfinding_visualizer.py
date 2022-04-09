@@ -67,6 +67,8 @@ if __name__ == "__main__":
 # Ability to set algo speed
 # Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item
+# Rewrite sections of code into separate functions (eg draw() into multiple parts)
+# Implement threading in square access methods
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
