@@ -30,7 +30,6 @@ LEGEND_RECT = pygame.Rect(0, HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - HEIGHT)
 pygame.font.init()
 
 # Other constants
-DEFAULT_SPEED_MULTIPLIER = 1
 CENTER_GRAPH = HEIGHT // 2
 CENTER_LEGEND_AREA = HEIGHT + (WINDOW_HEIGHT - HEIGHT) // 2
 
@@ -50,8 +49,6 @@ class GraphState:
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
     FPS: int = 240
-    algo_speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
-    path_speed_multiplier: int = DEFAULT_SPEED_MULTIPLIER
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
