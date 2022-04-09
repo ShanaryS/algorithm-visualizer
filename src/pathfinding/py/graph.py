@@ -579,8 +579,8 @@ def reset_graph(
     """Resets entire graph removing every square"""
 
     # Need to update these values
-    gph.algo_speed_multiplier = DEFAULT_SPEED_MULTIPLIER
-    gph.path_speed_multiplier = DEFAULT_SPEED_MULTIPLIER
+    algo.algo_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
+    algo.path_speed_multiplier = algo.DEFAULT_SPEED_MULTIPLIER
     gph.has_img = False
     algo.dijkstra_finished = False
     algo.a_star_finished = False
