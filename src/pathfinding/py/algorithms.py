@@ -12,7 +12,7 @@ from lib.timer import sleep
 import threading
 from dataclasses import dataclass, field
 from queue import PriorityQueue
-from time import perf_counter
+from time import perf_counter_ns
 import random
 
 
@@ -56,7 +56,7 @@ class AlgoState:
     timer_max: float = float("-inf")
     timer_min: float = float("inf")
     timer_count: int = 0
-    timer_start_time: float = None
+    _timer_start_time: float = None
     
     def __post_init__(self):
         """Initialize variables with their unique values."""
@@ -157,12 +157,12 @@ class AlgoState:
 
     def _timer_start(self) -> None:
         """Start timer for algo. Not for general use."""
-        self.timer_start_time = perf_counter()
+        self._timer_start_time = perf_counter_ns()
 
     def _timer_end(self, count=True) -> None:
         """End timer for algo. Not for general use."""
-        end = perf_counter()
-        total = end - self.timer_start_time
+        end = perf_counter_ns()
+        total = (end - self._timer_start_time) / (10**9 * 60)  # Time in seconds
         self.timer_total += total
         if count:
             self.timer_count += 1
@@ -180,7 +180,7 @@ class AlgoState:
         self.timer_max: float = float("-inf")
         self.timer_min: float = float("inf")
         self.timer_count: int = 0
-        self.timer_start_time: float = None
+        self._timer_start_time: float = None
     
     def _auto(self) -> int:
         """Assign unique int on every call"""
