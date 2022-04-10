@@ -339,9 +339,9 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     reset_graph(gph, algo, txt)
     draw(gph, algo, txt, clear_legend=True)
     gph.base_drawn = False
-    algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
+    algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
 
 
 def _graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, new_graph_size) -> None:
