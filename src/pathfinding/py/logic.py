@@ -316,7 +316,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
         if algo.check_finished() and lgc.start and lgc.mid and lgc.end:
             reset_algo(algo)
             algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-            algo.run(algo.PHASE_ALGO, algo.check_algo)
+            algo.run(algo.PHASE_ALGO, algo.check_algo())
 
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
