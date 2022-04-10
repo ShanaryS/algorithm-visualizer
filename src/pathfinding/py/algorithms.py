@@ -47,7 +47,6 @@ class AlgoState:
     
     # Control the speed of algorithms
     best_path_sleep_ns: int = 3000
-    highway_multiplier: int = 3
 
     # Timer for algorithm
     timer_total: float = 0
