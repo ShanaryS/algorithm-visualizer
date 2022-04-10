@@ -58,6 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Reject inputs when phase is not null
 # Use check_algo to change text on graph
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
