@@ -20,19 +20,19 @@ class AlgoState:
     """Stores the state of the algorithms, whether they are finished or not"""
     # Possible phases
     PHASE_ALGO: int = field(init=False)
-    PHASE_PATH: int = field(init=False)
     PHASE_MAZE: int = field(init=False)
     
     # Possible algorithms
     ALGO_DIJKSTRA: int = field(init=False)
     ALGO_A_STAR: int = field(init=False)
     ALGO_BI_DIJKSTRA: int = field(init=False)
+    ALGO_BEST_PATH: int = field(init=False)
     ALGO_RECURSIVE_MAZE: int = field(init=False)
     
     # The current phase and current/last algorithm.
     phase: int = field(init=False)
     algo: int = field(init=False)
-    finished: bool = False  # Cobination with PHASE and ALGO preserves past
+    finished: bool = False  # Cobination with ALGO preserves past
     
     # Special variables
     NULL: int = 0  # Value is 0 which return false when casted to bool
@@ -63,16 +63,13 @@ class AlgoState:
     def __post_init__(self):
         """Initialize variables with their unique values."""
         self.PHASE_ALGO = self._auto()
-        self.PHASE_PATH = self._auto()
         self.PHASE_MAZE = self._auto()
         self.ALGO_DIJKSTRA = self._auto()
         self.ALGO_A_STAR = self._auto()
         self.ALGO_BI_DIJKSTRA = self._auto()
+        self.ALGO_BEST_PATH = self._auto()
         self.ALGO_RECURSIVE_MAZE = self._auto()
-        self.phase = self.NULL
-        self.algo = self.NULL
-        self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
-        self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+        self.reset()
 
     def start_loop(self) -> None:
         """Starts the algo loop on a daemon thread that runs forever."""
@@ -484,6 +481,9 @@ def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end
 
 def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
     """Main algo for reconstructing path"""
+    # Update info
+    algo._set_algo(algo.ALGO_BEST_PATH)
+    
     # Puts square path into list so it's easier to traverse in either direction and choose start and end points
     path: list = []
     while curr_square in came_from:
