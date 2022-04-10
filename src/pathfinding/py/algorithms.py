@@ -109,11 +109,13 @@ class AlgoState:
         """Change the phase. Use PHASE constants. Set to NULL when finished."""
         with self.lock:
             self.phase = phase
+            self.finished = False
     
     def set_algo(self, algo: int) -> None:
         """Change the algo. Use ALGO constants. Don't set to NULL when finished"""
         with self.lock:
             self.algo = algo
+            self.finished = False
 
     def set_finished(self, x: bool) -> None:
         """Set finshed to true or false"""
