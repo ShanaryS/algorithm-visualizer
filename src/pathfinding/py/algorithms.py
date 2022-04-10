@@ -84,10 +84,11 @@ class AlgoState:
 
     def run_options(self, start, mid, end, ignore_square) -> None:
         """Set the options that will be performed on run"""
-        self.start = start
-        self.mid = mid
-        self.end = end
-        self.ignore_square = ignore_square
+        with self.lock:
+            self.start = start
+            self.mid = mid
+            self.end = end
+            self.ignore_square = ignore_square
     
     def watch_phase(self) -> int:
         """Checks the phase"""
@@ -122,13 +123,13 @@ class AlgoState:
     def reset(self) -> None:
         """Resets options to their default values"""
         with self.lock:
-            self.set_phase(self.NULL)
-            self.set_algo(self.NULL)
+            self.phase = self.NULL
+            self.algo = self.NULL
             self.start = None
             self.mid = None
             self.end = None
             self.ignore_square = None
-            self.set_finished(False)
+            self.finished = False
             self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
             self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
 
@@ -136,8 +137,7 @@ class AlgoState:
         """This loop is placed on a daemon thread and broadcasts its state."""
         while True:
             # Check if algo
-            if self.watch_phase() == self.PHASE_ALGO:
-                self.set_finished(False)
+            if self.watch_phase() == self.PHASE_ALGO and not self.watch_finished():
                 if not self.mid:
                     if self.watch_algo() == self.ALGO_DIJKSTRA:
                         dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
@@ -150,7 +150,7 @@ class AlgoState:
                 self.set_finished(True)
 
             # Check if maze
-            elif self.watch_phase() == self.PHASE_MAZE:
+            elif self.watch_phase() == self.PHASE_MAZE and not self.watch_finished():
                 self.reset()
                 recursive_maze(self)
                 self.set_finished(True)
@@ -225,9 +225,6 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
 
         # Terminates if found the best path
         if curr_square == end:
-            # Clean up
-            algo.set_phase(algo.NULL)
-            
             if draw_best_path:
                 _best_path(algo, came_from, end)
                 return dict()
@@ -260,8 +257,6 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
         # End timer before visualizing for better comparisons
         algo._timer_end()
     
-    # Clean up
-    algo.set_phase(algo.NULL)
     return dict()
 
 
@@ -304,9 +299,6 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
 
         # Terminates if found the best path
         if curr_square == end:
-            # Clean up
-            algo.set_phase(algo.NULL)
-            
             if draw_best_path:
                 _best_path(algo, came_from, end)
                 return dict()
@@ -340,8 +332,6 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
         # End timer before visualizing for better comparisons
         algo._timer_end()
 
-    # Clean up
-    algo.set_phase(algo.NULL)
     return dict()
 
 
@@ -401,9 +391,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
 
             # Start swarm reaching mid (end square if no mid) swarm
             if curr_square.is_open() and nei.is_open2():
-                # Clean up
-                algo.set_phase(algo.NULL)
-                            
                 if draw_best_path:
                     _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
                     return dict()
@@ -412,9 +399,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
 
             # Mid (end if no mid) swarm reaching start swarm
             elif curr_square.is_open2() and nei.is_open() and not alt_color:
-                # Clean up
-                algo.set_phase(algo.NULL)
-                
                 if draw_best_path:
                     _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
                     return dict()
@@ -423,9 +407,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
 
             # Mid swarm reaching end swarm
             elif curr_square.is_open2() and nei.is_open3():
-                # Clean up
-                algo.set_phase(algo.NULL)
-                
                 if draw_best_path:
                     _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
                     return dict()
@@ -434,9 +415,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
 
             # End swarm reaching mid swarm
             elif curr_square.is_open3() and nei.is_open2():
-                # Clean up
-                algo.set_phase(algo.NULL)
-                
                 if draw_best_path:
                     _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
                     return dict()
@@ -498,8 +476,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ig
         # End timer before visualizing for better comparisons
         algo._timer_end()
     
-    # Clean up
-    algo.set_phase(algo.NULL)
     return dict()
 
 
@@ -535,8 +511,8 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
             for square in path[len(path) - 2 :: -1]:
                 square.set_path()
     
-    # Clean up
-    algo.set_phase(algo.NULL)
+    # Clean up. Set phase to algo to show that algo was completed
+    algo.set_phase(algo.PHASE_ALGO)
 
 
 def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> None:
@@ -728,10 +704,6 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
     # Recursively divides chambers
     for chamber in chambers:
         recursive_maze(algo, chamber, graph=graph)
-    
-    # Clean up on last chamber only
-    if not chamber:
-        algo.set_phase(algo.NULL)
 
 
 def _get_random_sample(population: tuple, k: int) -> list:
