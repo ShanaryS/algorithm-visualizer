@@ -143,7 +143,7 @@ class AlgoState:
                     elif self.check_algo() == self.ALGO_A_STAR:
                         a_star(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_BI_DIJKSTRA:
-                        bi_dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                        bi_dijkstra(self, self.start, self.end, alt_color=False, ignore_square=self.ignore_square, draw_best_path=True)
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
                 self._set_finished(True)

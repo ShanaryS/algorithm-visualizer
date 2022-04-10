@@ -187,11 +187,11 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
 
         gph.base_drawn = True
     else:
-        if not legend:
+        if legend:
+            gph.update_legend = True
+        else:
             if not algo.check_phase() == algo.PHASE_ALGO and not algo.check_phase() == algo.PHASE_MAZE:
                 gph.base_drawn = False
-        elif algo.check_algo() == algo.ALGO_BEST_PATH:
-            gph.update_legend = True
 
     if gph.update_legend:
         gph.update_legend = False
