@@ -162,7 +162,7 @@ class AlgoState:
     def _timer_end(self, count=True) -> None:
         """End timer for algo. Not for general use."""
         end = perf_counter_ns()
-        total = (end - self._timer_start_time) / (10**9 * 60)  # Time in seconds
+        total = (end - self._timer_start_time) / 10**9  # Time in seconds
         self.timer_total += total
         if count:
             self.timer_count += 1
