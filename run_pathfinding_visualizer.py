@@ -58,10 +58,9 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Use check_algo to change text on graph
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
-# Need to use lock (update only 60fps?)
-# Have algo yeild after each set of neighbours for update?
 
 # Multiple threads for algorithm?
 # Ability to set algo speed

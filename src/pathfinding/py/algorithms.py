@@ -88,11 +88,6 @@ class AlgoState:
         self._set_phase(phase)
         self._set_algo(algo)
         self._set_finished(False)
-    
-    def check_phase(self) -> int:
-        """Checks the phase"""
-        with self.lock:
-            return self.phase
 
     def check_algo(self) -> int:
         """Checks the algo"""
@@ -116,6 +111,11 @@ class AlgoState:
             self.finished = False
             self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
             self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
+    
+    def _check_phase(self) -> int:
+        """Checks the phase"""
+        with self.lock:
+            return self.phase
 
     def _set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants."""
@@ -136,7 +136,7 @@ class AlgoState:
         """This loop is placed on a daemon thread and watches for updates."""
         while True:
             # Check if algo
-            if self.check_phase() == self.PHASE_ALGO and not self.check_finished():
+            if self._check_phase() == self.PHASE_ALGO and not self.check_finished():
                 if not self.mid:
                     if self.check_algo() == self.ALGO_DIJKSTRA:
                         dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
@@ -150,7 +150,7 @@ class AlgoState:
                 self._set_phase(self.NULL)
 
             # Check if maze
-            elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
+            elif self._check_phase() == self.PHASE_MAZE and not self.check_finished():
                 if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
                 self._set_finished(True)
