@@ -62,7 +62,6 @@ if __name__ == "__main__":
 # Ordinal nodes disappear on algo run
 # Instant graph slow
 # Google maps slow
-# Dragging nodes doesn't update algo
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
 # Rewrite draw()?
