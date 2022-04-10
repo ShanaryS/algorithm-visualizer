@@ -173,6 +173,8 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
 
     # Draws the horizontal and vertical lines on the graph unless it has image
     if not gph.base_drawn:
+        algo.reset()
+        
         if gph.has_img:
             _draw_img(gph)
         else:
