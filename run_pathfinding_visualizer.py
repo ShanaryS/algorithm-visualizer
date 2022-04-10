@@ -64,6 +64,7 @@ if __name__ == "__main__":
 # Call .update_legend after best path finishes
 
 # Multiple threads for algorithm?
+# Multiprocessing for algo
 # Ability to set algo speed
 # Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item

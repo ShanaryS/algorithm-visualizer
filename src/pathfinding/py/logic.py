@@ -43,6 +43,8 @@ class LogicState:
 
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
+    # Start other loops
+    algo.start_loop()
     
     # Create pygame window
     gph.create_pygame_window()
@@ -58,9 +60,6 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
 
 def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Main loop that handles logic, inputs, and GUI on a single thread."""
-    # Start other loops
-    algo.start_loop()
-    
     # Defines the FPS of the game. Used by clock.tick() at bottom of while loop
     clock = pygame.time.Clock()
     
