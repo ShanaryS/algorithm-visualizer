@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Use check_algo and not finished to change text on graph
 # Best path draw is instant
 # Ordinal nodes disappear on algo run
 # Instant graph slow
