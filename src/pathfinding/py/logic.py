@@ -219,12 +219,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                     square.set_end()
 
                 # Runs the algo again instantly with no visualizations.
-                if algo.check_algo() == algo.ALGO_DIJKSTRA:
-                    _dijkstra_button(gph, algo, lgc, txt)
-                elif algo.check_algo() == algo.ALGO_A_STAR:
-                    _a_star_button(gph, algo, lgc, txt)
-                elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-                    _bi_dijkstra_button(gph, algo, lgc, txt)
+                _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo())
 
         # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
@@ -241,12 +236,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
             # Update algo
             if algo.check_finished():
-                if algo.check_algo() == algo.ALGO_DIJKSTRA:
-                    _dijkstra_button(gph, algo, lgc, txt)
-                elif algo.check_algo() == algo.ALGO_A_STAR:
-                    _a_star_button(gph, algo, lgc, txt)
-                elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-                    _bi_dijkstra_button(gph, algo, lgc, txt)
+                _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo())
 
     # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
@@ -255,12 +245,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.check_finished() and lgc.end:
-            if algo.check_algo() == algo.ALGO_DIJKSTRA:
-                _dijkstra_button(gph, algo, lgc, txt)
-            elif algo.check_algo() == algo.ALGO_A_STAR:
-                _a_star_button(gph, algo, lgc, txt)
-            elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-                _bi_dijkstra_button(gph, algo, lgc, txt)
+            _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo())
 
    # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
@@ -296,12 +281,7 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
         
     # Updates algo
     if algo.check_finished() and lgc.start and lgc.end:
-        if algo.check_algo() == algo.ALGO_DIJKSTRA:
-            _dijkstra_button(gph, algo, lgc, txt)
-        elif algo.check_algo() == algo.ALGO_A_STAR:
-            _a_star_button(gph, algo, lgc, txt)
-        elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-            _bi_dijkstra_button(gph, algo, lgc, txt)
+        _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo())
 
 
 def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
@@ -314,9 +294,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
         
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.check_finished() and lgc.start and lgc.mid and lgc.end:
-            reset_algo(algo)
-            algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-            algo.run(algo.PHASE_ALGO, algo.check_algo())
+            _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo())
 
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
@@ -330,37 +308,30 @@ def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     _reset_ordinal_squares(lgc)
 
 
-def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
-    """Run the dijkstra algorithm"""
+def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, algo_to_run) -> None:
+    """Run's the specificed algo"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
     draw(gph, algo, txt, clear_legend=True)
 
     # Set algorithm to run
     algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-    algo.run(algo.PHASE_ALGO, algo.ALGO_DIJKSTRA)
+    algo.run(algo.PHASE_ALGO, algo_to_run)
+
+
+def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+    """Run the dijkstra algorithm"""
+    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_DIJKSTRA)
 
 
 def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Runs the A* algorithm"""
-    # Resets algo visualizations without removing ordinal squares or walls
-    reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True)
-
-    # Set algorithm to run
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-    algo.run(algo.PHASE_ALGO, algo.ALGO_A_STAR)
+    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_A_STAR)
 
 
 def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """Runs the Bi-Directional Dijkstra algorithm"""
-    # Resets algo visualizations without removing ordinal squares or walls
-    reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True)
-
-    # Set algorithm to run
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-    algo.run(algo.PHASE_ALGO, algo.ALGO_BI_DIJKSTRA)
+    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_BI_DIJKSTRA)
 
 
 def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
