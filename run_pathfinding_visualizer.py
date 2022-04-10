@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Best path draw is instant
 # Ordinal nodes disappear on algo run
 # Add visualize call to graph that disables it until next algo update
 # Bug when switch to address after algo completion
