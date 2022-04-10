@@ -5,6 +5,7 @@ import the variable timer instead.
 """
 
 
+from time import perf_counter_ns as _get_time_ns
 from typing import Callable
 
 
@@ -21,8 +22,6 @@ class Timer:
     5. Min Time result ignores zero time values as they are usually trivial
     """
     
-    from time import perf_counter_ns as _get_time_ns
-
     def __init__(self, name="Code Section") -> None:
         self.timer_name = name
         self.timer_start = None
@@ -37,11 +36,11 @@ class Timer:
 
     def start(self) -> None:
         """Start timer for a section of code"""
-        self.timer_start = Timer._get_time_ns()
+        self.timer_start = _get_time_ns()
 
     def end(self) -> None:
         """End timer for a section of code"""
-        end = Timer._get_time_ns()
+        end = _get_time_ns()
 
         self.timer_count += 1
         total = end - self.timer_start
@@ -151,3 +150,26 @@ class Timer:
 
 # Import this var instead of class to share timer across modules
 timer = Timer()
+
+
+# Highest accuracy sleep
+def sleep(delay: int, unit: str ="s") -> None:
+        """Sleeps for specified unit of time."""
+        if unit == "ns":
+            ns = delay
+        elif unit == "us":
+            ns = delay * 10**3
+        elif unit == "ms":
+            ns = delay * 10**6
+        elif unit == "s":
+            ns = delay * 10**9
+        elif unit == "min":
+            ns = delay * (10**9 * 60)
+        elif unit == "h":
+            ns = delay * (10**9 * 60 * 60)
+        else:
+            raise NotImplementedError("Invalid time unit for sleep.")
+        
+        end = _get_time_ns() + ns
+        while _get_time_ns() < end:
+            pass
