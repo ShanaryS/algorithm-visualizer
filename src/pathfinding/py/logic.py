@@ -64,7 +64,11 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
     clock = pygame.time.Clock()
     
     while lgc.run:
-        draw(gph, algo, txt, legend=True)  # Draws the graph with all the necessary updates
+        # Draws the graph with all the necessary updates
+        if algo.check_phase() == algo.NULL:
+            draw(gph, algo, txt, legend=True)
+        else:
+            draw(gph, algo, txt)
 
         for event in pygame.event.get():
 
