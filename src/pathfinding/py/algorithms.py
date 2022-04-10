@@ -37,7 +37,6 @@ class AlgoState:
     # Special variables
     NULL: int = 0  # Value is 0 which return false when casted to bool
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
-    DEFAULT_SPEED_MULTIPLIER = 1
     lock: threading.Lock  = threading.Lock()
 
     # Run options
@@ -47,9 +46,7 @@ class AlgoState:
     ignore_square: Square = None
     
     # Control the speed of algorithms
-    algo_speed_multiplier: int = field(init=False)
-    path_speed_multiplier: int = field(init=False)
-    best_path_sleep: int = 3
+    best_path_sleep_ns: int = 3000
     highway_multiplier: int = 3
 
     # Timer for algorithm
@@ -114,8 +111,6 @@ class AlgoState:
             self.end = None
             self.ignore_square = None
             self.finished = False
-            self.algo_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
-            self.path_speed_multiplier = self.DEFAULT_SPEED_MULTIPLIER
 
     def _set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants."""
