@@ -59,12 +59,12 @@ if __name__ == "__main__":
     main()
 
 # Reject inputs when phase is not null
-# Use check_algo to change text on graph
+# Use check_algo and not finished to change text on graph
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
 
 # Multiple threads for algorithm?
-# Multiprocessing for algo
+# Multiprocessing for algo, may need to share memory
 # Ability to set algo speed
 # Refactor into class? Delay until the end
 # May need to handle how priority queue selects next item
