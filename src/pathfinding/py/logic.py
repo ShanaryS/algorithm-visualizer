@@ -53,8 +53,6 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
     # Only allow certain events
     pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN])
     
-    # thread_logic = threading.Thread(target=logic_loop, args=(gph, algo, lgc, txt))
-    # thread_logic.run()
     logic_loop(gph, algo, lgc, txt)
  
 
