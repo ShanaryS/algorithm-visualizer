@@ -137,6 +137,7 @@ class AlgoState:
         while True:
             # Check if algo
             if self.check_phase() == self.PHASE_ALGO and not self.check_finished():
+                previous_algo = self.check_algo()
                 if not self.mid:
                     if self.check_algo() == self.ALGO_DIJKSTRA:
                         dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
@@ -147,6 +148,7 @@ class AlgoState:
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
                 self._set_finished(True)
+                self._set_algo(previous_algo)  # Preserves more info
                 self._set_phase(self.NULL)
 
             # Check if maze
@@ -482,7 +484,6 @@ def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end
 def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
     """Main algo for reconstructing path"""
     # Update info
-    previous_algo = algo.check_algo()
     algo._set_algo(algo.ALGO_BEST_PATH)
     
     # Puts square path into list so it's easier to traverse in either direction and choose start and end points
@@ -500,9 +501,6 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
         else:
             for square in path[len(path) - 2 :: -1]:
                 square.set_path()
-
-    # Set algo to previous to preserve info for future use
-    algo._set_algo(previous_algo)
 
 
 def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> None:

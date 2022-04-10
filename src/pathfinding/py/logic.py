@@ -69,6 +69,7 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
             draw(gph, algo, txt, legend=True)
         else:
             draw(gph, algo, txt)
+            draw_vis_text(gph, algo, txt)
 
         for event in pygame.event.get():
 
