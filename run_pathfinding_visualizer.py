@@ -59,7 +59,7 @@ if __name__ == "__main__":
     main()
 
 # Add visualize call to graph that disables it until next algo update
-# Algo timer not working
+# Maze does not get drawn randomly
 # Instant graph slow
 # Google maps slow
 # Rewrite draw()?

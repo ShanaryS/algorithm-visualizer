@@ -433,6 +433,8 @@ def draw_vis_text(
 
     text_rects = []  # Used to only update text area
 
+    txt.timer_to_string(algo.timer_total, algo.timer_count)
+
     # Text to be shown depending on operation
     if algo.check_algo() == algo.ALGO_DIJKSTRA:
         text_rects.append(draw_algo_timer(gph, txt))
