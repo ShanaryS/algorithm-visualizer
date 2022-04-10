@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Ordinal nodes disappear on algo run
 # Add visualize call to graph that disables it until next algo update
 # Algo timer not working
 # Bug when switch to address after algo completion

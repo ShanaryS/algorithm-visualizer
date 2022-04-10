@@ -189,8 +189,8 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
     else:
         if legend:
             gph.update_legend = True
-        else:
-            if not algo.check_phase() == algo.PHASE_ALGO and not algo.check_phase() == algo.PHASE_MAZE:
+        elif algo.check_phase() == algo.NULL:
+            if not clear_legend:
                 gph.base_drawn = False
 
     if gph.update_legend:

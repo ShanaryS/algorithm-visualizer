@@ -47,7 +47,7 @@ class AlgoState:
     ignore_square: Square = None
     
     # Control the speed of algorithms
-    DEFAULT_BEST_PATH_DELAY_MS: int = 5
+    DEFAULT_BEST_PATH_DELAY_MS: int = 3
     best_path_delay_ms: int = field(init=False)
 
     # Timer for algorithm
