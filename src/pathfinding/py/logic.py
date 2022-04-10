@@ -122,13 +122,13 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img):
                 if Square.get_num_rows() == lgc.GRAPH_MAX:
                     _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE)
-                _recursive_maze_buttons(gph, algo, lgc, txt)
+                _recursive_maze_buttons(gph, algo, lgc, txt, False)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_i and not gph.has_img):
                 if Square.get_num_rows() == lgc.GRAPH_MAX:
                     _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE)
-                _recursive_maze_buttons(gph, algo, lgc, txt)
+                _recursive_maze_buttons(gph, algo, lgc, txt, True)
 
             # Redraw small maze with "S" key on keyboard if not currently small
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_s and Square.get_num_rows() != lgc.GRAPH_SMALL and not gph.has_img):
@@ -315,7 +315,7 @@ def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt
     draw(gph, algo, txt, clear_legend=True)
 
     # Set algorithm to run
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None, False)
     algo.run(algo.PHASE_ALGO, algo_to_run)
 
 
@@ -334,13 +334,14 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_BI_DIJKSTRA)
 
 
-def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, finished: bool) -> None:
     """Draws recursive maze"""
     reset_graph(gph, algo, txt)
     draw(gph, algo, txt, clear_legend=True)
     gph.base_drawn = False
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None, finished)
     algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
 
 

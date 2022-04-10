@@ -73,19 +73,20 @@ class AlgoState:
         """Starts the algo loop on a daemon thread that runs forever."""
         threading.Thread(target=self._algo_loop, args=(), daemon=True).start()
 
-    def run_options(self, start, mid, end, ignore_square) -> None:
+    def run_options(self, start, mid, end, ignore_square, finished) -> None:
         """Set the options that will be performed on run"""
         with self.lock:
             self.start = start
             self.mid = mid
             self.end = end
             self.ignore_square = ignore_square
+            self.finished = finished
 
     def run(self, phase, algo) -> None:
         """Start an algorithm using PHASE and ALGO, NULL where applicable."""
         self._set_phase(phase)
         self._set_algo(algo)
-        self.set_finished(False)
+        self._set_finished(False)
     
     def check_phase(self) -> int:
         """Checks the phase"""
@@ -101,11 +102,6 @@ class AlgoState:
         """Checks if algo is finished"""
         with self.lock:
             return self.finished
-
-    def set_finished(self, x: bool) -> None:
-        """Set finshed to true or false"""
-        with self.lock:
-            self.finished = x
 
     def reset(self) -> None:
         """Resets options to their default values"""
@@ -129,6 +125,11 @@ class AlgoState:
         with self.lock:
             self.algo = algo
 
+    def _set_finished(self, x: bool) -> None:
+        """Set finshed to true or false"""
+        with self.lock:
+            self.finished = x
+
     def _algo_loop(self) -> None:
         """This loop is placed on a daemon thread and watches for updates."""
         while True:
@@ -145,14 +146,14 @@ class AlgoState:
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
                 self._set_algo(previous_algo)  # Preserves more info
-                self.set_finished(True)
+                self._set_finished(True)
                 self._set_phase(self.NULL)
 
             # Check if maze
             elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
                 if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
-                self.set_finished(True)
+                self._set_finished(True)
                 self._set_phase(self.NULL)
 
     def _timer_start(self) -> None:
