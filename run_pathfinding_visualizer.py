@@ -59,7 +59,6 @@ if __name__ == "__main__":
     main()
 
 # Add visualize call to graph that disables it until next algo update
-# Mid squre not working
 # Algo timer not working
 # Instant graph slow
 # Google maps slow
