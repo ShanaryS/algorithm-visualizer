@@ -7,6 +7,7 @@ if use_square_h:
     from src.pathfinding.cpp.square import Square
 else:
     from src.pathfinding.py.square import Square
+from lib.timer import sleep
 
 import threading
 from dataclasses import dataclass, field
@@ -46,7 +47,8 @@ class AlgoState:
     ignore_square: Square = None
     
     # Control the speed of algorithms
-    best_path_sleep_ns: int = 3000
+    DEFAULT_BEST_PATH_DELAY_MS: int = 5
+    best_path_delay_ms: int = field(init=False)
 
     # Timer for algorithm
     timer_total: float = 0
@@ -110,6 +112,7 @@ class AlgoState:
             self.end = None
             self.ignore_square = None
             self.finished = False
+            self.best_path_delay_ms = self.DEFAULT_BEST_PATH_DELAY_MS
 
     def _set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants."""
@@ -488,12 +491,15 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
 
     # Need to traverse in reverse depending on what part of algo
     square: Square
-    with algo.lock:
-        if reverse:
-            for square in path[:-1]:
+    if reverse:
+        for square in path[:-1]:
+            sleep(algo.best_path_delay_ms, unit="ms")
+            with algo.lock:
                 square.set_path()
-        else:
-            for square in path[len(path) - 2 :: -1]:
+    else:
+        for square in path[len(path) - 2 :: -1]:
+            sleep(algo.best_path_delay_ms, unit="ms")
+            with algo.lock:
                 square.set_path()
 
 
