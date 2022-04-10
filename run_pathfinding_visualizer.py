@@ -59,9 +59,11 @@ if __name__ == "__main__":
     main()
 
 # Reject inputs when phase is not null
+# Set legend=True for draw() only if phase is null
 # Use check_algo and not finished to change text on graph
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
+# Rewrite draw()?
 
 # Multiple threads for algorithm?
 # Multiprocessing for algo, may need to share memory

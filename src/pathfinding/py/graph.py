@@ -187,8 +187,9 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
 
         gph.base_drawn = True
     else:
-        if not legend and not algo.phase == algo.PHASE_ALGO:
-            gph.base_drawn = False
+        if not legend:
+            if not algo.check_phase() == algo.PHASE_ALGO and not algo.check_phase() == algo.PHASE_MAZE:
+                gph.base_drawn = False
 
     if gph.update_legend:
         gph.update_legend = False
@@ -429,7 +430,7 @@ def draw_vis_text(
     text_rects = []  # Used to only update text area
 
     # Text to be shown depending on operation
-    if algo.algo == algo.ALGO_DIJKSTRA:
+    if algo.check_algo() == algo.ALGO_DIJKSTRA:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -440,7 +441,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif algo.algo == algo.ALGO_A_STAR:
+    elif algo.check_algo() == algo.ALGO_A_STAR:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -451,7 +452,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+    elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -464,7 +465,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif algo.phase == algo.PHASE_PATH:
+    elif algo.check_algo() == algo.ALGO_BEST_PATH:
         text_rects.append(draw_algo_timer(gph, txt))
         text_rects.append(
             gph.window.blit(
@@ -475,7 +476,7 @@ def draw_vis_text(
                 ),
             )
         )
-    elif algo.phase == algo.PHASE_MAZE:
+    elif algo.check_algo() == algo.ALGO_RECURSIVE_MAZE:
         text_rects.append(
             gph.window.blit(
                 txt.vis_text_recursive_maze,
@@ -590,8 +591,7 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
 def reset_algo(algo) -> None:
     """Resets algo colors while keeping ordinal squares and walls"""
     # Resets only certain colors
-    with algo.lock:
-        Square.reset_algo_squares()
+    Square.reset_algo_squares()
 
 
 def change_graph_size(gph: GraphState, algo: AlgoState, txt: VisText, new_num_rows_cols, to_draw=True) -> None:
