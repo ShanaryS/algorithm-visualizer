@@ -58,9 +58,13 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Reject inputs when phase is not null
 # Set legend=True for draw() only if phase is null
 # Use check_algo and not finished to change text on graph
+# Best path draw is instant
+# Ordinal nodes disappear on algo run
+# Instant graph slow
+# Google maps slow
+# Dragging nodes doesn't update algo
 # Add visualize call to graph that disables it until next algo update
 # Call .update_legend after best path finishes
 # Rewrite draw()?

@@ -74,6 +74,10 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
             if event.type == pygame.QUIT:
                 lgc.run = False
 
+            # Don't allow button presses in certain phases
+            if algo.check_phase() != algo.NULL:
+                continue
+
             """Mouse buttons"""
 
             # Used to know if no longer dragging ordinal square after algo completion
