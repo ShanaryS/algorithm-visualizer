@@ -92,17 +92,17 @@ class AlgoState:
         self._set_algo(algo)
         self._set_finished(False)
     
-    def watch_phase(self) -> int:
+    def check_phase(self) -> int:
         """Checks the phase"""
         with self.lock:
             return self.phase
 
-    def watch_algo(self) -> int:
+    def check_algo(self) -> int:
         """Checks the algo"""
         with self.lock:
             return self.algo
 
-    def watch_finished(self) -> bool:
+    def check_finished(self) -> bool:
         """Checks if algo is finished"""
         with self.lock:
             return self.finished
@@ -136,16 +136,16 @@ class AlgoState:
             self.finished = x
 
     def _algo_loop(self) -> None:
-        """This loop is placed on a daemon thread and broadcasts its state."""
+        """This loop is placed on a daemon thread and watches for updates."""
         while True:
             # Check if algo
-            if self.watch_phase() == self.PHASE_ALGO and not self.watch_finished():
+            if self.check_phase() == self.PHASE_ALGO and not self.check_finished():
                 if not self.mid:
-                    if self.watch_algo() == self.ALGO_DIJKSTRA:
+                    if self.check_algo() == self.ALGO_DIJKSTRA:
                         dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
-                    elif self.watch_algo() == self.ALGO_A_STAR:
+                    elif self.check_algo() == self.ALGO_A_STAR:
                         a_star(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
-                    elif self.watch_algo() == self.ALGO_BI_DIJKSTRA:
+                    elif self.check_algo() == self.ALGO_BI_DIJKSTRA:
                         bi_dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
@@ -153,8 +153,8 @@ class AlgoState:
                 self._set_phase(self.NULL)
 
             # Check if maze
-            elif self.watch_phase() == self.PHASE_MAZE and not self.watch_finished():
-                if self.watch_algo() == self.ALGO_RECURSIVE_MAZE:
+            elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
+                if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
                 self._set_finished(True)
                 self._set_phase(self.NULL)
