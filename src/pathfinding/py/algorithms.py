@@ -482,6 +482,7 @@ def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end
 def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
     """Main algo for reconstructing path"""
     # Update info
+    previous_algo = algo.check_algo()
     algo._set_algo(algo.ALGO_BEST_PATH)
     
     # Puts square path into list so it's easier to traverse in either direction and choose start and end points
@@ -499,6 +500,9 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
         else:
             for square in path[len(path) - 2 :: -1]:
                 square.set_path()
+
+    # Set algo to previous to preserve info for future use
+    algo._set_algo(previous_algo)
 
 
 def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> None:
