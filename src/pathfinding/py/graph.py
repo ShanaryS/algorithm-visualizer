@@ -55,7 +55,7 @@ class GraphState:
     visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
-    FPS: int = 60
+    FPS: int = 240
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
@@ -590,7 +590,8 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
 def reset_algo(algo) -> None:
     """Resets algo colors while keeping ordinal squares and walls"""
     # Resets only certain colors
-    Square.reset_algo_squares()
+    with algo.lock:
+        Square.reset_algo_squares()
 
 
 def change_graph_size(gph: GraphState, algo: AlgoState, txt: VisText, new_num_rows_cols, to_draw=True) -> None:
