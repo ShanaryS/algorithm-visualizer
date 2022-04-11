@@ -37,7 +37,7 @@ class AlgoState:
     
     # Special variables
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
-    NULL: int = _unique_int  # Value is 0 which returns false when casted to bool
+    NONE: int = _unique_int  # Value is 0 which returns false when casted to bool
     lock: threading.Lock  = threading.Lock()
 
     # Run options
@@ -107,8 +107,8 @@ class AlgoState:
     def reset(self) -> None:
         """Resets options to their default values"""
         with self.lock:
-            self._phase = self.NULL
-            self._algo = self.NULL
+            self._phase = self.NONE
+            self._algo = self.NONE
             self._start = None
             self._mid = None
             self._end = None
@@ -160,7 +160,7 @@ class AlgoState:
                 self._best_path_delay_ms = self._DEFAULT_BEST_PATH_DELAY_MS  # Set to 0 with no vis
                 self._set_algo(previous_algo)  # Preserves more info
                 self._set_finished(True)
-                self._set_phase(self.NULL)
+                self._set_phase(self.NONE)
 
             # Check if maze
             elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
@@ -168,7 +168,7 @@ class AlgoState:
                     recursive_maze(self)
                     self._recursive_maze_delay_us = self._DEFAULT_RECURSIVE_MAZE_DELAY_US
                 self._set_finished(True)
-                self._set_phase(self.NULL)
+                self._set_phase(self.NONE)
 
     def _timer_start(self) -> None:
         """Start timer for algo. Not for general use."""

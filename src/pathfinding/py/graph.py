@@ -190,7 +190,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
     else:
         if legend:
             gph.update_legend = True
-        elif algo.check_phase() == algo.NULL:
+        elif algo.check_phase() == algo.NONE:
             if not clear_legend:
                 gph.base_drawn = False
 

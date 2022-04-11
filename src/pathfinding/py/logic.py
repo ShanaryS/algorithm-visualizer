@@ -66,7 +66,7 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
     
     while lgc.run:
         # Draws the graph with all the necessary updates
-        if algo.check_phase() == algo.NULL:
+        if algo.check_phase() == algo.NONE:
             draw(gph, algo, txt, legend=True)
         elif lgc.visualize:
             draw(gph, algo, txt)
@@ -81,7 +81,7 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
                 lgc.run = False
 
             # Don't allow button presses in certain phases
-            if algo.check_phase() != algo.NULL:
+            if algo.check_phase() != algo.NONE:
                 continue
 
             """Mouse buttons"""
