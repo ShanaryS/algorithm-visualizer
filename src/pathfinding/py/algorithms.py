@@ -73,14 +73,13 @@ class AlgoState:
         """Starts the algo loop on a daemon thread that runs forever."""
         threading.Thread(target=self._algo_loop, args=(), daemon=True).start()
 
-    def run_options(self, start, mid, end, ignore_square, finished) -> None:
+    def run_options(self, start, mid, end, ignore_square) -> None:
         """Set the options that will be performed on run"""
         with self.lock:
             self.start = start
             self.mid = mid
             self.end = end
             self.ignore_square = ignore_square
-            self.finished = finished
 
     def run(self, phase, algo) -> None:
         """Start an algorithm using PHASE and ALGO, NULL where applicable."""
