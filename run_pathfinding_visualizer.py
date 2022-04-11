@@ -58,6 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Right click doesn't redraw lines
 # Google maps slow
 # Rewrite draw()?
 # Move loops of set_ square methods into square class?
