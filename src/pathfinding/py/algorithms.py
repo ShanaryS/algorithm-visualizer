@@ -31,28 +31,28 @@ class AlgoState:
     ALGO_RECURSIVE_MAZE: int = field(init=False)
     
     # The current phase and current/last algorithm.
-    phase: int = field(init=False)
-    algo: int = field(init=False)
-    finished: bool = False  # Cobination with ALGO preserves past
+    _phase: int = field(init=False)
+    _algo: int = field(init=False)
+    _finished: bool = False  # Cobination with ALGO preserves past
     
     # Special variables
-    NULL: int = 0  # Value is 0 which return false when casted to bool
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
+    NULL: int = _unique_int  # Value is 0 which returns false when casted to bool
     lock: threading.Lock  = threading.Lock()
 
     # Run options
-    start: Square = None
-    mid: Square = None
-    end: Square = None
-    ignore_square: Square = None
+    _start: Square = None
+    _mid: Square = None
+    _end: Square = None
+    _ignore_square: Square = None
     
     # Control the speed of algorithms
-    DEFAULT_BEST_PATH_DELAY_MS: int = 3
-    best_path_delay_ms: int = field(init=False)
-    DEFAULT_RECURSIVE_MAZE_DELAY_US: int = 250
-    recursive_maze_delay_us: int = field(init=False)
+    _DEFAULT_BEST_PATH_DELAY_MS: int = 3
+    _best_path_delay_ms: int = field(init=False)
+    _DEFAULT_RECURSIVE_MAZE_DELAY_US: int = 250
+    _recursive_maze_delay_us: int = field(init=False)
 
-    # Timer for algorithm
+    # Timer for algorithms
     timer_total: float = 0
     timer_avg: float = None
     timer_max: float = float("-inf")
@@ -62,13 +62,13 @@ class AlgoState:
     
     def __post_init__(self):
         """Initialize variables with their unique values."""
-        self.PHASE_ALGO = self._auto()
-        self.PHASE_MAZE = self._auto()
-        self.ALGO_DIJKSTRA = self._auto()
-        self.ALGO_A_STAR = self._auto()
-        self.ALGO_BI_DIJKSTRA = self._auto()
-        self.ALGO_BEST_PATH = self._auto()
-        self.ALGO_RECURSIVE_MAZE = self._auto()
+        self.PHASE_ALGO = self._generate_unique_int()
+        self.PHASE_MAZE = self._generate_unique_int()
+        self.ALGO_DIJKSTRA = self._generate_unique_int()
+        self.ALGO_A_STAR = self._generate_unique_int()
+        self.ALGO_BI_DIJKSTRA = self._generate_unique_int()
+        self.ALGO_BEST_PATH = self._generate_unique_int()
+        self.ALGO_RECURSIVE_MAZE = self._generate_unique_int()
         self.reset()
 
     def start_loop(self) -> None:
@@ -78,10 +78,10 @@ class AlgoState:
     def run_options(self, start, mid, end, ignore_square) -> None:
         """Set the options that will be performed on run"""
         with self.lock:
-            self.start = start
-            self.mid = mid
-            self.end = end
-            self.ignore_square = ignore_square
+            self._start = start
+            self._mid = mid
+            self._end = end
+            self._ignore_square = ignore_square
 
     def run(self, phase, algo) -> None:
         """Start an algorithm using PHASE and ALGO, NULL where applicable."""
@@ -92,55 +92,55 @@ class AlgoState:
     def check_phase(self) -> int:
         """Checks the phase"""
         with self.lock:
-            return self.phase
+            return self._phase
 
     def check_algo(self) -> int:
         """Checks the algo"""
         with self.lock:
-            return self.algo
+            return self._algo
 
     def check_finished(self) -> bool:
         """Checks if algo is finished"""
         with self.lock:
-            return self.finished
+            return self._finished
 
     def reset(self) -> None:
         """Resets options to their default values"""
         with self.lock:
-            self.phase = self.NULL
-            self.algo = self.NULL
-            self.start = None
-            self.mid = None
-            self.end = None
-            self.ignore_square = None
-            self.finished = False
-            self.best_path_delay_ms = self.DEFAULT_BEST_PATH_DELAY_MS
-            self.recursive_maze_delay_us = self.DEFAULT_RECURSIVE_MAZE_DELAY_US
+            self._phase = self.NULL
+            self._algo = self.NULL
+            self._start = None
+            self._mid = None
+            self._end = None
+            self._ignore_square = None
+            self._finished = False
+            self._best_path_delay_ms = self._DEFAULT_BEST_PATH_DELAY_MS
+            self._recursive_maze_delay_us = self._DEFAULT_RECURSIVE_MAZE_DELAY_US
 
     def set_best_path_delay(self, ms: int) -> None:
         """Change the delay for the next best path"""
         with self.lock:
-            self.best_path_delay_ms = ms
+            self._best_path_delay_ms = ms
 
     def set_recursive_maze_delay(self, us: int) -> None:
         """Change the delay for the next recursive maze"""
         with self.lock:
-            self.recursive_maze_delay_us = us
+            self._recursive_maze_delay_us = us
 
     def _set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants."""
         with self.lock:
-            self.phase = phase
+            self._phase = phase
     
     def _set_algo(self, algo: int) -> None:
         """Change the algo. Use ALGO constants."""
         with self.lock:
-            self.algo = algo
+            self._algo = algo
 
     def _set_finished(self, x: bool) -> None:
         """Set finshed to true or false"""
         with self.lock:
-            self.finished = x
+            self._finished = x
 
     def _algo_loop(self) -> None:
         """This loop is placed on a daemon thread and watches for updates."""
@@ -148,16 +148,16 @@ class AlgoState:
             # Check if algo
             if self.check_phase() == self.PHASE_ALGO and not self.check_finished():
                 previous_algo = self.check_algo()
-                if not self.mid:
+                if not self._mid:
                     if self.check_algo() == self.ALGO_DIJKSTRA:
-                        dijkstra(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                        dijkstra(self, self._start, self._end, ignore_square=self._ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_A_STAR:
-                        a_star(self, self.start, self.end, ignore_square=self.ignore_square, draw_best_path=True)
+                        a_star(self, self._start, self._end, ignore_square=self._ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_BI_DIJKSTRA:
-                        bi_dijkstra(self, self.start, self.end, alt_color=False, ignore_square=self.ignore_square, draw_best_path=True)
+                        bi_dijkstra(self, self._start, self._end, alt_color=False, ignore_square=self._ignore_square, draw_best_path=True)
                 else:
-                    start_mid_end(self, self.start, self.mid, self.end)
-                self.best_path_delay_ms = self.DEFAULT_BEST_PATH_DELAY_MS  # Set to 0 with no vis
+                    start_mid_end(self, self._start, self._mid, self._end)
+                self._best_path_delay_ms = self._DEFAULT_BEST_PATH_DELAY_MS  # Set to 0 with no vis
                 self._set_algo(previous_algo)  # Preserves more info
                 self._set_finished(True)
                 self._set_phase(self.NULL)
@@ -166,7 +166,7 @@ class AlgoState:
             elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
                 if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
-                    self.recursive_maze_delay_us = self.DEFAULT_RECURSIVE_MAZE_DELAY_US
+                    self._recursive_maze_delay_us = self._DEFAULT_RECURSIVE_MAZE_DELAY_US
                 self._set_finished(True)
                 self._set_phase(self.NULL)
 
@@ -197,7 +197,7 @@ class AlgoState:
         self.timer_count: int = 0
         self._timer_start_time: float = None
     
-    def _auto(self) -> int:
+    def _generate_unique_int(self) -> int:
         """Assign unique int on every call"""
         self._unique_int += 1
         return self._unique_int
@@ -508,12 +508,12 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
     square: Square
     if reverse:
         for square in path[:-1]:
-            sleep(algo.best_path_delay_ms, unit="ms")
+            sleep(algo._best_path_delay_ms, unit="ms")
             with algo.lock:
                 square.set_path()
     else:
         for square in path[len(path) - 2 :: -1]:
-            sleep(algo.best_path_delay_ms, unit="ms")
+            sleep(algo._best_path_delay_ms, unit="ms")
             with algo.lock:
                 square.set_path()
 
@@ -601,7 +601,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             square: Square = graph[chamber_left + x_divide][chamber_top + y]
             with algo.lock:
                 square.set_wall()
-            sleep(algo.recursive_maze_delay_us, unit="us")
+            sleep(algo._recursive_maze_delay_us, unit="us")
             algo._timer_end()
 
     # Draws horizontal maze line within chamber
@@ -611,7 +611,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             square: Square = graph[chamber_left + x][chamber_top + y_divide]
             with algo.lock:
                 square.set_wall()
-            sleep(algo.recursive_maze_delay_us, unit="us")
+            sleep(algo._recursive_maze_delay_us, unit="us")
             algo._timer_end()
 
     # Terminates if below division limit

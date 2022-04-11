@@ -13,25 +13,66 @@
 struct AlgoState
 {
 public:
-    bool m_dijkstra_finished{ false };
-    bool m_a_star_finished{ false };
-    bool m_bi_dijkstra_finished{ false };
-    bool m_maze{ false };
-    int m_best_path_sleep{ 3 };
-    int m_highway_multiplier{ 3 };
+    // Possible phases
+
+    int PHASE_ALGO;
+    int PHASE_MAZE;
+
+    // Possible algorithms
+
+    int ALGO_DIJKSTRA;
+    int ALGO_A_STAR;
+    int ALGO_BI_DIJKSTRA;
+    int ALGO_BEST_PATH;
+    int ALGO_RECURSIVE_MAZE;
+
+    // Special variables
+
+    int NULL;  // Value is 0 which returns false when casted to bool
+    auto lock;
+
+    // Timer for algorithms
+
+    double m_timer_total{ 0.0 };
+    double m_timer_avg{ 0.0 };
+    double m_timer_max{ std::numeric_limits<double>::min() };
+    double m_timer_min{ std::numeric_limits<double>::max() };
+    int m_timer_count{ 0 };
 
     void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
     void timer_end(bool count = true);
     void timer_reset();
 
 private:
-    // Timer for algorithm
-    double m_timer_total{ 0.0 };
-    double m_timer_avg{ 0.0 };
-    double m_timer_max{ std::numeric_limits<double>::min() };
-    double m_timer_min{ std::numeric_limits<double>::max() };
-    int m_timer_count{ 0 };
+    // The current phase and current/last algorithm
+
+    int m_phase;
+    int m_algo;
+    int m_finished;  // Combination with ALGO preserves the past
+
+    // Special variables
+
+    int m_unique_int = 0;  // Starts +1 when call by self._next_int()
+
+    // Run options
+
+    const Square* start = nullptr;
+    const Square* mid = nullptr;
+    const Square* end = nullptr;
+    const Square* ignore_square = nullptr;
+
+    // Control the speed of algorithms
+
+    int DEFAULT_BEST_PATH_DELAY_MS = 3;
+    int best_path_delay_ms;
+    int DEFAULT_RECURSIVE_MAZE_DELAY_US = 250;
+    int recursive_maze_delay_us;
+
+    // Timer for algorithms
+
     std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
+    
+    int generate_unique_int(){ return ++m_unique_int; }
 };
 
 
@@ -46,18 +87,6 @@ public:
     bool is_dijkstra{ true };
     bool is_a_star{ true };
     bool is_bi_dijkstra{ true };
-
-    // Remove once no longer importing draw funcs
-    bool legend{ false };
-    bool clear_legend{ false };
-    bool algo_running{ false };
-    bool is_best_path{ false };
-    bool is_recursive_maze{ false };
-    bool is_graph_size{ false };
-    bool is_input{ false };
-    bool is_base_img{ false };
-    bool is_clean_img{ false };
-    bool is_converting_img{ false };
 
     Square& null_square() { return m_null_square; }
     std::array<int, 4>& null_chamber() { return m_null_chamber; }
@@ -76,73 +105,48 @@ static Args arg;
 
 // Code for dijkstra algorithm
 std::unordered_map<Square*, Square*> dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square = arg.null_square(),
-    bool draw_best_path = true, bool visualize = true
-);
+    const AlgoState& algo, const Square& start, const Square& end,
+    const Square& ignore_square, bool draw_best_path);
 
-/*
+
 // Code for A* algorithm
 std::unordered_map<Square*, Square*> a_star(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square = arg.null_square(),
-    bool draw_best_path = true, bool visualize = true
-);
+    const AlgoState& algo, const Square& start, const Square& end,
+    const Square& ignore_square, bool draw_best_path);
 
 // Used by A* to prioritize traveling towards next square
 int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2);
 
 // Code for Bi-directional dijkstra. Custom algorithm.
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, bool alt_color = false,
-    const Square& ignore_square = arg.null_square(), bool draw_best_path = true, bool visualize = true
-);
+    const AlgoState& algo, const Square& start, const Square& end,
+    bool alt_color, const Square& ignore_square, bool draw_best_path);
 
 // Used by bi_dijkstra to draw best path in two parts
 void best_path_bi_dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
+    const AlgoState& algo,
     const std::unordered_map<Square*, Square*>& came_from_start,
     const std::unordered_map<Square*, Square*>& came_from_end,
-    const Square& first_meet_square, const Square& second_meet_square,
-    bool visualize = true
-);
+    const Square* first_meet_square, const Square* second_meet_square);
 
-*/
+
 // Main algo for reconstructing path
 void best_path(
-    const auto& gph, const auto& algo, const auto& txt,
-    const std::unordered_map<Square*, Square*>& came_from,
-    const Square* curr_square, bool reverse = false, bool visualize = true
-);
+    const AlgoState& algo, const std::unordered_map<Square*, Square*>& came_from,
+    const Square* curr_square, bool reverse = false);
 
-/*
+
 // Used if algos need to reach mid square first
 void start_mid_end(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& mid, const Square& end,
-    bool is_dijkstra = false, bool is_a_star = false, bool is_bi_dijkstra = false,
-    bool visualize = true
-);
-
-// Skips steps to end when visualizing algo. Used when dragging oridnal squares
-std::unordered_map<> algo_no_vis(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, bool is_dijkstra = false,
-    bool is_a_star = false, bool is_bi_dijkstra = false, bool alt_color = false,
-    const Square& ignore_square = arg.null_square(), bool draw_best_path = true
-);
+    const AlgoState& algo, const Square& start, const Square& mid, const Square& end);
 
 // Creates maze using recursive division.
 void recursive_maze(
-    const auto& gph, const auto& algo, const auto& txt,
-    const std::array<int, 4>& chamber = arg.null_chamber, const std::vector<std::vector<Square>>& graph = arg.null_graph,
-    bool visualize = true
-);
+    const AlgoState& algo,
+    const std::array<int, 4>& chamber = arg.null_chamber, const std::vector<std::vector<Square>>& graph = arg.null_graph);
 
 // Returns a k length vector of unique elements from population
 std::vector<> get_random_sample(const std::array<>& population, int k);
 
 // Return a random int within a range
 int get_randrange(int start, int stop);
-*/

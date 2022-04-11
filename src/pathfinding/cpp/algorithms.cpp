@@ -41,7 +41,7 @@ void AlgoState::timer_reset()
 
 
 std::unordered_map<Square*, Square*> dijkstra(
-    const auto& algo, const Square& start, const Square& end,
+    const AlgoState& algo, const Square& start, const Square& end,
     const Square& ignore_square, bool draw_best_path)
 {
     // Clear preivious and start timer here
@@ -127,64 +127,42 @@ std::unordered_map<Square*, Square*> dijkstra(
     return came_from;
 }
 
-/*
+
 std::unordered_map<Square*, Square*> a_star(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, const Square& ignore_square,
-    bool draw_best_path, bool visualize
-)
+    const AlgoState& algo, const Square& start, const Square& end,
+    const Square& ignore_square, bool draw_best_path)
 {}
 
 int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2) {}
 
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, bool alt_color,
-    const Square& ignore_square, bool draw_best_path, bool visualize
-)
+    const AlgoState& algo, const Square& start, const Square& end,
+    const Square& ignore_square, bool draw_best_path)
 {}
 
 void best_path_bi_dijkstra(
-    const auto& gph, const auto& algo, const auto& txt,
+    const AlgoState& algo,
     const std::unordered_map<Square*, Square*>& came_from_start,
     const std::unordered_map<Square*, Square*>& came_from_end,
-    const Square& first_meet_square, const Square& second_meet_square,
-    bool visualize
-)
+    const Square* first_meet_square, const Square* second_meet_square)
 {}
 
-*/
+
 void best_path(
-    const auto& gph, const auto& algo, const auto& txt,
-    const std::unordered_map<Square*, Square*>& came_from,
-    const Square* curr_square, bool reverse, bool visualize
-)
+    const AlgoState& algo, const std::unordered_map<Square*, Square*>& came_from,
+    const Square* curr_square, bool reverse)
 {}
 
-/*
+
 void start_mid_end(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& mid, const Square& end,
-    bool is_dijkstra, bool is_a_star, bool is_bi_dijkstra,
-    bool visualize
-)
-{}
-
-std::unordered_map<> algo_no_vis(
-    const auto& gph, const auto& algo, const auto& txt,
-    const Square& start, const Square& end, bool is_dijkstra,
-    bool is_a_star, bool is_bi_dijkstra, bool alt_color,
-    const Square& ignore_square, bool draw_best_path
-)
+    const AlgoState& algo, const Square& start, const Square& mid, const Square& end)
 {}
 
 void recursive_maze(
-    const auto& gph, const auto& algo, const auto& txt,
-    const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph,
-    bool visualize
-)
+    const AlgoState& algo,
+    const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph)
 {}
-*/
+
 
 
 void Args::args_reset()
@@ -227,11 +205,4 @@ PYBIND11_MODULE(algorithms, m)
         .def_readwrite("maze", &AlgoState::m_maze, py::return_value_policy::reference_internal)
         .def_readonly("best_path_sleep", &AlgoState::m_best_path_sleep, py::return_value_policy::reference_internal)
         .def_readonly("highway_multiplier", &AlgoState::m_highway_multiplier, py::return_value_policy::reference_internal);
-
-    m.def("dijkstra", &dijkstra, "ignore_square"_a = py::none(), "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("a_star", &a_star, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("bi_dijkstra", &bi_dijkstra, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("start_mid_end", &start_mid_end, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "visualize"_a = true, py::return_value_policy::automatic_reference);
-    m.def("algo_no_vis", &algo_no_vis, "is_dijkstra"_a = false, "is_a_star"_a = false, "is_bi_dijkstra"_a = false, "alt_color"_a = false, "ignore_square"_a = py::none, "draw_best_path"_a = true, py::return_value_policy::automatic_reference);
-    m.def("recursive_maze", &recursive_maze, "chamber"_a = py::none, "graph"_a = py::none, "visualize"_a = true, py::return_value_policy::automatic_reference);
 }
