@@ -131,6 +131,7 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
                 if Square.get_num_rows() == lgc.GRAPH_MAX:
                     _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE)
                 lgc.visualize = False
+                algo.best_path_delay_ms = 0
                 _recursive_maze_buttons(gph, algo, lgc, txt)
 
             # Redraw small maze with "S" key on keyboard if not currently small
@@ -314,6 +315,8 @@ def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt
 
     # Set algorithm to run
     lgc.visualize = visualize
+    if not visualize:
+        algo.best_path_delay_ms = 0
     algo.run_options(lgc.start, lgc.mid, lgc.end, None)
     algo.run(algo.PHASE_ALGO, algo_to_run)
 

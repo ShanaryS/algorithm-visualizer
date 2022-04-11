@@ -144,6 +144,7 @@ class AlgoState:
                         bi_dijkstra(self, self.start, self.end, alt_color=False, ignore_square=self.ignore_square, draw_best_path=True)
                 else:
                     start_mid_end(self, self.start, self.mid, self.end)
+                self.best_path_delay_ms = self.DEFAULT_BEST_PATH_DELAY_MS  # Set to 0 with no vis
                 self._set_algo(previous_algo)  # Preserves more info
                 self._set_finished(True)
                 self._set_phase(self.NULL)

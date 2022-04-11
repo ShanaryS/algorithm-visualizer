@@ -58,8 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Add visualize call to graph that disables it until next algo update
-# Maze does not get drawn randomly
+# Maze does not get drawn with G but does with I
 # Instant graph slow
 # Google maps slow
 # Rewrite draw()?
