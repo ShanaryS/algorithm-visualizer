@@ -58,19 +58,9 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Google maps slow
-
-# Multiple threads for algorithm?
-# Multiprocessing for algo, may need to share memory
-# Ability to set algo speed
-# Refactor into class? Delay until the end
-# May need to handle how priority queue selects next item
-# Rewrite sections of code into separate functions (eg draw() into multiple parts)
-# Implement threading in square access methods. Separate locks for square and algo?
-# Can safely parrallise set_ square methods? Except for algos?
-
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
+# May need to handle how priority queue selects next item
 # Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
@@ -84,6 +74,11 @@ if __name__ == "__main__":
 # (Optimization Station: Things to test to see if faster)
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
+# Rewrite sections of code into separate functions (eg draw() into multiple parts)
+# Multiple threads for algorithm?
+# Multiprocessing for algo, may need to share memory
+# Can safely parrallise set_ square methods? Except for algos?
+# Implement threading in square access methods. Separate locks for square and algo?
 # Return unoredered_map and unordered_set directly rather than coverting to vector
 # Store graph in std::array
 # Write graph as non nested container to optimize cache hits
