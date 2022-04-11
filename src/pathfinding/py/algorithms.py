@@ -521,7 +521,7 @@ def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: b
 def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> None:
     """Used if algos need to reach mid square first"""
     # Selects the correct algo to use
-    if algo.algo == algo.ALGO_DIJKSTRA:
+    if algo.check_algo() == algo.ALGO_DIJKSTRA:
         start_to_mid = dijkstra(algo, start, mid, ignore_square=end, draw_best_path=False)
         mid_to_end = dijkstra(algo, mid, end, ignore_square=start, draw_best_path=False)
         
@@ -533,7 +533,7 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
 
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
-    elif algo.algo == algo.ALGO_A_STAR:
+    elif algo.check_algo() == algo.ALGO_A_STAR:
         start_to_mid = a_star(algo, start, mid, ignore_square=end, draw_best_path=False)
         mid_to_end = a_star(algo, mid, end, ignore_square=start, draw_best_path=False)
 
@@ -545,7 +545,7 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
 
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
-    elif algo.algo == algo.ALGO_BI_DIJKSTRA:
+    elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
         start_to_mid = bi_dijkstra(algo, start, mid, ignore_square=end, draw_best_path=False)
         mid_to_end = bi_dijkstra(algo, mid, end, alt_color=True, ignore_square=start, draw_best_path=False)
         

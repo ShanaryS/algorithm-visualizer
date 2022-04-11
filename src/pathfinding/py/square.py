@@ -85,10 +85,6 @@ class Square:
         self.color_history = None
         self.highway = False
 
-    def __lt__(self, _) -> bool:
-        """Allows comparison of squares"""
-        return False
-
     def get_pos(self) -> tuple[int, int]:
         """Returns the square location"""
         return self.pos
