@@ -19,6 +19,7 @@ from src.pathfinding.py.maps import get_img_base, get_img_clean
 from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
     reset_graph, reset_algo, change_graph_size, set_squares_to_roads,
     draw_vis_text, HEIGHT)
+from lib.timer import sleep
 
 import threading
 import pygame
@@ -123,16 +124,13 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img):
                 if Square.get_num_rows() == lgc.GRAPH_MAX:
                     _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE)
-                lgc.visualize = True
-                _recursive_maze_buttons(gph, algo, lgc, txt)
+                _recursive_maze_buttons(gph, algo, lgc, txt, True)
 
             # Draw recursive maze with NO VISUALIZATIONS with "I" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_i and not gph.has_img):
                 if Square.get_num_rows() == lgc.GRAPH_MAX:
                     _graph_size_buttons(gph, algo, lgc, txt, lgc.GRAPH_LARGE)
-                lgc.visualize = False
-                algo.best_path_delay_ms = 0
-                _recursive_maze_buttons(gph, algo, lgc, txt)
+                _recursive_maze_buttons(gph, algo, lgc, txt, False)
 
             # Redraw small maze with "S" key on keyboard if not currently small
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_s and Square.get_num_rows() != lgc.GRAPH_SMALL and not gph.has_img):
@@ -316,7 +314,7 @@ def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt
     # Set algorithm to run
     lgc.visualize = visualize
     if not visualize:
-        algo.best_path_delay_ms = 0
+        algo.set_best_path_delay(0)
     algo.run_options(lgc.start, lgc.mid, lgc.end, None)
     algo.run(algo.PHASE_ALGO, algo_to_run)
 
@@ -336,15 +334,20 @@ def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_BI_DIJKSTRA, True)
 
 
-def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize) -> None:
     """Draws recursive maze"""
     reset_graph(gph, algo, txt)
     draw(gph, algo, txt, clear_legend=True)
     gph.base_drawn = False
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
+    lgc.visualize = visualize
     algo.run_options(lgc.start, lgc.mid, lgc.end, None)
     algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
+    if visualize:
+        sleep(15, unit="ms")  # Need to sleep a bit for algo to work.
+    else:
+        algo.set_recursive_maze_delay(0)
 
 
 def _graph_size_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, new_graph_size) -> None:

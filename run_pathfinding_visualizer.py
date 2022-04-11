@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Maze does not get drawn with G but does with I
 # Algo gets removed then redrawn when dragging
 # Google maps slow
 # Rewrite draw()?

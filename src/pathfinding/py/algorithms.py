@@ -49,6 +49,8 @@ class AlgoState:
     # Control the speed of algorithms
     DEFAULT_BEST_PATH_DELAY_MS: int = 3
     best_path_delay_ms: int = field(init=False)
+    DEFAULT_RECURSIVE_MAZE_DELAY_US: int = 250
+    recursive_maze_delay_us: int = field(init=False)
 
     # Timer for algorithm
     timer_total: float = 0
@@ -113,6 +115,17 @@ class AlgoState:
             self.ignore_square = None
             self.finished = False
             self.best_path_delay_ms = self.DEFAULT_BEST_PATH_DELAY_MS
+            self.recursive_maze_delay_us = self.DEFAULT_RECURSIVE_MAZE_DELAY_US
+
+    def set_best_path_delay(self, ms: int) -> None:
+        """Change the delay for the next best path"""
+        with self.lock:
+            self.best_path_delay_ms = ms
+
+    def set_recursive_maze_delay(self, us: int) -> None:
+        """Change the delay for the next recursive maze"""
+        with self.lock:
+            self.recursive_maze_delay_us = us
 
     def _set_phase(self, phase: int) -> None:
         """Change the phase. Use PHASE constants."""
@@ -153,6 +166,7 @@ class AlgoState:
             elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
                 if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
+                    self.recursive_maze_delay_us = self.DEFAULT_RECURSIVE_MAZE_DELAY_US
                 self._set_finished(True)
                 self._set_phase(self.NULL)
 
@@ -587,6 +601,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             square: Square = graph[chamber_left + x_divide][chamber_top + y]
             with algo.lock:
                 square.set_wall()
+            sleep(algo.recursive_maze_delay_us, unit="us")
             algo._timer_end()
 
     # Draws horizontal maze line within chamber
@@ -596,6 +611,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             square: Square = graph[chamber_left + x][chamber_top + y_divide]
             with algo.lock:
                 square.set_wall()
+            sleep(algo.recursive_maze_delay_us, unit="us")
             algo._timer_end()
 
     # Terminates if below division limit
