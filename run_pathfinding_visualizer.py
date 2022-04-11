@@ -59,7 +59,6 @@ if __name__ == "__main__":
     main()
 
 # Maze does not get drawn with G but does with I
-# Instant graph slow
 # Google maps slow
 # Rewrite draw()?
 
