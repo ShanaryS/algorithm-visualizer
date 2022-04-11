@@ -15,7 +15,6 @@ if use_algorithms_h:
 else:
     from src.pathfinding.py.algorithms import AlgoState
 
-import threading
 import pygame
 from dataclasses import dataclass
 

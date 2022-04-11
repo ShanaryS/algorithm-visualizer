@@ -59,9 +59,6 @@ if __name__ == "__main__":
     main()
 
 # Google maps slow
-# Rewrite draw()?
-# Move loops of set_ square methods into square class?
-#   (Allow looping over a bunch of squares through a single func call)
 
 # Multiple threads for algorithm?
 # Multiprocessing for algo, may need to share memory
@@ -81,9 +78,12 @@ if __name__ == "__main__":
 # Try to remove external cacert.pem dependency (also lib folder)
 # Add conditional cpp include from json file in readme
 # Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
+# Rewrite draw()?
 # Test debug and release
 
 # (Optimization Station: Things to test to see if faster)
+# Move loops of set_ square methods into square class?
+#   (Allow looping over a bunch of squares through a single func call)
 # Return unoredered_map and unordered_set directly rather than coverting to vector
 # Store graph in std::array
 # Write graph as non nested container to optimize cache hits
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
 # Compare memory address instead of squares in algos
-# Test debug and release
+# Seperate thread for GUI from logic?
 
 # --- Mutltithreading/Multiprocessing ---
 # Maybe just put pygame and logic on two distinct processes at leave it at that
