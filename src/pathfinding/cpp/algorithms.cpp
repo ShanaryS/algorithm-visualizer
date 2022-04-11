@@ -41,7 +41,7 @@ void AlgoState::timer_reset()
 
 
 std::unordered_map<Square*, Square*> dijkstra(
-    const AlgoState& algo, const Square& start, const Square& end,
+    AlgoState& algo, const Square& start, const Square& end,
     const Square& ignore_square, bool draw_best_path)
 {
     // Clear preivious and start timer here
@@ -49,13 +49,13 @@ std::unordered_map<Square*, Square*> dijkstra(
     algo.timer_start();
 
     // Get pointers to squares for consistency
-    Square* start_ptr = &start;
-    Square* end_ptr = &end;
-    Square* ignore_square_ptr = &ignore_square;
+    const Square* start_ptr = &start;
+    const Square* end_ptr = &end;
+    const Square* ignore_square_ptr = &ignore_square;
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
     int queue_pos{ 0 };
-    std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
+    std::tuple<int, int, const Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
     std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
 
@@ -129,19 +129,19 @@ std::unordered_map<Square*, Square*> dijkstra(
 
 
 std::unordered_map<Square*, Square*> a_star(
-    const AlgoState& algo, const Square& start, const Square& end,
+    AlgoState& algo, const Square& start, const Square& end,
     const Square& ignore_square, bool draw_best_path)
 {}
 
 int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2) {}
 
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
-    const AlgoState& algo, const Square& start, const Square& end,
+    AlgoState& algo, const Square& start, const Square& end,
     const Square& ignore_square, bool draw_best_path)
 {}
 
 void best_path_bi_dijkstra(
-    const AlgoState& algo,
+    AlgoState& algo,
     const std::unordered_map<Square*, Square*>& came_from_start,
     const std::unordered_map<Square*, Square*>& came_from_end,
     const Square* first_meet_square, const Square* second_meet_square)
@@ -149,17 +149,17 @@ void best_path_bi_dijkstra(
 
 
 void best_path(
-    const AlgoState& algo, const std::unordered_map<Square*, Square*>& came_from,
+    AlgoState& algo, const std::unordered_map<Square*, Square*>& came_from,
     const Square* curr_square, bool reverse)
 {}
 
 
 void start_mid_end(
-    const AlgoState& algo, const Square& start, const Square& mid, const Square& end)
+    AlgoState& algo, const Square& start, const Square& mid, const Square& end)
 {}
 
 void recursive_maze(
-    const AlgoState& algo,
+    AlgoState& algo,
     const std::array<int, 4>& chamber, const std::vector<std::vector<Square>>& graph)
 {}
 
