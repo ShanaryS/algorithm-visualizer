@@ -55,7 +55,7 @@ std::unordered_map<Square*, Square*> dijkstra(
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
     int queue_pos{ 0 };
-    std::tuple<int, int, const Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
+    std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
     std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
 
@@ -129,16 +129,20 @@ std::unordered_map<Square*, Square*> dijkstra(
 
 
 std::unordered_map<Square*, Square*> a_star(
-    AlgoState& algo, const Square& start, const Square& end,
-    const Square& ignore_square, bool draw_best_path)
-{}
+    AlgoState& algo, Square& start, Square& end,
+    Square& ignore_square, bool draw_best_path)
+{
+    return std::unordered_map<Square*, Square*>{};
+}
 
-int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2) {}
+int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2) { return 1; }
 
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
-    AlgoState& algo, const Square& start, const Square& end,
-    const Square& ignore_square, bool draw_best_path)
-{}
+    AlgoState& algo, Square& start, Square& end,
+    Square& ignore_square, bool draw_best_path)
+{
+    return std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*>{};
+}
 
 void best_path_bi_dijkstra(
     AlgoState& algo,
@@ -155,7 +159,7 @@ void best_path(
 
 
 void start_mid_end(
-    AlgoState& algo, const Square& start, const Square& mid, const Square& end)
+    AlgoState& algo, Square& start, Square& mid, Square& end)
 {}
 
 void recursive_maze(
@@ -178,7 +182,7 @@ void Args::args_reset()
 
 // std::vector<> get_random_sample(const std::array<>& population, int k) {}
 
-int get_randrange(int start, int stop) {}
+int get_randrange(int start, int stop) { return 1; }
 
 
 namespace py = pybind11;
