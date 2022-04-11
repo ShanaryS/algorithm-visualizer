@@ -62,6 +62,8 @@ if __name__ == "__main__":
 # Algo gets removed then redrawn when dragging
 # Google maps slow
 # Rewrite draw()?
+# Move loops of set_ square methods into square class?
+#   (Allow looping over a bunch of squares through a single func call)
 
 # Multiple threads for algorithm?
 # Multiprocessing for algo, may need to share memory
