@@ -166,7 +166,7 @@ void best_path(
 
 // Used if algos need to reach mid square first
 void start_mid_end(
-    AlgoState& algo, const Square& start, const Square& mid, const Square& end);
+    AlgoState& algo, Square& start, Square& mid, Square& end);
 
 // Creates maze using recursive division.
 void recursive_maze(
