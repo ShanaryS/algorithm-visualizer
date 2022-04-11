@@ -164,7 +164,6 @@ void recursive_maze(
 {}
 
 
-
 void Args::args_reset()
 {
     draw_best_path = true;
@@ -174,23 +173,12 @@ void Args::args_reset()
     is_dijkstra = true;
     is_a_star = true;
     is_bi_dijkstra = true;
-
-    legend = true;
-    clear_legend = true;
-    algo_running = true;
-    is_best_path = true;
-    is_recursive_maze = true;
-    is_graph_size = true;
-    is_input = true;
-    is_base_img = true;
-    is_clean_img = true;
-    is_converting_img = true;
 }
 
 
 // std::vector<> get_random_sample(const std::array<>& population, int k) {}
 
-// int get_randrange(int start, int stop) {}
+int get_randrange(int start, int stop) {}
 
 
 namespace py = pybind11;
@@ -199,10 +187,16 @@ using namespace pybind11::literals;
 PYBIND11_MODULE(algorithms, m)
 {
     py::class_<AlgoState>(m, "AlgoState")
-        .def_readwrite("dijkstra_finished", &AlgoState::m_dijkstra_finished, py::return_value_policy::reference_internal)
-        .def_readwrite("a_star_finished", &AlgoState::m_a_star_finished, py::return_value_policy::reference_internal)
-        .def_readwrite("bi_dijkstra_finished", &AlgoState::m_bi_dijkstra_finished, py::return_value_policy::reference_internal)
-        .def_readwrite("maze", &AlgoState::m_maze, py::return_value_policy::reference_internal)
-        .def_readonly("best_path_sleep", &AlgoState::m_best_path_sleep, py::return_value_policy::reference_internal)
-        .def_readonly("highway_multiplier", &AlgoState::m_highway_multiplier, py::return_value_policy::reference_internal);
+        .def("start_loop", &AlgoState::start_loop, py::return_value_policy::automatic_reference)
+        .def("run_options", &AlgoState::run_options, py::return_value_policy::automatic_reference)
+        .def("run", &AlgoState::run, py::return_value_policy::automatic_reference)
+        .def("check_phase", &AlgoState::check_phase, py::return_value_policy::automatic_reference)
+        .def("check_algo", &AlgoState::check_algo, py::return_value_policy::automatic_reference)
+        .def("check_finished", &AlgoState::check_finished, py::return_value_policy::automatic_reference)
+        .def("reset", &AlgoState::reset, py::return_value_policy::automatic_reference)
+        .def("set_best_path_delay", &AlgoState::set_best_path_delay, py::return_value_policy::automatic_reference)
+        .def("set_recursive_maze_delay", &AlgoState::set_recursive_maze_delay, py::return_value_policy::automatic_reference)
+        .def("timer_start", &AlgoState::timer_start, py::return_value_policy::automatic_reference)
+        .def("timer_end", &AlgoState::timer_end, "count"_a = true, py::return_value_policy::automatic_reference)
+        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference)
 }

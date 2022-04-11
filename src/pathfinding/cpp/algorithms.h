@@ -13,6 +13,18 @@
 struct AlgoState
 {
 public:
+    AlgoState()
+    {
+        PHASE_ALGO = generate_unique_int();
+        PHASE_MAZE = generate_unique_int();
+        ALGO_DIJKSTRA = generate_unique_int();
+        ALGO_A_STAR = generate_unique_int();
+        ALGO_BI_DIJKSTRA = generate_unique_int();
+        ALGO_BEST_PATH = generate_unique_int();
+        ALGO_RECURSIVE_MAZE = generate_unique_int();
+        reset();
+    }
+
     // Possible phases
 
     int PHASE_ALGO;
@@ -29,7 +41,7 @@ public:
     // Special variables
 
     int NULL;  // Value is 0 which returns false when casted to bool
-    auto lock;
+    auto m_lock;
 
     // Timer for algorithms
 
@@ -38,6 +50,16 @@ public:
     double m_timer_max{ std::numeric_limits<double>::min() };
     double m_timer_min{ std::numeric_limits<double>::max() };
     int m_timer_count{ 0 };
+
+    void start_loop(){}
+    void run_options(const Square& start, const Square& mid, const Square& end, const Square& ignore_square);
+    void run(int phase, int algo){ set_phase(phase); set_algo(algo); set_finished(false); }
+    int check_phase(){}
+    int check_algo(){}
+    bool check_finished(){}
+    void reset();
+    void set_best_path_delay(int ms){}
+    void set_recursive_maze_delay(int us){}
 
     void timer_start() { m_timer_start_time = std::chrono::high_resolution_clock::now(); }
     void timer_end(bool count = true);
@@ -56,22 +78,26 @@ private:
 
     // Run options
 
-    const Square* start = nullptr;
-    const Square* mid = nullptr;
-    const Square* end = nullptr;
-    const Square* ignore_square = nullptr;
+    const Square* m_start = nullptr;
+    const Square* m_mid = nullptr;
+    const Square* m_end = nullptr;
+    const Square* m_ignore_square = nullptr;
 
     // Control the speed of algorithms
 
     int DEFAULT_BEST_PATH_DELAY_MS = 3;
-    int best_path_delay_ms;
+    int m_best_path_delay_ms;
     int DEFAULT_RECURSIVE_MAZE_DELAY_US = 250;
-    int recursive_maze_delay_us;
+    int m_recursive_maze_delay_us;
 
     // Timer for algorithms
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
     
+    void set_phase(int phase){}
+    void set_algo(int algo){}
+    void set_finished(bool x){}
+    void algo_loop();
     int generate_unique_int(){ return ++m_unique_int; }
 };
 
