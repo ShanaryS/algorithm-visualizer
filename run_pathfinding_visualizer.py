@@ -69,6 +69,7 @@ if __name__ == "__main__":
 # May need to handle how priority queue selects next item
 # Rewrite sections of code into separate functions (eg draw() into multiple parts)
 # Implement threading in square access methods. Separate locks for square and algo?
+# Can safely parrallise set_ square methods? Except for algos?
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
