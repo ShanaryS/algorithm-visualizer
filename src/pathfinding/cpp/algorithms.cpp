@@ -41,17 +41,17 @@ void AlgoState::timer_reset()
 
 
 std::unordered_map<Square*, Square*> dijkstra(
-    AlgoState& algo, const Square& start, const Square& end,
-    const Square& ignore_square, bool draw_best_path)
+    AlgoState& algo, Square& start, Square& end,
+    Square& ignore_square, bool draw_best_path)
 {
     // Clear preivious and start timer here
     algo.timer_reset();
     algo.timer_start();
 
     // Get pointers to squares for consistency
-    const Square* start_ptr = &start;
-    const Square* end_ptr = &end;
-    const Square* ignore_square_ptr = &ignore_square;
+    Square* start_ptr = &start;
+    Square* end_ptr = &end;
+    Square* ignore_square_ptr = &ignore_square;
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
     int queue_pos{ 0 };
@@ -62,11 +62,11 @@ std::unordered_map<Square*, Square*> dijkstra(
     // Determine what is the best square to check
     std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
     std::unordered_map<Square*, int> g_score{};
-    for (const std::vector<Square>& row : graph)
+    for (std::vector<Square>& row : graph)
     {
-        for (Square* square : row)
+        for (Square& square : row)
         {
-            g_score[square] = std::numeric_limits<int>::max();
+            g_score[&square] = std::numeric_limits<int>::max();
         }
     }
     g_score[start_ptr] = 0;
@@ -91,7 +91,7 @@ std::unordered_map<Square*, Square*> dijkstra(
         {
             if (draw_best_path)
             {
-                best_path(gph, algo, txt, came_from, end_ptr, visualize);
+                best_path(algo, came_from, end_ptr);
             }
             return came_from;
         }
@@ -198,5 +198,5 @@ PYBIND11_MODULE(algorithms, m)
         .def("set_recursive_maze_delay", &AlgoState::set_recursive_maze_delay, py::return_value_policy::automatic_reference)
         .def("timer_start", &AlgoState::timer_start, py::return_value_policy::automatic_reference)
         .def("timer_end", &AlgoState::timer_end, "count"_a = true, py::return_value_policy::automatic_reference)
-        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference)
+        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference);
 }

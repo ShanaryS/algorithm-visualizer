@@ -116,7 +116,7 @@ public:
 
     Square& null_square() { return m_null_square; }
     std::array<int, 4>& null_chamber() { return m_null_chamber; }
-    std::vector<std::vector<Square>>& null_graph() { return m_null_graph; }
+    std::vector<std::vector<Square>>& null_graph() const { return m_null_graph; }
 
     // Reset args back to default
     void args_reset();
@@ -124,7 +124,7 @@ public:
 private:
     Square& m_null_square = Square::s_get_null_square();
     std::array<int, 4> m_null_chamber{};
-    std::vector<std::vector<Square>> m_null_graph{};
+    const std::vector<std::vector<Square>> m_null_graph{};
 };
 
 static Args arg;
@@ -172,7 +172,7 @@ void recursive_maze(
     const std::array<int, 4>& chamber = arg.null_chamber, const std::vector<std::vector<Square>>& graph = arg.null_graph);
 
 // Returns a k length vector of unique elements from population
-std::vector<> get_random_sample(const std::array<>& population, int k);
+//std::vector<> get_random_sample(const std::array<>& population, int k);
 
 // Return a random int within a range
 int get_randrange(int start, int stop);
