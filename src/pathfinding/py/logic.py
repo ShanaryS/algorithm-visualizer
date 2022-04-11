@@ -110,15 +110,15 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
 
             # Run Dijkstra with "D" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_d and lgc.start and lgc.end and not gph.has_img):
-                _dijkstra_button(gph, algo, lgc, txt)
+                _dijkstra_button(algo, lgc)
 
             # Run A* with "A" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_a and lgc.start and lgc.end and not gph.has_img):
-                _a_star_button(gph, algo, lgc, txt)
+                _a_star_button(algo, lgc)
 
             # Run Bi-directional Dijkstra with "B" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_b and lgc.start and lgc.end and not gph.has_img):
-                _bi_dijkstra_button(gph, algo, lgc, txt)
+                _bi_dijkstra_button(algo, lgc)
 
             # Draw recursive maze with "G" key on keyboard
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_g and not gph.has_img):
@@ -291,7 +291,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
         
         # Handles removing and adding mid manually instead of dragging on algo completion.
         if algo.check_finished() and lgc.start and lgc.mid and lgc.end:
-            _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+            _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
@@ -305,7 +305,7 @@ def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     _reset_ordinal_squares(lgc)
 
 
-def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, algo_to_run, visualize: bool) -> None:
+def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visualize: bool) -> None:
     """Run's the specificed algo"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
@@ -318,19 +318,19 @@ def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt
         algo.set_best_path_delay(0)
 
 
-def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _dijkstra_button(algo: AlgoState, lgc: LogicState) -> None:
     """Run the dijkstra algorithm"""
-    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_DIJKSTRA, True)
+    _run_pathfinding_algo(algo, lgc, algo.ALGO_DIJKSTRA, True)
 
 
-def _a_star_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _a_star_button(algo: AlgoState, lgc: LogicState) -> None:
     """Runs the A* algorithm"""
-    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_A_STAR, True)
+    _run_pathfinding_algo(algo, lgc, algo.ALGO_A_STAR, True)
 
 
-def _bi_dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _bi_dijkstra_button(algo: AlgoState, lgc: LogicState) -> None:
     """Runs the Bi-Directional Dijkstra algorithm"""
-    _run_pathfinding_algo(gph, algo, lgc, txt, algo.ALGO_BI_DIJKSTRA, True)
+    _run_pathfinding_algo(algo, lgc, algo.ALGO_BI_DIJKSTRA, True)
 
 
 def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText, visualize) -> None:
