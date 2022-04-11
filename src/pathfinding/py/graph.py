@@ -201,6 +201,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
         _draw_legend(gph, txt)
 
     # Get squares to draw
+    graph = []
     with algo.lock:
         if gph.visualize_square_history:
             gph.visualize_square_history = False
@@ -212,6 +213,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
         else:
             square: Square
             for square in Square.get_squares_to_update():
+                graph.append(square)
                 gph.add_to_update_queue(square)
             Square.clear_squares_to_update()
 
@@ -228,7 +230,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
         _draw_lines(gph)
         pygame.display.flip()
     else:
-        _draw_square_borders(gph)
+        _draw_square_borders(gph, graph)
         pygame.display.update(gph.rects_to_update)
     gph.rects_to_update.clear()
 
@@ -238,12 +240,12 @@ def _draw_square(gph: GraphState, square_color, square_pos) -> pygame.Rect:
     return pygame.draw.rect(gph.window, square_color, square_pos)
 
 
-def _draw_square_borders(gph: GraphState) -> None:
+def _draw_square_borders(gph: GraphState, graph) -> None:
     """Draws the lines surrounding the updating squares"""
 
     square: Square
     square_length = Square.get_square_length()
-    for square in Square.get_squares_to_update():
+    for square in graph:
         x, y, *_ = square.draw_square()
         top_left = x, y
         top_right = x, y + square_length
