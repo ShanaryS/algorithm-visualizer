@@ -309,14 +309,13 @@ def _run_pathfinding_algo(gph: GraphState, algo: AlgoState, lgc: LogicState, txt
     """Run's the specificed algo"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
-    draw(gph, algo, txt, clear_legend=True)
 
     # Set algorithm to run
+    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run(algo.PHASE_ALGO, algo_to_run)
     lgc.visualize = visualize
     if not visualize:
         algo.set_best_path_delay(0)
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
-    algo.run(algo.PHASE_ALGO, algo_to_run)
 
 
 def _dijkstra_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -341,9 +340,9 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     gph.base_drawn = False
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
-    lgc.visualize = visualize
     algo.run_options(lgc.start, lgc.mid, lgc.end, None)
     algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
+    lgc.visualize = visualize
     if visualize:
         sleep(15, unit="ms")  # Need to sleep a bit for algo to work.
     else:

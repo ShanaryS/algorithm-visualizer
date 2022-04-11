@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Algo gets removed then redrawn when dragging
 # Google maps slow
 # Rewrite draw()?
 # Move loops of set_ square methods into square class?
