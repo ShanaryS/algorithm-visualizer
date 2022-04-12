@@ -71,6 +71,9 @@ class Square:
     future_history_squares = set()
     track_square_history = False
 
+    # Null square for easy checks
+    null_square = None
+
     def __init__(self, row: int, col: int) -> None:
         self.row = row
         self.col = col
@@ -444,6 +447,8 @@ class Square:
         for row in cls.graph:
             for square in row:
                 square._update_neighbours()
+
+        cls.null_square = Square(-1, -1)
     
     @classmethod
     def get_graph(cls) -> list:
@@ -549,6 +554,11 @@ class Square:
     def get_track_square_history(cls) -> bool:
         """Get track square history"""
         return cls.track_square_history
+
+    @classmethod
+    def get_null_square(cls) -> "Square":
+        """Get the null square"""
+        return cls.null_square
 
     @classmethod
     def reset_algo_squares(cls) -> None:

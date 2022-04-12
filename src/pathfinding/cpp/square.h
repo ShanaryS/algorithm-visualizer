@@ -117,7 +117,7 @@ public:
     static std::vector<Square*> s_get_squares_to_update();
     static std::vector<Square*> s_get_future_history_squares();
     static bool s_get_track_square_history() { return s_track_square_history; }
-    static Square& s_get_null_square() { return s_null_square[0]; }
+    static Square* s_get_null_square() { return &s_null_square[0]; }
 
     // Change square containers of the class
 

@@ -31,9 +31,9 @@ class LogicState:
     """Stores the state of the logic"""
 
     ordinal_square_clicked_last_tick: list
-    start: Square = None
-    mid: Square = None
-    end: Square = None
+    start: Square = Square.get_null_square()
+    mid: Square = Square.get_null_square()
+    end: Square = Square.get_null_square()
     run: bool = True
     visualize: bool = True
     GRAPH_SMALL: int = 22
@@ -296,7 +296,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
     """Resets the ordinal squares"""
-    lgc.start = lgc.mid = lgc.end = None
+    lgc.start = lgc.mid = lgc.end = Square.get_null_square()
 
 
 def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -311,7 +311,7 @@ def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visuali
     reset_algo(algo)
 
     # Set algorithm to run
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run_options(lgc.start, lgc.mid, lgc.end, Square.get_null_square())
     algo.run(algo.PHASE_ALGO, algo_to_run)
     lgc.visualize = visualize
     if not visualize:
@@ -340,7 +340,7 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     gph.base_drawn = False
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
-    algo.run_options(lgc.start, lgc.mid, lgc.end, None)
+    algo.run_options(lgc.start, lgc.mid, lgc.end, Square.get_null_square())
     algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
     lgc.visualize = visualize
     if visualize:

@@ -123,7 +123,7 @@ public:
     const std::vector<std::vector<Square>>& null_graph() const { return m_null_graph; }
 
 private:
-    const Square& m_null_square = Square::s_get_null_square();
+    const Square& m_null_square = *Square::s_get_null_square();
     const std::array<int, 4> m_null_chamber{};
     const std::vector<std::vector<Square>> m_null_graph{};
 };
