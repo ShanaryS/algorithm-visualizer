@@ -55,7 +55,7 @@ public:
 
     // Functions
 
-    void start_loop() {}
+    void start_loop() { std::thread algo_thread(algo_loop, this); }
     void run_options(Square& start, Square& mid, Square& end, Square& ignore_square);
     void run(int phase, int algo);
     int check_phase() { std::scoped_lock{ m_lock }; return m_phase; }
