@@ -168,6 +168,12 @@ std::unordered_map<Square*, Square*> dijkstra(
         // Decides the order of neighbours to check
         for (Square* nei_ptr : curr_square_ptr->get_neighbours())
         {
+            // Ignore walls
+            if (nei_ptr->is_wall())
+            {
+                continue;
+            }
+            
             int temp_g_score{ g_score.at(curr_square_ptr) - 1 };
             if (temp_g_score > g_score.at(nei_ptr))
             {
