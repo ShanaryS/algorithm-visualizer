@@ -79,6 +79,7 @@ if __name__ == "__main__":
 # Multiprocessing for algo, may need to share memory
 # Can safely parrallise set_ square methods? Except for algos?
 # Implement threading in square access methods. Separate locks for square and algo?
+# Switch statement for algo state loop
 # Return unoredered_map and unordered_set directly rather than coverting to vector
 # Store graph in std::array
 # Write graph as non nested container to optimize cache hits

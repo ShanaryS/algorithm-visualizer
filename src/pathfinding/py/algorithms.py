@@ -157,7 +157,7 @@ class AlgoState:
                         bi_dijkstra(self, self._start, self._end, alt_color=False, ignore_square=self._ignore_square, draw_best_path=True)
                 else:
                     start_mid_end(self, self._start, self._mid, self._end)
-                self._best_path_delay_ms = self._DEFAULT_BEST_PATH_DELAY_MS  # Set to 0 with no vis
+                self.set_best_path_delay(self._DEFAULT_BEST_PATH_DELAY_MS)  # Set to 0 with no vis
                 self._set_algo(previous_algo)  # Preserves more info
                 self._set_finished(True)
                 self._set_phase(self.NONE)
@@ -166,7 +166,7 @@ class AlgoState:
             elif self.check_phase() == self.PHASE_MAZE and not self.check_finished():
                 if self.check_algo() == self.ALGO_RECURSIVE_MAZE:
                     recursive_maze(self)
-                    self._recursive_maze_delay_us = self._DEFAULT_RECURSIVE_MAZE_DELAY_US
+                    self.set_recursive_maze_delay(self._DEFAULT_RECURSIVE_MAZE_DELAY_US)
                 self._set_finished(True)
                 self._set_phase(self.NONE)
 
