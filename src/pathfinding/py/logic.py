@@ -45,7 +45,7 @@ class LogicState:
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
     # Start other loops
-    algo.start_loop()
+    threading.Thread(target=algo.start_loop, args=(), daemon=True).start()
     
     # Create pygame window
     gph.create_pygame_window()

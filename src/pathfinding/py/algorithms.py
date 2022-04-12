@@ -72,8 +72,8 @@ class AlgoState:
         self.reset()
 
     def start_loop(self) -> None:
-        """Starts the algo loop on a daemon thread that runs forever."""
-        threading.Thread(target=self._algo_loop, args=(), daemon=True).start()
+        """Starts the algo loop. Place on a daemon thread."""
+        self._algo_loop()
 
     def run_options(self, start, mid, end, ignore_square) -> None:
         """Set the options that will be performed on run"""
