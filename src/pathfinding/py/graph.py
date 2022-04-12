@@ -2,19 +2,15 @@
 
 
 # Handles how much C++ the the program should use
-from src.pathfinding.cpp_or_py import use_square_h
+from src.pathfinding.cpp_or_py import use_square_h, use_algorithms_h
 if use_square_h:
     from src.pathfinding.cpp.square import Square
+elif use_algorithms_h:
+    from src.pathfinding.cpp.algorithms import Square, AlgoState
 else:
     from src.pathfinding.py.square import Square
-
-# Handles how much C++ the the program should use
-from lib.cpp_py_lock import CppPyLock
-from src.pathfinding.cpp_or_py import use_algorithms_h
-if use_algorithms_h:
-    from src.pathfinding.cpp.algorithms import AlgoState
-else:
     from src.pathfinding.py.algorithms import AlgoState
+from lib.cpp_py_lock import CppPyLock
 
 import pygame
 from dataclasses import dataclass
