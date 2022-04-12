@@ -24,6 +24,7 @@ public:
         ALGO_BEST_PATH = generate_unique_int();
         ALGO_RECURSIVE_MAZE = generate_unique_int();
         reset();
+        timer_reset();
     }
 
     // Possible phases
@@ -46,11 +47,11 @@ public:
 
     // Timer for algorithms
 
-    double m_timer_total{ 0.0 };
-    double m_timer_avg{ 0.0 };
-    double m_timer_max{ std::numeric_limits<double>::min() };
-    double m_timer_min{ std::numeric_limits<double>::max() };
-    int m_timer_count{ 0 };
+    double m_timer_total;
+    double m_timer_avg;
+    double m_timer_max;
+    double m_timer_min;
+    int m_timer_count;
 
     // Functions
 
@@ -87,10 +88,10 @@ private:
 
     // Run options
 
-    Square* m_start_ptr = nullptr;
-    Square* m_mid_ptr = nullptr;
-    Square* m_end_ptr = nullptr;
-    Square* m_ignore_square_ptr = nullptr;
+    Square* m_start_ptr;
+    Square* m_mid_ptr;
+    Square* m_end_ptr;
+    Square* m_ignore_square_ptr;
 
     // Control the speed of algorithms
 
@@ -117,12 +118,12 @@ private:
 struct Args
 {
 public:
-    const Square& null_square() const { return m_null_square; }
+    Square* null_square_ptr() const { return m_null_square_ptr; }
     const std::array<int, 4>& null_chamber() const { return m_null_chamber; }
     const std::vector<std::vector<Square>>& null_graph() const { return m_null_graph; }
 
 private:
-    const Square& m_null_square = *Square::s_get_null_square();
+    Square* m_null_square_ptr = Square::s_get_null_square();
     const std::array<int, 4> m_null_chamber{};
     const std::vector<std::vector<Square>> m_null_graph{};
 };

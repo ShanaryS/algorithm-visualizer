@@ -28,10 +28,10 @@ void AlgoState::reset()
     std::scoped_lock{ m_lock };
     m_phase = NONE;
     m_algo = NONE;
-    m_start_ptr = nullptr;
-    m_mid_ptr = nullptr;
-    m_end_ptr = nullptr;
-    m_ignore_square_ptr = nullptr;
+    m_start_ptr = arg.null_square_ptr();
+    m_mid_ptr = arg.null_square_ptr();
+    m_end_ptr = arg.null_square_ptr();
+    m_ignore_square_ptr = arg.null_square_ptr();
     m_finished = false;
     m_best_path_delay_ms = DEFAULT_BEST_PATH_DELAY_MS;
     m_recursive_maze_delay_us = DEFAULT_RECURSIVE_MAZE_DELAY_US;
@@ -101,7 +101,7 @@ void AlgoState::algo_loop()
             set_finished(true);
             set_phase(NONE);
         }
-        
+
         else if (check_phase() == PHASE_MAZE && !check_finished())
         {
             if (check_algo() == ALGO_RECURSIVE_MAZE)
