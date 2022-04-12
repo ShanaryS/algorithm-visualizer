@@ -88,6 +88,10 @@ class Square:
         self.color_history = None
         self.highway = False
 
+    def __bool__(self) -> bool:
+        """Returns false for impossible squares"""
+        return (self.row >= 0 and self.col >= 0)
+
     def get_pos(self) -> tuple[int, int]:
         """Returns the square location"""
         return self.pos

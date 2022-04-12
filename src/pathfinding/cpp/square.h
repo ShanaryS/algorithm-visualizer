@@ -19,7 +19,7 @@ public:
 
         double square_length_trunc = static_cast<int>(s_square_length);
         m_square_dim = { m_x, m_y, square_length_trunc, square_length_trunc };
-        m_is_valid = (m_row >= 0 || m_col >= 0) ? true : false;
+        m_is_valid = (m_row >= 0 && m_col >= 0) ? true : false;
 
         // Create string hash using the square pos. No longer being used
         /*m_pos_string_hash += std::to_string(m_row);
