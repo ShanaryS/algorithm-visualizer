@@ -16,6 +16,7 @@ struct AlgoState
 public:
     AlgoState()
     {
+        NONE = 0;
         PHASE_ALGO = generate_unique_int();
         PHASE_MAZE = generate_unique_int();
         ALGO_DIJKSTRA = generate_unique_int();
