@@ -77,7 +77,7 @@ void AlgoState::algo_loop()
         if (check_phase() == PHASE_ALGO && !check_finished())
         {
             int previous_algo = check_algo();
-            if (!m_mid_ptr)
+            if (!*m_mid_ptr)
             {
                 if (check_algo() == ALGO_DIJKSTRA)
                 {
