@@ -45,5 +45,4 @@ if _use_cpp["#include"] == ".py":
 elif _use_cpp["#include"] == "square.h":
     use_square_h = True
 elif _use_cpp["#include"] == "algorithms.h":
-    use_square_h = True
     use_algorithms_h = True
