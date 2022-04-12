@@ -6,7 +6,6 @@
 #include <limits>
 #include <mutex>
 #include <string>
-#include <thread>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
@@ -55,7 +54,7 @@ public:
 
     // Functions
 
-    void start_loop() { std::thread algo_thread(algo_loop, this); }
+    void start_loop() { algo_loop(); }
     void run_options(Square& start, Square& mid, Square& end, Square& ignore_square);
     void run(int phase, int algo);
     int check_phase() { std::scoped_lock{ m_lock }; return m_phase; }
