@@ -4,7 +4,7 @@
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
-    from src.pathfinding.cpp.algorithms import AlgoState
+    from src.pathfinding.cpp.modules import AlgoState
 else:
     from src.pathfinding.py.algorithms import AlgoState
 

@@ -4,7 +4,7 @@
 # Handles how much C++ the the program should use
 from src.pathfinding.cpp_or_py import use_square_h
 if use_square_h:
-    from src.pathfinding.cpp.square import Square
+    from src.pathfinding.cpp.modules import Square
 else:
     from src.pathfinding.py.square import Square
 from lib.timer import sleep
