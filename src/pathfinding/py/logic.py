@@ -221,7 +221,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
                     square.set_end()
 
                 # Runs the algo again instantly with no visualizations.
-                _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+                _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
         # If ordinal square is not being dragged, prepare it to
         elif square is lgc.start:
@@ -238,7 +238,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
             # Update algo
             if algo.check_finished():
-                _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+                _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
     # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.start and square != lgc.mid and square != lgc.end:
@@ -247,7 +247,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.check_finished() and lgc.end:
-            _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+            _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
    # If start square does not exist, create it. If not currently ordinal square.
     elif not lgc.end and square != lgc.start and square != lgc.mid:
@@ -256,7 +256,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
 
         # Handles removing and adding end manually instead of dragging on algo completion.
         if algo.check_finished():
-            _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+            _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
     # If start and end square exists, create wall. If not currently ordinal square.
     # Saves pos of wall to be able to reinstate it after dragging ordinal square past it.
@@ -278,7 +278,7 @@ def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
         
     # Updates algo
     if algo.check_finished() and lgc.start and lgc.end:
-        _run_pathfinding_algo(gph, algo, lgc, txt, algo.check_algo(), False)
+        _run_pathfinding_algo(algo, lgc, algo.check_algo(), False)
 
 
 def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
