@@ -246,8 +246,6 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
         if curr_square == end:
             if draw_best_path:
                 _best_path(algo, came_from, end)
-                return dict()
-
             return came_from
 
         # Decides the order of neighbours to check
