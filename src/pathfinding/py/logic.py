@@ -31,9 +31,9 @@ class LogicState:
     """Stores the state of the logic"""
 
     ordinal_square_clicked_last_tick: list
-    start: Square = Square.get_null_square()
-    mid: Square = Square.get_null_square()
-    end: Square = Square.get_null_square()
+    start: Square = None
+    mid: Square = None
+    end: Square = None
     run: bool = True
     visualize: bool = True
     GRAPH_SMALL: int = 22
@@ -296,7 +296,7 @@ def _middle_click_button(algo: AlgoState, lgc: LogicState) -> None:
 
 def _reset_ordinal_squares(lgc: LogicState) -> None:
     """Resets the ordinal squares"""
-    lgc.start = lgc.mid = lgc.end = Square.get_null_square()
+    lgc.start = lgc.mid = lgc.end = None
 
 
 def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
@@ -305,13 +305,26 @@ def _reset_graph_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: 
     _reset_ordinal_squares(lgc)
 
 
+def _none_to_null_square(square) -> Square:
+    """Turns a square from None to a null_square"""
+    if square is None:
+        square = Square.get_null_square()
+    return square
+
+
 def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visualize: bool) -> None:
     """Run's the specificed algo"""
     # Resets algo visualizations without removing ordinal squares or walls
     reset_algo(algo)
 
+    # These fix sending none to C++
+    start = _none_to_null_square(lgc.start)
+    mid = _none_to_null_square(lgc.mid)
+    end = _none_to_null_square(lgc.end)
+    null_square = _none_to_null_square(None)       
+
     # Set algorithm to run
-    algo.run_options(lgc.start, lgc.mid, lgc.end, Square.get_null_square())
+    algo.run_options(start, mid, end, null_square)
     algo.run(algo.PHASE_ALGO, algo_to_run)
     lgc.visualize = visualize
     if not visualize:
@@ -340,7 +353,15 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     gph.base_drawn = False
     gph.update_legend = True
     _reset_ordinal_squares(lgc)
-    algo.run_options(lgc.start, lgc.mid, lgc.end, Square.get_null_square())
+
+    # These fix sending none to C++
+    start = _none_to_null_square(lgc.start)
+    mid = _none_to_null_square(lgc.mid)
+    end = _none_to_null_square(lgc.end)
+    null_square = _none_to_null_square(None)       
+
+    # Set algorithm to run
+    algo.run_options(start, mid, end, null_square)
     algo.run(algo.PHASE_MAZE, algo.ALGO_RECURSIVE_MAZE)
     lgc.visualize = visualize
     if visualize:
