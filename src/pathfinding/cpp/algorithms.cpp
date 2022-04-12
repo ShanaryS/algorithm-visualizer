@@ -137,7 +137,7 @@ std::unordered_map<Square*, Square*> dijkstra(
     {
         for (Square& square : row)
         {
-            g_score[&square] = std::numeric_limits<int>::min();
+            g_score[&square] = std::numeric_limits<int>::lowest();
         }
     }
     g_score[start_ptr] = 0;
@@ -170,14 +170,14 @@ std::unordered_map<Square*, Square*> dijkstra(
         // Decides the order of neighbours to check
         for (Square* nei_ptr : curr_square_ptr->get_neighbours())
         {
-            int temp_g_score{ g_score[curr_square_ptr] - 1 };
-            if (temp_g_score > g_score[nei_ptr])
+            int temp_g_score{ g_score.at(curr_square_ptr) - 1 };
+            if (temp_g_score > g_score.at(nei_ptr))
             {
                 came_from[nei_ptr] = curr_square_ptr;
                 g_score[nei_ptr] = temp_g_score;
 
                 --queue_pos;
-                std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score[nei_ptr], queue_pos, nei_ptr) };
+                std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
