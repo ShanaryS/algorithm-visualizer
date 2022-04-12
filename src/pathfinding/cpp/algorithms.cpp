@@ -1,7 +1,4 @@
 #include "algorithms.h"
-#include "square.cpp"  // Must include cpp files or else cmake won't link.
-
-#include <pybind11/pybind11.h>
 
 #include <algorithm>
 #include <queue>
@@ -246,55 +243,38 @@ void recursive_maze(
 int get_randrange(int start, int stop) { return 1; }
 
 
+
+
+
+// Allow code to be imported into python using pybind11
+
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
+#include <pybind11/operators.h>
+#include "square.cpp"  // Must include cpp files or else cmake won't link.
+
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-PYBIND11_MODULE(algorithms, m)
-{
-    py::class_<AlgoState>(m, "AlgoState")
-        .def(py::init())
-        .def_readonly("PHASE_ALGO", &AlgoState::PHASE_ALGO)
-        .def_readonly("PHASE_MAZE", &AlgoState::PHASE_MAZE)
-        .def_readonly("ALGO_DIJKSTRA", &AlgoState::ALGO_DIJKSTRA)
-        .def_readonly("ALGO_A_STAR", &AlgoState::ALGO_A_STAR)
-        .def_readonly("ALGO_BI_DIJKSTRA", &AlgoState::ALGO_BI_DIJKSTRA)
-        .def_readonly("ALGO_BEST_PATH", &AlgoState::ALGO_BEST_PATH)
-        .def_readonly("ALGO_RECURSIVE_MAZE", &AlgoState::ALGO_RECURSIVE_MAZE)
-        .def_readonly("NONE", &AlgoState::NONE)
-        .def_readonly("timer_total", &AlgoState::m_timer_total)
-        .def_readonly("timer_avg", &AlgoState::m_timer_avg)
-        .def_readonly("timer_max", &AlgoState::m_timer_max)
-        .def_readonly("timer_min", &AlgoState::m_timer_min)
-        .def_readonly("timer_count", &AlgoState::m_timer_count)
-        .def("start_loop", &AlgoState::start_loop, py::return_value_policy::automatic_reference, py::call_guard<py::gil_scoped_release>())
-        .def("run_options", &AlgoState::run_options, py::return_value_policy::automatic_reference)
-        .def("run", &AlgoState::run, py::return_value_policy::automatic_reference)
-        .def("check_phase", &AlgoState::check_phase, py::return_value_policy::automatic_reference)
-        .def("check_algo", &AlgoState::check_algo, py::return_value_policy::automatic_reference)
-        .def("check_finished", &AlgoState::check_finished, py::return_value_policy::automatic_reference)
-        .def("reset", &AlgoState::reset, py::return_value_policy::automatic_reference)
-        .def("set_best_path_delay", &AlgoState::set_best_path_delay, py::return_value_policy::automatic_reference)
-        .def("set_recursive_maze_delay", &AlgoState::set_recursive_maze_delay, py::return_value_policy::automatic_reference)
-        .def("timer_start", &AlgoState::timer_start, py::return_value_policy::automatic_reference)
-        .def("timer_end", &AlgoState::timer_end, "count"_a = true, py::return_value_policy::automatic_reference)
-        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference)
-        .def("thread_lock", &AlgoState::thread_lock, py::return_value_policy::automatic_reference)
-        .def("thread_unlock", &AlgoState::thread_unlock, py::return_value_policy::automatic_reference);
-    
-    //
-    // FROM square.cpp. Need to include this here for imports to work.
-    //
+// Prevent copies being made when passing these types around
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Square>>);
+PYBIND11_MAKE_OPAQUE(std::vector<Square>);
+PYBIND11_MAKE_OPAQUE(std::vector<Square*>);
 
+PYBIND11_MODULE(modules, m)
+{
     // Define Python API for opaque types
     py::bind_vector<std::vector<std::vector<Square>>>(m, "VectorGraph");
     py::bind_vector<std::vector<Square>>(m, "VectorSquare");
     py::bind_vector<std::vector<Square*>>(m, "VectorSquare*");
 
-    // Define Python API for Square class
+    // Define Python API for classes and functions
     // Default to automatic_reference return policy.
     // Return pointers to return a reference to python. Must make container opaque to prevent pybind11 from copying.
     // Use reference_internal if C++ might delete data while python is using it (should be rare)
     // Use take_ownership when C++ will have no use and python should call the destructor.
+
     py::class_<Square>(m, "Square")
         .def(py::init<int, int>())
         .def(py::self == py::self)
@@ -364,4 +344,34 @@ PYBIND11_MODULE(algorithms, m)
         .def_static("clear_future_history_squares", &Square::s_clear_future_history_squares, py::return_value_policy::automatic_reference)
         .def_static("set_track_square_history", &Square::s_set_track_square_history, py::return_value_policy::automatic_reference)
         .def_static("update_num_rows_cols", &Square::s_update_num_rows_cols, py::return_value_policy::automatic_reference);
+
+    py::class_<AlgoState>(m, "AlgoState")
+        .def(py::init())
+        .def_readonly("PHASE_ALGO", &AlgoState::PHASE_ALGO)
+        .def_readonly("PHASE_MAZE", &AlgoState::PHASE_MAZE)
+        .def_readonly("ALGO_DIJKSTRA", &AlgoState::ALGO_DIJKSTRA)
+        .def_readonly("ALGO_A_STAR", &AlgoState::ALGO_A_STAR)
+        .def_readonly("ALGO_BI_DIJKSTRA", &AlgoState::ALGO_BI_DIJKSTRA)
+        .def_readonly("ALGO_BEST_PATH", &AlgoState::ALGO_BEST_PATH)
+        .def_readonly("ALGO_RECURSIVE_MAZE", &AlgoState::ALGO_RECURSIVE_MAZE)
+        .def_readonly("NONE", &AlgoState::NONE)
+        .def_readonly("timer_total", &AlgoState::m_timer_total)
+        .def_readonly("timer_avg", &AlgoState::m_timer_avg)
+        .def_readonly("timer_max", &AlgoState::m_timer_max)
+        .def_readonly("timer_min", &AlgoState::m_timer_min)
+        .def_readonly("timer_count", &AlgoState::m_timer_count)
+        .def("start_loop", &AlgoState::start_loop, py::return_value_policy::automatic_reference, py::call_guard<py::gil_scoped_release>())
+        .def("run_options", &AlgoState::run_options, py::return_value_policy::automatic_reference)
+        .def("run", &AlgoState::run, py::return_value_policy::automatic_reference)
+        .def("check_phase", &AlgoState::check_phase, py::return_value_policy::automatic_reference)
+        .def("check_algo", &AlgoState::check_algo, py::return_value_policy::automatic_reference)
+        .def("check_finished", &AlgoState::check_finished, py::return_value_policy::automatic_reference)
+        .def("reset", &AlgoState::reset, py::return_value_policy::automatic_reference)
+        .def("set_best_path_delay", &AlgoState::set_best_path_delay, py::return_value_policy::automatic_reference)
+        .def("set_recursive_maze_delay", &AlgoState::set_recursive_maze_delay, py::return_value_policy::automatic_reference)
+        .def("timer_start", &AlgoState::timer_start, py::return_value_policy::automatic_reference)
+        .def("timer_end", &AlgoState::timer_end, "count"_a = true, py::return_value_policy::automatic_reference)
+        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference)
+        .def("thread_lock", &AlgoState::thread_lock, py::return_value_policy::automatic_reference)
+        .def("thread_unlock", &AlgoState::thread_unlock, py::return_value_policy::automatic_reference);
 }
