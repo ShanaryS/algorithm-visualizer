@@ -153,6 +153,7 @@ std::unordered_map<Square*, Square*> dijkstra(
 
         // Gets the square currently being checked
         Square* curr_square_ptr{ std::get<2>(open_set.top()) };
+        open_set.pop();
 
         // Terminates if found the best path
         if (curr_square_ptr == end_ptr)
