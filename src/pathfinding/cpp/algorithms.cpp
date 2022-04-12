@@ -1,5 +1,5 @@
 #include "algorithms.h"
-#include "square.cpp"
+#include "square.cpp"  // Must include cpp files or else cmake won't link.
 
 #include <pybind11/pybind11.h>
 
