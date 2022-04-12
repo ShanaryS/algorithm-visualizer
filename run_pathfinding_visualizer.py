@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Replace imports to only use algorithms.h instead of square.h if included
+
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
 # May need to handle how priority queue selects next item
