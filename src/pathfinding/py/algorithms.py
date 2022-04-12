@@ -202,6 +202,14 @@ class AlgoState:
         self._unique_int += 1
         return self._unique_int
 
+    def thread_lock(self) -> None:
+        """For use in custom context manager for consistency with C++"""
+        self.lock.acquire()
+
+    def thread_unlock(self) -> None:
+        """For use in custom context manager for consistency with C++"""
+        self.lock.release()
+
 
 def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict:
     """Code for the dijkstra algorithm"""

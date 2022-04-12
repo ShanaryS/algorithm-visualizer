@@ -9,6 +9,7 @@ else:
     from src.pathfinding.py.square import Square
 
 # Handles how much C++ the the program should use
+from lib.cpp_py_lock import CppPyLock
 from src.pathfinding.cpp_or_py import use_algorithms_h
 if use_algorithms_h:
     from src.pathfinding.cpp.algorithms import AlgoState
@@ -201,7 +202,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
 
     # Get squares to draw
     graph = []
-    with algo.lock:
+    with CppPyLock(algo):
         if gph.visualize_square_history:
             gph.visualize_square_history = False
             for square in Square.get_future_history_squares():

@@ -1,4 +1,5 @@
 #include "algorithms.h"
+#include "square.cpp"
 
 #include <pybind11/pybind11.h>
 
@@ -249,6 +250,15 @@ using namespace pybind11::literals;
 PYBIND11_MODULE(algorithms, m)
 {
     py::class_<AlgoState>(m, "AlgoState")
+        .def(py::init())
+        .def_readonly("PHASE_ALGO", &AlgoState::PHASE_ALGO)
+        .def_readonly("PHASE_MAZE", &AlgoState::PHASE_MAZE)
+        .def_readonly("ALGO_DIJKSTRA", &AlgoState::ALGO_DIJKSTRA)
+        .def_readonly("ALGO_A_STAR", &AlgoState::ALGO_A_STAR)
+        .def_readonly("ALGO_BI_DIJKSTRA", &AlgoState::ALGO_BI_DIJKSTRA)
+        .def_readonly("ALGO_BEST_PATH", &AlgoState::ALGO_BEST_PATH)
+        .def_readonly("ALGO_RECURSIVE_MAZE", &AlgoState::ALGO_RECURSIVE_MAZE)
+        .def_readonly("NONE", &AlgoState::NONE)
         .def("start_loop", &AlgoState::start_loop, py::return_value_policy::automatic_reference)
         .def("run_options", &AlgoState::run_options, py::return_value_policy::automatic_reference)
         .def("run", &AlgoState::run, py::return_value_policy::automatic_reference)
@@ -260,5 +270,7 @@ PYBIND11_MODULE(algorithms, m)
         .def("set_recursive_maze_delay", &AlgoState::set_recursive_maze_delay, py::return_value_policy::automatic_reference)
         .def("timer_start", &AlgoState::timer_start, py::return_value_policy::automatic_reference)
         .def("timer_end", &AlgoState::timer_end, "count"_a = true, py::return_value_policy::automatic_reference)
-        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference);
+        .def("timer_reset", &AlgoState::timer_reset, py::return_value_policy::automatic_reference)
+        .def("thread_lock", &AlgoState::thread_lock, py::return_value_policy::automatic_reference)
+        .def("thread_unlock", &AlgoState::thread_unlock, py::return_value_policy::automatic_reference);
 }

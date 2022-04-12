@@ -87,6 +87,7 @@ if __name__ == "__main__":
 # In set_history impletement switch statement
 # In algorithms check if not closed first when setting open
 # Compare memory address instead of squares in algos
+# CppPyLock using func instead of class
 # Seperate thread for GUI from logic?
 
 # --- Mutltithreading/Multiprocessing ---

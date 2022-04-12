@@ -71,6 +71,10 @@ public:
     void timer_end(bool count = true);
     void timer_reset();
 
+    // Allow python to lock thread
+    void thread_lock() { m_lock.lock(); }
+    void thread_unlock() { m_lock.unlock(); }
+
 private:
     // The current phase and current/last algorithm
 
