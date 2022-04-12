@@ -59,8 +59,8 @@ public:
     void run_options(Square& start, Square& mid, Square& end, Square& ignore_square);
     void run(int phase, int algo);
     int check_phase() { std::scoped_lock{ m_lock }; return m_phase; }
-    int check_algo() { std::scoped_lock{ m_lock }; return m_phase; }
-    bool check_finished() { std::scoped_lock{ m_lock }; return m_phase; }
+    int check_algo() { std::scoped_lock{ m_lock }; return m_algo; }
+    bool check_finished() { std::scoped_lock{ m_lock }; return m_finished; }
     void reset();
     void set_best_path_delay(int ms) { std::scoped_lock{ m_lock }; m_best_path_delay_ms = ms; }
     void set_recursive_maze_delay(int us) { std::scoped_lock{ m_lock }; m_recursive_maze_delay_us = us; }
