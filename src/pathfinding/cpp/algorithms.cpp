@@ -181,6 +181,7 @@ std::unordered_map<Square*, Square*> dijkstra(
                 open_set.push(queue_tuple);
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
+                    std::scoped_lock{ algo->m_lock };
                     nei_ptr->set_open();
                 }
             }
@@ -189,6 +190,7 @@ std::unordered_map<Square*, Square*> dijkstra(
         // Sets square to closed after finished checking
         if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
         {
+            std::scoped_lock{ algo->m_lock };
             curr_square_ptr->set_closed();
         }
 
