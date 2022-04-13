@@ -314,8 +314,6 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
         if curr_square == end:
             if draw_best_path:
                 _best_path(algo, came_from, end)
-                return dict()
-
             return came_from
 
         # Decides the order of neighbours to check
@@ -345,7 +343,7 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
         # End timer before visualizing for better comparisons
         algo._timer_end()
 
-    return dict()
+    return came_from
 
 
 def _heuristic(pos1: tuple, pos2: tuple) -> int:
