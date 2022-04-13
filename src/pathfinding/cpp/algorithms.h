@@ -46,6 +46,13 @@ public:
     int NONE;  // Value is 0 which returns false when casted to bool
     std::mutex m_lock;
 
+    // Control the speed of algorithms
+
+    int DEFAULT_BEST_PATH_DELAY_MS = 3;
+    int m_best_path_delay_ms;
+    int DEFAULT_RECURSIVE_MAZE_DELAY_US = 250;
+    int m_recursive_maze_delay_us;
+
     // Timer for algorithms
 
     double m_timer_total;
@@ -73,8 +80,15 @@ public:
     void timer_reset();
 
     // Allow python to lock thread
+
     void thread_lock() { m_lock.lock(); }
     void thread_unlock() { m_lock.unlock(); }
+
+    // Should not be used outside this unit
+
+    void _set_phase(int phase) { std::scoped_lock{ m_lock }; m_phase = phase; }
+    void _set_algo(int algo) { std::scoped_lock{ m_lock }; m_algo = algo; }
+    void _set_finished(bool x) { std::scoped_lock{ m_lock }; m_finished = x; }
 
 private:
     // The current phase and current/last algorithm
@@ -94,22 +108,12 @@ private:
     Square* m_end_ptr;
     Square* m_ignore_square_ptr;
 
-    // Control the speed of algorithms
-
-    int DEFAULT_BEST_PATH_DELAY_MS = 3;
-    int m_best_path_delay_ms;
-    int DEFAULT_RECURSIVE_MAZE_DELAY_US = 250;
-    int m_recursive_maze_delay_us;
-
     // Timer for algorithms
 
     std::chrono::time_point<std::chrono::high_resolution_clock> m_timer_start_time;
 
     // Functions
 
-    void set_phase(int phase) { std::scoped_lock{ m_lock }; m_phase = phase; }
-    void set_algo(int algo) { std::scoped_lock{ m_lock }; m_algo = algo; }
-    void set_finished(bool x) { std::scoped_lock{ m_lock }; m_finished = x; }
     void algo_loop();
     int generate_unique_int() { return ++m_unique_int; }
 };
@@ -160,8 +164,8 @@ void best_path_bi_dijkstra(
 
 // Main algo for reconstructing path
 void best_path(
-    AlgoState* algo, const std::unordered_map<Square*, Square*>& came_from,
-    const Square* curr_square_ptr, bool reverse = false);
+    AlgoState* algo, std::unordered_map<Square*, Square*>& came_from,
+    Square* curr_square_ptr, bool reverse = false);
 
 
 // Used if algos need to reach mid square first
@@ -178,3 +182,5 @@ void recursive_maze(
 
 // Return a random int within a range
 int get_randrange(int start, int stop);
+
+void sleep(int delay, std::string unit = "s");

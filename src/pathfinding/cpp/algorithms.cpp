@@ -1,6 +1,7 @@
 #include "algorithms.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <queue>
 
@@ -16,9 +17,9 @@ void AlgoState::run_options(Square& start, Square& mid, Square& end, Square& ign
 
 void AlgoState::run(int phase, int algo)
 {
-    set_phase(phase);
-    set_algo(algo);
-    set_finished(false);
+    _set_phase(phase);
+    _set_algo(algo);
+    _set_finished(false);
 }
 
 void AlgoState::reset()
@@ -95,9 +96,9 @@ void AlgoState::algo_loop()
                 start_mid_end(this, m_start_ptr, m_mid_ptr, m_end_ptr);
             }
             set_best_path_delay(DEFAULT_BEST_PATH_DELAY_MS);
-            set_algo(previous_algo);
-            set_finished(true);
-            set_phase(NONE);
+            _set_algo(previous_algo);
+            _set_finished(true);
+            _set_phase(NONE);
         }
 
         else if (check_phase() == PHASE_MAZE && !check_finished())
@@ -107,8 +108,8 @@ void AlgoState::algo_loop()
                 recursive_maze(this);
                 set_recursive_maze_delay(DEFAULT_RECURSIVE_MAZE_DELAY_US);
             }
-            set_finished(true);
-            set_phase(NONE);
+            _set_finished(true);
+            _set_phase(NONE);
         }
     }
 }
@@ -316,9 +317,41 @@ void best_path_bi_dijkstra(
 
 
 void best_path(
-    AlgoState* algo, const std::unordered_map<Square*, Square*>& came_from,
-    const Square* curr_square_ptr, bool reverse)
-{}
+    AlgoState* algo, std::unordered_map<Square*, Square*>& came_from,
+    Square* curr_square_ptr, bool reverse)
+{
+    // Update info
+    algo->_set_algo(algo->ALGO_BEST_PATH);
+
+    // Puts square path into vector so it's easier to traverse in either direction
+    std::vector<Square*> path;
+    while (came_from.contains(curr_square_ptr))
+    {
+        curr_square_ptr = came_from[curr_square_ptr];
+        path.push_back(curr_square_ptr);
+    }
+
+    // Need to traverse in reverse depending on what part of algo
+    if (reverse)
+    {
+        for (int i{ static_cast<int>(path.size()) - 1 }; i >= 0; --i)
+        {
+            Square* square = path[i];
+            sleep(algo->m_best_path_delay_ms, "ms");
+            std::scoped_lock { algo->m_lock };
+            square->set_path();
+        }
+    }
+    else
+    {
+        for (Square* square : path)
+        {
+            sleep(algo->m_best_path_delay_ms, "ms");
+            std::scoped_lock { algo->m_lock };
+            square->set_path();
+        }
+    }
+}
 
 
 void start_mid_end(
@@ -334,3 +367,39 @@ void recursive_maze(
 // std::vector<> get_random_sample(const std::array<>& population, int k) {}
 
 int get_randrange(int start, int stop) { return 1; }
+
+void sleep(int delay, std::string unit)
+{
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    if (unit == "ns")
+    {
+        end += std::chrono::nanoseconds(delay);
+    }
+    else if (unit == "us")
+    {
+        end += std::chrono::microseconds(delay);
+    }
+    else if (unit == "ms")
+    {
+        end += std::chrono::milliseconds(delay);
+    }
+    else if (unit == "s")
+    {
+        end += std::chrono::seconds(delay);
+    }
+    else if (unit == "min")
+    {
+        end += std::chrono::minutes(delay);
+    }
+    else if (unit == "h")
+    {
+        end += std::chrono::hours(delay);
+    }
+    else
+    {
+        throw "NotImplementedError: Invalid time for sleep";
+    }
+
+    while (std::chrono::high_resolution_clock::now() < end) {}
+}
