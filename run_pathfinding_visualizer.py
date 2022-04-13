@@ -58,6 +58,13 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Benchmark in set vs in tuple
+# Replace all comparisons to a single varible to above result
+# Use same open_set between start_to_mid and mid_to_end to know where to start?
+# Need to fix squares while dragging in start_to_mid?
+# Still need nullsquare rather than nullptr?
+# Set open2, open3, closed2, and closed3 to obviously different colors?
+
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
@@ -74,6 +81,7 @@ if __name__ == "__main__":
 # Test debug and release
 
 # (Optimization Station: Things to test to see if faster)
+# Better logic to not have to check if ordinal node each time before setting open or closed
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 # Rewrite sections of code into separate functions (eg draw() into multiple parts)
@@ -130,6 +138,8 @@ if __name__ == "__main__":
 # Bi dijk only draws best_path when edges of swarms are touching, mid square
 
 # --- Features to add ---
+# Have the frame times for visualizer be consistent.
+#   Include wait time for algo.lock but don't hold the lock longer than necessary to avoid slowing down C++
 # Sticky mud for patches where algo goes slowly
 # Take in consideration speed limit of roads
 #   Use length of open_set to assign queue_pos
