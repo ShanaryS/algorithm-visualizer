@@ -66,7 +66,7 @@ if __name__ == "__main__":
 #   Changing to large graph takes 40ms
 # Map takes long to start
 # Try to remove external cacert.pem dependency (also lib folder)
-# Add conditional cpp include from json file in readme
+# Add to readme, conditional cpp include from json file and title of pygame window
 # Rewrite draw()?
 # Test debug and release
 

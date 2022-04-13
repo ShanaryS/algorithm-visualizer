@@ -60,7 +60,7 @@ class GraphState:
         title = "Pathfinding Visualizer"
         if any([use_algorithms_h, use_square_h]):
             title += " (#include "
-            title += "algorithms.h, " if use_algorithms_h else ""
+            title += "algorithms.h, square.h" if use_algorithms_h else ""
             title += "square.h" if use_square_h else ""
             title += ")"
         pygame.display.set_caption(title)
