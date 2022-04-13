@@ -88,7 +88,7 @@ void AlgoState::algo_loop()
                 }
                 else if (check_algo() == ALGO_BI_DIJKSTRA)
                 {
-                    bi_dijkstra(this, m_start_ptr, m_end_ptr, false, m_ignore_square_ptr, true);
+                    bi_dijkstra(this, m_start_ptr, m_end_ptr, m_ignore_square_ptr, false, true);
                 }
             }
             else
@@ -303,7 +303,7 @@ int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2)
 
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     AlgoState* algo, Square* start_ptr, Square* end_ptr,
-    bool alt_color, Square* ignore_square_ptr, bool draw_best_path)
+    Square* ignore_square_ptr, bool alt_color, bool draw_best_path)
 {
     return std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*>{};
 }
@@ -356,7 +356,54 @@ void best_path(
 
 void start_mid_end(
     AlgoState* algo, Square* start_ptr, Square* mid_ptr, Square* end_ptr)
-{}
+{
+    // Selects the correct algo to use
+    if (algo->check_algo() == algo->ALGO_DIJKSTRA)
+    {
+        std::unordered_map<Square*, Square*> start_to_mid = dijkstra(algo, start_ptr, mid_ptr, end_ptr, false);
+        std::unordered_map<Square*, Square*> mid_to_end = dijkstra(algo, mid_ptr, end_ptr, start_ptr, false);
+
+        // Fixes square disappearing when dragging
+        {
+            std::scoped_lock{ algo->m_lock };
+            start_ptr->set_start();
+            mid_ptr->set_mid();
+            end_ptr->set_end();
+        }
+        best_path(algo, start_to_mid, mid_ptr);
+        best_path(algo, mid_to_end, end_ptr);
+    }
+    else if (algo->check_algo() == algo->ALGO_A_STAR)
+    {
+        std::unordered_map<Square*, Square*> start_to_mid = a_star(algo, start_ptr, mid_ptr, end_ptr, false);
+        std::unordered_map<Square*, Square*> mid_to_end = a_star(algo, mid_ptr, end_ptr, start_ptr, false);
+
+        // Fixes square disappearing when dragging
+        {
+            std::scoped_lock{ algo->m_lock };
+            start_ptr->set_start();
+            mid_ptr->set_mid();
+            end_ptr->set_end();
+        }
+        best_path(algo, start_to_mid, mid_ptr);
+        best_path(algo, mid_to_end, end_ptr);
+    }
+    else if (algo->check_algo() == algo->ALGO_BI_DIJKSTRA)
+    {
+        auto start_to_mid = bi_dijkstra(algo, start_ptr, mid_ptr, end_ptr, false, false);
+        auto mid_to_end = bi_dijkstra(algo, mid_ptr, end_ptr, start_ptr, true, false);
+
+        // Fixes square disappearing when dragging
+        {
+            std::scoped_lock{ algo->m_lock };
+            start_ptr->set_start();
+            mid_ptr->set_mid();
+            end_ptr->set_end();
+        }
+        best_path_bi_dijkstra(algo, std::get<0>(start_to_mid), std::get<1>(start_to_mid), std::get<2>(start_to_mid), std::get<3>(start_to_mid));
+        best_path_bi_dijkstra(algo, std::get<0>(mid_to_end), std::get<1>(mid_to_end), std::get<2>(mid_to_end), std::get<3>(mid_to_end));
+    }
+}
 
 void recursive_maze(
     AlgoState* algo, const std::array<int, 4>& chamber,

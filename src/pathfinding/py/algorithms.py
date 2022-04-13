@@ -154,7 +154,7 @@ class AlgoState:
                     elif self.check_algo() == self.ALGO_A_STAR:
                         a_star(self, self._start, self._end, ignore_square=self._ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_BI_DIJKSTRA:
-                        bi_dijkstra(self, self._start, self._end, alt_color=False, ignore_square=self._ignore_square, draw_best_path=True)
+                        bi_dijkstra(self, self._start, self._end, ignore_square=self._ignore_square, alt_color=False, draw_best_path=True)
                 else:
                     start_mid_end(self, self._start, self._mid, self._end)
                 self.set_best_path_delay(self._DEFAULT_BEST_PATH_DELAY_MS)  # Set to 0 with no vis
@@ -353,7 +353,7 @@ def _heuristic(pos1: tuple, pos2: tuple) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def bi_dijkstra(algo: AlgoState, start: Square, end: Square, alt_color: bool, ignore_square: Square, draw_best_path: bool) -> dict:
+def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square, alt_color: bool, draw_best_path: bool) -> dict:
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
     # Clear previous and start timer here to include setup of algo into timer
     algo._timer_reset()
@@ -550,8 +550,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
     elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-        start_to_mid = bi_dijkstra(algo, start, mid, ignore_square=end, draw_best_path=False)
-        mid_to_end = bi_dijkstra(algo, mid, end, alt_color=True, ignore_square=start, draw_best_path=False)
+        start_to_mid = bi_dijkstra(algo, start, mid, ignore_square=end, alt_color=False, draw_best_path=False)
+        mid_to_end = bi_dijkstra(algo, mid, end, ignore_square=start, alt_color=True, draw_best_path=False)
         
         # Fixes squares disappearing when dragging
         with algo.lock:

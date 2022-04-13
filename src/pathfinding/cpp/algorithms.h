@@ -152,7 +152,7 @@ int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2);
 // Code for Bi-directional dijkstra. Custom algorithm.
 std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     AlgoState* algo, Square* start_ptr, Square* end_ptr,
-    bool alt_color, Square* ignore_square_ptr, bool draw_best_path);
+    Square* ignore_square_ptr, bool alt_color, bool draw_best_path);
 
 // Used by bi_dijkstra to draw best path in two parts
 void best_path_bi_dijkstra(
