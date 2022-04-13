@@ -157,9 +157,9 @@ std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Squ
 // Used by bi_dijkstra to draw best path in two parts
 void best_path_bi_dijkstra(
     AlgoState* algo,
-    const std::unordered_map<Square*, Square*>& came_from_start,
-    const std::unordered_map<Square*, Square*>& came_from_end,
-    const Square* first_meet_square_ptr, const Square* second_meet_square_ptr);
+    std::unordered_map<Square*, Square*>& came_from_start,
+    std::unordered_map<Square*, Square*>& came_from_end,
+    Square* first_meet_square_ptr, Square* second_meet_square_ptr);
 
 
 // Main algo for reconstructing path

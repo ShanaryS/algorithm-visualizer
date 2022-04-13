@@ -305,15 +305,104 @@ std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Squ
     AlgoState* algo, Square* start_ptr, Square* end_ptr,
     Square* ignore_square_ptr, bool alt_color, bool draw_best_path)
 {
-    return std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*>{};
+    // Clear preivious and start timer here
+    algo->timer_reset();
+    algo->timer_start();
+
+    // Used to determine the order of squares to check. Order of args helper decide the priority.
+    int queue_pos{ 0 };
+    std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
+    std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
+    open_set.push(queue_tuple);
+
+    // Determine what is the best square to check
+    std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
+    std::unordered_map<Square*, int> g_score{};
+    for (std::vector<Square>& row : graph)
+    {
+        for (Square& square : row)
+        {
+            g_score[&square] = std::numeric_limits<int>::lowest();
+        }
+    }
+    g_score[start_ptr] = 0;
+
+    // Keeps track of next square for every square in graph. A linked list basically.
+    std::unordered_map<Square*, Square*> came_from{};
+
+    // End timer here to start it again in loop
+    algo->timer_end(false);
+
+    // Continues until every square has been checked or best path found
+    while (!open_set.empty())
+    {
+        // Time increments for each square being checked
+        algo->timer_start();
+
+        // Gets the square currently being checked
+        Square* curr_square_ptr{ std::get<2>(open_set.top()) };
+        open_set.pop();
+
+        // Terminates if found the best path
+        if (curr_square_ptr == end_ptr)
+        {
+            if (draw_best_path)
+            {
+                best_path(algo, came_from, end_ptr);
+            }
+            return came_from;
+        }
+        // Decides the order of neighbours to check
+        for (Square* nei_ptr : curr_square_ptr->get_neighbours())
+        {
+            // Ignore walls
+            if (nei_ptr->is_wall())
+            {
+                continue;
+            }
+            int temp_g_score{ g_score.at(curr_square_ptr) - 1 };
+            if (temp_g_score > g_score.at(nei_ptr))
+            {
+                came_from[nei_ptr] = curr_square_ptr;
+                g_score[nei_ptr] = temp_g_score;
+
+                --queue_pos;
+                std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
+                open_set.push(queue_tuple);
+                if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
+                {
+                    std::scoped_lock{ algo->m_lock };
+                    nei_ptr->set_open();
+                }
+            }
+        }
+        // Sets square to closed after finished checking
+        if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
+        {
+            std::scoped_lock{ algo->m_lock };
+            curr_square_ptr->set_closed();
+        }
+        // End timer before visualizing for better comparisions
+        algo->timer_end();
+    }
+    return came_from;
 }
 
 void best_path_bi_dijkstra(
     AlgoState* algo,
-    const std::unordered_map<Square*, Square*>& came_from_start,
-    const std::unordered_map<Square*, Square*>& came_from_end,
-    const Square* first_meet_square_ptr, const Square* second_meet_square_ptr)
-{}
+    std::unordered_map<Square*, Square*>& came_from_start,
+    std::unordered_map<Square*, Square*>& came_from_end,
+    Square* first_meet_square_ptr, Square* second_meet_square_ptr)
+{
+    // Draw best path for first swarm
+    best_path(algo, came_from_start, first_meet_square_ptr, false);
+    {
+        std::scoped_lock { algo->m_lock };
+        first_meet_square_ptr->set_path();
+        second_meet_square_ptr->set_path();
+    }
+    best_path(algo, came_from_end, second_meet_square_ptr, true);
+}
 
 
 void best_path(
