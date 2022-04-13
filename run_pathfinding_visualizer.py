@@ -58,6 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Best path drawing over mid square
+
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
