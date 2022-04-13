@@ -64,6 +64,7 @@ if __name__ == "__main__":
 # Need to fix squares while dragging in start_to_mid?
 # Still need nullsquare rather than nullptr?
 # Set open2, open3, closed2, and closed3 to obviously different colors?
+# Lower fps should mean faster algos. Maybe just keep it at 60.
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
