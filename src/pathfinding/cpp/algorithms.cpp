@@ -337,7 +337,7 @@ void best_path(
         for (Square* square : path)
         {
             sleep(algo->m_best_path_delay_ms, "ms");
-            std::scoped_lock { algo->m_lock };
+            std::scoped_lock{ algo->m_lock };
             square->set_path();
         }
     }
@@ -347,7 +347,7 @@ void best_path(
         {
             Square* square = path[i];
             sleep(algo->m_best_path_delay_ms, "ms");
-            std::scoped_lock { algo->m_lock };
+            std::scoped_lock{ algo->m_lock };
             square->set_path();
         }
     }
@@ -418,7 +418,7 @@ int get_randrange(int start, int stop) { return 1; }
 void sleep(int delay, std::string unit)
 {
     auto end = std::chrono::high_resolution_clock::now();
-    
+
     if (unit == "ns")
     {
         end += std::chrono::nanoseconds(delay);
