@@ -65,6 +65,11 @@ if __name__ == "__main__":
 # Map takes long to start
 # Try to remove external cacert.pem dependency (also lib folder)
 # Add to readme, conditional cpp include from json file and title of pygame window
+#   Note that #include square.h only paradoxically slows down code from pure python
+#   This is due to there then being a lot of passing data back and forth between C++ and Python (thousands of times per second!)
+#   through pybind11 which creates overhead.
+#   Fun fact: a no-op method call in C++ through pybind11 is 60% slower (1.79us vs 2.87us) than a no-op method call in pure python.
+#   Of course this 1us difference is quickly irrelevant if the function does intense work.
 # Rewrite draw()?
 # Test debug and release
 
