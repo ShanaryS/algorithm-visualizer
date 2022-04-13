@@ -46,11 +46,11 @@ public:
     int NONE;  // Value is 0 which returns false when casted to bool
     std::mutex m_lock;
 
-    // Control the speed of algorithms
+    // Control the speed of algorithms. Keep 3x faster than python to maintain speed difference.
 
-    int DEFAULT_BEST_PATH_DELAY_MS = 3;
+    int DEFAULT_BEST_PATH_DELAY_MS = 1;
     int m_best_path_delay_ms;
-    int DEFAULT_RECURSIVE_MAZE_DELAY_US = 250;
+    int DEFAULT_RECURSIVE_MAZE_DELAY_US = 80;
     int m_recursive_maze_delay_us;
 
     // Timer for algorithms
