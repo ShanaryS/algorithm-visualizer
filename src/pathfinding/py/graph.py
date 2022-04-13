@@ -51,7 +51,7 @@ class GraphState:
     visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
-    FPS: int = 240
+    FPS: int = 1000
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
