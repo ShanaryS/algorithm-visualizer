@@ -5,8 +5,10 @@
 from src.pathfinding.cpp_or_py import use_square_h, use_algorithms_h
 if use_square_h:
     from src.pathfinding.cpp.modules import Square
+    from src.pathfinding.py.algorithms import AlgoState
 elif use_algorithms_h:
-    from src.pathfinding.cpp.modules import Square, AlgoState
+    from src.pathfinding.cpp.modules import Square
+    from src.pathfinding.cpp.modules import AlgoState
 else:
     from src.pathfinding.py.square import Square
     from src.pathfinding.py.algorithms import AlgoState
