@@ -334,19 +334,20 @@ void best_path(
     // Need to traverse in reverse depending on what part of algo
     if (reverse)
     {
-        for (Square* square : path)
+        for (int i{ 0 }; i < static_cast<int>(path.size()) - 1; ++i)
         {
             sleep(algo->m_best_path_delay_ms, "ms");
+            Square* square = path[i];
             std::scoped_lock{ algo->m_lock };
             square->set_path();
         }
     }
     else
     {
-        for (int i{ static_cast<int>(path.size()) - 1 }; i >= 0; --i)
+        for (int i{ static_cast<int>(path.size()) - 2 }; i >= 0; --i)
         {
-            Square* square = path[i];
             sleep(algo->m_best_path_delay_ms, "ms");
+            Square* square = path[i];
             std::scoped_lock{ algo->m_lock };
             square->set_path();
         }
