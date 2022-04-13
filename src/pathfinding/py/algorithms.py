@@ -274,7 +274,7 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
         # End timer before visualizing for better comparisons
         algo._timer_end()
     
-    return dict()
+    return came_from
 
 
 def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict:

@@ -164,7 +164,6 @@ std::unordered_map<Square*, Square*> dijkstra(
             }
             return came_from;
         }
-
         // Decides the order of neighbours to check
         for (Square* nei_ptr : curr_square_ptr->get_neighbours())
         {
@@ -173,7 +172,6 @@ std::unordered_map<Square*, Square*> dijkstra(
             {
                 continue;
             }
-            
             int temp_g_score{ g_score.at(curr_square_ptr) - 1 };
             if (temp_g_score > g_score.at(nei_ptr))
             {
@@ -190,14 +188,12 @@ std::unordered_map<Square*, Square*> dijkstra(
                 }
             }
         }
-
         // Sets square to closed after finished checking
         if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
         {
             std::scoped_lock{ algo->m_lock };
             curr_square_ptr->set_closed();
         }
-
         // End timer before visualizing for better comparisions
         algo->timer_end();
     }
