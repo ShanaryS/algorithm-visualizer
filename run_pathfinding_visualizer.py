@@ -60,14 +60,11 @@ if __name__ == "__main__":
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
-# May need to handle how priority queue selects next item
-# Rewrite algos to not call draw, take in gph.graph directly, use loop to check new rects
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
 #   Changing to large graph takes 40ms
 # Map takes long to start
 # Try to remove external cacert.pem dependency (also lib folder)
 # Add conditional cpp include from json file in readme
-# Allow importing square.py into algorithms.h, base it off cpp_or_py.py as well.
 # Rewrite draw()?
 # Test debug and release
 
@@ -91,14 +88,10 @@ if __name__ == "__main__":
 # Seperate thread for GUI from logic?
 
 # --- Mutltithreading/Multiprocessing ---
-# Maybe just put pygame and logic on two distinct processes at leave it at that
-#   - Else probably would need to mantually set processes then manually assign it to everything
-#   - Need to already have processes started else there won't be any performance increase
 # psutil.cpu_count(logical=True/False), add to requirements.txt
 # May need multiprocessing.freeze_support()
 # 2ms to 54us for thread startup, linear scaling for func calls
 # 1.35s to 600us for process startup, non linear scaling for increased func calls
-# https://stackoverflow.com/questions/66018977/using-multiprocessing-with-pygame
 # Update performance section of github with Multiprocessing/Multithreading
 # All performance intensive code
 #   - Cannot update two neighbouring squares if becoming a wall is possible
