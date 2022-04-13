@@ -150,11 +150,11 @@ class AlgoState:
                 previous_algo = self.check_algo()
                 if not self._mid:
                     if self.check_algo() == self.ALGO_DIJKSTRA:
-                        dijkstra(self, self._start, self._end, ignore_square=self._ignore_square, draw_best_path=True)
+                        dijkstra(self, self._start, self._end, self._ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_A_STAR:
-                        a_star(self, self._start, self._end, ignore_square=self._ignore_square, draw_best_path=True)
+                        a_star(self, self._start, self._end, self._ignore_square, draw_best_path=True)
                     elif self.check_algo() == self.ALGO_BI_DIJKSTRA:
-                        bi_dijkstra(self, self._start, self._end, ignore_square=self._ignore_square, alt_color=False, draw_best_path=True)
+                        bi_dijkstra(self, self._start, self._end, self._ignore_square, alt_color=False, draw_best_path=True)
                 else:
                     start_mid_end(self, self._start, self._mid, self._end)
                 self.set_best_path_delay(self._DEFAULT_BEST_PATH_DELAY_MS)  # Set to 0 with no vis
@@ -255,13 +255,15 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
             if nei.is_wall():
                 continue
 
+            # Only check square if not already checked.
             temp_g_score: int = g_score[curr_square] + 1
-
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
                 g_score[nei] = temp_g_score
                 queue_pos += 1
                 open_set.put((g_score[nei], queue_pos, nei))
+
+                # Set nei to open under certain conditions
                 if nei != end and not nei.is_closed() and nei != ignore_square:
                     with algo.lock:
                         nei.set_open()
@@ -323,14 +325,16 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
             if nei.is_wall():
                 continue
 
+            # Only check square if not already checked.
             temp_g_score: int = g_score[curr_square] + 1
-
             if temp_g_score < g_score[nei]:
                 came_from[nei] = curr_square
                 g_score[nei] = temp_g_score
                 f_score[nei] = temp_g_score + _heuristic(nei.get_pos(), end.get_pos())
                 queue_pos += 1
                 open_set.put((f_score[nei], queue_pos, nei))
+
+                # Set nei to open under certain conditions
                 if nei != end and not nei.is_closed() and nei != ignore_square:
                     with algo.lock:
                         nei.set_open()
@@ -362,9 +366,11 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
     # Used to determine the order of squares to check. Order of args helper decide the priority.
     queue_pos: int = 0
     open_set = PriorityQueue()
-    open_set.put((0, queue_pos, start, "start"))
+    FIRST_SWARM = "FIRST_SWARM"
+    open_set.put((0, queue_pos, start, FIRST_SWARM))
     queue_pos += 1
-    open_set.put((0, queue_pos, end, "end"))
+    SECOND_SWARM = "SECOND_SWARM"
+    open_set.put((0, queue_pos, end, SECOND_SWARM))
 
     # Determine what is the best square to check
     graph = Square.get_graph()
@@ -373,8 +379,12 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
     g_score[end] = 0
 
     # Keeps track of next square for every square in graph. A linked list basically.
-    came_from_start: dict = {}
-    came_from_end: dict = {}
+    came_from: dict = {}
+    visited: set = set()
+
+    # Track the last squares for each swarm
+    first_swarm_meet_square: Square = None
+    second_swarm_meet_square: Square = None
 
     # End timer here to start it again in loop
     algo._timer_end(count=False)
@@ -384,94 +394,63 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
 
         # Time increments for each square being checked
         algo._timer_start()
+        
+        # Terminates if the swarms meet each other
+        if first_swarm_meet_square or second_swarm_meet_square:
+            # Allow access the meet squares using the known start and end squares
+            came_from[start] = first_swarm_meet_square
+            came_from[end] = second_swarm_meet_square
 
-        # Gets the square currently being checked
+            if draw_best_path:
+                _best_path_bi_dijkstra(algo, came_from, start, end)
+            return came_from
+
+        # Gets the square currently being checked.
         temp: tuple = open_set.get()
         curr_square: Square = temp[2]
+        swarm: str = temp[3]
 
-        # Terminates if found the best path
-        nei: Square
+        # Decides the order of neighbours to check for both swarms.
+        temp_g_score: int
         for nei in curr_square.get_neighbours():
             # Ignore walls
             if nei.is_wall():
                 continue
 
-            # Start swarm reaching mid (end square if no mid) swarm
-            if curr_square.is_open() and nei.is_open2():
-                if draw_best_path:
-                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
-                    return dict()
 
-                return came_from_start, came_from_end, curr_square, nei
+            # Only check square if not already checked.
+            temp_g_score = g_score[curr_square] + 1
+            if temp_g_score < g_score[nei]:
+                # If swarms meet no need to check neighbours
+                if nei not in visited:
+                    visited.add(nei)
+                else:
+                    first_swarm_meet_square = nei if swarm == FIRST_SWARM else curr_square
+                    second_swarm_meet_square = curr_square if swarm == FIRST_SWARM else nei
+                    break
+                
+                came_from[nei] = curr_square
+                g_score[nei] = temp_g_score
+                queue_pos += 1
+                open_set.put((g_score[nei], queue_pos, nei, swarm))
 
-            # Mid (end if no mid) swarm reaching start swarm
-            elif curr_square.is_open2() and nei.is_open() and not alt_color:
-                if draw_best_path:
-                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
-                    return dict()
-
-                return came_from_start, came_from_end, nei, curr_square
-
-            # Mid swarm reaching end swarm
-            elif curr_square.is_open2() and nei.is_open3():
-                if draw_best_path:
-                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, curr_square, nei)
-                    return dict()
-
-                return came_from_start, came_from_end, curr_square, nei
-
-            # End swarm reaching mid swarm
-            elif curr_square.is_open3() and nei.is_open2():
-                if draw_best_path:
-                    _best_path_bi_dijkstra(algo, came_from_start, came_from_end, nei, curr_square)
-                    return dict()
-
-                return came_from_start, came_from_end, nei, curr_square
-
-        # Decides the order of neighbours to check for both swarms.
-        temp_g_score: int
-        if temp[3] == "start":
-            for nei in curr_square.get_neighbours():
-                # Ignore walls
-                if nei.is_wall():
-                    continue
-    
-                temp_g_score = g_score[curr_square] + 1
-
-                if temp_g_score < g_score[nei]:
-                    came_from_start[nei] = curr_square
-                    g_score[nei] = temp_g_score
-                    queue_pos += 1
-                    open_set.put((g_score[nei], queue_pos, nei, "start"))
-                    if nei != end and not nei.is_closed() and nei != ignore_square:
+                # Set nei to open under certain conditions
+                if not nei.is_closed() and nei != ignore_square:
+                    if swarm == FIRST_SWARM and nei != end:
                         with algo.lock:
-                            if alt_color:
-                                nei.set_open2()
-                            else:
+                            if not alt_color:
                                 nei.set_open()
-        elif temp[3] == "end":
-            for nei in curr_square.get_neighbours():
-                # Ignore walls
-                if nei.is_wall():
-                    continue
-    
-                temp_g_score = g_score[curr_square] + 1
-
-                if temp_g_score < g_score[nei]:
-                    came_from_end[nei] = curr_square
-                    g_score[nei] = temp_g_score
-                    queue_pos += 1
-                    open_set.put((g_score[nei], queue_pos, nei, "end"))
-                    if nei != start and not nei.is_closed() and nei != ignore_square:
-                        with algo.lock:
-                            if alt_color:
-                                nei.set_open3()
                             else:
                                 nei.set_open2()
+                    elif swarm == SECOND_SWARM and nei != start:
+                        with algo.lock:
+                            if not alt_color:
+                                nei.set_open2()
+                            else:
+                                nei.set_open3()
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_square:
-            # Set square to proper closed value based on it's open value
             with algo.lock:
                 if curr_square.is_open():
                     curr_square.set_closed()
@@ -483,18 +462,13 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
         # End timer before visualizing for better comparisons
         algo._timer_end()
     
-    return dict()
+    return came_from
 
 
-def _best_path_bi_dijkstra(algo: AlgoState, came_from_start: dict, came_from_end: dict, first_meet_square: Square, second_meet_square: Square) -> None:
-    """Used by bi_dijkstra to draw best path in two parts"""
-    # Draws best path for first swarm
-    _best_path(algo, came_from_start, first_meet_square)
-    with algo.lock:
-        first_meet_square.set_path()
-        # Draws best path for second swarm
-        second_meet_square.set_path()
-    _best_path(algo, came_from_end, second_meet_square, reverse=True)
+def _best_path_bi_dijkstra(algo: AlgoState, came_from: dict, start: Square, end: Square) -> None:
+    """Used by bi_dijkstra to draw best path for both swarms"""
+    _best_path(algo, came_from, came_from[start])
+    _best_path(algo, came_from, came_from[end], reverse=True)
 
 
 def _best_path(algo: AlgoState, came_from: dict, curr_square: Square, reverse: bool = False) -> None:
@@ -526,20 +500,20 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
     """Used if algos need to reach mid square first"""
     # Selects the correct algo to use
     if algo.check_algo() == algo.ALGO_DIJKSTRA:
-        start_to_mid = dijkstra(algo, start, mid, ignore_square=end, draw_best_path=False)
-        mid_to_end = dijkstra(algo, mid, end, ignore_square=start, draw_best_path=False)
+        start_to_mid = dijkstra(algo, start, mid, end, draw_best_path=False)
+        mid_to_end = dijkstra(algo, mid, end, start, draw_best_path=False)
         
         # Fixes squares disappearing when dragging
         with algo.lock:
             start.set_start()
             mid.set_mid()
             end.set_end()
-
+    
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
     elif algo.check_algo() == algo.ALGO_A_STAR:
-        start_to_mid = a_star(algo, start, mid, ignore_square=end, draw_best_path=False)
-        mid_to_end = a_star(algo, mid, end, ignore_square=start, draw_best_path=False)
+        start_to_mid = a_star(algo, start, mid, end, draw_best_path=False)
+        mid_to_end = a_star(algo, mid, end, start, draw_best_path=False)
 
         # Fixes squares disappearing when dragging
         with algo.lock:
@@ -550,8 +524,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
     elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-        start_to_mid = bi_dijkstra(algo, start, mid, ignore_square=end, alt_color=False, draw_best_path=False)
-        mid_to_end = bi_dijkstra(algo, mid, end, ignore_square=start, alt_color=True, draw_best_path=False)
+        start_to_mid = bi_dijkstra(algo, start, mid, end, alt_color=False, draw_best_path=False)
+        mid_to_end = bi_dijkstra(algo, mid, end, start, alt_color=True, draw_best_path=False)
         
         # Fixes squares disappearing when dragging
         with algo.lock:
@@ -559,8 +533,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
             mid.set_mid()
             end.set_end()
 
-        _best_path_bi_dijkstra(algo, start_to_mid[0], start_to_mid[1], start_to_mid[2], start_to_mid[3])
-        _best_path_bi_dijkstra(algo, mid_to_end[0], mid_to_end[1], mid_to_end[2], mid_to_end[3])
+        _best_path_bi_dijkstra(algo, start_to_mid, start, mid)
+        _best_path_bi_dijkstra(algo, mid_to_end, mid, end)
 
 
 def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -> None:
