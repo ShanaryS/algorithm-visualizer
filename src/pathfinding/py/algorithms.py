@@ -218,8 +218,8 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
     algo._timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
     open_set = PriorityQueue()
+    queue_pos = 0
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
@@ -273,7 +273,7 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
             with algo.lock:
                 curr_square.set_closed()
 
-        # End timer before visualizing for better comparisons
+        # End timer to increment count
         algo._timer_end()
     
     return came_from
@@ -286,8 +286,8 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
     algo._timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
     open_set = PriorityQueue()
+    queue_pos = 0
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
@@ -344,7 +344,7 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
             with algo.lock:
                 curr_square.set_closed()
 
-        # End timer before visualizing for better comparisons
+        # End timer to increment count
         algo._timer_end()
 
     return came_from
@@ -364,8 +364,8 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
     algo._timer_start()
 
     # Used to determine the order of squares to check. Order of args helper decide the priority.
-    queue_pos = 0
     open_set = PriorityQueue()
+    queue_pos = 0
     FIRST_SWARM = "FIRST_SWARM"
     open_set.put((0, queue_pos, start, FIRST_SWARM))
     queue_pos += 1
@@ -393,9 +393,6 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
     # Continues until every square has been checked or best path found
     while not open_set.empty():
 
-        # Time increments for each square being checked
-        algo._timer_start()
-        
         # Terminates if the swarms meet each other
         if first_swarm_meet_square or second_swarm_meet_square:
             # Allow access the meet squares using the known start and end squares
@@ -403,6 +400,9 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
                 _best_path_bi_dijkstra(algo, came_from, first_swarm_meet_square, second_swarm_meet_square)
             return came_from, first_swarm_meet_square, second_swarm_meet_square
 
+        # Time increments for each square being checked
+        algo._timer_start()
+        
         # Gets the square currently being checked.
         temp = open_set.get()
         curr_square: Square = temp[2]
@@ -445,7 +445,7 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
             with algo.lock:
                     curr_square.set_closed()
 
-        # End timer before visualizing for better comparisons
+        # End timer to increment count
         algo._timer_end()
     
     return came_from, first_swarm_meet_square, second_swarm_meet_square
