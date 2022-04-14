@@ -549,16 +549,13 @@ void recursive_maze(
 
 std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k)
 {
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(population.begin(), population.end(), g);
-    
     std::vector<std::array<int, 4>> res;
     res.reserve(k);
-    for (int i{ 0 }; i < k; ++i)
-    {
-        res.push_back(population[i]);
-    }
+    
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::sample(population.begin(), population.end(), std::back_inserter(res), k, g);
     return res;
 }
 
