@@ -706,9 +706,9 @@ void recursive_maze(
     }
 
     // Recursively divides chambers
-    for (auto& chamber : chambers)
+    for (std::array<int, 4>& chamber : chambers)
     {
-        recursive_maze(algo, chamber_ptr, graph_ptr);
+        recursive_maze(algo, &chamber, graph_ptr);
     }
 }
 
