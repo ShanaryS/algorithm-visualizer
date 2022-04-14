@@ -331,7 +331,7 @@ def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visuali
     start = _none_to_null_square(lgc.start)
     mid = _none_to_null_square(lgc.mid)
     end = _none_to_null_square(lgc.end)
-    null_square = _none_to_null_square(None)       
+    null_square = _none_to_null_square(None)
 
     # Set algorithm to run
     algo.run_options(start, mid, end, null_square)
@@ -369,7 +369,7 @@ def _recursive_maze_buttons(gph: GraphState, algo: AlgoState, lgc: LogicState, t
     start = _none_to_null_square(lgc.start)
     mid = _none_to_null_square(lgc.mid)
     end = _none_to_null_square(lgc.end)
-    null_square = _none_to_null_square(None)       
+    null_square = _none_to_null_square(None)
 
     # Set algorithm to run
     algo.run_options(start, mid, end, null_square)
