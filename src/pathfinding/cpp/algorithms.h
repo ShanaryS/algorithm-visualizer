@@ -124,13 +124,13 @@ struct Args
 {
 public:
     Square* null_square_ptr() const { return m_null_square_ptr; }
-    const std::array<int, 4>& null_chamber() const { return m_null_chamber; }
-    const std::vector<std::vector<Square>>& null_graph() const { return m_null_graph; }
+    std::array<int, 4>* null_chamber_ptr() { return m_null_chamber; }
+    std::vector<std::vector<Square>>* null_graph_ptr() { return m_null_graph; }
 
 private:
     Square* m_null_square_ptr = Square::s_get_null_square();
-    const std::array<int, 4> m_null_chamber{};
-    const std::vector<std::vector<Square>> m_null_graph{};
+    std::array<int, 4>* m_null_chamber{ nullptr };
+    std::vector<std::vector<Square>>* m_null_graph{ nullptr };
 };
 
 static Args arg;
@@ -172,8 +172,9 @@ void start_mid_end(
 
 // Creates maze using recursive division.
 void recursive_maze(
-    AlgoState* algo, const std::array<int, 4>& chamber = arg.null_chamber(),
-    const std::vector<std::vector<Square>>& graph = arg.null_graph());
+    AlgoState* algo, std::array<int, 4>* chamber = arg.null_chamber_ptr(),
+    std::vector<std::vector<Square>>* graph = arg.null_graph_ptr(),
+    int division_limit = 3, int num_gaps = 3);
 
 // Returns a k length vector of unique elements from population
 std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k);

@@ -542,9 +542,175 @@ void start_mid_end(
 }
 
 void recursive_maze(
-    AlgoState* algo, const std::array<int, 4>& chamber,
-    const std::vector<std::vector<Square>>& graph)
-{}
+    AlgoState* algo, std::array<int, 4>* chamber_ptr,
+    std::vector<std::vector<Square>>* graph_ptr, int division_limit, int num_gaps)
+{
+    // Only perform these on first call
+    if (!chamber_ptr)
+    {
+        algo->timer_reset();
+    }
+
+    // Start timer here to include setup in timer
+    algo->timer_start();
+
+    // Only get graph once then use it for recursive calls
+    if (!graph_ptr)
+    {
+        std::vector<std::vector<Square>>* graph_ptr = Square::s_get_graph();
+    }
+
+    // Creates chambers to divide into
+    int chamber_width;
+    int chamber_height;
+    int chamber_left;
+    int chamber_top;
+    if (!chamber_ptr)
+    {
+        int chamber_width = graph_ptr->size();
+        int chamber_height = (*graph_ptr)[0].size();
+        int chamber_left = 0;
+        int chamber_top = 0;
+    }
+    else
+    {
+        int chamber_width = (*chamber_ptr)[2];
+        int chamber_height = (*chamber_ptr)[3];
+        int chamber_left = (*chamber_ptr)[0];
+        int chamber_top = (*chamber_ptr)[1];
+    }
+
+    // Helps with location of chambers
+    int x_divide = static_cast<int>(chamber_width / 2);
+    int y_divide = static_cast<int>(chamber_height / 2);
+
+    // End timer here to resume in loop
+    algo->timer_end(false);
+
+    // Draws vertical maze line wihin chamber
+    if (chamber_width >= division_limit)
+    {
+        for (int y{ 0 }; y < chamber_height; ++y)
+        {
+            algo->timer_start();
+            Square& square = (*graph_ptr)[chamber_left + x_divide][chamber_top + y];
+            {
+                std::scoped_lock{ algo->m_lock };
+                square.set_wall();
+            }
+            sleep(algo->m_recursive_maze_delay_us, "us");
+            algo->timer_end();
+        }
+    }
+
+    // Draws horizontal maze line within chamber
+    if (chamber_height >= division_limit)
+    {
+        for (int x{ 0 }; x < chamber_width; ++x)
+        {
+            algo->timer_start();
+            Square& square = (*graph_ptr)[chamber_left + x][chamber_top + y_divide];
+            {
+                std::scoped_lock{ algo->m_lock };
+                square.set_wall();
+            }
+            sleep(algo->m_recursive_maze_delay_us, "us");
+            algo->timer_end();
+        }
+    }
+
+    // Start timer again
+    algo->timer_start();
+
+    // Terminates if below division limit
+    if (chamber_width < division_limit && chamber_height < division_limit)
+    {
+        return;
+    }
+
+    // Defining limits on where to draw walls
+    std::array<int, 4> top_left{ chamber_left, chamber_top, x_divide, y_divide };
+    std::array<int, 4> top_right{ chamber_left + x_divide + 1, chamber_top, chamber_width - x_divide - 1, y_divide };
+    std::array<int, 4> bottom_left{ chamber_left, chamber_top + y_divide + 1, x_divide, chamber_height - y_divide - 1 };
+    std::array<int, 4> bottom_right{ chamber_left + x_divide + 1, chamber_top + y_divide + 1, chamber_width - x_divide - 1, chamber_height - y_divide - 1 };
+
+    // Combines all chambers into one object
+    std::array<std::array<int, 4>, 4> chambers{ top_left, top_right, bottom_left, bottom_right };
+
+    // Defines location of walls
+    std::array<int, 4> left{ chamber_left, chamber_top + y_divide, x_divide, 1 };
+    std::array<int, 4> right{ chamber_left + x_divide + 1, chamber_top + y_divide, chamber_width - x_divide - 1, 1 };
+    std::array<int, 4> top{ chamber_left + x_divide, chamber_top, 1, y_divide };
+    std::array<int, 4> bottom{ chamber_left + x_divide, chamber_top + y_divide + 1, 1, chamber_height - y_divide - 1 };
+
+    // Combines walls into one object
+    std::array<std::array<int, 4>, 4> walls{ left, right, top, bottom };
+
+    // Prevents drawing wall over gaps
+    std::vector<int> gaps_to_offset;
+    gaps_to_offset.reserve(Square::s_get_num_rows() / num_gaps);
+    for (int i{ num_gaps - 1 }; i < Square::s_get_num_rows(); i += num_gaps)
+    {
+        gaps_to_offset.push_back(i);
+    }
+
+    // End timer here to resume in loop
+    algo->timer_end(false);
+
+    // Draws the gaps into the walls
+    for (std::array<int, 4>& wall : get_random_sample(walls, num_gaps))
+    {
+        // Continue timer here
+        algo->timer_start();
+
+        int x;
+        int y;
+        if (wall[3] == 1)
+        {
+            int x = get_randrange(wall[0], wall[0] + wall[2]);
+            int y = wall[1];
+            if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), x) != gaps_to_offset.end())
+            {
+                if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), y) != gaps_to_offset.end())
+                {
+                    if (wall[2] == x_divide) { --x; } else { ++x; }
+                }
+            }
+            if (x >= Square::s_get_num_rows())
+            {
+                x = Square::s_get_num_rows() - 1;
+            }
+        }
+        else
+        {
+            int x = wall[0];
+            int y = get_randrange(wall[1], wall[1] + wall[3]);
+            if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), y) != gaps_to_offset.end())
+            {
+                if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), x) != gaps_to_offset.end())
+                {
+                    if (wall[3] == y_divide) { --y; } else { ++y; }
+                }
+            }
+            if (y >= Square::s_get_num_rows())
+            {
+                y = Square::s_get_num_rows() - 1;
+            }
+        }
+        Square& square = (*graph_ptr)[x][y];
+        {
+            std::scoped_lock{ algo->m_lock };
+            square.reset();
+        }
+        algo->timer_end();
+    }
+
+    // Recursively divides chambers
+    for (auto& chamber : chambers)
+    {
+        recursive_maze(algo, chamber_ptr, graph_ptr);
+    }
+}
 
 
 std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k)
