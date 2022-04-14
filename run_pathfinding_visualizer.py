@@ -75,17 +75,15 @@ if __name__ == "__main__":
 #   Mention CMake to compile C++ code
 
 # (Optimization Station: Things to test to see if faster)
+# Seperate thread for GUI from logic?
+# Write graph as non nested container to optimize cache hits
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
-# Rewrite sections of code into separate functions (eg draw() into multiple parts)
-# Multiple threads for algorithm?
-# Multiprocessing for algo, may need to share memory
-# Can safely parrallise set_ square methods? Except for algos?
 # Square on it's on thread?
-# Implement threading in square access methods. Separate locks for square and algo?
-# Store graph in std::array
-# Write graph as non nested container to optimize cache hits
-# Seperate thread for GUI from logic?
+#   Implement threading in square access methods. Separate locks for square and algo?
+# Multiprocessing for algo, may need to share memory
+#   Can safely parrallise set_ square methods? Except for algos?
+# Multiple threads for algorithm?
 
 # --- Mutltithreading/Multiprocessing ---
 # psutil.cpu_count(logical=True/False), add to requirements.txt
@@ -129,3 +127,4 @@ if __name__ == "__main__":
 #   Use length of open_set to assign queue_pos
 # Add prim maze
 # Write tests
+# Rewrite messy complicated functions. Split into smaller parts (e.g. draw()?)
