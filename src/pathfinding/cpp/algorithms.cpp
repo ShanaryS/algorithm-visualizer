@@ -4,6 +4,8 @@
 #include <chrono>
 #include <cmath>
 #include <queue>
+#include <unordered_set>
+#include <iostream>
 
 
 void AlgoState::run_options(Square& start, Square& mid, Square& end, Square& ignore_square)
@@ -88,7 +90,7 @@ void AlgoState::algo_loop()
                 }
                 else if (check_algo() == ALGO_BI_DIJKSTRA)
                 {
-                    bi_dijkstra(this, m_start_ptr, m_end_ptr, m_ignore_square_ptr, false, true);
+                    bi_dijkstra(this, m_start_ptr, m_end_ptr, m_ignore_square_ptr, true);
                 }
             }
             else
@@ -124,9 +126,9 @@ std::unordered_map<Square*, Square*> dijkstra(
     algo->timer_start();
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
+    std::priority_queue<std::tuple<int, int, Square*>> open_set{};
     int queue_pos{ 0 };
     std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
-    std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
@@ -179,10 +181,10 @@ std::unordered_map<Square*, Square*> dijkstra(
             {
                 came_from[nei_ptr] = curr_square_ptr;
                 g_score[nei_ptr] = temp_g_score;
-
                 --queue_pos;
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
+                
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
@@ -196,7 +198,7 @@ std::unordered_map<Square*, Square*> dijkstra(
             std::scoped_lock{ algo->m_lock };
             curr_square_ptr->set_closed();
         }
-        // End timer before visualizing for better comparisions
+        // End timer to increment count
         algo->timer_end();
     }
     return came_from;
@@ -212,9 +214,9 @@ std::unordered_map<Square*, Square*> a_star(
     algo->timer_start();
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
+    std::priority_queue<std::tuple<int, int, Square*>> open_set{};
     int queue_pos{ 0 };
     std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
-    std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
@@ -271,10 +273,10 @@ std::unordered_map<Square*, Square*> a_star(
                 came_from[nei_ptr] = curr_square_ptr;
                 g_score[nei_ptr] = temp_g_score;
                 f_score[nei_ptr] = temp_g_score - heuristic(nei_ptr->get_pos(), end_ptr->get_pos());
-
                 --queue_pos;
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(f_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
+                
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
@@ -288,7 +290,7 @@ std::unordered_map<Square*, Square*> a_star(
             std::scoped_lock{ algo->m_lock };
             curr_square_ptr->set_closed();
         }
-        // End timer before visualizing for better comparisions
+        // End timer to increment count
         algo->timer_end();
     }
     return came_from;
@@ -301,19 +303,25 @@ int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2)
     return std::abs(x1 - x2) + std::abs(y1 - y2);
 }
 
-std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
+std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     AlgoState* algo, Square* start_ptr, Square* end_ptr,
-    Square* ignore_square_ptr, bool alt_color, bool draw_best_path)
+    Square* ignore_square_ptr, bool draw_best_path)
 {
     // Clear preivious and start timer here
     algo->timer_reset();
     algo->timer_start();
 
     // Used to determine the order of squares to check. Order of args helper decide the priority.
+    std::priority_queue<std::tuple<int, int, Square*, std::string>> open_set{};
     int queue_pos{ 0 };
-    std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(0, queue_pos, start_ptr) };
-    std::priority_queue<std::tuple<int, int, Square*>> open_set{}; // May need to specific vector elements and define comparison for square
-    open_set.push(queue_tuple);
+    std::string FIRST_SWARM{ "FIRST_SWARM" };
+    std::tuple<int, int, Square*, std::string> queue_tuple_first_swarm{ std::make_tuple(0, queue_pos, start_ptr, FIRST_SWARM) };
+    open_set.push(queue_tuple_first_swarm);
+    --queue_pos;
+    std::string SECOND_SWARM{ "SECOND_SWARM" };
+    std::tuple<int, int, Square*, std::string> queue_tuple_second_swarm{ std::make_tuple(0, queue_pos, end_ptr, SECOND_SWARM) };
+    open_set.push(queue_tuple_second_swarm);
+    
 
     // Determine what is the best square to check
     std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
@@ -326,9 +334,16 @@ std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Squ
         }
     }
     g_score[start_ptr] = 0;
+    g_score[end_ptr] = 0;
 
     // Keeps track of next square for every square in graph. A linked list basically.
     std::unordered_map<Square*, Square*> came_from{};
+
+    // Track the last squares for each swarm
+    std::unordered_set<Square*> first_swarm;
+    std::unordered_set<Square*> second_swarm;
+    Square* first_swarm_meet_square_ptr{ nullptr };
+    Square* second_swarm_meet_square_ptr{ nullptr };
 
     // End timer here to start it again in loop
     algo->timer_end(false);
@@ -336,22 +351,24 @@ std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Squ
     // Continues until every square has been checked or best path found
     while (!open_set.empty())
     {
+        // Terminates if the swarms meet each other
+        if (first_swarm_meet_square_ptr || second_swarm_meet_square_ptr)
+        {
+            if (draw_best_path)
+            {
+                best_path_bi_dijkstra(algo, came_from, first_swarm_meet_square_ptr, second_swarm_meet_square_ptr);
+            }
+            return std::make_tuple(came_from, first_swarm_meet_square_ptr, second_swarm_meet_square_ptr);
+        }
+        
         // Time increments for each square being checked
         algo->timer_start();
 
         // Gets the square currently being checked
         Square* curr_square_ptr{ std::get<2>(open_set.top()) };
+        std::string swarm{ std::get<3>(open_set.top())};
         open_set.pop();
 
-        // Terminates if found the best path
-        if (curr_square_ptr == end_ptr)
-        {
-            if (draw_best_path)
-            {
-                best_path(algo, came_from, end_ptr);
-            }
-            return came_from;
-        }
         // Decides the order of neighbours to check
         for (Square* nei_ptr : curr_square_ptr->get_neighbours())
         {
@@ -365,43 +382,65 @@ std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Squ
             {
                 came_from[nei_ptr] = curr_square_ptr;
                 g_score[nei_ptr] = temp_g_score;
-
                 --queue_pos;
-                std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
+                std::tuple<int, int, Square*, std::string> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr, swarm) };
                 open_set.push(queue_tuple);
-                if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
+                
+                if (!nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
-                    std::scoped_lock{ algo->m_lock };
-                    nei_ptr->set_open();
+                    if (swarm == FIRST_SWARM && nei_ptr != end_ptr)
+                    {
+                        first_swarm.insert(nei_ptr);
+                        std::scoped_lock{ algo->m_lock };
+                        nei_ptr->set_open();
+                    }
+                    else if (swarm == SECOND_SWARM && nei_ptr != start_ptr)
+                    {
+                        second_swarm.insert(nei_ptr);
+                        std::scoped_lock{ algo->m_lock };
+                        nei_ptr->set_open();
+                    }
                 }
+            }
+            // Conditions for when path is found
+            else if (swarm == FIRST_SWARM && second_swarm.contains(nei_ptr))
+            {
+                first_swarm_meet_square_ptr = curr_square_ptr;
+                second_swarm_meet_square_ptr = nei_ptr;
+                break;
+            }
+            else if (swarm == SECOND_SWARM && first_swarm.contains(nei_ptr))
+            {
+                first_swarm_meet_square_ptr = nei_ptr;
+                second_swarm_meet_square_ptr = curr_square_ptr;
+                break;
             }
         }
         // Sets square to closed after finished checking
-        if (curr_square_ptr != start_ptr && curr_square_ptr != ignore_square_ptr)
+        if (curr_square_ptr != start_ptr && curr_square_ptr != end_ptr && curr_square_ptr != ignore_square_ptr)
         {
             std::scoped_lock{ algo->m_lock };
             curr_square_ptr->set_closed();
         }
-        // End timer before visualizing for better comparisions
+        // End timer to increment count
         algo->timer_end();
     }
-    return came_from;
+    return std::make_tuple(came_from, first_swarm_meet_square_ptr, second_swarm_meet_square_ptr);
 }
 
 void best_path_bi_dijkstra(
-    AlgoState* algo,
-    std::unordered_map<Square*, Square*>& came_from_start,
-    std::unordered_map<Square*, Square*>& came_from_end,
-    Square* first_meet_square_ptr, Square* second_meet_square_ptr)
+    AlgoState* algo, std::unordered_map<Square*, Square*>& came_from,
+    Square* first_swarm_meet_square_ptr, Square* second_swarm_meet_square_ptr)
 {
     // Draw best path for first swarm
-    best_path(algo, came_from_start, first_meet_square_ptr, false);
+    best_path(algo, came_from, first_swarm_meet_square_ptr);
     {
+        // Best path skips these two naturally so need to set them here
         std::scoped_lock { algo->m_lock };
-        first_meet_square_ptr->set_path();
-        second_meet_square_ptr->set_path();
+        first_swarm_meet_square_ptr->set_path();
+        second_swarm_meet_square_ptr->set_path();
     }
-    best_path(algo, came_from_end, second_meet_square_ptr, true);
+    best_path(algo, came_from, second_swarm_meet_square_ptr, true);
 }
 
 
@@ -480,8 +519,14 @@ void start_mid_end(
     }
     else if (algo->check_algo() == algo->ALGO_BI_DIJKSTRA)
     {
-        auto start_to_mid = bi_dijkstra(algo, start_ptr, mid_ptr, end_ptr, false, false);
-        auto mid_to_end = bi_dijkstra(algo, mid_ptr, end_ptr, start_ptr, true, false);
+        auto temp_first_swarm = bi_dijkstra(algo, start_ptr, mid_ptr, end_ptr, false);
+        std::unordered_map<Square*, Square*> start_to_mid = std::get<0>(temp_first_swarm);
+        Square* first_swarm_meet_square_ptr = std::get<1>(temp_first_swarm);
+        Square* second_swarm_meet_square_ptr = std::get<2>(temp_first_swarm);
+        auto temp_second_swarm = bi_dijkstra(algo, mid_ptr, end_ptr, start_ptr, false);
+        std::unordered_map<Square*, Square*> mid_to_end = std::get<0>(temp_second_swarm);
+        Square* third_swarm_meet_square_ptr = std::get<1>(temp_second_swarm);
+        Square* fourth_swarm_meet_square_ptr = std::get<2>(temp_second_swarm);
 
         // Fixes square disappearing when dragging
         {
@@ -490,8 +535,8 @@ void start_mid_end(
             mid_ptr->set_mid();
             end_ptr->set_end();
         }
-        best_path_bi_dijkstra(algo, std::get<0>(start_to_mid), std::get<1>(start_to_mid), std::get<2>(start_to_mid), std::get<3>(start_to_mid));
-        best_path_bi_dijkstra(algo, std::get<0>(mid_to_end), std::get<1>(mid_to_end), std::get<2>(mid_to_end), std::get<3>(mid_to_end));
+        best_path_bi_dijkstra(algo, start_to_mid, first_swarm_meet_square_ptr, second_swarm_meet_square_ptr);
+        best_path_bi_dijkstra(algo, mid_to_end, third_swarm_meet_square_ptr, fourth_swarm_meet_square_ptr);
     }
 }
 

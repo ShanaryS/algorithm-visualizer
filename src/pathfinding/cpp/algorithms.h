@@ -150,16 +150,14 @@ std::unordered_map<Square*, Square*> a_star(
 int heuristic(const std::array<int, 2>& pos1, const std::array<int, 2>& pos2);
 
 // Code for Bi-directional dijkstra. Custom algorithm.
-std::tuple<std::unordered_map<Square*, Square*>, std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
+std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     AlgoState* algo, Square* start_ptr, Square* end_ptr,
-    Square* ignore_square_ptr, bool alt_color, bool draw_best_path);
+    Square* ignore_square_ptr, bool draw_best_path);
 
 // Used by bi_dijkstra to draw best path in two parts
 void best_path_bi_dijkstra(
-    AlgoState* algo,
-    std::unordered_map<Square*, Square*>& came_from_start,
-    std::unordered_map<Square*, Square*>& came_from_end,
-    Square* first_meet_square_ptr, Square* second_meet_square_ptr);
+    AlgoState* algo, std::unordered_map<Square*, Square*>& came_from,
+    Square* first_swarm_meet_square_ptr, Square* second_swarm_meet_square_ptr);
 
 
 // Main algo for reconstructing path
