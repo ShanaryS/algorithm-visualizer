@@ -278,8 +278,8 @@ def _draw_img(gph: GraphState) -> None:
     gph.add_to_update_queue(gph.window.blit(gph.img, (0, 0)))
 
 
-def set_squares_to_roads(gph: GraphState) -> None:
-    """Sets squares to the color of a single pixel"""
+def pygame_image_to_squares(gph: GraphState) -> None:
+    """Converts the mapped image to squares"""
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
     for x in range(Square.get_num_rows()):

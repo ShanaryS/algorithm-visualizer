@@ -78,11 +78,13 @@ if __name__ == "__main__":
 # (Optimization Station: Things to test to see if faster)
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
+#   future_history_squares, history_squares, _set_road
 # Square on it's on thread?
 #   Implement threading in square access methods. Separate locks for square and algo?
 # Multiprocessing for algo, may need to share memory
 #   Can safely parrallise set_ square methods? Except for algos?
 # Multiple threads for algorithm?
+# Simplify code. Remove functions. Use cleaver args like passing in a function
 
 # --- Mutltithreading/Multiprocessing ---
 # psutil.cpu_count(logical=True/False), add to requirements.txt

@@ -15,7 +15,7 @@ else:
 
 from src.pathfinding.py.maps import get_img_base, get_img_clean
 from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
-    reset_graph, reset_algo, change_graph_size, set_squares_to_roads,
+    reset_graph, reset_algo, change_graph_size, pygame_image_to_squares,
     draw_vis_text, HEIGHT)
 from lib.timer import sleep
 
@@ -412,7 +412,7 @@ def _convert_img_to_squares(gph: GraphState, algo: AlgoState, txt: VisText) -> N
     gph.update_legend = True
     gph.has_img = False
 
-    set_squares_to_roads(gph)
+    pygame_image_to_squares(gph)
 
 
 def _get_address_from_user(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
