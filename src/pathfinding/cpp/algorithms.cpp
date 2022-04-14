@@ -9,8 +9,6 @@
 #include <unordered_set>
 
 
-#include <iostream>
-
 void AlgoState::run_options(Square& start, Square& mid, Square& end, Square& ignore_square)
 {
     std::scoped_lock{ m_lock };
@@ -557,10 +555,12 @@ void recursive_maze(
     algo->timer_start();
 
     // Only get graph once then use it for recursive calls
+    std::vector<std::vector<Square>>* graph_ptr;
     if (!graph_ptr)
     {
-        std::vector<std::vector<Square>>* graph_ptr = Square::s_get_graph();
+        graph_ptr = Square::s_get_graph();
     }
+    std::vector<std::vector<Square>>& graph = *graph_ptr;
 
     // Creates chambers to divide into
     int chamber_width;
@@ -581,11 +581,6 @@ void recursive_maze(
         chamber_left = (*chamber_ptr)[0];
         chamber_top = (*chamber_ptr)[1];
     }
-    std::cout << chamber_width << "\n";
-    std::cout << chamber_height << "\n";
-    std::cout << chamber_left << "\n";
-    std::cout << chamber_top << "\n";
-
 
     // Helps with location of chambers
     int x_divide = static_cast<int>(chamber_width / 2);
@@ -600,7 +595,7 @@ void recursive_maze(
         for (int y{ 0 }; y < chamber_height; ++y)
         {
             algo->timer_start();
-            Square& square = (*graph_ptr)[chamber_left + x_divide][chamber_top + y];
+            Square& square = graph[chamber_left + x_divide][chamber_top + y];
             {
                 std::scoped_lock{ algo->m_lock };
                 square.set_wall();
@@ -616,7 +611,7 @@ void recursive_maze(
         for (int x{ 0 }; x < chamber_width; ++x)
         {
             algo->timer_start();
-            Square& square = (*graph_ptr)[chamber_left + x][chamber_top + y_divide];
+            Square& square = graph[chamber_left + x][chamber_top + y_divide];
             {
                 std::scoped_lock{ algo->m_lock };
                 square.set_wall();
@@ -706,7 +701,7 @@ void recursive_maze(
                 y = Square::s_get_num_rows() - 1;
             }
         }
-        Square& square = (*graph_ptr)[x][y];
+        Square& square = graph[x][y];
         {
             std::scoped_lock{ algo->m_lock };
             square.reset();

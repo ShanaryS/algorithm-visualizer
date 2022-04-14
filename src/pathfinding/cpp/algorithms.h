@@ -124,13 +124,9 @@ struct Args
 {
 public:
     Square* null_square_ptr() const { return m_null_square_ptr; }
-    std::array<int, 4>* null_chamber_ptr() { return m_null_chamber; }
-    std::vector<std::vector<Square>>* null_graph_ptr() { return m_null_graph; }
 
 private:
     Square* m_null_square_ptr = Square::s_get_null_square();
-    std::array<int, 4>* m_null_chamber{ nullptr };
-    std::vector<std::vector<Square>>* m_null_graph{ nullptr };
 };
 
 static Args arg;
@@ -172,8 +168,8 @@ void start_mid_end(
 
 // Creates maze using recursive division.
 void recursive_maze(
-    AlgoState* algo, std::array<int, 4>* chamber = arg.null_chamber_ptr(),
-    std::vector<std::vector<Square>>* graph = arg.null_graph_ptr(),
+    AlgoState* algo, std::array<int, 4>* chamber = nullptr,
+    std::vector<std::vector<Square>>* graph = nullptr,
     int division_limit = 3, int num_gaps = 3);
 
 // Returns a k length vector of unique elements from population
