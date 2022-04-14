@@ -79,6 +79,7 @@ if __name__ == "__main__":
 #   through pybind11 which creates overhead.
 #   Fun fact: a no-op method call in C++ through pybind11 is 60% slower (1.79us vs 2.87us) than a no-op method call in pure python.
 #   Of course this 1us difference is quickly irrelevant if the function does intense work.
+#   Mention CMake to compile C++ code
 # Rewrite draw()?
 # Test debug and release
 
