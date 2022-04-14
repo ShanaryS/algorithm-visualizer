@@ -20,11 +20,6 @@ public:
         double square_length_trunc = static_cast<int>(s_square_length);
         m_square_dim = { m_x, m_y, square_length_trunc, square_length_trunc };
         m_is_valid = (m_row >= 0 && m_col >= 0) ? true : false;
-
-        // Create string hash using the square pos. No longer being used
-        /*m_pos_string_hash += std::to_string(m_row);
-        m_pos_string_hash += ", ";
-        m_pos_string_hash += std::to_string(m_col);*/
     }
 
     // Allow these operators
@@ -145,7 +140,6 @@ private:
     double m_x;
     double m_y;
     std::array<double, 4> m_square_dim;  // x, y, x_length, y_length
-    //std::string m_pos_string_hash{}; No longer being used
 
     // Member variables with default values
 
@@ -224,7 +218,4 @@ private:
 
     // Update square lengths
     static void s_update_square_length(int graph_width, int pixel_offset) { s_square_length = static_cast<double>(graph_width - pixel_offset) / s_num_rows; }
-
-    // Unhash pos_string_hash. No longer being used.
-    //static std::array<int, 2> s_pos_string_unhash(const std::string& pos_string_hash, const std::string& delimiter = ", ");
 };
