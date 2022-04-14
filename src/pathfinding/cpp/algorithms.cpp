@@ -9,6 +9,8 @@
 #include <unordered_set>
 
 
+#include <iostream>
+
 void AlgoState::run_options(Square& start, Square& mid, Square& end, Square& ignore_square)
 {
     std::scoped_lock{ m_lock };
@@ -185,7 +187,7 @@ std::unordered_map<Square*, Square*> dijkstra(
                 --queue_pos;
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
-                
+
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
@@ -277,7 +279,7 @@ std::unordered_map<Square*, Square*> a_star(
                 --queue_pos;
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(f_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
-                
+
                 if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
@@ -322,7 +324,7 @@ std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
     std::string SECOND_SWARM{ "SECOND_SWARM" };
     std::tuple<int, int, Square*, std::string> queue_tuple_second_swarm{ std::make_tuple(0, queue_pos, end_ptr, SECOND_SWARM) };
     open_set.push(queue_tuple_second_swarm);
-    
+
 
     // Determine what is the best square to check
     std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
@@ -361,13 +363,13 @@ std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
             }
             return std::make_tuple(came_from, first_swarm_meet_square_ptr, second_swarm_meet_square_ptr);
         }
-        
+
         // Time increments for each square being checked
         algo->timer_start();
 
         // Gets the square currently being checked
         Square* curr_square_ptr{ std::get<2>(open_set.top()) };
-        std::string swarm{ std::get<3>(open_set.top())};
+        std::string swarm{ std::get<3>(open_set.top()) };
         open_set.pop();
 
         // Decides the order of neighbours to check
@@ -386,7 +388,7 @@ std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
                 --queue_pos;
                 std::tuple<int, int, Square*, std::string> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr, swarm) };
                 open_set.push(queue_tuple);
-                
+
                 if (!nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
                 {
                     if (swarm == FIRST_SWARM && nei_ptr != end_ptr)
@@ -437,7 +439,7 @@ void best_path_bi_dijkstra(
     best_path(algo, came_from, first_swarm_meet_square_ptr);
     {
         // Best path skips these two naturally so need to set them here
-        std::scoped_lock { algo->m_lock };
+        std::scoped_lock{ algo->m_lock };
         first_swarm_meet_square_ptr->set_path();
         second_swarm_meet_square_ptr->set_path();
     }
@@ -579,6 +581,11 @@ void recursive_maze(
         int chamber_left = (*chamber_ptr)[0];
         int chamber_top = (*chamber_ptr)[1];
     }
+    std::cout << chamber_width << "\n";
+    std::cout << chamber_height << "\n";
+    std::cout << chamber_left << "\n";
+    std::cout << chamber_top << "\n";
+
 
     // Helps with location of chambers
     int x_divide = static_cast<int>(chamber_width / 2);
@@ -658,7 +665,7 @@ void recursive_maze(
     algo->timer_end(false);
 
     // Draws the gaps into the walls
-    for (std::array<int, 4>& wall : get_random_sample(walls, num_gaps))
+    for (std::array<int, 4>&wall : get_random_sample(walls, num_gaps))
     {
         // Continue timer here
         algo->timer_start();
@@ -673,7 +680,8 @@ void recursive_maze(
             {
                 if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), y) != gaps_to_offset.end())
                 {
-                    if (wall[2] == x_divide) { --x; } else { ++x; }
+                    if (wall[2] == x_divide) { --x; }
+                    else { ++x; }
                 }
             }
             if (x >= Square::s_get_num_rows())
@@ -689,7 +697,8 @@ void recursive_maze(
             {
                 if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), x) != gaps_to_offset.end())
                 {
-                    if (wall[3] == y_divide) { --y; } else { ++y; }
+                    if (wall[3] == y_divide) { --y; }
+                    else { ++y; }
                 }
             }
             if (y >= Square::s_get_num_rows())
@@ -706,7 +715,7 @@ void recursive_maze(
     }
 
     // Recursively divides chambers
-    for (std::array<int, 4>& chamber : chambers)
+    for (std::array<int, 4>&chamber : chambers)
     {
         recursive_maze(algo, &chamber, graph_ptr);
     }
@@ -717,7 +726,7 @@ std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>,
 {
     std::vector<std::array<int, 4>> res;
     res.reserve(k);
-    
+
     std::random_device rd;
     std::mt19937 g(rd());
 
