@@ -436,9 +436,11 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
             elif swarm == FIRST_SWARM and nei in second_swarm:
                 first_swarm_meet_square = curr_square
                 second_swarm_meet_square = nei
+                break
             elif swarm == SECOND_SWARM and nei in first_swarm:
                 first_swarm_meet_square = nei
                 second_swarm_meet_square = curr_square
+                break
 
         # Sets square to closed after finished checking
         if curr_square != start and curr_square != end and curr_square != ignore_square:
