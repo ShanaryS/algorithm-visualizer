@@ -38,10 +38,11 @@ class Square:
     # Extend set class and remove ability to .copy() to
     # force use of copy module. This is for seamless compatibility
     # with the C++ square implementation of this class
-    
+
     # Stores the instances of all the squares in a 1D graph for cache efficiency.
-    graph: list["Square"] = []
-    
+    # Row-major order
+    graph: list['Square'] = []
+
     # Info about the squares
     num_rows = 46  # Default value.
     num_cols = 46  # Default value.
@@ -434,30 +435,25 @@ class Square:
         """Initializes the graph for the class"""
         # Reset class
         cls._clear_all_square_lists()
-        cls.graph.clear()
         
         # Update values
         cls._update_square_length(graph_width, pixel_offset)
         
-        # Create each square
+        # Emplace each square into graph in row-major order
         for row in range(cls.num_rows):
-            cls.graph.append([])
             for col in range(cls.num_cols):
-                square: Square = Square(row, col)
-                cls.graph[row].append(square)
+                cls.graph.append(Square(row, col))
         
         # Update neighbours once graph is done
-        square: Square
-        for row in cls.graph:
-            for square in row:
-                square._update_neighbours()
+        for square in cls.graph:
+            square._update_neighbours()
 
         cls.null_square = Square(-1, -1)
     
     @classmethod
     def get_square(cls, row, col) -> 'Square':
         """Get a square by row and col"""
-        return cls.graph[row][col]
+        return cls.graph[cls.num_cols * row + col]
 
     @classmethod
     def get_num_rows(cls) -> int:

@@ -92,7 +92,7 @@ public:
 
     // Get get info about squares from class
 
-    static Square* s_get_square(int row, int col) { return &s_graph[row][col]; }
+    static Square* s_get_square(int row, int col) { return &s_graph[s_num_cols * row + col]; }
     static int s_get_num_rows() { return s_num_rows; }
     static int s_get_num_cols() { return s_num_cols; }
     static double s_get_square_length() { return s_square_length; }
@@ -161,13 +161,13 @@ private:
 
     //////////////////////Static Below//////////////////////
 
-    // Stores the instances of all the squares in a 1D graph for cache efficiency
-    static inline std::vector<std::vector<Square>> s_graph;
-
     // Info about the squares
     static inline int s_num_rows = 46;  // Default value
     static inline int s_num_cols = 46;  // Default value
     static inline double s_square_length = 0;  // Assigned in init function
+
+    // Stores the instances of all the squares in a 1D graph for cache efficiency (row-major order)
+    static inline std::vector<Square> s_graph;
 
     // A square that can never exist in the graph
     static inline std::vector<Square> s_null_square;

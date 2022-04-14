@@ -6,27 +6,25 @@ void Square::init(int graph_width, int pixel_offset)
     // Reset class
     s_clear_all_square_lists();
     s_graph.clear();
+    s_graph.reserve(s_num_rows * s_num_cols);
 
     // Update values
     s_update_square_length(graph_width, pixel_offset);
 
-    // Create each square
+    // Emplace each square into graph in row-major order
     for (int row{ 0 }; row < s_num_rows; ++row)
     {
-        s_graph.push_back({});
         for (int col{ 0 }; col < s_num_cols; ++col)
         {
-            s_graph[row].emplace_back(Square(row, col));
+            // Store squares into array as row-major order
+            s_graph.emplace_back(Square(row, col));
         }
     }
 
     // Update neighours after all squares are created
-    for (std::vector<Square>& row : s_graph)
+    for (Square& square : s_graph)
     {
-        for (Square& square : row)
-        {
-            square.update_neighbours();
-        }
+        square.update_neighbours();
     }
 
     // Create a null square

@@ -76,8 +76,6 @@ if __name__ == "__main__":
 #   Squares 2d squares laid out as 1d vector for cache efficiency
 
 # (Optimization Station: Things to test to see if faster)
-# Write graph as non nested container to optimize cache hits
-#   get_square, init
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 # Square on it's on thread?
