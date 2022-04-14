@@ -53,7 +53,7 @@ class GraphState:
     visualize_square_history: bool = False
 
     # These control the speed of the program. The last is used for speeding up certain parts when necessary.
-    FPS: int = 1000
+    FPS: int = 60
 
     def create_pygame_window(self) -> None:
         """Create the pygame window."""
@@ -63,6 +63,7 @@ class GraphState:
             title += "algorithms.h, square.h" if use_algorithms_h else ""
             title += "square.h" if use_square_h else ""
             title += ")"
+        title += f" @ {self.FPS}fps"
         pygame.display.set_caption(title)
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 

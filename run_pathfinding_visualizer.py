@@ -80,6 +80,9 @@ if __name__ == "__main__":
 #   Fun fact: a no-op method call in C++ through pybind11 is 60% slower (1.79us vs 2.87us) than a no-op method call in pure python.
 #   Of course this 1us difference is quickly irrelevant if the function does intense work.
 #   Mention CMake to compile C++ code
+#   With pygame fps at 60 or below, limiting factor is C++. Above 60fps, python accesses the data so frequently
+#   that the mutex lock starts delaying the C++ execution. 60fps gives a 16.6ms window, on a large graph
+#   the C++ algo can finish in less than 10ms and thus isn't affected.
 # Rewrite draw()?
 # Test debug and release
 
