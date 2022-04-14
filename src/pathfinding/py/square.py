@@ -383,13 +383,13 @@ class Square:
     def _update_neighbours(self) -> None:
         """Updates this square's neighbours in the four cardinal directions"""
         if self.col > 0:
-            self.neighbours["Left"] = Square.graph[self.row][self.col - 1]
+            self.neighbours["Left"] = Square.get_square(self.row, self.col - 1)
         if self.row > 0:
-            self.neighbours["Up"] = Square.graph[self.row - 1][self.col]
+            self.neighbours["Up"] = Square.get_square(self.row - 1, self.col)
         if self.col < Square.num_cols - 1:
-            self.neighbours["Right"] = Square.graph[self.row][self.col + 1]
+            self.neighbours["Right"] = Square.get_square(self.row, self.col + 1)
         if self.row < Square.num_rows - 1:
-            self.neighbours["Down"] = Square.graph[self.row + 1][self.col]
+            self.neighbours["Down"] = Square.get_square(self.row + 1, self.col)
 
     def _reset_wall_color(self) -> None:
         """Resets wall color to default"""
@@ -444,7 +444,7 @@ class Square:
             cls.graph.append([])
             for col in range(Square.num_cols):
                 square: Square = Square(row, col)
-                Square.graph[row].append(square)
+                cls.graph[row].append(square)
         
         # Update neighbours once graph is done
         square: Square

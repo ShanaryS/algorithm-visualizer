@@ -515,19 +515,19 @@ void Square::update_neighbours()
 {
     if (m_col > 0)
     {
-        m_neighbours.insert({ std::string("Left"), &s_graph[m_row][m_col - 1] });
+        m_neighbours.insert({ std::string("Left"), s_get_square(m_row, m_col - 1) });
     }
     if (m_row > 0)
     {
-        m_neighbours.insert({ std::string("Up"), &s_graph[m_row - 1][m_col] });
+        m_neighbours.insert({ std::string("Up"), s_get_square(m_row - 1, m_col) });
     }
     if (m_col < s_num_cols - 1)
     {
-        m_neighbours.insert({ std::string("Right"), &s_graph[m_row][m_col + 1] });
+        m_neighbours.insert({ std::string("Right"), s_get_square(m_row, m_col + 1) });
     }
     if (m_row < s_num_rows - 1)
     {
-        m_neighbours.insert({ std::string("Down"), &s_graph[m_row + 1][m_col] });
+        m_neighbours.insert({ std::string("Down"), s_get_square(m_row + 1, m_col) });
     }
 }
 

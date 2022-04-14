@@ -73,10 +73,11 @@ if __name__ == "__main__":
 #   the C++ algo can finish in less than 10ms and thus isn't affected.
 #   #include algorithms.h has a 50x perf improvement over pure python.
 #   Mention CMake to compile C++ code
+#   Squares 2d squares laid out as 1d vector for cache efficiency
 
 # (Optimization Station: Things to test to see if faster)
 # Write graph as non nested container to optimize cache hits
-#   get_graph, get_square, init, update_neighbours, dijk, a_star, bi_dijk, maze, set_road
+#   get_square, init
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 # Square on it's on thread?
