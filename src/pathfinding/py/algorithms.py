@@ -264,7 +264,7 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
                 open_set.put((g_score[nei], queue_pos, nei))
 
                 # Set nei to open under certain conditions
-                if nei != end and not nei.is_closed() and nei != ignore_square:
+                if not nei.is_closed() and nei != end and nei != ignore_square:
                     with algo.lock:
                         nei.set_open()
 
@@ -335,7 +335,7 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
                 open_set.put((f_score[nei], queue_pos, nei))
 
                 # Set nei to open under certain conditions
-                if nei != end and not nei.is_closed() and nei != ignore_square:
+                if not nei.is_closed() and nei != end and nei != ignore_square:
                     with algo.lock:
                         nei.set_open()
 

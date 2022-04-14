@@ -186,7 +186,7 @@ std::unordered_map<Square*, Square*> dijkstra(
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(g_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
 
-                if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
+                if (!nei_ptr->is_closed() && nei_ptr != end_ptr && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
                     nei_ptr->set_open();
@@ -278,7 +278,7 @@ std::unordered_map<Square*, Square*> a_star(
                 std::tuple<int, int, Square*> queue_tuple{ std::make_tuple(f_score.at(nei_ptr), queue_pos, nei_ptr) };
                 open_set.push(queue_tuple);
 
-                if (nei_ptr != end_ptr && !nei_ptr->is_closed() && nei_ptr != ignore_square_ptr)
+                if (!nei_ptr->is_closed() && nei_ptr != end_ptr && nei_ptr != ignore_square_ptr)
                 {
                     std::scoped_lock{ algo->m_lock };
                     nei_ptr->set_open();

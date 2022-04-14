@@ -59,11 +59,6 @@ if __name__ == "__main__":
     main()
 
 # --- C++ Performance Rewrite ---
-# algorithms.py into C++
-#   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
-#   Changing to large graph takes 40ms
-# Map takes long to start
-# Try to remove external cacert.pem dependency (also lib folder)
 # Add to readme, conditional cpp include from json file and title of pygame window
 #   Note that #include square.h only paradoxically slows down code from pure python
 #   This is due to there then being a lot of passing data back and forth between C++ and Python (thousands of times per second!)
@@ -78,25 +73,19 @@ if __name__ == "__main__":
 #   the C++ algo can finish in less than 10ms and thus isn't affected.
 #   #include algorithms.h has a 50x perf improvement over pure python.
 #   Mention CMake to compile C++ code
-# Test debug and release
 
 # (Optimization Station: Things to test to see if faster)
-# Better logic to not have to check if ordinal node each time before setting open or closed
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 # Rewrite sections of code into separate functions (eg draw() into multiple parts)
 # Multiple threads for algorithm?
 # Multiprocessing for algo, may need to share memory
 # Can safely parrallise set_ square methods? Except for algos?
+# Square on it's on thread?
 # Implement threading in square access methods. Separate locks for square and algo?
 # Switch statement for algo state loop and other algo.check_ if statements
-# Return unoredered_map and unordered_set directly rather than coverting to vector
 # Store graph in std::array
 # Write graph as non nested container to optimize cache hits
-# Reserve variable containers
-# In set_history impletement switch statement
-# In algorithms check if not closed first when setting open
-# Compare memory address instead of squares in algos
 # CppPyLock using func instead of class
 # Seperate thread for GUI from logic?
 
@@ -136,6 +125,7 @@ if __name__ == "__main__":
 #   (maybe if closed check fails, let it through if it's not in either visited)
 
 # --- Features to add ---
+# Try to remove external cacert.pem dependency (also lib folder)
 # Sticky mud for patches where algo goes slowly
 # Take in consideration speed limit of roads
 #   Use length of open_set to assign queue_pos
