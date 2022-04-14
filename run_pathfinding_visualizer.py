@@ -58,7 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Algo timer does not update when dragging squares
 # Benchmark in set vs in tuple
 # Replace all comparisons to a single varible to above result
 # Use same open_set between start_to_mid and mid_to_end to know where to start?

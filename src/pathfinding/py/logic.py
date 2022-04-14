@@ -35,6 +35,7 @@ class LogicState:
     run: bool = True
     visualize: bool = True
     vis_text_counter: int = 0
+    DEFAULT_VIS_COUNTER: int = 6  # FPS / 10
     GRAPH_SMALL: int = 22
     GRAPH_MEDIUM: int = 46
     GRAPH_LARGE: int = 95
@@ -54,6 +55,9 @@ def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisT
     
     # Only allow certain events
     pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN])
+
+    # Other variables
+    lgc.DEFAULT_VIS_COUNTER = gph.FPS / 10  # 100ms always
     
     logic_loop(gph, algo, lgc, txt)
  
@@ -76,7 +80,7 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
         elif lgc.visualize:
             draw(gph, algo, txt)
             draw_vis_text(gph, algo, txt)
-            lgc.vis_text_counter = gph.FPS / 10  # 100ms always
+            lgc.vis_text_counter = lgc.DEFAULT_VIS_COUNTER
 
         for event in pygame.event.get():
 
@@ -335,6 +339,7 @@ def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visuali
     lgc.visualize = visualize
     if not visualize:
         algo.set_best_path_delay(0)
+        lgc.vis_text_counter = lgc.DEFAULT_VIS_COUNTER
 
 
 def _dijkstra_button(algo: AlgoState, lgc: LogicState) -> None:
