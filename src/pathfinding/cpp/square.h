@@ -29,6 +29,7 @@ public:
     
     // False if instanced using default constructor
     operator bool() const { return m_is_valid; }
+    bool op_bool() const { return m_is_valid; }  // For __bool__ in python
 
     // Allow hashing using row and col position
     struct hash
