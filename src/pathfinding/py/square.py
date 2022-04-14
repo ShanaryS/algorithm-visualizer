@@ -440,9 +440,9 @@ class Square:
         cls._update_square_length(graph_width, pixel_offset)
         
         # Create each square
-        for row in range(Square.num_rows):
+        for row in range(cls.num_rows):
             cls.graph.append([])
-            for col in range(Square.num_cols):
+            for col in range(cls.num_cols):
                 square: Square = Square(row, col)
                 cls.graph[row].append(square)
         
