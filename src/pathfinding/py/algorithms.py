@@ -679,7 +679,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
 
     # Recursively divides chambers
     for chamber in chambers:
-        recursive_maze(algo, chamber, graph=graph)
+        recursive_maze(algo, chamber, graph)
 
 
 def _get_random_sample(population: tuple, k: int) -> list:
