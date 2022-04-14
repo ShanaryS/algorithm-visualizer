@@ -569,17 +569,17 @@ void recursive_maze(
     int chamber_top;
     if (!chamber_ptr)
     {
-        int chamber_width = graph_ptr->size();
-        int chamber_height = (*graph_ptr)[0].size();
-        int chamber_left = 0;
-        int chamber_top = 0;
+        chamber_width = Square::s_get_num_rows();
+        chamber_height = Square::s_get_num_cols();
+        chamber_left = 0;
+        chamber_top = 0;
     }
     else
     {
-        int chamber_width = (*chamber_ptr)[2];
-        int chamber_height = (*chamber_ptr)[3];
-        int chamber_left = (*chamber_ptr)[0];
-        int chamber_top = (*chamber_ptr)[1];
+        chamber_width = (*chamber_ptr)[2];
+        chamber_height = (*chamber_ptr)[3];
+        chamber_left = (*chamber_ptr)[0];
+        chamber_top = (*chamber_ptr)[1];
     }
     std::cout << chamber_width << "\n";
     std::cout << chamber_height << "\n";
@@ -674,8 +674,8 @@ void recursive_maze(
         int y;
         if (wall[3] == 1)
         {
-            int x = get_randrange(wall[0], wall[0] + wall[2]);
-            int y = wall[1];
+            x = get_randrange(wall[0], wall[0] + wall[2]);
+            y = wall[1];
             if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), x) != gaps_to_offset.end())
             {
                 if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), y) != gaps_to_offset.end())
@@ -691,8 +691,8 @@ void recursive_maze(
         }
         else
         {
-            int x = wall[0];
-            int y = get_randrange(wall[1], wall[1] + wall[3]);
+            x = wall[0];
+            y = get_randrange(wall[1], wall[1] + wall[3]);
             if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), y) != gaps_to_offset.end())
             {
                 if (std::find(gaps_to_offset.begin(), gaps_to_offset.end(), x) != gaps_to_offset.end())
