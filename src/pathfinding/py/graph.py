@@ -282,10 +282,9 @@ def set_squares_to_roads(gph: GraphState) -> None:
     """Sets squares to the color of a single pixel"""
 
     # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
-    graph = Square.get_graph()
     for x in range(Square.get_num_rows()):
         for y in range(Square.get_num_cols()):
-            square: Square = graph[x][y]
+            square: square = Square.get_square(x, y)
             row, col = square.get_pos()
             square.set_wall_color_map()  # Change wall color for easy visibility
             tot = 0
