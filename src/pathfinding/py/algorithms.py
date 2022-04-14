@@ -555,7 +555,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
     # Creates chambers to divide into
     if chamber is None:
         chamber_width: int = len(graph)
-        chamber_height: int = len(graph[1])
+        chamber_height: int = len(graph[0])
         chamber_left: int = 0
         chamber_top: int = 0
     else:
