@@ -26,7 +26,7 @@ public:
 
     bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
     bool operator!= (const Square& other) const { return !(operator==(other)); }
-    
+
     // False if instanced using default constructor
     operator bool() const { return m_is_valid; }
     bool op_bool() const { return m_is_valid; }  // For __bool__ in python
