@@ -325,7 +325,7 @@ def _none_to_null_square(square) -> Square:
 def _run_pathfinding_algo(algo: AlgoState, lgc: LogicState, algo_to_run, visualize: bool) -> None:
     """Run's the specificed algo"""
     # Resets algo visualizations without removing ordinal squares or walls
-    reset_algo(algo)
+    reset_algo()
 
     # These fix sending none to C++
     start = _none_to_null_square(lgc.start)

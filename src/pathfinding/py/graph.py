@@ -595,7 +595,7 @@ def reset_graph(gph: GraphState, algo, txt: VisText, graph_max=None, graph_defau
         Square.reset_all_squares()
 
 
-def reset_algo(algo) -> None:
+def reset_algo() -> None:
     """Resets algo colors while keeping ordinal squares and walls"""
     # Resets only certain colors
     Square.reset_algo_squares()
