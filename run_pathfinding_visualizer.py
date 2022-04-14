@@ -60,11 +60,8 @@ if __name__ == "__main__":
 
 # Benchmark in set vs in tuple
 # Replace all comparisons to a single varible to above result
-# Use same open_set between start_to_mid and mid_to_end to know where to start?
 # Need to fix squares while dragging in start_to_mid?
-# Still need nullsquare rather than nullptr?
 # Set open2, open3, closed2, and closed3 to obviously different colors?
-# Lower fps should mean faster algos. Maybe just keep it at 60.
 
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
@@ -86,7 +83,6 @@ if __name__ == "__main__":
 #   the C++ algo can finish in less than 10ms and thus isn't affected.
 #   #include algorithms.h has a 50x perf improvement over pure python.
 #   Mention CMake to compile C++ code
-# Rewrite draw()?
 # Test debug and release
 
 # (Optimization Station: Things to test to see if faster)

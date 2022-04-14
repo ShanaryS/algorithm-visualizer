@@ -102,11 +102,11 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
 
             # LEFT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             if (pygame.mouse.get_pressed(3)[0] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
-                _left_click_button(gph, algo, lgc, txt)
+                _left_click_button(algo, lgc)
 
             # RIGHT MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             elif (pygame.mouse.get_pressed(3)[2] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
-                _right_click_button(gph, algo, lgc, txt)
+                _right_click_button(algo, lgc)
 
             # MIDDLE MOUSE CLICK. HEIGHT condition prevents out of bound when clicking on legend.
             elif (pygame.mouse.get_pressed(3)[1] and pygame.mouse.get_pos()[1] < HEIGHT and not gph.has_img):
@@ -194,7 +194,7 @@ def _get_square_clicked() -> Square:
     return square
 
 
-def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _left_click_button(algo: AlgoState, lgc: LogicState,) -> None:
     """Handles mouse left click"""
     square = _get_square_clicked()
     # Checks if algo is completed, used for dragging algo
@@ -274,7 +274,7 @@ def _left_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: V
         square.set_wall()
 
 
-def _right_click_button(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
+def _right_click_button(algo: AlgoState, lgc: LogicState) -> None:
     """Handles mouse right click"""
     square = _get_square_clicked()
     # Reset square and ordinal square if it was any

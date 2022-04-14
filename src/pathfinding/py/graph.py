@@ -301,7 +301,7 @@ def set_squares_to_roads(gph: GraphState) -> None:
                     col * int(square_length),
                     (col + 1) * int(square_length),
                 ):
-                    r, g, b, a = gph.window.get_at((i, j))
+                    r, g, b, _ = gph.window.get_at((i, j))
                     tot += r + g + b
                     tot_b += b
             avg_tot = tot / square_length ** 2 / 3  # Gets the average of each square
