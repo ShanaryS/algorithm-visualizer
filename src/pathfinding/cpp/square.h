@@ -161,8 +161,8 @@ private:
 
     //////////////////////Static Below//////////////////////
 
-    // Stores the instances of all the squares
-    static inline std::vector<std::vector<Square>> s_graph;
+    // Stores the instances of all the squares in a 1D graph for cache efficiency
+    static inline std::vector<Square> s_graph;
 
     // Info about the squares
     static inline int s_num_rows = 46;  // Default value

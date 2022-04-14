@@ -39,8 +39,8 @@ class Square:
     # force use of copy module. This is for seamless compatibility
     # with the C++ square implementation of this class
     
-    # Stores the instances of all the squares
-    graph = []
+    # Stores the instances of all the squares in a 1D graph for cache efficiency.
+    graph: list["Square"] = []
     
     # Info about the squares
     num_rows = 46  # Default value.
