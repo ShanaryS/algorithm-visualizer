@@ -176,9 +176,10 @@ void recursive_maze(
     const std::vector<std::vector<Square>>& graph = arg.null_graph());
 
 // Returns a k length vector of unique elements from population
-//std::vector<> get_random_sample(const std::array<>& population, int k);
+std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k);
 
 // Return a random int within a range
 int get_randrange(int start, int stop);
 
+// Sleep for an exact amout of time using a no-op loop
 void sleep(int delay, std::string unit = "s");

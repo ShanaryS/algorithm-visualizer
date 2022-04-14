@@ -3,9 +3,10 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstdlib>
 #include <queue>
+#include <random>
 #include <unordered_set>
-#include <iostream>
 
 
 void AlgoState::run_options(Square& start, Square& mid, Square& end, Square& ignore_square)
@@ -546,9 +547,25 @@ void recursive_maze(
 {}
 
 
-// std::vector<> get_random_sample(const std::array<>& population, int k) {}
+std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k)
+{
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(population.begin(), population.end(), g);
+    
+    std::vector<std::array<int, 4>> res;
+    res.reserve(k);
+    for (int i{ 0 }; i < k; ++i)
+    {
+        res.push_back(population[i]);
+    }
+    return res;
+}
 
-int get_randrange(int start, int stop) { return 1; }
+int get_randrange(int start, int stop)
+{
+    return start + (rand() % (stop - start));
+}
 
 void sleep(int delay, std::string unit)
 {
