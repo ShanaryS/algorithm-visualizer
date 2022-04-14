@@ -58,11 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Benchmark in set vs in tuple
-# Replace all comparisons to a single varible to above result
-# Need to fix squares while dragging in start_to_mid?
-# Set open2, open3, closed2, and closed3 to obviously different colors?
-
 # --- C++ Performance Rewrite ---
 # algorithms.py into C++
 #   Adding _update_surrounding_neighbour_pool() to other set_ methods 0.1x performance in python
@@ -138,6 +133,7 @@ if __name__ == "__main__":
 
 # --- Known Bugs ---
 # Bi_Dijkstra mid seems to have wrong best path
+#   (maybe if closed check fails, let it through if it's not in either visited)
 
 # --- Features to add ---
 # Sticky mud for patches where algo goes slowly
