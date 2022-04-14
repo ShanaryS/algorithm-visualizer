@@ -34,6 +34,7 @@ class LogicState:
     end: Square = None
     run: bool = True
     visualize: bool = True
+    vis_text_counter: int = 0
     GRAPH_SMALL: int = 22
     GRAPH_MEDIUM: int = 46
     GRAPH_LARGE: int = 95
@@ -66,9 +67,16 @@ def logic_loop(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) 
         # Draws the graph with all the necessary updates
         if algo.check_phase() == algo.NONE:
             draw(gph, algo, txt, legend=True)
+
+            # Need to update algo time and #squares for a bit longer
+            # Algos finish too fast and makes numbers inaccurate
+            if lgc.vis_text_counter:
+                draw_vis_text(gph, algo, txt)
+                lgc.vis_text_counter -= 1  
         elif lgc.visualize:
             draw(gph, algo, txt)
             draw_vis_text(gph, algo, txt)
+            lgc.vis_text_counter = gph.FPS / 10  # 100ms always
 
         for event in pygame.event.get():
 
