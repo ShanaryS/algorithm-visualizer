@@ -135,8 +135,6 @@ if __name__ == "__main__":
 # --- Known Bugs ---
 # Algo timer resets on algo completion for include square.h
 # Can place walls during maze, causes crash when dragging over it
-# Bi dijk redraws open squares
-# Bi dijk only draws best_path when edges of swarms are touching, mid square
 
 # --- Features to add ---
 # Have the frame times for visualizer be consistent.

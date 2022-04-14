@@ -357,7 +357,7 @@ def _heuristic(pos1: tuple, pos2: tuple) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict:
+def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square, draw_best_path: bool) -> dict | Square:
     """Code for Bi-directional Dijkstra algorithm. Custom algorithm made by me."""
     # Clear previous and start timer here to include setup of algo into timer
     algo._timer_reset()
@@ -515,8 +515,14 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         _best_path(algo, start_to_mid, mid)
         _best_path(algo, mid_to_end, end)
     elif algo.check_algo() == algo.ALGO_BI_DIJKSTRA:
-        start_to_mid = bi_dijkstra(algo, start, mid, end, draw_best_path=False)
-        mid_to_end = bi_dijkstra(algo, mid, end, start, draw_best_path=False)
+        temp = bi_dijkstra(algo, start, mid, end, draw_best_path=False)
+        start_to_mid = temp[0]
+        first_swarm_meet_square = temp[1]
+        second_swarm_meet_square = temp[2]
+        temp = bi_dijkstra(algo, mid, end, start, draw_best_path=False)
+        mid_to_end = temp[0]
+        third_swarm_meet_square = temp[1]
+        fourth_swarm_meet_square = temp[2]
         
         # Fixes squares disappearing when dragging
         with algo.lock:
@@ -524,8 +530,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
             mid.set_mid()
             end.set_end()
 
-        _best_path_bi_dijkstra(algo, start_to_mid, start, mid)
-        _best_path_bi_dijkstra(algo, mid_to_end, mid, end)
+        _best_path_bi_dijkstra(algo, start_to_mid, first_swarm_meet_square, second_swarm_meet_square)
+        _best_path_bi_dijkstra(algo, mid_to_end, third_swarm_meet_square, fourth_swarm_meet_square)
 
 
 def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -> None:
