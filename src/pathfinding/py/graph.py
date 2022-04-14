@@ -201,7 +201,7 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
 
     # Get squares to draw
     graph = []
-    with CppPyLock(algo):
+    with CppPyLock(algo.thread_lock, algo.thread_unlock):
         if gph.visualize_square_history:
             gph.visualize_square_history = False
             for square in Square.get_future_history_squares():

@@ -83,10 +83,8 @@ if __name__ == "__main__":
 # Can safely parrallise set_ square methods? Except for algos?
 # Square on it's on thread?
 # Implement threading in square access methods. Separate locks for square and algo?
-# Switch statement for algo state loop and other algo.check_ if statements
 # Store graph in std::array
 # Write graph as non nested container to optimize cache hits
-# CppPyLock using func instead of class
 # Seperate thread for GUI from logic?
 
 # --- Mutltithreading/Multiprocessing ---
