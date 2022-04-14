@@ -75,8 +75,8 @@ if __name__ == "__main__":
 #   Mention CMake to compile C++ code
 
 # (Optimization Station: Things to test to see if faster)
-# Seperate thread for GUI from logic?
 # Write graph as non nested container to optimize cache hits
+#   get_graph, get_square, init, update_neighbours, dijk, a_star, bi_dijk, maze, set_road
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 # Square on it's on thread?
