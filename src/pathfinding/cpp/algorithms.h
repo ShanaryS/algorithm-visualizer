@@ -167,10 +167,7 @@ void start_mid_end(
     AlgoState* algo, Square* start_ptr, Square* mid_ptr, Square* end_ptr);
 
 // Creates maze using recursive division.
-void recursive_maze(
-    AlgoState* algo, std::array<int, 4>* chamber = nullptr,
-    std::vector<std::vector<Square>>* graph = nullptr,
-    int division_limit = 3, int num_gaps = 3);
+void recursive_maze(AlgoState* algo, std::array<int, 4>* chamber = nullptr, int division_limit = 3, int num_gaps = 3);
 
 // Returns a k length vector of unique elements from population
 std::vector<std::array<int, 4>> get_random_sample(std::array<std::array<int, 4>, 4> population, int k);

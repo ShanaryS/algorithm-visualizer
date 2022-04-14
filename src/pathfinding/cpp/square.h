@@ -92,7 +92,6 @@ public:
 
     // Get get info about squares from class
 
-    static std::vector<std::vector<Square>>* s_get_graph() { return &s_graph; }
     static Square* s_get_square(int row, int col) { return &s_graph[row][col]; }
     static int s_get_num_rows() { return s_num_rows; }
     static int s_get_num_cols() { return s_num_cols; }

@@ -223,8 +223,7 @@ def dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Square,
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
-    graph = Square.get_graph()
-    g_score = {square: float("inf") for row in graph for square in row}
+    g_score = {Square.get_square(row, col): float("inf") for row in range(Square.get_num_rows()) for col in range(Square.get_num_cols())}
     g_score[start] = 0
 
     # Keeps track of next square for every square in graph. A linked list basically.
@@ -291,10 +290,9 @@ def a_star(algo: AlgoState, start: Square, end: Square, ignore_square: Square, d
     open_set.put((0, queue_pos, start))
 
     # Determine what is the best square to check
-    graph = Square.get_graph()
-    g_score = {square: float("inf") for row in graph for square in row}
+    g_score = {Square.get_square(row, col): float("inf") for row in range(Square.get_num_rows()) for col in range(Square.get_num_cols())}
     g_score[start] = 0
-    f_score = {square: float("inf") for row in graph for square in row}
+    f_score = {Square.get_square(row, col): float("inf") for row in range(Square.get_num_rows()) for col in range(Square.get_num_cols())}
     f_score[start] = _heuristic(start.get_pos(), end.get_pos())
 
     # Keeps track of next square for every square in graph. A linked list basically.
@@ -373,8 +371,7 @@ def bi_dijkstra(algo: AlgoState, start: Square, end: Square, ignore_square: Squa
     open_set.put((0, queue_pos, end, SECOND_SWARM))
 
     # Determine what is the best square to check
-    graph = Square.get_graph()
-    g_score = {square: float("inf") for row in graph for square in row}
+    g_score = {Square.get_square(row, col): float("inf") for row in range(Square.get_num_rows()) for col in range(Square.get_num_cols())}
     g_score[start] = 0
     g_score[end] = 0
 
@@ -536,7 +533,7 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         _best_path_bi_dijkstra(algo, mid_to_end, third_swarm_meet_square, fourth_swarm_meet_square)
 
 
-def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
+def recursive_maze(algo: AlgoState, chamber: tuple = None,
     division_limit: int = 3, num_gaps: int = 3) -> None:
     """Creates maze using recursive division."""
     # Only perform these on first call
@@ -546,10 +543,6 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
     # Start timer here to include setup in timer
     algo._timer_start()
     
-    # Only get graph once then use it for recursive calls
-    if not graph:
-        graph = Square.get_graph()
-
     # Creates chambers to divide into
     if chamber is None:
         chamber_width: int = Square.get_num_rows()
@@ -573,7 +566,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
     if chamber_width >= division_limit:
         for y in range(chamber_height):
             algo._timer_start()
-            square: Square = graph[chamber_left + x_divide][chamber_top + y]
+            square: Square = Square.get_square(chamber_left + x_divide, chamber_top + y)
             with algo.lock:
                 square.set_wall()
             sleep(algo._recursive_maze_delay_us, unit="us")
@@ -583,7 +576,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
     if chamber_height >= division_limit:
         for x in range(chamber_width):
             algo._timer_start()
-            square: Square = graph[chamber_left + x][chamber_top + y_divide]
+            square: Square = Square.get_square(chamber_left + x, chamber_top + y_divide)
             with algo.lock:
                 square.set_wall()
             sleep(algo._recursive_maze_delay_us, unit="us")
@@ -671,7 +664,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
                     y += 1
             if y >= Square.get_num_rows():
                 y = Square.get_num_rows() - 1
-        square: Square = graph[x][y]
+        square: Square = Square.get_square(x, y)
         with algo.lock:
             square.reset()
 
@@ -679,7 +672,7 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
 
     # Recursively divides chambers
     for chamber in chambers:
-        recursive_maze(algo, chamber, graph)
+        recursive_maze(algo, chamber)
 
 
 def _get_random_sample(population: tuple, k: int) -> list:

@@ -455,11 +455,6 @@ class Square:
         cls.null_square = Square(-1, -1)
     
     @classmethod
-    def get_graph(cls) -> list:
-        """Returns the graph of squares"""
-        return cls.graph
-    
-    @classmethod
     def get_square(cls, row, col) -> 'Square':
         """Get a square by row and col"""
         return cls.graph[row][col]

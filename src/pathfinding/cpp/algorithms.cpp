@@ -133,13 +133,12 @@ std::unordered_map<Square*, Square*> dijkstra(
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
-    std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
     std::unordered_map<Square*, int> g_score{};
-    for (std::vector<Square>& row : graph)
+    for (int row{ 0 }; row < Square::s_get_num_rows(); ++row)
     {
-        for (Square& square : row)
+        for (int col{ 0 }; col < Square::s_get_num_cols(); ++col)
         {
-            g_score[&square] = std::numeric_limits<int>::lowest();
+            g_score[Square::s_get_square(row, col)] = std::numeric_limits<int>::lowest();
         }
     }
     g_score[start_ptr] = 0;
@@ -221,15 +220,14 @@ std::unordered_map<Square*, Square*> a_star(
     open_set.push(queue_tuple);
 
     // Determine what is the best square to check
-    std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
     std::unordered_map<Square*, int> g_score{};
     std::unordered_map<Square*, int> f_score{};
-    for (std::vector<Square>& row : graph)
+    for (int row{ 0 }; row < Square::s_get_num_rows(); ++row)
     {
-        for (Square& square : row)
+        for (int col{ 0 }; col < Square::s_get_num_cols(); ++col)
         {
-            g_score[&square] = std::numeric_limits<int>::lowest();
-            f_score[&square] = std::numeric_limits<int>::lowest();
+            g_score[Square::s_get_square(row, col)] = std::numeric_limits<int>::lowest();
+            f_score[Square::s_get_square(row, col)] = std::numeric_limits<int>::lowest();
         }
     }
     g_score[start_ptr] = 0;
@@ -325,13 +323,12 @@ std::tuple<std::unordered_map<Square*, Square*>, Square*, Square*> bi_dijkstra(
 
 
     // Determine what is the best square to check
-    std::vector<std::vector<Square>>& graph = *Square::s_get_graph();
     std::unordered_map<Square*, int> g_score{};
-    for (std::vector<Square>& row : graph)
+    for (int row{ 0 }; row < Square::s_get_num_rows(); ++row)
     {
-        for (Square& square : row)
+        for (int col{ 0 }; col < Square::s_get_num_cols(); ++col)
         {
-            g_score[&square] = std::numeric_limits<int>::lowest();
+            g_score[Square::s_get_square(row, col)] = std::numeric_limits<int>::lowest();
         }
     }
     g_score[start_ptr] = 0;
@@ -541,9 +538,7 @@ void start_mid_end(
     }
 }
 
-void recursive_maze(
-    AlgoState* algo, std::array<int, 4>* chamber_ptr,
-    std::vector<std::vector<Square>>* graph_ptr, int division_limit, int num_gaps)
+void recursive_maze(AlgoState* algo, std::array<int, 4>* chamber_ptr, int division_limit, int num_gaps)
 {
     // Only perform these on first call
     if (!chamber_ptr)
@@ -553,14 +548,6 @@ void recursive_maze(
 
     // Start timer here to include setup in timer
     algo->timer_start();
-
-    // Only get graph once then use it for recursive calls
-    std::vector<std::vector<Square>>* temp_graph_ptr;
-    if (!graph_ptr)
-    {
-        temp_graph_ptr = Square::s_get_graph();
-    }
-    std::vector<std::vector<Square>>& graph = *temp_graph_ptr;
 
     // Creates chambers to divide into
     int chamber_width;
@@ -595,10 +582,10 @@ void recursive_maze(
         for (int y{ 0 }; y < chamber_height; ++y)
         {
             algo->timer_start();
-            Square& square = graph[chamber_left + x_divide][chamber_top + y];
+            Square* square = Square::s_get_square(chamber_left + x_divide, chamber_top + y);
             {
                 std::scoped_lock{ algo->m_lock };
-                square.set_wall();
+                square->set_wall();
             }
             sleep(algo->m_recursive_maze_delay_us, "us");
             algo->timer_end();
@@ -611,10 +598,10 @@ void recursive_maze(
         for (int x{ 0 }; x < chamber_width; ++x)
         {
             algo->timer_start();
-            Square& square = graph[chamber_left + x][chamber_top + y_divide];
+            Square* square = Square::s_get_square(chamber_left + x, chamber_top + y_divide);
             {
                 std::scoped_lock{ algo->m_lock };
-                square.set_wall();
+                square->set_wall();
             }
             sleep(algo->m_recursive_maze_delay_us, "us");
             algo->timer_end();
@@ -701,10 +688,10 @@ void recursive_maze(
                 y = Square::s_get_num_rows() - 1;
             }
         }
-        Square& square = graph[x][y];
+        Square* square = Square::s_get_square(x, y);
         {
             std::scoped_lock{ algo->m_lock };
-            square.reset();
+            square->reset();
         }
         algo->timer_end();
     }
@@ -712,7 +699,7 @@ void recursive_maze(
     // Recursively divides chambers
     for (std::array<int, 4>&chamber : chambers)
     {
-        recursive_maze(algo, &chamber, &graph);
+        recursive_maze(algo, &chamber);
     }
 }
 
