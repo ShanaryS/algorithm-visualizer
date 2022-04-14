@@ -555,12 +555,12 @@ void recursive_maze(
     algo->timer_start();
 
     // Only get graph once then use it for recursive calls
-    std::vector<std::vector<Square>>* graph_ptr_;
+    std::vector<std::vector<Square>>* temp_graph_ptr;
     if (!graph_ptr)
     {
-        graph_ptr = Square::s_get_graph();
+        temp_graph_ptr = Square::s_get_graph();
     }
-    std::vector<std::vector<Square>>& graph = *graph_ptr_;
+    std::vector<std::vector<Square>>& graph = *temp_graph_ptr;
 
     // Creates chambers to divide into
     int chamber_width;
@@ -712,7 +712,7 @@ void recursive_maze(
     // Recursively divides chambers
     for (std::array<int, 4>&chamber : chambers)
     {
-        recursive_maze(algo, &chamber, graph_ptr_);
+        recursive_maze(algo, &chamber, &graph);
     }
 }
 
