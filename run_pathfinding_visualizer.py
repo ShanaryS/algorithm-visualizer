@@ -141,8 +141,6 @@ if __name__ == "__main__":
 # Algo timer resets on algo completion for include square.h
 
 # --- Features to add ---
-# Have the frame times for visualizer be consistent.
-#   Include wait time for algo.lock but don't hold the lock longer than necessary to avoid slowing down C++
 # Sticky mud for patches where algo goes slowly
 # Take in consideration speed limit of roads
 #   Use length of open_set to assign queue_pos
