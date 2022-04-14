@@ -26,6 +26,9 @@ public:
 
     bool operator== (const Square& other) const { return m_row == other.m_row && m_col == other.m_col; }
     bool operator!= (const Square& other) const { return !(operator==(other)); }
+    
+    // False if instanced using default constructor
+    operator bool() const { return m_is_valid; }
 
     // Allow hashing using row and col position
     struct hash
@@ -37,9 +40,6 @@ public:
             return row_hash ^ col_hash;
         }
     };
-
-    // False if instanced using default constructor
-    operator bool() const { return m_is_valid; }
 
     // Info about square
 
