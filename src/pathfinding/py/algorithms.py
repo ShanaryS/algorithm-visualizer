@@ -536,7 +536,8 @@ def start_mid_end(algo: AlgoState, start: Square, mid: Square, end: Square) -> N
         _best_path_bi_dijkstra(algo, mid_to_end, third_swarm_meet_square, fourth_swarm_meet_square)
 
 
-def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -> None:
+def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None,
+    division_limit: int = 3, num_gaps: int = 3) -> None:
     """Creates maze using recursive division."""
     # Only perform these on first call
     if not chamber:
@@ -548,9 +549,6 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
     # Only get graph once then use it for recursive calls
     if not graph:
         graph = Square.get_graph()
-
-    # Sets min size for division
-    division_limit: int = 3
 
     # Creates chambers to divide into
     if chamber is None:
@@ -591,11 +589,12 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
             sleep(algo._recursive_maze_delay_us, unit="us")
             algo._timer_end()
 
+    # Start timer again
+    algo._timer_start()
+    
     # Terminates if below division limit
     if chamber_width < division_limit and chamber_height < division_limit:
         return
-
-    algo._timer_start()
 
     # Defining limits on where to draw walls
     top_left: tuple = (chamber_left, chamber_top, x_divide, y_divide)
@@ -640,9 +639,6 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
     # Combines walls into one object
     walls: tuple = (left, right, top, bottom)
 
-    # Number of gaps to leave in walls after each division into four sub quadrants.
-    num_gaps: int = 3
-
     # Prevents drawing wall over gaps
     gaps_to_offset: list = [x for x in range(num_gaps - 1, Square.get_num_rows(), num_gaps)]
 
@@ -679,7 +675,6 @@ def recursive_maze(algo: AlgoState, chamber: tuple = None, graph: list = None) -
         with algo.lock:
             square.reset()
 
-        # End timer before visualizing
         algo._timer_end()
 
     # Recursively divides chambers
