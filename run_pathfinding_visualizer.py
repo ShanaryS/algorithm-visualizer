@@ -138,7 +138,6 @@ if __name__ == "__main__":
 
 # --- Known Bugs ---
 # Bi_Dijkstra mid seems to have wrong best path
-# Algo timer resets on algo completion for include square.h
 
 # --- Features to add ---
 # Sticky mud for patches where algo goes slowly
