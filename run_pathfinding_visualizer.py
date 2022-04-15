@@ -58,6 +58,10 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+# Write a function that takes commands from user to exec code rather than setting phase/algo directly
+# Prevent user inputs when Phase is not null. Use else: if lgc.visualize then contine after that block but in else
+# Algo get timer_total and count (maybe single func?) needed for shared memory
+
 # --- C++ Performance Rewrite ---
 # Add to readme, conditional cpp include from json file and title of pygame window
 #   Note that #include square.h only paradoxically slows down code from pure python
