@@ -279,44 +279,17 @@ def _draw_img(gph: GraphState) -> None:
 
 
 def pygame_image_to_squares(gph: GraphState) -> None:
-    """Converts the mapped image to squares"""
+    """Converts the mapped image to squares. 2D array"""
+    rgba_array = []
+    length_int = int(Square.get_square_length())
+    for row in range(Square.get_num_rows()):
+        for col in range(Square.get_num_cols()):
+            for x in range(row * length_int, (row+1) * length_int):
+                rgba_array.append([])
+                for y in range(col * length_int, (col+1) * length_int):
+                    rgba_array[x].append(gph.window.get_at((x, y)))
 
-    # These two loops x,y gets all the squares in the graph. At 400 graph size a square is a pixel.
-    for x in range(Square.get_num_rows()):
-        for y in range(Square.get_num_cols()):
-            square: square = Square.get_square(x, y)
-            row, col = square.get_pos()
-            square.set_wall_color_map()  # Change wall color for easy visibility
-            tot = 0
-            tot_b = 0  # Used to check if highway since they are yellow.
-
-            # These two loops i,j get each pixel in each square. Time Complexity is O(n) in regards to pixels.
-            square_length = Square.get_square_length()
-            for i in range(
-                row * int(square_length),
-                (row + 1) * int(square_length),
-            ):
-                for j in range(
-                    col * int(square_length),
-                    (col + 1) * int(square_length),
-                ):
-                    r, g, b, _ = gph.window.get_at((i, j))
-                    tot += r + g + b
-                    tot_b += b
-            avg_tot = tot / square_length ** 2 / 3  # Gets the average of each square
-            avg_b = tot_b / square_length ** 2
-            cutoff = 1  # Any color with value above this will be set as a viable path
-
-            # If the square's color is above cutoff, set it as path. Else wall square
-            if avg_tot > cutoff:
-                # If b is greater, then it is white.
-                if avg_b > 225:
-                    square.reset()
-                else:
-                    square.reset()
-                    square.set_highway(True)
-            else:
-                square.set_wall()
+    Square.set_square_color_by_array(rgba_array)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:

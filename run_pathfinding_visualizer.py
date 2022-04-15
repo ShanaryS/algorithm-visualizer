@@ -79,8 +79,10 @@ if __name__ == "__main__":
 # Move loops of set_ square methods into square class?
 #   (Allow looping over a bunch of squares through a single func call)
 #   future_history_squares, history_squares, _set_road
+# Use pygame.surfarray.pixels2d() [array2d() comparison] or CImg for converting graph img to squares
 # Square on it's on thread?
 #   Implement threading in square access methods. Separate locks for square and algo?
+#   Place set_squares to road on that thread to visualize changes
 # Multiprocessing for algo, may need to share memory
 #   Can safely parrallise set_ square methods? Except for algos?
 # Multiple threads for algorithm?

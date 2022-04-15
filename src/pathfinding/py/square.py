@@ -435,6 +435,7 @@ class Square:
         """Initializes the graph for the class"""
         # Reset class
         cls._clear_all_square_lists()
+        cls.graph.clear()
         
         # Update values
         cls._update_square_length(graph_width, pixel_offset)
@@ -631,7 +632,40 @@ class Square:
     def set_track_square_history(cls, x: bool) -> None:
         """Sets track square history to true or false"""
         cls.track_square_history = x
-    
+
+    @classmethod
+    def set_square_color_by_array(cls, square_colors) -> None:
+        """Set the square colors based on the 2D array of rgb values."""
+
+        ROAD_CUTOFF = 1  # Any value above this value is a road
+        HIGHWAY_CUTOFF = 225  # Any value below this is a highway
+
+        square: Square
+        for index, square in enumerate(cls.graph):
+            square.set_wall_color_map()
+            row, col = square.get_pos()
+            square_length = cls.get_square_length()
+            length_int = int(square_length)
+
+            rgb_sum = 0
+            blue_sum = 0
+            for x in range(row * length_int, (row+1) * length_int):
+                for y in range(col * length_int, (col+1) * length_int):
+                    red, green, blue, alpha = square_colors[x][y]
+                    rgb_sum += red + green + blue
+                    blue_sum += blue
+                    blue_sum += blue
+            rgb_avg = rgb_sum / square_length**2 * 3
+            blue_avg = blue_sum / square_length**2
+
+            # Set squares to roads, highways and non pathable space
+            if rgb_avg < ROAD_CUTOFF:
+                square.set_wall()
+            else:
+                square.reset()
+                if blue_avg < HIGHWAY_CUTOFF:
+                    square.set_highway(True)
+
     @classmethod
     def _update_square_length(cls, graph_width, pixel_offset) -> None:
         """Calculates square size with an optional offset"""
