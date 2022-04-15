@@ -58,9 +58,8 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Write a function that takes commands from user to exec code rather than setting phase/algo directly
 # Prevent user inputs when Phase is not null. Use else: if lgc.visualize then contine after that block but in else
-# Algo get timer_total and count (maybe single func?) needed for shared memory
+# Force python version if no enough cores avaiable. Possibly makes it easier to make it multithreaded.
 
 # --- C++ Performance Rewrite ---
 # Add to readme, conditional cpp include from json file and title of pygame window
@@ -117,7 +116,6 @@ if __name__ == "__main__":
 #       - bi_dijkstra*
 #       - best_path*
 #       - draw_recursive_maze*
-# Write tests for both threading and multiprocessing
 
 # --- Known Bugs ---
 # Bi_Dijkstra mid seems to have wrong best path
@@ -131,3 +129,46 @@ if __name__ == "__main__":
 # Add prim maze
 # Write tests
 # Rewrite messy complicated functions. Split into smaller parts (e.g. draw()?)
+
+# --- Possible API for multiprocessing ---
+# Goal is to use multiprocessing.Pipe and pass info using enums for any possibe interaction.
+#
+# def config(self, config_type, options: list) -> None:
+#     """Sets the state=self.STATE_* to value. Usually you want to call
+#     this function before every start_action() call.
+#     """
+#     if config_type == self.CONFIG_RUN:
+#         self.run_config(*options)
+#     elif config_type == self.CONFIG_BEST_PATH_DELAY:
+#         self._set_best_path_delay(*options)
+#     elif conifg_type == self.CONFIG_RECURSIVE_MAZE_DELAY:
+#         self._set_recursive_maze_delay(*options)
+#     else:
+#         raise NotImplementedError("Invalid config_type provided!")
+
+# def start_action(self, action) -> None:
+#     """Starts the action specified by action. Use self.START_* for action.
+#     Usually self.config() is called before self.start_action() is called.
+#     """
+#     if action == self.START_DIJKSTRA:
+#         self._run(self.PHASE_ALGO, self.ALGO_DIJKSTRA)
+#     elif action == self.START_A_STAR:
+#         self._run(self.PHASE_ALGO, self.ALGO_A_STAR)
+#     elif action == self.START_BI_DIJKSTRA:
+#         self._run(self.PHASE_ALGO, self.ALGO_BI_DIJKSTRA)
+#     elif action == self.START_RECURSIVE_MAZE:
+#         self._run(self.PHASE_MAZE, self.ALGO_RECURSIVE_MAZE)
+#     else:
+#         raise NotImplementedError("Invalid action provided!")
+
+# def check(self, state) -> int:
+#     """Checks the state provided. Bools are returned as 0 or 1."""
+#     if state == self.CHECK_PHASE:
+#         res = self._check_phase()
+#     elif state == self.CHECK_ALGO:
+#         res = self._check_algo()
+#     elif state == self.CHECK_FINISHED:
+#         res = int(self._check_finished())
+#     else:
+#         raise NotImplementedError("Invalid state provided!")
+#     return res
