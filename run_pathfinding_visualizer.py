@@ -58,31 +58,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# --- C++ Performance Rewrite ---
-# Add to readme, conditional cpp include from json file and title of pygame window
-#   Note that #include square.h only paradoxically slows down code from pure python
-#   This is due to there then being a lot of passing data back and forth between C++ and Python (thousands of times per second!)
-#   through pybind11 which creates overhead.
-#   Fun fact: a no-op method call in C++ through pybind11 is 60% slower (1.79us vs 2.87us) than a no-op method call in pure python.
-#   Of course this 1us difference is quickly irrelevant if the function does intense work.
-#   #include algorithms.h means python never calls C++ directly, but insteads set the task for C++ to run through methods
-#   These are one time func calls and thus there is 0 overhead under this mode with the exepction of
-#   reading the queue of items that needs to be updated every frame. This locks the thread and blocks the C++ code during that time.
-#   With pygame fps at 60 or below, limiting factor is C++. Above 60fps, python accesses the data so frequently
-#   that the mutex lock starts delaying the C++ execution. 60fps gives a 16.6ms window, on a large graph
-#   the C++ algo can finish in less than 10ms and thus isn't affected.
-#   #include algorithms.h has a 50x perf improvement over pure python.
-#   Mention CMake to compile C++ code
-#   Squares 2d squares laid out as 1d vector for cache efficiency
-
-# (Optimization Station: Things to test to see if faster)
-# Square on it's on thread?
-#   Implement threading in square access methods. Separate locks for square and algo?
-#   Place set_squares to road on that thread to visualize changes
-# Multiprocessing for algo, may need to share memory
-#   Can safely parrallise set_ square methods? Except for algos?
-# Multiple threads for algorithm?
-# Simplify code. Remove functions. Use cleaver args like passing in a function
+# Record gif of C++ speedup on release and pyinstaller compiled code
 
 # --- C++ Mutltithreading ---
 # Write threading pool class in its own .h and .cpp file. Include in square.cpp and algorithms.cpp.
@@ -90,6 +66,10 @@ if __name__ == "__main__":
 #   If possible try to use a pool that can be reduced to single threaded C++
 # psutil.cpu_count(logical=True/False), add to requirements.txt
 # Update performance section of github with C++ Multithreading
+# Square on it's on thread?
+#   Implement threading in square access methods. Separate locks for square and algo?
+#   Place set_squares to road on that thread to visualize changes
+# Multiple threads for algorithm?
 # All performance intensive code
 #   - Keep pygame on its own processor at all times?
 #       - Whenever calling funcs that update pygame: draw, draw_vis_text, reset_graph, reset_algo
@@ -124,6 +104,7 @@ if __name__ == "__main__":
 #   Use length of open_set to assign queue_pos
 # Add prim maze
 # Write tests
+# Combine similar functions and provide a good API to keep functionality
 # Rewrite messy complicated functions. Split into smaller parts (e.g. draw()?)
 
 # --- Possible API for multiprocessing ---
