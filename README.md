@@ -125,6 +125,8 @@ Install the required packages (While inside the virtual environment):
 pip install -r requirements.txt
 ```
 
+For compiling the C++ code, the CMakeLists.txt is all you need. The result will be a python extension (.pyd) in the same directory as the source files (for easy importing to python).
+
 # Usage
 
 To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.cmd').
