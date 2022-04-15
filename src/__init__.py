@@ -1,1 +1,1 @@
-"""Source code for program"""
+"""Source code of visualizers"""

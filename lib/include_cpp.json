@@ -1,0 +1,16 @@
+{
+    "#include": "algorithms.h",
+    "How to Use": [
+        "Use python or C++ implementation for certain parts of code",
+        "For pure python, choose '.py'. For maximum C++ usage, choose highest item.",
+        "Going up the import tree will override those python implementations with C++.",
+        "Items higher up the import tree requires those below.",
+        "Example: 'algorithms.h' will also include 'square.h' automatically.",
+        "C++ imports are optional but the program will always depend on python.",
+        "######################################################################",
+        "--- Import Tree: #include only one ---",
+        "algorithms.h",
+        "square.h",
+        ".py"
+    ]
+}

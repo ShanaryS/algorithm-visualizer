@@ -1,7 +1,7 @@
-"""Run search visualizer. Must be '__main__'."""
+"""Run sort visualizer. Must be '__main__'."""
 
-from src.search.graph import Graph, set_graph
-from src.search.values import generate_array, KEY, HESITATE
+from src.sorting.py.graph import Graph, set_graph
+from src.sorting.py.utils.values import generate_array
 
 
 def main() -> None:
@@ -10,24 +10,28 @@ def main() -> None:
     array = generate_array(0, 150, 30)
     array_size = len(array)
     labels = [label for label in range(array_size)]
+    is_sorted = False
 
-    vis = None
+    vis = None  # Created in set_graph. Defining here would be redundant
     pause_short = 150 / array_size * 0.01
+    pause_mid = (pause_short * 3) + (array_size * 0.001)
     pause_long = (pause_short * 3) + (array_size * 0.005)
 
     g = Graph(
         array=array,
         array_size=array_size,
         labels=labels,
-        key=KEY,
+        is_sorted=is_sorted,
         vis=vis,
         pause_short=pause_short,
-        pause_long=pause_long,
-        hesitate=HESITATE
+        pause_mid=pause_mid,
+        pause_long=pause_long
     )
 
-    set_graph(g, initialize=True)
+    set_graph(g)
 
 
 if __name__ == '__main__':
     main()
+    
+    # Keeps running in background if closed while algo running.

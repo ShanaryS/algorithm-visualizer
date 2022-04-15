@@ -1,11 +1,11 @@
 # Algorithm Visualizer
 
-This tool visualizes the operations of the most popular pathfinding, sorting, and searching algorithms. This is helpful to anyone trying to understand these algorithms or even just to enjoy the beauty of math. This was implemented fully using NumPy and Matplotlib for Search and Sort visualizations, and Pygame with google maps API for pathfinding visualizations. All done in Python, fully interactive for all algorithms with multithreading/multiprocessing support and per pixel screen updates.
+This tool visualizes the operations of the most popular pathfinding, sorting, and searching algorithms. Algorithms are written both in C++ and Python with easy comparisons by editing 'include_cpp.json'. GUI and user inputs are always in python. This was implemented using NumPy and Matplotlib for Search and Sort visualizations, and Pygame with google maps API for pathfinding visualizations. All are fully interactive with multithreading support and per pixel screen refreshes. Visualizers can be easily compilied into a single .exe for portability while maintaining configurability with 'include_cpp.json'.
 
 ***
 
 <p align="center">
-  <strong>Pathfinding Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Pathfinding-Visualizer?v=1">Try it Online!</a>
+  <strong>Pathfinding Visualizer:</strong>
 </p>
 
 <p align="center">
@@ -41,7 +41,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 ***
 
 <p align="center">
-  <strong>Sorting Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Sorting-Visualizer?v=1">Try it Online!</a>
+  <strong>Sorting Visualizer:</strong>
 </p>
 
 <p align="center">
@@ -55,7 +55,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 ***
 
 <p align="center">
-  <strong>Searching Visualizer:</strong> <a href="https://replit.com/@ShanaryS/Searching-Visualizer?v=1">Try it Online!</a>
+  <strong>Searching Visualizer:</strong>
 </p>
 
 <p align="center">
@@ -68,27 +68,35 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 ## Performance Improvements
 
-* Compiling with Pyinstaller
+* Compiling with PyInstaller
   * Up to 3x faster
-* Partial display update for pathfinding visualizer (Only update changed pixels between frames; Took a lot of effort!)
+* Partial Display Refresh (Only update changed pixels between frames)
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
   * A typical performance increase between ~30x to ~100x for pathfinding algorithms and medium maze generation
   * 'V' button can be used to visualize the changed squares between toggles
   * For comparison, check out archived branch [archive/V2.0/feature-complete](https://github.com/ShanaryS/algorithm-visualizer/tree/archive/V2.0/feature-complete)
+* C++ Algorithms
+  * 50x faster than pure python with #include algorithms.h
+    * Python only interacts with C++ through thread locked Observer Pattern style calls
+    * At 60fps for GUI and user input updates, limiting factor is C++ code (<10ms of 16.6ms rendering budget)
+    * Above 60fps, limiting factor becomes python blocking C++ through thread locks for reading data
+  * 1.6x slower than pure python with #include square.h (High overhead sending data between C++ and python up to 10kHz)
+  * Nodes are flattened from 2D into a 1D Vector for cache efficiency.
+  * Uses pybind11 to send data between python and C++, CMake for compiling config
+  * For comparison, edit 'include_cpp.json' to switch between C++ and python
+  * Current #includes shown as GUI window title
+* Total speed up: **66480x** (Large maze generation - **2.77min** to **2.5ms** 🤯)
 
 <p align="center">
   <strong>Speed up in action! (Relative to above gifs):</strong>
 </p>
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/86130442/160454970-8e499a0f-32ee-4165-8376-856f05f726f1.gif" alt="animated" />
-</p>
+(Pure Python) Partial Display Refresh: | C++ Algorithms:
+:-------------------------:|:-------------------------:
+![Partial Display Refresh](https://user-images.githubusercontent.com/86130442/160454970-8e499a0f-32ee-4165-8376-856f05f726f1.gif)  |  ![C++ Algorithms](https://user-images.githubusercontent.com/86130442/163631616-48356d80-b529-4321-adea-dcca5eb4f4aa.gif)
+The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature. | It may not look much faster but this is a 50x perf improvement! Notice algorithm timer in the center of the legend.
 
-<p align="center">
-  Note: The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature.
-</p>
-
-## Installation (Python 3.10)
+## Installation (C++20 | Python 3.10)
 
 Clone this repo and cd into it:
 
@@ -117,6 +125,8 @@ Install the required packages (While inside the virtual environment):
 pip install -r requirements.txt
 ```
 
+For compiling the C++ code, the CMakeLists.txt is all you need. The result will be a python extension (.pyd) in the same directory as the source files (for easy importing to python).
+
 # Usage
 
 To create portable .exe files for each visualizer, setup the virtual environment as described above along with installing requirements.txt (On windows just run 'create_venv.cmd').
@@ -130,14 +140,14 @@ Or run each visualizer directly using:
 python run_pathfinding_visualizer
 ```
 
-* Sort Visualizer:
+* Sorting Visualizer:
 ```bash
-python run_sort_visualizer
+python run_sorting_visualizer
 ```
 
-* Search Visualizer:
+* Searching Visualizer:
 ```bash
-python run_search_visualizer
+python run_searching_visualizer
 ```
 
 To use google maps functionality, you need static maps api key from google.

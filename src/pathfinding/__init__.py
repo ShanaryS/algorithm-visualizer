@@ -1,1 +1,1 @@
-"""Package for pathfinding visualizer"""
+"""Source code for pathfinding visualizer"""

@@ -7,3 +7,8 @@ __pycache__
 *.spec
 *.prof
 *.austin
+.vs
+x64
+x86
+*.pyd
+/build
