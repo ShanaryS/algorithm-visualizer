@@ -58,8 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Record gif of C++ speedup on release and pyinstaller compiled code
-
 # --- C++ Mutltithreading ---
 # Write threading pool class in its own .h and .cpp file. Include in square.cpp and algorithms.cpp.
 # Force python version if not enough cores avaiable. Possibly makes it easier to make it multithreaded.
