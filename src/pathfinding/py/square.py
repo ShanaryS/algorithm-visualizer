@@ -360,7 +360,7 @@ class Square:
             return
 
         # Don't do anything if ordinal square or path square
-        if self.is_start() or self.is_mid() or self.is_end() or self.is_path():
+        if self.is_path() or self.is_start() or self.is_mid() or self.is_end():
             return
 
         # Don't discard square from list as will be immediately revert color

@@ -265,10 +265,10 @@ void Square::set_history()
     // Don't do anything if already set correctly
     if (is_history()) { return; }
 
-    // Add to note history if user requests to track
+    // Don't do anything if ordinal square or path square
     if (is_path() || is_start() || is_mid() || is_end())
     {
-        s_future_history_squares.insert(this);
+        return;
     }
 
     // Don't discard square from list as will be immediately revert color
