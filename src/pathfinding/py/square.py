@@ -683,7 +683,7 @@ class Square:
             raise NotImplementedError("Invalid square type provided")
 
     @classmethod
-    def set_square_color_by_array(cls, square_colors) -> None:
+    def set_square_color_by_array(cls, pixels_r, pixels_g, pixels_b) -> None:
         """Set the square colors based on the 2D array of rgb values."""
 
         ROAD_CUTOFF = 1  # Any value above this is a road
@@ -702,9 +702,8 @@ class Square:
             blue_sum = 0  # Used for highway
             for x in range(row * length_int, (row+1) * length_int):
                 for y in range(col * length_int, (col+1) * length_int):
-                    red, green, blue, alpha = square_colors[x][y]
-                    rgb_sum += red + green + blue
-                    blue_sum += blue
+                    rgb_sum += pixels_r[x][y] + pixels_g[x][y] + pixels_b[x][y]
+                    blue_sum += pixels_b[x][y]
             rgb_avg = rgb_sum / square_length_squared * 3
             blue_avg = blue_sum / square_length_squared
 

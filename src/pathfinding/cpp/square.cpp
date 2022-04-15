@@ -599,7 +599,11 @@ void Square::s_set_square_color_by_group(std::vector<Square*>& squares, std::str
     }
 }
 
-void Square::s_set_square_color_by_array(std::vector<std::vector<std::array<int, 4>>>& square_colors)
+void Square::s_set_square_color_by_array(
+    std::vector<std::vector<int>>& pixels_r,
+    std::vector<std::vector<int>>& pixels_g,
+    std::vector<std::vector<int>>& pixels_b
+)
 {
     int ROAD_CUTOFF = 1;  // Any value about this is a road
     int HIGHWAY_CUTOFF = 225;  // Any value below this is a highway
@@ -622,9 +626,8 @@ void Square::s_set_square_color_by_array(std::vector<std::vector<std::array<int,
         {
             for (int y{ col * length }; y < col_limit; ++y)
             {
-                auto [red, green, blue, alpha] = square_colors[x][y];
-                rgb_sum += red + green + blue;
-                blue_sum += blue;
+                rgb_sum += pixels_r[x][y] + pixels_g[x][y] + pixels_b[x][y];
+                blue_sum += pixels_b[x][y];
             }
         }
         double rgb_avg = rgb_sum / square_length_squared * 3;

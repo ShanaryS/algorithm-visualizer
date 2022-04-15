@@ -283,16 +283,11 @@ def _draw_img(gph: GraphState) -> None:
 
 def pygame_image_to_squares(gph: GraphState) -> None:
     """Converts the mapped image to squares. 2D array"""
-    rgba_array = []
-    length_int = int(Square.get_square_length())
-    for row in range(Square.get_num_rows()):
-        for col in range(Square.get_num_cols()):
-            for x in range(row * length_int, (row+1) * length_int):
-                rgba_array.append([])
-                for y in range(col * length_int, (col+1) * length_int):
-                    rgba_array[x].append(gph.window.get_at((x, y)))
-
-    Square.set_square_color_by_array(rgba_array)
+    pixels_r = pygame.surfarray.pixels_red(gph.window).tolist()
+    pixels_g = pygame.surfarray.pixels_green(gph.window).tolist()
+    pixels_b = pygame.surfarray.pixels_blue(gph.window).tolist()
+    
+    Square.set_square_color_by_array(pixels_r, pixels_g, pixels_b)
 
 
 def _draw_legend(gph: GraphState, txt: VisText) -> None:

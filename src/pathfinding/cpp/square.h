@@ -128,7 +128,11 @@ public:
     // Set the square colors in special conditions
 
     static void s_set_square_color_by_group(std::vector<Square*>& squares, std::string square_type);
-    static void s_set_square_color_by_array(std::vector<std::vector<std::array<int, 4>>>& square_colors);
+    static void s_set_square_color_by_array(
+        std::vector<std::vector<int>>& pixels_r,
+        std::vector<std::vector<int>>& pixels_g,
+        std::vector<std::vector<int>>& pixels_b
+    );
 
     // Update values
     static void s_update_num_rows_cols(int new_num) { s_num_rows = s_num_cols = new_num; }
