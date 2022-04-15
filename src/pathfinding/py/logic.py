@@ -19,7 +19,7 @@ from src.pathfinding.py.graph import (GraphState, VisText, set_graph, draw,
     draw_vis_text, HEIGHT)
 from lib.timer import sleep
 
-import threading
+from threading import Thread
 import pygame
 from dataclasses import dataclass
 
@@ -45,7 +45,7 @@ class LogicState:
 def run_pathfinding(gph: GraphState, algo: AlgoState, lgc: LogicState, txt: VisText) -> None:
     """The pygame logic loop. This runs forever until exited. This is what should be called to run program."""
     # Start other loops
-    threading.Thread(target=algo.start_loop, args=(), daemon=True).start()
+    Thread(target=algo.start_loop, args=(), daemon=True).start()
     
     # Create pygame window
     gph.create_pygame_window()

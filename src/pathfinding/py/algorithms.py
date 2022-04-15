@@ -9,7 +9,7 @@ else:
     from src.pathfinding.py.square import Square
 from lib.timer import sleep
 
-import threading
+from threading import Lock
 from dataclasses import dataclass, field
 from queue import PriorityQueue
 from time import perf_counter_ns
@@ -38,7 +38,7 @@ class AlgoState:
     # Special variables
     _unique_int: int = 0  # Starts +1 when called by self._next_int()
     NONE: int = _unique_int  # Value is 0 which returns false when casted to bool
-    lock: threading.Lock  = threading.Lock()
+    lock: Lock  = Lock()
 
     # Run options
     _start: Square = None
