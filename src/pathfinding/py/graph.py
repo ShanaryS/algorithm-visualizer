@@ -204,10 +204,17 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
     with CppPyLock(algo.thread_lock, algo.thread_unlock):
         if gph.visualize_square_history:
             gph.visualize_square_history = False
-            for square in Square.get_future_history_squares():
-                square.set_history()
+            future_history_squares = Square.get_future_history_squares()
+            Square.set_square_color_by_group(future_history_squares, "history")
+            for square in future_history_squares:
                 gph.add_to_update_queue(square)
             Square.clear_future_history_squares()
+
+            # Used to reset squares to previous color like nothing happened
+            history_squares = Square.get_all_history_squares()
+            Square.set_square_color_by_group(history_squares, "history_rollback")
+            Square.clear_history_squares()
+
         # Queues all changed squares to update
         else:
             square: Square
@@ -216,10 +223,6 @@ def draw(gph: GraphState, algo: AlgoState, txt: VisText, legend=False, clear_leg
                 gph.add_to_update_queue(square)
             Square.clear_squares_to_update()
 
-        # Used to reset squares to previous color like nothing happened
-        for square in Square.get_all_history_squares():
-            square.set_history_rollback()
-        Square.clear_history_squares()
 
     # Update the pygame display
     # It's faster to update entire screen if number of rects is greater than 20

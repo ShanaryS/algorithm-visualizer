@@ -634,6 +634,55 @@ class Square:
         cls.track_square_history = x
 
     @classmethod
+    def set_square_color_by_group(cls, squares, square_type: str) -> None:
+        """Sets a group of squares to a color"""
+        square: Square
+        if square_type == "reset":
+            for square in squares:
+                square.reset()
+        elif square_type == "open":
+            for square in squares:
+                square.set_open()
+        elif square_type == "open2":
+            for square in squares:
+                square.set_open2()
+        elif square_type == "open3":
+            for square in squares:
+                square.set_open3()
+        elif square_type == "closed":
+            for square in squares:
+                square.set_closed()
+        elif square_type == "closed2":
+            for square in squares:
+                square.set_closed2()
+        elif square_type == "closed3":
+            for square in squares:
+                square.set_closed3()
+        elif square_type == "start":
+            for square in squares:
+                square.set_start()
+        elif square_type == "mid":
+            for square in squares:
+                square.set_mid()
+        elif square_type == "end":
+            for square in squares:
+                square.set_end()
+        elif square_type == "wall":
+            for square in squares:
+                square.set_wall()
+        elif square_type == "path":
+            for square in squares:
+                square.set_path()
+        elif square_type == "history":
+            for square in squares:
+                square.set_history()
+        elif square_type == "history_rollback":
+            for square in squares:
+                square.set_history_rollback()
+        else:
+            raise NotImplementedError("Invalid square type provided")
+
+    @classmethod
     def set_square_color_by_array(cls, square_colors) -> None:
         """Set the square colors based on the 2D array of rgb values."""
 
@@ -668,11 +717,11 @@ class Square:
                     square.set_highway(True)
 
     @classmethod
-    def _update_square_length(cls, graph_width, pixel_offset) -> None:
-        """Calculates square size with an optional offset"""
-        cls.square_length = (graph_width - pixel_offset) / cls.num_rows
-    
-    @classmethod
     def update_num_rows_cols(cls, new_num) -> None:
         """Updates the num of rows and cols"""
         cls.num_rows = cls.num_cols = new_num
+
+    @classmethod
+    def _update_square_length(cls, graph_width, pixel_offset) -> None:
+        """Calculates square size with an optional offset"""
+        cls.square_length = (graph_width - pixel_offset) / cls.num_rows

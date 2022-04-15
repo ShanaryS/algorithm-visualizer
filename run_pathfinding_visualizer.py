@@ -76,9 +76,6 @@ if __name__ == "__main__":
 #   Squares 2d squares laid out as 1d vector for cache efficiency
 
 # (Optimization Station: Things to test to see if faster)
-# Move loops of set_ square methods into square class?
-#   (Allow looping over a bunch of squares through a single func call)
-#   future_history_squares, history_squares, _set_road
 # Use pygame.surfarray.pixels2d() [array2d() comparison] or CImg for converting graph img to squares
 # Square on it's on thread?
 #   Implement threading in square access methods. Separate locks for square and algo?

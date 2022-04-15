@@ -492,11 +492,118 @@ void Square::s_reset_all_squares()
     }
 }
 
+void Square::s_set_square_color_by_group(std::vector<Square*>& squares, std::string square_type)
+{
+    std::array<int, 3> color;
+    if (square_type == "reset")
+    {
+        for (Square* square : squares)
+        {
+            square->reset();
+        }
+    }
+    else if (square_type == "open")
+    {
+        for (Square* square : squares)
+        {
+            square->set_open();
+        }
+    }
+    else if (square_type == "open2")
+    {
+        for (Square* square : squares)
+        {
+            square->set_open2();
+        }
+    }
+    else if (square_type == "open3")
+    {
+        for (Square* square : squares)
+        {
+            square->set_open3();
+        }
+    }
+    else if (square_type == "closed")
+    {
+        for (Square* square : squares)
+        {
+            square->set_closed();
+        }
+    }
+    else if (square_type == "closed2")
+    {
+        for (Square* square : squares)
+        {
+            square->set_closed2();
+        }
+    }
+    else if (square_type == "closed3")
+    {
+        for (Square* square : squares)
+        {
+            square->set_closed3();
+        }
+    }
+    else if (square_type == "start")
+    {
+        for (Square* square : squares)
+        {
+            square->set_start();
+        }
+    }
+    else if (square_type == "mid")
+    {
+        for (Square* square : squares)
+        {
+            square->set_mid();
+        }
+    }
+    else if (square_type == "end")
+    {
+        for (Square* square : squares)
+        {
+            square->set_end();
+        }
+    }
+    else if (square_type == "wall")
+    {
+        for (Square* square : squares)
+        {
+            square->set_wall();
+        }
+    }
+    else if (square_type == "path")
+    {
+        for (Square* square : squares)
+        {
+            square->set_path();
+        }
+    }
+    else if (square_type == "history")
+    {
+        for (Square* square : squares)
+        {
+            square->set_history();
+        }
+    }
+    else if (square_type == "history_rollback")
+    {
+        for (Square* square : squares)
+        {
+            square->set_history_rollback();
+        }
+    }
+    else
+    {
+        throw "NotImplementedError: Invalid square type provided";
+    }
+}
+
 void Square::s_set_square_color_by_array(std::vector<std::vector<std::array<int, 4>>>& square_colors)
 {
     int ROAD_CUTOFF = 1;  // Any value about this is a road
     int HIGHWAY_CUTOFF = 225;  // Any value below this is a highway
-    
+
     double square_length = s_get_square_length();
     double square_length_squared = square_length * square_length;
     int length = int(square_length);

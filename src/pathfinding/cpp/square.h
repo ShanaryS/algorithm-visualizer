@@ -125,7 +125,9 @@ public:
     // Handle changing track_square_history
     static void s_set_track_square_history(bool x) { s_track_square_history = x; }
 
-    // Set the square colors based on the 2D array of rgb values
+    // Set the square colors in special conditions
+
+    static void s_set_square_color_by_group(std::vector<Square*>& squares, std::string square_type);
     static void s_set_square_color_by_array(std::vector<std::vector<std::array<int, 4>>>& square_colors);
 
     // Update values
