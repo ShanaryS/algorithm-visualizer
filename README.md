@@ -94,7 +94,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 (Pure Python) Partial Display Refresh: | C++ Algorithms:
 :-------------------------:|:-------------------------:
 ![Partial Display Refresh](https://user-images.githubusercontent.com/86130442/160454970-8e499a0f-32ee-4165-8376-856f05f726f1.gif)  |  ![C++ Algorithms](https://user-images.githubusercontent.com/86130442/163631616-48356d80-b529-4321-adea-dcca5eb4f4aa.gif)
-The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature. | It may not look much faster but this is a 50x perf improvement! Notice algorithm timer in the center of the legend.
+The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature. | It may not look much faster but this is a 50x perf improvement! Notice the algorithm timer in the center of the legend.
 
 ## Installation (C++20 | Python 3.10)
 
