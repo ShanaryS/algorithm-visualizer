@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <cstdlib>
 #include <queue>
 #include <random>

@@ -637,26 +637,27 @@ class Square:
     def set_square_color_by_array(cls, square_colors) -> None:
         """Set the square colors based on the 2D array of rgb values."""
 
-        ROAD_CUTOFF = 1  # Any value above this value is a road
+        ROAD_CUTOFF = 1  # Any value above this is a road
         HIGHWAY_CUTOFF = 225  # Any value below this is a highway
+
+        square_length = cls.get_square_length()
+        square_length_squared = square_length * square_length
+        length_int = int(square_length)
 
         square: Square
         for index, square in enumerate(cls.graph):
             square.set_wall_color_map()
             row, col = square.get_pos()
-            square_length = cls.get_square_length()
-            length_int = int(square_length)
 
             rgb_sum = 0
-            blue_sum = 0
+            blue_sum = 0  # Used for highway
             for x in range(row * length_int, (row+1) * length_int):
                 for y in range(col * length_int, (col+1) * length_int):
                     red, green, blue, alpha = square_colors[x][y]
                     rgb_sum += red + green + blue
                     blue_sum += blue
-                    blue_sum += blue
-            rgb_avg = rgb_sum / square_length**2 * 3
-            blue_avg = blue_sum / square_length**2
+            rgb_avg = rgb_sum / square_length_squared * 3
+            blue_avg = blue_sum / square_length_squared
 
             # Set squares to roads, highways and non pathable space
             if rgb_avg < ROAD_CUTOFF:

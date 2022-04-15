@@ -492,6 +492,53 @@ void Square::s_reset_all_squares()
     }
 }
 
+void Square::s_set_square_color_by_array(std::vector<std::vector<std::array<int, 4>>>& square_colors)
+{
+    int ROAD_CUTOFF = 1;  // Any value about this is a road
+    int HIGHWAY_CUTOFF = 225;  // Any value below this is a highway
+    
+    double square_length = s_get_square_length();
+    double square_length_squared = square_length * square_length;
+    int length = int(square_length);
+
+    for (int index{ 0 }; index < s_graph.size(); ++index)
+    {
+        Square& square = s_graph[index];
+        square.set_wall_color_map();
+        auto [row, col] = square.get_pos();
+
+        int rgb_sum = 0;
+        int blue_sum = 0;  // Used for highway
+        int row_limit = (row + 1) * length;
+        int col_limit = (col + 1) * length;
+        for (int x{ row * length }; x < row_limit; ++x)
+        {
+            for (int y{ col * length }; y < col_limit; ++y)
+            {
+                auto [red, green, blue, alpha] = square_colors[x][y];
+                rgb_sum += red + green + blue;
+                blue_sum += blue;
+            }
+        }
+        double rgb_avg = rgb_sum / square_length_squared * 3;
+        double blue_avg = blue_sum / square_length_squared;
+
+        // Set squares to roads, highways and non pathable space
+        if (rgb_avg < ROAD_CUTOFF)
+        {
+            square.set_wall();
+        }
+        else
+        {
+            square.reset();
+            if (blue_avg < HIGHWAY_CUTOFF)
+            {
+                square.set_highway(true);
+            }
+        }
+    }
+}
+
 void Square::s_clear_all_square_lists()
 {
     s_all_empty_squares.clear();
