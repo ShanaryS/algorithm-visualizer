@@ -58,9 +58,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Prevent user inputs when Phase is not null. Use else: if lgc.visualize then contine after that block but in else
-# Force python version if no enough cores avaiable. Possibly makes it easier to make it multithreaded.
-
 # --- C++ Performance Rewrite ---
 # Add to readme, conditional cpp include from json file and title of pygame window
 #   Note that #include square.h only paradoxically slows down code from pure python
@@ -87,14 +84,13 @@ if __name__ == "__main__":
 # Multiple threads for algorithm?
 # Simplify code. Remove functions. Use cleaver args like passing in a function
 
-# --- Mutltithreading/Multiprocessing ---
+# --- C++ Mutltithreading ---
+# Write threading pool class in its own .h and .cpp file. Include in square.cpp and algorithms.cpp.
+# Force python version if not enough cores avaiable. Possibly makes it easier to make it multithreaded.
+#   If possible try to use a pool that can be reduced to single threaded C++
 # psutil.cpu_count(logical=True/False), add to requirements.txt
-# May need multiprocessing.freeze_support()
-# 2ms to 54us for thread startup, linear scaling for func calls
-# 1.35s to 600us for process startup, non linear scaling for increased func calls
-# Update performance section of github with Multiprocessing/Multithreading
+# Update performance section of github with C++ Multithreading
 # All performance intensive code
-#   - Cannot update two neighbouring squares if becoming a wall is possible
 #   - Keep pygame on its own processor at all times?
 #       - Whenever calling funcs that update pygame: draw, draw_vis_text, reset_graph, reset_algo
 #       - E.g algo button reset and draw calls are 80ms vs 700ms for entire algo after
@@ -132,6 +128,7 @@ if __name__ == "__main__":
 
 # --- Possible API for multiprocessing ---
 # Goal is to use multiprocessing.Pipe and pass info using enums for any possibe interaction.
+# May need multiprocessing.freeze_support()
 #
 # def config(self, config_type, options: list) -> None:
 #     """Sets the state=self.STATE_* to value. Usually you want to call
