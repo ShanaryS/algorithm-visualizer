@@ -68,7 +68,7 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
 
 ## Performance Improvements
 
-* Compiling with Pyinstaller
+* Compiling with PyInstaller
   * Up to 3x faster
 * Partial Display Refresh (Only update changed pixels between frames)
   * Increased performance by ~2x (Adding nodes) to ~354x (Large maze generation)
@@ -85,12 +85,13 @@ Add mid node to layer the search! Able to drag mid node as well:             |  
   * Uses pybind11 to send data between python and C++, CMake for compiling config
   * For comparison, edit 'include_cpp.json' to switch between C++ and python
   * Current #includes shown as GUI window title
+* Total speed up: **66480x** (Large maze generation - **2.77min** to **2.5ms** 🤯)
 
 <p align="center">
   <strong>Speed up in action! (Relative to above gifs):</strong>
 </p>
 
-(Pure Python) Partial Display Refresh Speedup: | C++ Algorithms:
+(Pure Python) Partial Display Refresh: | C++ Algorithms:
 :-------------------------:|:-------------------------:
 ![Partial Display Refresh](https://user-images.githubusercontent.com/86130442/160454970-8e499a0f-32ee-4165-8376-856f05f726f1.gif)  |  ![C++ Algorithms](https://user-images.githubusercontent.com/86130442/163631616-48356d80-b529-4321-adea-dcca5eb4f4aa.gif)
 The purple color shows what pixels have been changed since the 'V' button toggle. It visualizes the per-pixel display update feature. | It may not look much faster but this is a 50x perf improvement! Notice algorithm timer in the center of the legend.
